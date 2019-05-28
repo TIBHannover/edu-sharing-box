@@ -1,0 +1,78 @@
+---
+- name: Ensure mysql python packages are present
+  package:
+    name: python-mysqldb
+
+- name: Create a new database with name 'esrender'
+  mysql_db:
+    name: '{{esrender_db.name}}'
+    config_file: /etc/my.cnf.d/mysql.cnf
+    state: present
+
+- name: Create database user
+  mysql_user:
+    name: '{{esrender_db.user}}'
+    password: '{{esrender_db.password}}'
+    priv: '{{esrender_db.name}}.*:ALL'
+
+- name: php - install base packages
+  apt:
+    name: ["php5-cli", "php5-gd", "php5-curl", "php5-mysql", "php5-pgsql"]
+    state: "present"
+
+- name: Install apache
+  apt:
+    name: ["apache2", "libapache2-mod-php5"]
+    state: "present"
+
+- name: apache - enabled mod_rewrite
+  apache2_module:
+    name: "rewrite"
+    state: "present"
+
+- name: apache - enabled mod_headers
+  apache2_module:
+    name: "headers"
+    state: "present"
+
+- name: download and extract sources
+  unarchive:
+    remote_src: yes
+    src: '{{esrender_archive_url}}'
+    owner: "www-data"
+    group: "www-data"
+    dest: /var/www
+    creates: /var/www/esrender
+    extra_opts:
+      - --transform
+      - s/^renderingservice-[0-9.]*/esrender/
+    notify:
+      - restart apache2
+
+- name: create /var/cache/esrender
+  file:
+    path: /var/cache/esrender
+    state: "directory"
+    owner: "www-data"
+    group: "www-data"
+
+- name: apache - add virtual host
+  template:
+    src: virtualhost.conf
+    dest: /etc/apache2/sites-available/esrender.conf
+
+- name: a2ensite esrender
+  command: a2ensite esrender
+  args:
+    creates: /etc/apache2/sites-enabled/esrender.conf
+  notify:
+    - restart apache2
+
+- name: a2dissite default
+  command: a2dissite 000-default
+  args:
+    removes: /etc/apache2/sites-enabled/000-default.conf
+  notify:
+    - restart apache2
+
+# TODO registrierung des renderingservice beim edu-sharing

@@ -1,0 +1,6 @@
+---
+esrender_archive_url: https://github.com/edu-sharing/renderingservice/archive/4.1.11.tar.gz
+esrender_db:
+  name: esrender
+  user: esrender
+  password: esrender

@@ -1,0 +1,7 @@
+---
+alf_inst_dir: /home/vagrant
+alf_home: "{{alf_inst_dir}}/alfresco-5.0.d"
+alf_password: admin
+alf_host: localhost
+alf_domain: localhost
+alf_port: 8080

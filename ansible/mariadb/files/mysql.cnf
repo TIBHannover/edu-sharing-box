@@ -1,0 +1,13 @@
+[server]
+user=root
+#basedir=/apps/opt/mariadb
+#datadir=/apps/data/db/mysql_data
+socket=/var/lib/mysql/mysql.sock
+port=3306
+lower_case_table_names=1
+max_allowed_packet=16777216
+
+[mysqladmin]
+user=root
+password=xxx
+socket=/var/lib/mysql/mysql.sock

@@ -1,0 +1,16 @@
+---
+- name: 1. Configure MariaDB
+  copy:
+    src: mysql.cnf
+    dest: /etc/my.cnf.d/
+
+- name: 2. Install MariaDB server package
+  package:
+    name: mariadb-server
+    state: present
+
+- name: 3. Start Mysql Service
+  service:
+    name: mysql
+    state: started
+    enabled: true
