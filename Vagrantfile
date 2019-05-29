@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
     local.vm.provider :virtualbox do |vb|
       vb.name = "edu-sharing-test"
-      vb.memory = 4096
+      vb.memory = 5120
       vb.cpus = 2
     end
   end

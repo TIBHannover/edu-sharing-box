@@ -1,4 +1,19 @@
 ---
+alf_installer_url: https://sourceforge.net/projects/alfresco/files/Alfresco%205.0.d%20Community/alfresco-community-5.0.d-installer-linux-x64.bin/download
+#alf_inst_dir: /home/vagrant
+alf_inst_dir: /opt
+alf_home: "{{alf_inst_dir}}/alfresco-5.0.d"
+alf_password: admin
+alf_host: localhost
+alf_domain: localhost
+alf_port: 8080
+
 edu_inst_dir: /opt
 edu_home: "{{edu_inst_dir}}/edu-sharing"
 edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.1.7/edu-sharing_4.1.7.2019-05-15-9ca4a3a2.zip
+
+esrender_archive_url: https://github.com/edu-sharing/renderingservice/archive/4.1.11.tar.gz
+esrender_db:
+  name: esrender
+  user: esrender
+  password: esrender

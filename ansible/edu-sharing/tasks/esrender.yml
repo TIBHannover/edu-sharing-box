@@ -9,7 +9,7 @@
     config_file: /etc/my.cnf.d/mysql.cnf
     state: present
 
-- name: Create database user
+- name: Create esrender database user
   mysql_user:
     name: '{{esrender_db.user}}'
     password: '{{esrender_db.password}}'
@@ -35,7 +35,7 @@
     name: "headers"
     state: "present"
 
-- name: download and extract sources
+- name: download and extract esrender sources
   unarchive:
     remote_src: yes
     src: '{{esrender_archive_url}}'
@@ -56,7 +56,7 @@
     owner: "www-data"
     group: "www-data"
 
-- name: apache - add virtual host
+- name: esrender: apache - add virtual host
   template:
     src: virtualhost.conf
     dest: /etc/apache2/sites-available/esrender.conf
@@ -75,4 +75,5 @@
   notify:
     - restart apache2
 
+# TODO installation über browser durchführen
 # TODO registrierung des renderingservice beim edu-sharing

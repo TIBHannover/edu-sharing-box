@@ -1,0 +1,52 @@
+---
+
+- name: download alfresco sources
+  get_url:
+    url: '{{alf_installer_url}}'
+    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
+    mode: "a+x"
+
+- name: Ensure pip is present
+  apt:
+    name: ["python-pip"]
+    state: "present"
+
+- name: Ensure pexpect packages are present
+  pip:
+    name: ["pexpect"]
+    state: "present"
+
+- name: execute alfresco installer
+  expect:
+    #echo: "yes"
+    timeout: 180
+    creates: "{{alf_home}}"
+    command: '/bin/bash -c "{{alf_inst_dir}}/alfresco-community-installer.bin | tee {{alf_inst_dir}}/alf_installation.log"'
+    responses:
+      'Please choose an option \[1\] :':
+        - "1" # Please select the installation language | [1] English
+        - "2" # Installation Type | [2] Advanced
+      'Java \[Y/n\] :': "Y"
+      'PostgreSQL \[Y/n\] :': "Y"
+      'Solr1 \[y/N\] :': "N"
+      'Solr4 \[Y/n\] :': "Y"
+      'SharePoint \[Y/n\] :': "n"
+      'Web Quick Start \[y/N\] :': "N"
+      'Google Docs Integration \[Y/n\] :': "Y"
+      'LibreOffice \[Y/n\] :': "Y"
+      'Is the selection above correct\? \[Y/n\]:': "Y"
+      'Select a folder \[.*\]:': "{{alf_home}}"
+      'Database Server port \[5432\]:': "5432"
+      'Web Server domain: \[.*\]:': "127.0.0.1"
+      'Tomcat Server Port: \[8080\]:': "8080"
+      'Tomcat Shutdown Port: \[8005\]:': "8005"
+      'Tomcat SSL Port \[8443\]:': "8443"
+      'Tomcat AJP Port: \[8009\]:': "8009"
+      'Port: \[[0-9]+\]:': "21" # Please choose a port number to use for the integrated Alfresco FTP server.
+      'Admin Password:': "{{alf_password}}"
+      'Repeat Password:': "{{alf_password}}"
+      'LibreOffice Server Port \[8100\]:': "8100"
+      'Install Alfresco Community as a service\? \[Y/n\]:': "Y"
+      'Do you want to continue\? \[Y/n\]:': "Y"
+      'View Readme File \[Y/n\]:': "n"
+      'Launch Alfresco Community Share \[Y/n\]:': "n"

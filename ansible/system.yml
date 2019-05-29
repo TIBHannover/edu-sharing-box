@@ -2,7 +2,4 @@
 - hosts: all
   become: yes
   roles:
-    - alfresco
     - edu-sharing
-    - mariadb
-    - esrender
