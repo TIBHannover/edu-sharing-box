@@ -4,10 +4,15 @@
     name: alfresco
     state: stopped
 
-- name: download and extract edu-sharing sources
+- name: download edu-sharing sources
+  get_url:
+    url: '{{edu_sharing_archive_url}}'
+    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+
+- name: extract edu-sharing sources
   unarchive:
     remote_src: yes
-    src: '{{edu_sharing_archive_url}}'
+    src: '{{edu_inst_dir}}/edu-sharing.zip'
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
@@ -37,25 +42,25 @@
   lineinfile:
     path: '{{ alf_home }}/tomcat/shared/classes/homeApplication.properties.xml'
     line: '<entry key="password">{{alf_password}}</entry>'
-    regexp: '^<entry key="password">'
+    regexp: '<entry key="password">'
 
 - name: edit host in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ alf_home }}/tomcat/shared/classes/homeApplication.properties.xml'
     line: '<entry key="host">{{alf_host}}</entry>'
-    regexp: '^<entry key="host">'
+    regexp: '<entry key="host">'
 
 - name: edit domain in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ alf_home }}/tomcat/shared/classes/homeApplication.properties.xml'
     line: '<entry key="domain">{{alf_domain}}</entry>'
-    regexp: '^<entry key="domain">'
+    regexp: '<entry key="domain">'
 
 - name: edit port in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ alf_home }}/tomcat/shared/classes/homeApplication.properties.xml'
     line: '<entry key="port">{{alf_port}}</entry>'
-    regexp: '^<entry key="port">'
+    regexp: '<entry key="port">'
 
 - name: edit tomcat/shared/classes/alfresco-global.properties
   lineinfile:

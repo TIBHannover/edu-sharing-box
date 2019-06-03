@@ -35,10 +35,15 @@
     name: "headers"
     state: "present"
 
-- name: download and extract esrender sources
+- name: download esrender sources
+  get_url:
+    url: '{{esrender_archive_url}}'
+    dest: "{{edu_inst_dir}}/esrenderingservice.tar.gz"
+
+- name: extract esrender sources
   unarchive:
     remote_src: yes
-    src: '{{esrender_archive_url}}'
+    src: '{{edu_inst_dir}}/esrenderingservice.tar.gz'
     owner: "www-data"
     group: "www-data"
     dest: /var/www
@@ -46,8 +51,8 @@
     extra_opts:
       - --transform
       - s/^renderingservice-[0-9.]*/esrender/
-    notify:
-      - restart apache2
+  notify:
+    - restart apache2
 
 - name: create /var/cache/esrender
   file:
@@ -55,8 +60,10 @@
     state: "directory"
     owner: "www-data"
     group: "www-data"
+  notify:
+    - restart apache2
 
-- name: esrender: apache - add virtual host
+- name: esrender / apache - add virtual host
   template:
     src: virtualhost.conf
     dest: /etc/apache2/sites-available/esrender.conf
