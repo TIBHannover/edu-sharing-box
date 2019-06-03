@@ -1,16 +1,32 @@
 ---
-- name: 1. Configure MariaDB
+- name: Configure MariaDB
   copy:
     src: mysql.cnf
     dest: /etc/my.cnf.d/
 
-- name: 2. Install MariaDB server package
+- name: Install MariaDB server package
   package:
     name: mariadb-server
     state: present
 
-- name: 3. Start Mysql Service
+- name: Start Mysql Service
   service:
     name: mysql
     state: started
     enabled: true
+
+- name: Ensure mysql python packages are present
+  package:
+    name: python-mysqldb
+
+- name: Create a new database with name 'esrender'
+  mysql_db:
+    name: '{{esrender_db.name}}'
+    config_file: /etc/my.cnf.d/mysql.cnf
+    state: present
+
+- name: Create esrender database user
+  mysql_user:
+    name: '{{esrender_db.user}}'
+    password: '{{esrender_db.password}}'
+    priv: '{{esrender_db.name}}.*:ALL'

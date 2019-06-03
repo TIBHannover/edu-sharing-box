@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
     ansible.version = "latest"
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "ansible/system.yml"
+    #ansible.verbose = "-vvvv"
   end
 
   #config.vm.provision "file", source: "files/", destination: "$HOME/"
