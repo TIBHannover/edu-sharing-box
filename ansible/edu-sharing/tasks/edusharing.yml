@@ -9,6 +9,10 @@
     url: '{{edu_sharing_archive_url}}'
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
 
+- name: Ensure unzip is present
+  package:
+    name: ["unzip"]
+
 - name: extract edu-sharing sources
   unarchive:
     remote_src: yes
@@ -25,7 +29,7 @@
 - name: edit edu-sharing call-ant.sh
   replace:
     path: '{{ edu_home }}/call-ant.sh'
-    replace: '{{alf_home}}/java/bin/java '
+    replace: '{{java_home}}/bin/java '
     regexp: '^java '
 
 - name: make edu-sharing install.sh executable
@@ -59,7 +63,7 @@
 - name: edit port in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="port">{{alf_port}}</entry>'
+    line: '<entry key="port">{{tomcat_port}}</entry>'
     regexp: '<entry key="port">'
 
 - name: edit tomcat/shared/classes/alfresco-global.properties

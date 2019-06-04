@@ -1,24 +1,17 @@
 ---
 
+- name: Ensure pexpect packages are present
+  apt:
+    name: ["python-pexpect"]
+
 - name: download alfresco sources
   get_url:
     url: '{{alf_installer_url}}'
     dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
     mode: "a+x"
 
-- name: Ensure pip is present
-  apt:
-    name: ["python-pip"]
-    state: "present"
-
-- name: Ensure pexpect packages are present
-  pip:
-    name: ["pexpect"]
-    state: "present"
-
 - name: execute alfresco installer
   expect:
-    #echo: "yes"
     timeout: 180
     creates: "{{alf_home}}"
     command: '/bin/bash -c "{{alf_inst_dir}}/alfresco-community-installer.bin | tee {{alf_inst_dir}}/alf_installation.log"'
@@ -38,10 +31,10 @@
       'Select a folder \[.*\]:': "{{alf_home}}"
       'Database Server port \[5432\]:': "5432"
       'Web Server domain: \[.*\]:': "127.0.0.1"
-      'Tomcat Server Port: \[8080\]:': "8080"
-      'Tomcat Shutdown Port: \[8005\]:': "8005"
-      'Tomcat SSL Port \[8443\]:': "8443"
-      'Tomcat AJP Port: \[8009\]:': "8009"
+      'Tomcat Server Port: \[8080\]:': "{{tomcat_port}}"
+      'Tomcat Shutdown Port: \[8005\]:': "{{tomcat_shutdown_port}}"
+      'Tomcat SSL Port \[8443\]:': "{{tomcat_ssl_port}}"
+      'Tomcat AJP Port: \[8009\]:': "{{tomcat_ajp_port}}"
       'Port: \[[0-9]+\]:': "21" # Please choose a port number to use for the integrated Alfresco FTP server.
       'Admin Password:': "{{alf_password}}"
       'Repeat Password:': "{{alf_password}}"

@@ -1,8 +1,11 @@
 ---
+- name: Ensures /etc/my.cnf.d/ dir exists
+  file: path=/etc/my.cnf.d/ state=directory
+  
 - name: Configure MariaDB
-  copy:
+  template:
     src: mysql.cnf
-    dest: /etc/my.cnf.d/
+    dest: /etc/my.cnf.d/mysql.cnf
 
 - name: Install MariaDB server package
   package:

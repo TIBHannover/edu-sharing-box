@@ -1,12 +1,16 @@
 ---
-- name: php - install base packages
-  apt:
-    name: ["php5-cli", "php5-gd", "php5-curl", "php5-mysql", "php5-pgsql"]
-    state: "present"
-
 - name: Install apache
   apt:
-    name: ["apache2", "libapache2-mod-php5"]
+    name: ["apache2"]
+    state: "present"
+
+- name: Ensure python-lxml packages are present
+  apt:
+    name: ["python-lxml"]
+
+- name: php - install base packages
+  apt:
+    name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml"]
     state: "present"
 
 - name: apache - enabled mod_rewrite
@@ -17,6 +21,21 @@
 - name: apache - enabled mod_headers
   apache2_module:
     name: "headers"
+    state: "present"
+
+- name: apache - enabled mod_proxy
+  apache2_module:
+    name: "proxy"
+    state: "present"
+
+- name: apache - enabled mod_proxy_ajp
+  apache2_module:
+    name: "proxy_ajp"
+    state: "present"
+
+- name: apache - enabled mod_proxy_http
+  apache2_module:
+    name: "proxy_http"
     state: "present"
 
 - name: download esrender sources
@@ -66,9 +85,12 @@
   notify:
     - restart apache2
 
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
+
 - name: "wait for tomcat to come up"
   uri:
-    url: 'http://localhost:{{alf_port}}/alfresco'
+    url: 'http://localhost:{{tomcat_port}}/alfresco'
     timeout: 60
     status_code: 200
   register: result
@@ -78,7 +100,7 @@
 
 - name: esrender installation step 1
   uri:
-    url: http://localhost/install/install.php
+    url: http://localhost/esrender/install/install.php
     method: POST
     body_format: form-urlencoded
     creates: /var/www/esrender/conf/esmain
@@ -86,7 +108,7 @@
 
 - name: esrender installation step 2
   uri:
-    url: http://localhost/install/install.php
+    url: http://localhost/esrender/install/install.php
     method: POST
     body_format: form-urlencoded
     creates: /var/www/esrender/conf/esmain
@@ -94,12 +116,12 @@
       step: 2
       LANG: 1
       RS_URL: '{{esrender_url}}/'
-      BASE_DIR: /var/www/esrender/
+      BASE_DIR: /var/www/
       DATA_DIR: /var/cache/esrender/
-      REPO_URL: http://192.168.98.101:8080/edu-sharing/
+      REPO_URL: 'http://192.168.98.101:{{tomcat_port}}/edu-sharing/'
       DB_DRIVER: mysql
       DB_HOST: 127.0.0.1
-      DB_PORT: 3306
+      DB_PORT: '{{esrender_db.port}}'
       DB_USER: '{{esrender_db.user}}'
       DB_PASS: '{{esrender_db.password}}'
       DB_NAME: '{{esrender_db.name}}'
@@ -107,7 +129,7 @@
 
 - name: esrender installation step 3
   uri:
-    url: http://localhost/install/install.php
+    url: http://localhost/esrender/install/install.php
     method: POST
     body_format: form-urlencoded
     creates: /var/www/esrender/conf/esmain
@@ -120,7 +142,10 @@
     regexp: '<entry key="applicationfiles">'
 
 - name: register esrender at edu-sharing - get esrender public key
-  shell: grep -Pzo "(?s)[-]+BEGIN PUBLIC KEY[-]+.*[-]+END PUBLIC KEY[-]+" /var/www/esrender/conf/esmain/homeApplication.properties.xml
+  xml:
+    path: /var/www/esrender/conf/esmain/homeApplication.properties.xml
+    xpath: /properties/entry[@key='public_key']
+    content: 'text'
   register: esrender_public_key
 
 - name: register esrender at edu-sharing - add tomcat/shared/classes/app-esrender.properties.xml
@@ -133,6 +158,20 @@
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
     line: '<entry key="contenturl">{{esrender_url}}/application/esmain/index.php</entry>'
     regexp: '<entry key="contenturl">'
+    insertbefore: '</properties>'
+
+- name: edit contenturlBackend in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="contenturlBackend">{{esrender_url}}/application/esmain/index.php</entry>'
+    regexp: '<entry key="contenturlBackend">'
+    insertbefore: '</properties>'
+
+- name: edit clientport in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="clientport">80</entry>'
+    regexp: '<entry key="clientport">'
     insertbefore: '</properties>'
 
 - name: restart alfresco
