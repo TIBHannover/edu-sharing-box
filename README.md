@@ -11,7 +11,7 @@ git clone https://git.tib.eu/boxes/edu-sharing-box.git
 cd edu-sharing-box
 vagrant up
 ```
-Wenn die Installation durchgelaufen ist (ca. 5min) kann edu-sharing im Browser aufgerufen werden mit
+Wenn die Installation durchgelaufen ist (einige Minuten, abhängig von der Download-Geschwindigkeit) kann edu-sharing im Browser aufgerufen werden mit
 ```
 http://192.168.98.101/
 ```
