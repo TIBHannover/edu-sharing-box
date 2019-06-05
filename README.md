@@ -13,7 +13,7 @@ vagrant up
 ```
 Wenn die Installation durchgelaufen ist (einige Minuten, abhängig von der Download-Geschwindigkeit) kann edu-sharing im Browser aufgerufen werden mit
 ```
-http://192.168.98.101/
+http://192.168.98.101/edu-sharing
 ```
 Die Anmeldung an der VM via SSH erfolgt in diesem Beispiel noch vereinfacht und ohne Passwort mit dem Benutzer "vagrant". Der Benutzer hat das sudo-Recht.
 ```
