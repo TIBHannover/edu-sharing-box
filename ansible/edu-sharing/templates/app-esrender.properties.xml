@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+ <properties>
+ <comment/>
+ <entry key="appcaption">my Renderingservice </entry>
+ <entry key="appid">esrender</entry>
+ <entry key="host">{{esrender_host}}</entry>
+ <entry key="trustedclient">true</entry>
+ <entry key="type">SERVICE</entry>
+ <entry key="public_key">{{ esrender_public_key.matches[0]['entry'] }}</entry>
+ <entry key="port">80</entry>
+ <entry key="contenturl">{{esrender_url}}/application/esmain/index.php</entry>
+ <!--
+ <entry key="authenticationwebservice">
+ <entry key="previewurl">{{esrender_url}}/application/esmain/preview.php</entry>
+ <entry key="message_offset_ms">5000</entry>
+ <entry key="message_send_offset_ms">2000</entry>
+-->
+ </properties>

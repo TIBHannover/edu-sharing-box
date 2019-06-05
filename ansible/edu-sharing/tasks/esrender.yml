@@ -1,0 +1,166 @@
+---
+- name: Install apache
+  apt:
+    name: ["apache2"]
+    state: "present"
+
+- name: Ensure python-lxml packages are present
+  apt:
+    name: ["python-lxml"]
+
+- name: php - install base packages
+  apt:
+    name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml", "php-zip", "php-soap", "php-mbstring", "php-dom", "php-iconv", "php-fileinfo", "php-mcrypt", "php-sockets", "php-wddx", "php-date"]
+    state: "present"
+
+- name: apache - enabled mod_rewrite
+  apache2_module:
+    name: "rewrite"
+    state: "present"
+
+- name: apache - enabled mod_headers
+  apache2_module:
+    name: "headers"
+    state: "present"
+
+- name: apache - enabled mod_proxy
+  apache2_module:
+    name: "proxy"
+    state: "present"
+
+- name: apache - enabled mod_proxy_ajp
+  apache2_module:
+    name: "proxy_ajp"
+    state: "present"
+
+- name: apache - enabled mod_proxy_http
+  apache2_module:
+    name: "proxy_http"
+    state: "present"
+
+- name: download esrender sources
+  get_url:
+    url: '{{esrender_archive_url}}'
+    dest: "{{edu_inst_dir}}/esrenderingservice.tar.gz"
+
+- name: extract esrender sources
+  unarchive:
+    remote_src: yes
+    src: '{{edu_inst_dir}}/esrenderingservice.tar.gz'
+    owner: "www-data"
+    group: "www-data"
+    dest: /var/www
+    creates: /var/www/esrender
+    extra_opts:
+      - --transform
+      - s/^renderingservice-[0-9.]*/esrender/
+  notify:
+    - restart apache2
+
+- name: create /var/cache/esrender
+  file:
+    path: /var/cache/esrender
+    state: "directory"
+    owner: "www-data"
+    group: "www-data"
+  notify:
+    - restart apache2
+
+- name: esrender / apache - add virtual host
+  template:
+    src: virtualhost.conf
+    dest: /etc/apache2/sites-available/esrender.conf
+
+- name: a2ensite esrender
+  command: a2ensite esrender
+  args:
+    creates: /etc/apache2/sites-enabled/esrender.conf
+  notify:
+    - restart apache2
+
+- name: a2dissite default
+  command: a2dissite 000-default
+  args:
+    removes: /etc/apache2/sites-enabled/000-default.conf
+  notify:
+    - restart apache2
+
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
+
+- name: "wait for tomcat to come up"
+  uri:
+    url: 'http://{{alf_host}}:{{tomcat_port}}/alfresco'
+    timeout: 60
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 5
+  delay: 1
+
+- name: esrender installation step 1
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    creates: /var/www/esrender/conf/esmain
+    body: step=1&LANG=1&terms_accepted=0&terms_accepted=1&send=
+
+- name: esrender installation step 2
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    creates: /var/www/esrender/conf/esmain
+    body:
+      step: 2
+      LANG: 1
+      RS_URL: '{{esrender_url}}/'
+      BASE_DIR: /var/www/esrender/
+      DATA_DIR: /var/cache/esrender/
+      REPO_URL: 'http://{{alf_host}}:{{tomcat_port}}/edu-sharing/'
+      DB_DRIVER: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '{{esrender_db.port}}'
+      DB_USER: '{{esrender_db.user}}'
+      DB_PASS: '{{esrender_db.password}}'
+      DB_NAME: '{{esrender_db.name}}'
+      send: ''
+
+- name: esrender installation step 3
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    creates: /var/www/esrender/conf/esmain
+    body: step=3&LANG=1&send=
+
+- name: register esrender at edu-sharing - edit applicationfiles in tomcat/shared/classes/ccapp-registry.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
+    line: '<entry key="applicationfiles">homeApplication.properties.xml,app-esrender.properties.xml</entry>'
+    regexp: '<entry key="applicationfiles">'
+
+- name: register esrender at edu-sharing - get esrender public key
+  xml:
+    path: /var/www/esrender/conf/esmain/homeApplication.properties.xml
+    xpath: /properties/entry[@key='public_key']
+    content: 'text'
+  register: esrender_public_key
+
+- name: register esrender at edu-sharing - add tomcat/shared/classes/app-esrender.properties.xml
+  template:
+    src: app-esrender.properties.xml
+    dest: '{{tomcat_home}}/shared/classes/app-esrender.properties.xml'
+
+- name: edit contenturl in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="contenturl">{{esrender_url}}/application/esmain/index.php</entry>'
+    regexp: '<entry key="contenturl">'
+    insertbefore: '</properties>'
+
+- name: restart alfresco
+  shell: service alfresco restart
+  args:
+    warn: false

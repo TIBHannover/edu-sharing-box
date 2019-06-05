@@ -1,0 +1,78 @@
+---
+- name: stop alfresco
+  shell: service alfresco stop
+  args:
+    warn: false
+
+- name: download edu-sharing sources
+  get_url:
+    url: '{{edu_sharing_archive_url}}'
+    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+
+- name: Ensure unzip is present
+  package:
+    name: ["unzip"]
+
+- name: extract edu-sharing sources
+  unarchive:
+    remote_src: yes
+    src: '{{edu_inst_dir}}/edu-sharing.zip'
+    dest: "{{edu_inst_dir}}"
+    creates: "{{edu_home}}"
+
+- name: edit edu-sharing build.properties
+  lineinfile:
+    path: '{{ edu_home }}/build.properties'
+    line: 'webserver.home={{tomcat_home}}'
+    regexp: '^webserver.home=.*$'
+
+- name: edit edu-sharing call-ant.sh
+  replace:
+    path: '{{ edu_home }}/call-ant.sh'
+    replace: '{{java_home}}/bin/java '
+    regexp: '^java '
+
+- name: make edu-sharing install.sh executable
+  file:
+    path: '{{ edu_home }}/install.sh'
+    mode: 'a+x'
+
+- name: run edu-sharing install.sh
+  shell: '{{ edu_home }}/install.sh'
+  args:
+    chdir: '{{ edu_home }}'
+
+- name: edit password in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="password">{{alf_password}}</entry>'
+    regexp: '<entry key="password">'
+
+- name: edit host in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="host">{{alf_host}}</entry>'
+    regexp: '<entry key="host">'
+
+- name: edit domain in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="domain">{{alf_domain}}</entry>'
+    regexp: '<entry key="domain">'
+
+- name: edit port in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="port">{{tomcat_port}}</entry>'
+    regexp: '<entry key="port">'
+
+- name: edit tomcat/shared/classes/alfresco-global.properties
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/alfresco-global.properties'
+    line: 'authentication.ticket.useSingleTicketPerUser=false'
+    regexp: '^authentication.ticket.useSingleTicketPerUser=false$'
+
+- name: start alfresco
+  shell: service alfresco start
+  args:
+    warn: false
