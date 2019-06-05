@@ -4,8 +4,8 @@ alf_installer_url: https://sourceforge.net/projects/alfresco/files/Alfresco%205.
 alf_inst_dir: /opt
 alf_home: "{{alf_inst_dir}}/alfresco-5.0.d"
 alf_password: admin
-alf_host: localhost
-alf_domain: localhost
+alf_host: 192.168.98.101
+alf_domain: 192.168.98.101
 
 java_home: "{{alf_home}}/java"
 tomcat_home: "{{alf_home}}/tomcat"

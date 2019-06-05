@@ -100,7 +100,7 @@
 
 - name: esrender installation step 1
   uri:
-    url: http://localhost/esrender/install/install.php
+    url: '{{esrender_url}}/install/install.php'
     method: POST
     body_format: form-urlencoded
     creates: /var/www/esrender/conf/esmain
@@ -108,7 +108,7 @@
 
 - name: esrender installation step 2
   uri:
-    url: http://localhost/esrender/install/install.php
+    url: '{{esrender_url}}/install/install.php'
     method: POST
     body_format: form-urlencoded
     creates: /var/www/esrender/conf/esmain
@@ -118,7 +118,7 @@
       RS_URL: '{{esrender_url}}/'
       BASE_DIR: /var/www/esrender/
       DATA_DIR: /var/cache/esrender/
-      REPO_URL: 'http://192.168.98.101:{{tomcat_port}}/edu-sharing/'
+      REPO_URL: 'http://{{alf_host}}:{{tomcat_port}}/edu-sharing/'
       DB_DRIVER: mysql
       DB_HOST: 127.0.0.1
       DB_PORT: '{{esrender_db.port}}'
@@ -129,7 +129,7 @@
 
 - name: esrender installation step 3
   uri:
-    url: http://localhost/esrender/install/install.php
+    url: '{{esrender_url}}/install/install.php'
     method: POST
     body_format: form-urlencoded
     creates: /var/www/esrender/conf/esmain
