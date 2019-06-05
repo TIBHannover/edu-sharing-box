@@ -8,9 +8,31 @@
   apt:
     name: ["python-lxml"]
 
+#- name: php - install base packages
+#  apt:
+#    name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml", "php-zip", "php-soap", "php-mbstring", "php-dom", "php-iconv", "php-fileinfo", "php-mcrypt", "php-sockets", "php-wddx", "php-date"]
+#    state: "present"
+
+# Info: renderingservicde need php5.6, because php-mysql seems not be supported since php>=7.0
+- name: Ensure apt repo packages are present
+  apt:
+    name: ["ca-certificates", "apt-transport-https"]
+
+- name: add packages.sury.org/php public_key
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+  when: ansible_distribution == 'Debian'
+
+- name: add repo packages.sury.org/php
+  apt_repository:
+    repo: 'deb https://packages.sury.org/php/ {{ansible_distribution_release}} main'
+    filename: php
+    update_cache: yes
+  when: ansible_distribution == 'Debian'
+
 - name: php - install base packages
   apt:
-    name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml"]
+    name: ["php5.6", "php5.6-cli", "php5.6-gd", "php5.6-curl", "php5.6-mysql", "php5.6-pgsql", "php5.6-xml", "php5.6-zip", "php5.6-soap", "php5.6-mbstring", "php5.6-dom", "php5.6-iconv", "php5.6-fileinfo", "php5.6-mcrypt", "php5.6-sockets", "php5.6-wddx", "libapache2-mod-php5.6"]
     state: "present"
 
 - name: apache - enabled mod_rewrite
@@ -90,7 +112,7 @@
 
 - name: "wait for tomcat to come up"
   uri:
-    url: 'http://localhost:{{tomcat_port}}/alfresco'
+    url: 'http://{{alf_host}}:{{tomcat_port}}/alfresco'
     timeout: 60
     status_code: 200
   register: result
@@ -116,7 +138,7 @@
       step: 2
       LANG: 1
       RS_URL: '{{esrender_url}}/'
-      BASE_DIR: /var/www/
+      BASE_DIR: /var/www/esrender/
       DATA_DIR: /var/cache/esrender/
       REPO_URL: 'http://192.168.98.101:{{tomcat_port}}/edu-sharing/'
       DB_DRIVER: mysql
@@ -160,19 +182,19 @@
     regexp: '<entry key="contenturl">'
     insertbefore: '</properties>'
 
-- name: edit contenturlBackend in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="contenturlBackend">{{esrender_url}}/application/esmain/index.php</entry>'
-    regexp: '<entry key="contenturlBackend">'
-    insertbefore: '</properties>'
+#- name: edit contenturlBackend in tomcat/shared/classes/homeApplication.properties.xml
+#  lineinfile:
+#    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+#    line: '<entry key="contenturlBackend">{{esrender_url}}/application/esmain/index.php</entry>'
+#    regexp: '<entry key="contenturlBackend">'
+#    insertbefore: '</properties>'
 
-- name: edit clientport in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="clientport">80</entry>'
-    regexp: '<entry key="clientport">'
-    insertbefore: '</properties>'
+#- name: edit clientport in tomcat/shared/classes/homeApplication.properties.xml
+#  lineinfile:
+#    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+#    line: '<entry key="clientport">80</entry>'
+#    regexp: '<entry key="clientport">'
+#    insertbefore: '</properties>'
 
 - name: restart alfresco
   shell: service alfresco restart
