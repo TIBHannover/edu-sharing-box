@@ -1,5 +1,3 @@
 ---
-  - include: alfresco.yml
-  - include: edusharing.yml
   - include: mariadb.yml
   - include: esrender.yml

@@ -1,0 +1,42 @@
+---
+- name: Ensure python-lxml packages are present
+  apt:
+    name: ["python-lxml"]
+
+- name: php - install base packages
+  apt:
+    name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml", "php-zip", "php-soap", "php-mbstring", "php-dom", "php-iconv", "php-fileinfo", "php-mcrypt", "php-sockets", "php-wddx", "php-date"]
+    state: "present"
+
+- name: TEST - esrender sources
+  copy:
+    src: renderingservice-4.1.11.tar.gz
+    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
+
+#- name: download esrender sources
+#  get_url:
+#    url: '{{esrender_archive_url}}'
+#    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
+
+- name: extract esrender sources
+  unarchive:
+    remote_src: yes
+    src: '{{esrender_download_dir}}/esrenderingservice.tar.gz'
+    owner: "www-data"
+    group: "www-data"
+    dest: /var/www
+    creates: /var/www/esrender
+    extra_opts:
+      - --transform
+      - s/^renderingservice-[0-9.]*/esrender/
+  notify:
+    - restart apache2
+
+- name: create /var/cache/esrender
+  file:
+    path: /var/cache/esrender
+    state: "directory"
+    owner: "www-data"
+    group: "www-data"
+  notify:
+    - restart apache2

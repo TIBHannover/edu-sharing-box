@@ -1,15 +1,26 @@
 ---
+- debug:
+    msg: "System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }}"
+
+- debug:
+    msg: "hostvars {{ hostvars }}"
 
 - name: Ensure pexpect packages are present
   apt:
     name: ["python-pexpect"]
 
-- name: download alfresco sources
-  get_url:
-    url: '{{alf_installer_url}}'
-    timeout: 60
+- name: TEST - alfresco sources
+  copy:
+    src: alfresco-community-5.0.d-installer-linux-x64.bin
     dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
     mode: "a+x"
+
+#- name: download alfresco sources
+#  get_url:
+#    url: '{{alf_installer_url}}'
+#    timeout: 60
+#    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
+#    mode: "a+x"
 
 - name: execute alfresco installer
   expect:
@@ -44,3 +55,14 @@
       'Do you want to continue\? \[Y/n\]:': "Y"
       'View Readme File \[Y/n\]:': "n"
       'Launch Alfresco Community Share \[Y/n\]:': "n"
+
+- name: Ensure python-lxml packages are present
+  apt:
+    name: ["python-lxml"]
+
+- name: modify tomcat config - allow only local access
+  xml:
+    path: '{{tomcat_home}}/conf/server.xml'
+    xpath: /Server/Service/Connector
+    attribute: address
+    value: 127.0.0.1

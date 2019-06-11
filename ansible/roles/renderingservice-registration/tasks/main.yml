@@ -1,0 +1,22 @@
+- name: register esrender at edu-sharing - edit applicationfiles in tomcat/shared/classes/ccapp-registry.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
+    line: '<entry key="applicationfiles">homeApplication.properties.xml,app-esrender.properties.xml</entry>'
+    regexp: '<entry key="applicationfiles">'
+
+- name: register esrender at edu-sharing - add tomcat/shared/classes/app-esrender.properties.xml
+  template:
+    src: app-esrender.properties.xml
+    dest: '{{tomcat_home}}/shared/classes/app-esrender.properties.xml'
+
+- name: edit contenturl in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="contenturl">{{esrender_url}}/application/esmain/index.php</entry>'
+    regexp: '<entry key="contenturl">'
+    insertbefore: '</properties>'
+
+- name: restart alfresco
+  shell: service alfresco restart
+  args:
+    warn: false

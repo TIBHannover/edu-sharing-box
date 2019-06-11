@@ -1,17 +1,14 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.define "local" do |local|
-    # local.vm.box = "ubuntu/trusty64"
-    #local.vm.box = "ubuntu/bionic64"
-    #local.vm.box = "debian/jessie64"
-    local.vm.box = "debian/stretch64"
-    local.ssh.insert_key = false
-    local.vm.hostname = "edu-sharing.box"
+  config.vm.define "edusharing" do |srv|
+    srv.vm.box = "debian/stretch64"
+    srv.ssh.insert_key = false
+    srv.vm.hostname = "edu-sharing.box"
     #local.vm.synced_folder ".", "/vagrant", create: true, disabled: false
-    local.vm.network :private_network, ip: "192.168.98.101"
+    srv.vm.network :private_network, ip: "192.168.98.101"
 
-    local.vm.provider :virtualbox do |vb|
+    srv.vm.provider :virtualbox do |vb|
       vb.name = "edu-sharing"
       vb.memory = 5120
       vb.cpus = 2
@@ -23,6 +20,10 @@ Vagrant.configure("2") do |config|
     ansible.version = "latest"
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "ansible/system.yml"
+    ansible.groups = {
+      "edusharing" => ["edusharing"],
+      "renderingservice" => ["edusharing"]
+    }
     ansible.install_mode = "pip"
     #ansible.verbose = "-vvvv"
   end

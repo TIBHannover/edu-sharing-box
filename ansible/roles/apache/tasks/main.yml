@@ -1,0 +1,49 @@
+---
+- name: Install apache
+  apt:
+    name: ["apache2"]
+    state: "present"
+
+- name: apache - enabled mod_rewrite
+  apache2_module:
+    name: "rewrite"
+    state: "present"
+
+- name: apache - enabled mod_headers
+  apache2_module:
+    name: "headers"
+    state: "present"
+
+- name: apache - enabled mod_proxy
+  apache2_module:
+    name: "proxy"
+    state: "present"
+
+- name: apache - enabled mod_proxy_ajp
+  apache2_module:
+    name: "proxy_ajp"
+    state: "present"
+
+- name: apache - enabled mod_proxy_http
+  apache2_module:
+    name: "proxy_http"
+    state: "present"
+
+- name: a2dissite default
+  command: a2dissite 000-default
+  args:
+    removes: /etc/apache2/sites-enabled/000-default.conf
+  notify:
+    - restart apache2
+
+- name: apache - add virtual host
+  template:
+    src: apache_vhost.conf.j2
+    dest: /etc/apache2/sites-available/edu-sharing.conf
+
+- name: a2ensite esrender
+  command: a2ensite edu-sharing
+  args:
+    creates: /etc/apache2/sites-enabled/edu-sharing.conf
+  notify:
+    - restart apache2

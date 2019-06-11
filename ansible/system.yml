@@ -1,5 +1,18 @@
 ---
-- hosts: all
+- hosts: edusharing
   become: yes
   roles:
     - edu-sharing
+    - apache
+
+- hosts: renderingservice
+  become: yes
+  roles:
+    - renderingservice-installation
+    - apache
+    - renderingservice-init
+
+- hosts: edusharing
+  become: yes
+  roles:
+    - renderingservice-registration

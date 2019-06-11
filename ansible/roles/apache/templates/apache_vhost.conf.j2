@@ -1,15 +1,18 @@
 <VirtualHost *:80>
+{% if esrender_vhost is defined and esrender_vhost %}
         DocumentRoot /var/www
-
         <Directory /var/www/esrender/>
           Options Indexes FollowSymLinks MultiViews
           AllowOverride All
           Require all granted
         </Directory>
+{% endif %}
 
+{% if es_proxy_vhost is defined and es_proxy_vhost %}
         ProxyPass /alfresco     ajp://localhost:{{tomcat_ajp_port}}/alfresco
         ProxyPass /share        ajp://localhost:{{tomcat_ajp_port}}/share
         ProxyPass /edu-sharing  ajp://localhost:{{tomcat_ajp_port}}/edu-sharing
+{% endif %}
 
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
