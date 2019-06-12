@@ -56,13 +56,13 @@
 - name: edit host in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="host">{{alf_host}}</entry>'
+    line: '<entry key="host">{{edu_sharing_host}}</entry>'
     regexp: '<entry key="host">'
 
 - name: edit domain in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="domain">{{alf_domain}}</entry>'
+    line: '<entry key="domain">{{edu_sharing_domain}}</entry>'
     regexp: '<entry key="domain">'
 
 - name: edit port in tomcat/shared/classes/homeApplication.properties.xml

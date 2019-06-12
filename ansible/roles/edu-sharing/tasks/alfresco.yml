@@ -42,7 +42,7 @@
       'Is the selection above correct\? \[Y/n\]:': "Y"
       'Select a folder \[.*\]:': "{{alf_home}}"
       'Database Server port \[5432\]:': "5432"
-      'Web Server domain: \[.*\]:': "{{alf_host}}"
+      'Web Server domain: \[.*\]:': "{{edu_sharing_host}}"
       'Tomcat Server Port: \[8080\]:': "{{tomcat_port}}"
       'Tomcat Shutdown Port: \[8005\]:': "{{tomcat_shutdown_port}}"
       'Tomcat SSL Port \[8443\]:': "{{tomcat_ssl_port}}"

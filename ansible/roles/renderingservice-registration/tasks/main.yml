@@ -1,3 +1,18 @@
+---
+- name: get esrender meta info
+  uri:
+    url: '{{esrender_url}}/application/esmain/metadata.php'
+    method: GET
+    return_content: yes
+  register: esrender_meta
+
+- name: get esrender public key
+  xml:
+    xmlstring: "{{esrender_meta.content}}"
+    xpath: /properties/entry[@key='public_key']
+    content: 'text'
+  register: esrender_public_key
+
 - name: register esrender at edu-sharing - edit applicationfiles in tomcat/shared/classes/ccapp-registry.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'

@@ -1,7 +1,6 @@
 ---
-alf_password: admin
-alf_host: 192.168.98.101
-alf_domain: 192.168.98.101
+edu_sharing_host: 192.168.98.101
+edu_sharing_domain: '{{edu_sharing_host}}'
 
 esrender_host: 192.168.98.101
 esrender_url: 'http://{{esrender_host}}/esrender'

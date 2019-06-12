@@ -1,7 +1,7 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.define "edusharing" do |srv|
+  config.vm.define "edu-sharing-vm" do |srv|
     srv.vm.box = "debian/stretch64"
     srv.ssh.insert_key = false
     srv.vm.hostname = "edu-sharing.box"
@@ -21,8 +21,8 @@ Vagrant.configure("2") do |config|
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "ansible/system.yml"
     ansible.groups = {
-      "edusharing" => ["edusharing"],
-      "renderingservice" => ["edusharing"]
+      "edusharing" => ["edu-sharing-vm"],
+      "renderingservice" => ["edu-sharing-vm"]
     }
     ansible.install_mode = "pip"
     #ansible.verbose = "-vvvv"

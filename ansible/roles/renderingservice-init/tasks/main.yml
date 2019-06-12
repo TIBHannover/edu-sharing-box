@@ -1,38 +1,42 @@
 ---
-- name: Force all notified handlers to run at this point, not waiting for normal sync points
-  meta: flush_handlers
+- name: check if esrender initialization is complete already
+  uri:
+    url: '{{esrender_url}}/application/esmain/metadata.php'
+    method: GET
+    status_code: [200, 500]
+  register: esrender_init_meta
 
 - name: "wait for tomcat to come up"
   uri:
-    url: 'http://{{alf_host}}/alfresco'
+    url: 'http://{{edu_sharing_host}}/edu-sharing'
     timeout: 60
     status_code: 200
   register: result
   until: result.status == 200
   retries: 5
   delay: 1
+  when: "esrender_init_meta['status'] == 500"
 
 - name: esrender installation step 1
   uri:
     url: '{{esrender_url}}/install/install.php'
     method: POST
     body_format: form-urlencoded
-    creates: /var/www/esrender/conf/esmain
     body: step=1&LANG=1&terms_accepted=0&terms_accepted=1&send=
+  when: "esrender_init_meta['status'] == 500"
 
 - name: esrender installation step 2
   uri:
     url: '{{esrender_url}}/install/install.php'
     method: POST
     body_format: form-urlencoded
-    creates: /var/www/esrender/conf/esmain
     body:
       step: 2
       LANG: 1
       RS_URL: '{{esrender_url}}/'
       BASE_DIR: /var/www/esrender/
       DATA_DIR: /var/cache/esrender/
-      REPO_URL: 'http://{{alf_host}}/edu-sharing/'
+      REPO_URL: 'http://{{edu_sharing_host}}/edu-sharing/'
       DB_DRIVER: mysql
       DB_HOST: 127.0.0.1
       DB_PORT: '{{esrender_db.port}}'
@@ -40,18 +44,12 @@
       DB_PASS: '{{esrender_db.password}}'
       DB_NAME: '{{esrender_db.name}}'
       send: ''
+  when: "esrender_init_meta['status'] == 500"
 
 - name: esrender installation step 3
   uri:
     url: '{{esrender_url}}/install/install.php'
     method: POST
     body_format: form-urlencoded
-    creates: /var/www/esrender/conf/esmain
     body: step=3&LANG=1&send=
-
-- name: register esrender at edu-sharing - get esrender public key
-  xml:
-    path: /var/www/esrender/conf/esmain/homeApplication.properties.xml
-    xpath: /properties/entry[@key='public_key']
-    content: 'text'
-  register: esrender_public_key
+  when: "esrender_init_meta['status'] == 500"

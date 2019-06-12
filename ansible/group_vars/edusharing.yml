@@ -4,6 +4,8 @@ es_proxy_vhost: true
 alf_installer_url: https://sourceforge.net/projects/alfresco/files/Alfresco%205.0.d%20Community/alfresco-community-5.0.d-installer-linux-x64.bin/download
 alf_inst_dir: /opt
 alf_home: "{{alf_inst_dir}}/alfresco-5.0.d"
+alf_password: admin
+
 java_home: "{{alf_home}}/java"
 tomcat_home: "{{alf_home}}/tomcat"
 tomcat_port: 8080
