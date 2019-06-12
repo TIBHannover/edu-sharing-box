@@ -1,12 +1,26 @@
+require 'yaml'
+settings = YAML.load_file 'ansible/group_vars/all.yml'
 
 Vagrant.configure("2") do |config|
+
+  config.vm.define "esrender-vm" do |srv|
+    srv.vm.box = "debian/stretch64"
+    srv.ssh.insert_key = false
+    srv.vm.hostname = "edu-sharing-rendering.box"
+    srv.vm.network :private_network, ip: settings['esrender_host']
+
+    srv.vm.provider :virtualbox do |vb|
+      vb.name = "edu-sharing-rendering"
+      vb.memory = 2024
+      vb.cpus = 2
+    end
+  end
 
   config.vm.define "edu-sharing-vm" do |srv|
     srv.vm.box = "debian/stretch64"
     srv.ssh.insert_key = false
     srv.vm.hostname = "edu-sharing.box"
-    #local.vm.synced_folder ".", "/vagrant", create: true, disabled: false
-    srv.vm.network :private_network, ip: "192.168.98.101"
+    srv.vm.network :private_network, ip: settings['edu_sharing_host']
 
     srv.vm.provider :virtualbox do |vb|
       vb.name = "edu-sharing"
@@ -22,9 +36,8 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "ansible/system.yml"
     ansible.groups = {
       "edusharing" => ["edu-sharing-vm"],
-      "renderingservice" => ["edu-sharing-vm"]
+      "renderingservice" => ["esrender-vm"]
     }
     ansible.install_mode = "pip"
-    #ansible.verbose = "-vvvv"
   end
 end

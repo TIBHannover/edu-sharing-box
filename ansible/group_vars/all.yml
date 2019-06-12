@@ -2,5 +2,11 @@
 edu_sharing_host: 192.168.98.101
 edu_sharing_domain: '{{edu_sharing_host}}'
 
-esrender_host: 192.168.98.101
+esrender_host: 192.168.98.102
 esrender_url: 'http://{{esrender_host}}/esrender'
+
+esrender_db:
+  port: 3306
+  name: esrender
+  user: esrender
+  password: esrender
