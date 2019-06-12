@@ -8,15 +8,15 @@
     name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml", "php-zip", "php-soap", "php-mbstring", "php-dom", "php-iconv", "php-fileinfo", "php-mcrypt", "php-sockets", "php-wddx", "php-date"]
     state: "present"
 
-- name: TEST - esrender sources
-  copy:
-    src: renderingservice-4.1.11.tar.gz
-    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
-
-#- name: download esrender sources
-#  get_url:
-#    url: '{{esrender_archive_url}}'
+#- name: TEST - esrender sources
+#  copy:
+#    src: renderingservice-4.1.11.tar.gz
 #    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
+
+- name: download esrender sources
+  get_url:
+    url: '{{esrender_archive_url}}'
+    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
 
 - name: extract esrender sources
   unarchive:

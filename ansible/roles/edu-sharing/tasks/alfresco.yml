@@ -3,18 +3,18 @@
   apt:
     name: ["python-pexpect"]
 
-- name: TEST - alfresco sources
-  copy:
-    src: alfresco-community-5.0.d-installer-linux-x64.bin
-    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
-    mode: "a+x"
-
-#- name: download alfresco sources
-#  get_url:
-#    url: '{{alf_installer_url}}'
-#    timeout: 60
+#- name: TEST - alfresco sources
+#  copy:
+#    src: alfresco-community-5.0.d-installer-linux-x64.bin
 #    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
 #    mode: "a+x"
+
+- name: download alfresco sources
+  get_url:
+    url: '{{alf_installer_url}}'
+    timeout: 60
+    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
+    mode: "a+x"
 
 - name: execute alfresco installer
   expect:

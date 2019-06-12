@@ -4,15 +4,15 @@
   args:
     warn: false
 
-- name: TEST - edu-sharing sources
-  copy:
-    src: edu-sharing_4.1.1.2018-12-13-42d9dfed.zip
-    dest: "{{edu_inst_dir}}/edu-sharing.zip"
-
-#- name: download edu-sharing sources
-#  get_url:
-#    url: '{{edu_sharing_archive_url}}'
+#- name: TEST - edu-sharing sources
+#  copy:
+#    src: edu-sharing_4.1.1.2018-12-13-42d9dfed.zip
 #    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+
+- name: download edu-sharing sources
+  get_url:
+    url: '{{edu_sharing_archive_url}}'
+    dest: "{{edu_inst_dir}}/edu-sharing.zip"
 
 - name: Ensure unzip is present
   package:
