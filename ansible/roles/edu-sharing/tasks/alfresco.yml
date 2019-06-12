@@ -1,10 +1,4 @@
 ---
-- debug:
-    msg: "System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }}"
-
-- debug:
-    msg: "hostvars {{ hostvars }}"
-
 - name: Ensure pexpect packages are present
   apt:
     name: ["python-pexpect"]
