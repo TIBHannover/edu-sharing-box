@@ -5,6 +5,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "esrender-vm" do |srv|
     srv.vm.box = "debian/stretch64"
+    srv.vm.box_version = "9.9.0" # newer version 9.9.1 with smtp daemon...
     srv.ssh.insert_key = false
     srv.vm.hostname = "edu-sharing-rendering.box"
     srv.vm.network :private_network, ip: settings['esrender_host']
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "edu-sharing-vm" do |srv|
     srv.vm.box = "debian/stretch64"
+    srv.vm.box_version = "9.9.0" # newer version 9.9.1 with smtp daemon...
     srv.ssh.insert_key = false
     srv.vm.hostname = "edu-sharing.box"
     srv.vm.network :private_network, ip: settings['edu_sharing_host']
@@ -31,13 +33,14 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible_local" do |ansible|
     ansible.install = true
+    ansible.install_mode = "pip"
     ansible.version = "latest"
+#  config.vm.provision "ansible" do |ansible|
     ansible.compatibility_mode = "2.0"
     ansible.playbook = "ansible/system.yml"
     ansible.groups = {
       "edusharing" => ["edu-sharing-vm"],
       "renderingservice" => ["esrender-vm"]
     }
-    ansible.install_mode = "pip"
   end
 end
