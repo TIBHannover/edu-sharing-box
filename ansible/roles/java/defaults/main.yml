@@ -1,0 +1,3 @@
+---
+java_name: zulu11.31.11-ca-jdk11.0.3-linux_x64
+java_archive_url: 'https://cdn.azul.com/zulu/bin/{{java_name}}.tar.gz'

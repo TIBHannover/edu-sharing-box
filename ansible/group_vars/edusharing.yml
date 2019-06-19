@@ -6,7 +6,8 @@ alf_inst_dir: /opt
 alf_home: "{{alf_inst_dir}}/alfresco-5.0.d"
 alf_password: admin
 
-java_home: "{{alf_home}}/java"
+java_inst_dir: "/opt"
+java_home: "{{java_inst_dir}}/java"
 tomcat_home: "{{alf_home}}/tomcat"
 tomcat_port: 8080
 tomcat_shutdown_port: 8005

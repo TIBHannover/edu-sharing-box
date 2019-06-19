@@ -1,0 +1,20 @@
+---
+  - name: download and extract java
+    unarchive:
+      remote_src: yes
+      src: '{{java_archive_url}}'
+      dest: "{{java_inst_dir}}"
+      creates: "{{java_inst_dir}}/{{java_name}}"
+
+  - name: create symlink
+    file:
+      path: '{{java_home}}'
+      src: '{{java_name}}'
+      state: link
+
+  - name: Set JAVA_HOME if configured.
+    template:
+      src: java_home.sh.j2
+      dest: /etc/profile.d/java_home.sh
+      mode: 0644
+    when: java_home is defined and java_home
