@@ -1,54 +1,56 @@
 ---
-- name: Ensure pexpect packages are present
-  apt:
-    name: ["python-pexpect"]
+- name: download mysql jconnector (mariadb driver not supported by alfresco)
+  get_url:
+    url: '{{mysql_jconnector_url}}'
+    dest: "{{tomcat_home}}/lib/mysql-connector-java.jar"
+    force: yes # necessary for driver updates
 
 #- name: TEST - alfresco sources
 #  copy:
-#    src: alfresco-community-5.0.d-installer-linux-x64.bin
-#    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
-#    mode: "a+x"
+#    src: alfresco-community-5.0.d.zip
+#    dest: "{{alf_inst_dir}}/alfresco-community-5.0.d.zip"
 
 - name: download alfresco sources
   get_url:
-    url: '{{alf_installer_url}}'
-    timeout: 60
-    dest: "{{alf_inst_dir}}/alfresco-community-installer.bin"
-    mode: "a+x"
+    url: '{{alf_sources_url}}'
+    dest: "{{alf_inst_dir}}/{{alf_name}}.zip"
 
-- name: execute alfresco installer
-  expect:
-    timeout: 180
+- name: Ensure unzip is present
+  package:
+    name: ["unzip"]
+
+- name: extract alfresco sources
+  unarchive:
+    remote_src: yes
+    src: '{{alf_inst_dir}}/{{alf_name}}.zip'
+    dest: "{{alf_inst_dir}}"
     creates: "{{alf_home}}"
-    command: '/bin/bash -c "{{alf_inst_dir}}/alfresco-community-installer.bin | tee {{alf_inst_dir}}/alf_installation.log"'
-    responses:
-      'Please choose an option \[1\] :':
-        - "1" # Please select the installation language | [1] English
-        - "2" # Installation Type | [2] Advanced
-      'Java \[Y/n\] :': "Y"
-      'PostgreSQL \[Y/n\] :': "Y"
-      'Solr1 \[y/N\] :': "N"
-      'Solr4 \[Y/n\] :': "Y"
-      'SharePoint \[Y/n\] :': "n"
-      'Web Quick Start \[y/N\] :': "N"
-      'Google Docs Integration \[Y/n\] :': "Y"
-      'LibreOffice \[Y/n\] :': "Y"
-      'Is the selection above correct\? \[Y/n\]:': "Y"
-      'Select a folder \[.*\]:': "{{alf_home}}"
-      'Database Server port \[5432\]:': "5432"
-      'Web Server domain: \[.*\]:': "{{edu_sharing_host}}"
-      'Tomcat Server Port: \[8080\]:': "{{tomcat_port}}"
-      'Tomcat Shutdown Port: \[8005\]:': "{{tomcat_shutdown_port}}"
-      'Tomcat SSL Port \[8443\]:': "{{tomcat_ssl_port}}"
-      'Tomcat AJP Port: \[8009\]:': "{{tomcat_ajp_port}}"
-      'Port: \[[0-9]+\]:': "21" # Please choose a port number to use for the integrated Alfresco FTP server.
-      'Admin Password:': "{{alf_password}}"
-      'Repeat Password:': "{{alf_password}}"
-      'LibreOffice Server Port \[8100\]:': "8100"
-      'Install Alfresco Community as a service\? \[Y/n\]:': "Y"
-      'Do you want to continue\? \[Y/n\]:': "Y"
-      'View Readme File \[Y/n\]:': "n"
-      'Launch Alfresco Community Share \[Y/n\]:': "n"
+
+- name: copy alresco war-files to tomcat
+  copy:
+    src: "{{item}}"
+    dest: "{{tomcat_home}}/webapps"
+    remote_src: yes
+  with_items:
+    - "{{alf_home}}/web-server/webapps/alfresco.war"
+    - "{{alf_home}}/web-server/webapps/share.war"
+
+- name: copy alresco default tomcat config
+  copy:
+    src: "{{alf_home}}/web-server/shared"
+    dest: "{{tomcat_home}}"
+    remote_src: yes
+
+- name: activate shared.loader for tomcat
+  lineinfile:
+    path: '{{ tomcat_home }}/conf/catalina.properties'
+    line: 'shared.loader=${catalina.base}/shared/classes'
+    regexp: 'shared.loader='
+
+- name: Configure alfresco-global.properties
+  template:
+    src: alfresco-global.properties
+    dest: '{{tomcat_home}}/shared/classes/alfresco-global.properties'
 
 - name: Ensure python-lxml packages are present
   apt:

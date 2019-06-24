@@ -1,0 +1,32 @@
+---
+  - name: download and extract tomcat
+    unarchive:
+      remote_src: yes
+      src: '{{tomcat_archive_url}}'
+      dest: "{{tomcat_inst_dir}}"
+      creates: "{{tomcat_inst_dir}}/{{tomcat_name}}"
+
+  - name: create symlink
+    file:
+      path: '{{tomcat_home}}'
+      src: '{{tomcat_name}}'
+      state: link
+
+  - name: Configure tomcat-users.xml
+    template:
+      src: tomcat-users.xml.j2
+      dest: '{{tomcat_home}}/conf/tomcat-users.xml'
+
+  - name: Configure server.xml
+    template:
+      src: server.xml
+      dest: '{{tomcat_home}}/conf/server.xml'
+
+  - name: Ensures tomcat_bin dir exists
+    file: path='{{tomcat_bin}}' state=directory
+
+  - name: Configure tomcat start-/stop-script
+    template:
+      src: tomcat.sh
+      dest: '{{tomcat_bin}}/tomcat.sh'
+      mode: 'a+x'

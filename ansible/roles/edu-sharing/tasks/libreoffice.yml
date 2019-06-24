@@ -1,0 +1,4 @@
+---
+  - name: Ensure libreoffice packages are present
+    apt:
+      name: ["libreoffice"]

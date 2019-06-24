@@ -31,7 +31,8 @@
     regexp: '<entry key="contenturl">'
     insertbefore: '</properties>'
 
-- name: restart alfresco
-  shell: service alfresco restart
-  args:
-    warn: false
+- name: stop alfresco
+  shell: '{{tomcat_bin}}/tomcat.sh stop'
+
+- name: start alfresco
+  shell: '{{tomcat_bin}}/tomcat.sh start'

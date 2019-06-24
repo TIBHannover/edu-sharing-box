@@ -2,11 +2,28 @@
 edu_sharing_host: 192.168.98.101
 edu_sharing_domain: '{{edu_sharing_host}}'
 
+solr_host: '{{edu_sharing_host}}'
+
 esrender_host: 192.168.98.102
 esrender_url: 'http://{{esrender_host}}/esrender'
 
+mariadb_port: 3306
 esrender_db:
-  port: 3306
   name: esrender
   user: esrender
   password: esrender
+
+java_inst_dir: "/opt"
+java_home: "{{java_inst_dir}}/java"
+
+tomcat_inst_dir: "/opt"
+tomcat_bin: "{{tomcat_inst_dir}}/bin"
+tomcat_home: "{{tomcat_inst_dir}}/tomcat"
+tomcat_port: 8080
+tomcat_shutdown_port: 8005
+tomcat_ssl_port: 8443
+tomcat_ajp_port: 8009
+
+alf_name: alfresco-community-5.0.d
+alf_inst_dir: /opt
+alf_home: "{{alf_inst_dir}}/{{alf_name}}"

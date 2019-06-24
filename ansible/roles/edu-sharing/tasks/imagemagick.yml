@@ -1,0 +1,4 @@
+---
+  - name: Ensure imagemagick packages are present
+    apt:
+      name: ["imagemagick"]

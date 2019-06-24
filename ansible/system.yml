@@ -3,11 +3,24 @@
   become: yes
   roles:
     - apache
+    - mariadb
     - renderingservice-installation
+
+- hosts: alfrescosolr4, edusharing
+  become: yes
+  roles:
+    - java
+    - tomcat
+
+- hosts: alfrescosolr4
+  become: yes
+  roles:
+    - alfresco-solr4
 
 - hosts: edusharing
   become: yes
   roles:
+    - mariadb
     - edu-sharing
     - apache
 

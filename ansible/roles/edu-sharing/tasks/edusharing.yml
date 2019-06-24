@@ -1,8 +1,6 @@
 ---
 - name: stop alfresco
-  shell: service alfresco stop
-  args:
-    warn: false
+  shell: '{{tomcat_bin}}/tomcat.sh stop'
 
 #- name: TEST - edu-sharing sources
 #  copy:
@@ -36,6 +34,12 @@
     path: '{{ edu_home }}/call-ant.sh'
     replace: '{{java_home}}/bin/java '
     regexp: '^java '
+
+- name: edit edu-sharing call-ant.sh
+  replace:
+    path: '{{ edu_home }}/call-ant.sh'
+    replace: '-classpath '
+    regexp: '-Djava.ext.dirs='
 
 - name: make edu-sharing install.sh executable
   file:
@@ -77,13 +81,5 @@
     line: '<entry key="clientport">80</entry>'
     regexp: '<entry key="clientport">'
 
-- name: edit tomcat/shared/classes/alfresco-global.properties
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/alfresco-global.properties'
-    line: 'authentication.ticket.useSingleTicketPerUser=false'
-    regexp: '^authentication.ticket.useSingleTicketPerUser=false$'
-
 - name: start alfresco
-  shell: service alfresco start
-  args:
-    warn: false
+  shell: '{{tomcat_bin}}/tomcat.sh start'

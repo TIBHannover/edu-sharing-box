@@ -1,3 +1,6 @@
 ---
+  - include: mariadb.yml
+  - include: imagemagick.yml
+  - include: libreoffice.yml
   - include: alfresco.yml
   - include: edusharing.yml

@@ -39,7 +39,7 @@
       REPO_URL: 'http://{{edu_sharing_host}}/edu-sharing/'
       DB_DRIVER: mysql
       DB_HOST: 127.0.0.1
-      DB_PORT: '{{esrender_db.port}}'
+      DB_PORT: '{{mariadb_port}}'
       DB_USER: '{{esrender_db.user}}'
       DB_PASS: '{{esrender_db.password}}'
       DB_NAME: '{{esrender_db.name}}'

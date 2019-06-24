@@ -1,0 +1,39 @@
+---
+- name: download alfresco sources
+  get_url:
+    url: '{{alf_sources_url}}'
+    dest: "{{alf_inst_dir}}/{{alf_name}}.zip"
+
+- name: Ensure unzip is present
+  package:
+    name: ["unzip"]
+
+- name: extract alfresco sources
+  unarchive:
+    remote_src: yes
+    src: '{{alf_inst_dir}}/{{alf_name}}.zip'
+    dest: "{{alf_inst_dir}}"
+    creates: "{{alf_home}}"
+
+- name: copy alresco-solr war-file to tomcat
+  copy:
+    src: "{{alf_home}}/web-server/webapps/solr4.war"
+    dest: "{{tomcat_home}}/webapps"
+    remote_src: yes
+
+- name: Ensures {{tomcat_home}}/conf/Catalina/localhost dir exists
+  file: path={{tomcat_home}}/conf/Catalina/localhost/ state=directory
+
+- name: Configure solr4 context
+  template:
+    src: solr4.xml
+    dest: '{{tomcat_home}}/conf/Catalina/localhost/solr4.xml'
+
+- name: set data.dir.root for both cores
+  lineinfile:
+    path: '{{ item }}'
+    line: 'data.dir.root={{alf_home}}/alf_data/solr4/index'
+    regexp: 'data.dir.root='
+  with_items:
+    - "{{alf_home}}/solr4/workspace-SpacesStore/conf/solrcore.properties"
+    - "{{alf_home}}/solr4/archive-SpacesStore/conf/solrcore.properties"
