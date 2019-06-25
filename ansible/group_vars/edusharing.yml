@@ -2,14 +2,6 @@
 es_proxy_vhost: true
 tomcat_user_solr_identity: true
 
-alf_sources_url: 'https://process.alfresco.com/ccdl/?file=release/community/5.0.d-build-00002/{{alf_name}}.zip'
-alf_password: admin
-
-alfresco_db:
-  name: alfresco
-  user: alfresco
-  password: alfresco
-
 edu_inst_dir: /opt
 edu_home: "{{edu_inst_dir}}/edu-sharing"
 edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.1.7/edu-sharing_4.1.7.2019-05-15-9ca4a3a2.zip

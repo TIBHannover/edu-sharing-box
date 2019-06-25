@@ -41,7 +41,12 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "alfrescosolr4" => ["edu-sharing-vm"],
       "edusharing" => ["edu-sharing-vm"],
-      "renderingservice" => ["esrender-vm"]
+      "renderingservice" => ["esrender-vm"],
+      "tomcat:children" => ["alfrescosolr4", "edusharing"],
+      "alfresco:children" => ["alfrescosolr4", "edusharing"],
+      "all:vars" => {
+        "timezone" => "Europe/Berlin"
+      }
     }
   end
 end
