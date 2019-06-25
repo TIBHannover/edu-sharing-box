@@ -2,6 +2,6 @@
 es_proxy_vhost: true
 tomcat_user_solr_identity: true
 
-edu_inst_dir: /opt
+edu_inst_dir: "{{base_dir}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
 edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.1.7/edu-sharing_4.1.7.2019-05-15-9ca4a3a2.zip

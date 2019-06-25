@@ -18,6 +18,10 @@
 - name: Ensure unzip is present
   package:
     name: ["unzip"]
+  become: yes
+  tags:
+  - packages
+  - root-task
 
 - name: extract alfresco sources
   unarchive:
@@ -55,6 +59,10 @@
 - name: Ensure python-lxml packages are present
   apt:
     name: ["python-lxml"]
+  become: yes
+  tags:
+  - packages
+  - root-task
 
 - name: modify tomcat config - allow only local access
   xml:

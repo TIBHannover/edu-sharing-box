@@ -3,34 +3,35 @@
   become: yes
   roles:
     - set-timezone
+  tags:
+    - root-task
 
-- hosts: renderingservice
+- hosts: renderingservice, edusharing
   become: yes
   roles:
     - apache
     - mariadb
+  tags:
+    - root-task
+
+- hosts: renderingservice
+  become: yes
+  roles:
     - renderingservice-installation
+  tags:
+    - root-task
 
 - hosts: alfrescosolr4, edusharing
-  become: yes
   roles:
     - java
     - tomcat
 
 - hosts: alfrescosolr4
-  become: yes
   roles:
     - alfresco-solr4
 
 - hosts: edusharing
-  become: yes
   roles:
-    - mariadb
     - edu-sharing
-    - apache
-
-- hosts: edusharing
-  become: yes
-  roles:
     - renderingservice-init
     - renderingservice-registration

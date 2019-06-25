@@ -5,7 +5,7 @@ alf_sources_url: 'https://process.alfresco.com/ccdl/?file=release/community/5.0.
 alf_password: admin
 
 alf_name: alfresco-community-5.0.d
-alf_inst_dir: /opt
+alf_inst_dir: "{{base_dir}}"
 alf_home: "{{alf_inst_dir}}/{{alf_name}}"
 
 alfresco_db:

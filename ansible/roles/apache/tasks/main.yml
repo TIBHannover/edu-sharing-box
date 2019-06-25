@@ -3,6 +3,8 @@
   apt:
     name: ["apache2"]
     state: "present"
+  tags:
+  - packages
 
 - name: apache - enabled mod_rewrite
   apache2_module:

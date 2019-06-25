@@ -7,6 +7,10 @@
 - name: Ensure unzip is present
   package:
     name: ["unzip"]
+  become: yes
+  tags:
+  - packages
+  - root-task
 
 - name: extract alfresco sources
   unarchive:

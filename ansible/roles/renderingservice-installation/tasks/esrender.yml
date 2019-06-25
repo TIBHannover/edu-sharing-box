@@ -2,11 +2,19 @@
 - name: Ensure python-lxml packages are present
   apt:
     name: ["python-lxml"]
+  become: yes
+  tags:
+  - packages
+  - root-task
 
 - name: php - install base packages
   apt:
     name: ["php", "php-cli", "php-gd", "php-curl", "php-mysql", "php-pgsql", "php-xml", "php-zip", "php-soap", "php-mbstring", "php-dom", "php-iconv", "php-fileinfo", "php-mcrypt", "php-sockets", "php-wddx", "php-date"]
     state: "present"
+  become: yes
+  tags:
+  - packages
+  - root-task
 
 #- name: TEST - esrender sources
 #  copy:

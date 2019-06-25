@@ -1,5 +1,5 @@
 ---
 esrender_vhost: true
 
-esrender_download_dir: /opt
+esrender_download_dir: "{{base_dir}}"
 esrender_archive_url: https://github.com/edu-sharing/renderingservice/archive/4.1.11.tar.gz
