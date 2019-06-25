@@ -86,4 +86,4 @@
     regexp: '<entry key="clientport">'
 
 - name: start alfresco
-  shell: '{{tomcat_bin}}/tomcat.sh start'
+  shell: 'nohup {{tomcat_bin}}/tomcat.sh start </dev/null >/dev/null 2>&1 &'
