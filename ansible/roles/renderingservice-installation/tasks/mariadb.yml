@@ -10,7 +10,7 @@
 - name: Create a new database with name 'esrender'
   mysql_db:
     name: '{{esrender_db.name}}'
-    config_file: /etc/mysql/conf.d/mysql.cnf
+    config_file: /etc/my.cnf.d/mysql.cnf
     state: present
   become: yes
   tags:

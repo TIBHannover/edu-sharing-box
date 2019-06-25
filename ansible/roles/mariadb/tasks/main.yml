@@ -1,13 +1,13 @@
 ---
-- name: Ensures /etc/mysql/conf.d dir exists
-  file: path=/etc/mysql/conf.d/ state=directory
+- name: Ensures /etc/my.cnf.d dir exists
+  file: path=/etc/my.cnf.d/ state=directory
   tags:
   - root-task
 
 - name: Configure MariaDB
   template:
     src: mysql.cnf
-    dest: /etc/mysql/conf.d/mysql.cnf
+    dest: /etc/my.cnf.d/mysql.cnf
   tags:
   - root-task
 
