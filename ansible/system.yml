@@ -24,7 +24,8 @@
 - hosts: alfrescosolr4, edusharing
   roles:
     - java
-    - tomcat
+    - role: tomcat
+      tags: [ tomcat ]
 
 - hosts: alfrescosolr4
   roles:

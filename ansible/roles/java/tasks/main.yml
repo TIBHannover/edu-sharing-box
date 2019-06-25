@@ -20,5 +20,4 @@
     when: java_home is defined and java_home
     become: yes
     tags:
-    - packages
     - root-task
