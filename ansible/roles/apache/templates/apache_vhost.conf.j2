@@ -1,7 +1,7 @@
 <VirtualHost *:80>
 {% if esrender_vhost is defined and esrender_vhost %}
-        DocumentRoot /var/www
-        <Directory /var/www/esrender/>
+        DocumentRoot {{esrender_document_root}}
+        <Directory {{esrender_base_dir}}/>
           Options Indexes FollowSymLinks MultiViews
           AllowOverride All
           Require all granted

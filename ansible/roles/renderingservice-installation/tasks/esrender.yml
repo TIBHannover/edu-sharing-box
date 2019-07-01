@@ -32,8 +32,8 @@
     src: '{{esrender_download_dir}}/esrenderingservice.tar.gz'
     owner: "www-data"
     group: "www-data"
-    dest: /var/www
-    creates: /var/www/esrender
+    dest: '{{esrender_document_root}}'
+    creates: '{{esrender_base_dir}}'
     extra_opts:
       - --transform
       - s/^renderingservice-[0-9.]*/esrender/
@@ -42,7 +42,7 @@
 
 - name: create /var/cache/esrender
   file:
-    path: /var/cache/esrender
+    path: '{{esrender_cache_dir}}'
     state: "directory"
     owner: "www-data"
     group: "www-data"

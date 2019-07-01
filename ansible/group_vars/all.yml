@@ -19,3 +19,7 @@ tomcat_ssl_port: 8443
 tomcat_ajp_port: 8009
 
 base_dir: "{{ansible_env.HOME}}"
+
+esrender_document_root: '/var/www'
+esrender_base_dir: '{{esrender_document_root}}/esrender'
+esrender_cache_dir: '/var/cache/esrender'

@@ -34,8 +34,8 @@
       step: 2
       LANG: 1
       RS_URL: '{{esrender_url}}/'
-      BASE_DIR: /var/www/esrender/
-      DATA_DIR: /var/cache/esrender/
+      BASE_DIR: '{{esrender_base_dir}}/'
+      DATA_DIR: '{{esrender_cache_dir}}/'
       REPO_URL: 'http://{{edu_sharing_host}}/edu-sharing/'
       DB_DRIVER: mysql
       DB_HOST: 127.0.0.1
