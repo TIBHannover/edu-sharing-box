@@ -1,6 +1,6 @@
 ---
 - name: stop alfresco
-  shell: '{{tomcat_bin}}/tomcat.sh stop'
+  shell: '{{tomcat_stop_command}}'
 
 #- name: TEST - edu-sharing sources
 #  copy:
@@ -86,4 +86,4 @@
     regexp: '<entry key="clientport">'
 
 - name: start alfresco
-  shell: 'nohup {{tomcat_bin}}/tomcat.sh start </dev/null >/dev/null 2>&1 &'
+  shell: '{{tomcat_start_command}}'
