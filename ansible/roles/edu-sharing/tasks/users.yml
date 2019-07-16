@@ -57,3 +57,35 @@
   no_log: true
   tags:
   - edu-sharing-users
+
+- name: "add esguest user"
+  uri:
+    url: 'http://{{edu_sharing_host}}/edu-sharing/rest/iam/v1/people/-home-/esguest'
+    method: POST
+    body_format: json
+    status_code: [200, 400]
+    headers:
+      Accept: 'application/json'
+      Authorization: 'Bearer {{accesstoken}}'
+    body:
+      firstName: esguest
+      lastName: esguest
+      email: 'esguest@esguest.com'
+  no_log: true
+  when : 'use_esguest_user'
+  tags:
+  - edu-sharing-users
+
+- name: "change esguest password"
+  uri:
+    url: 'http://{{edu_sharing_host}}/edu-sharing/rest/iam/v1/people/-home-/esguest/credential'
+    method: PUT
+    body_format: json
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+    body:
+      newPassword: 'esguest'
+  no_log: true
+  when : 'use_esguest_user'
+  tags:
+  - edu-sharing-users

@@ -1,6 +1,7 @@
 ---
 es_proxy_vhost: true
 tomcat_user_solr_identity: true
+use_esguest_user: true
 
 edu_inst_dir: "{{base_dir}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
