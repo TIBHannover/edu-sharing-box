@@ -41,8 +41,8 @@
 
 - name: copy alresco default tomcat config
   copy:
-    src: "{{alf_home}}/web-server/shared"
-    dest: "{{tomcat_home}}"
+    src: "{{alf_home}}/web-server/shared/classes"
+    dest: "{{tomcat_home}}/shared/"
     remote_src: yes
 
 - name: activate shared.loader for tomcat
