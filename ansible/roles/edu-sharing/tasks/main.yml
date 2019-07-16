@@ -4,3 +4,4 @@
   - include: libreoffice.yml
   - include: alfresco.yml
   - include: edusharing.yml
+  - include: users.yml

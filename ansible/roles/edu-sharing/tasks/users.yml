@@ -1,0 +1,59 @@
+- name: "wait for tomcat to come up"
+  uri:
+    url: 'http://{{edu_sharing_host}}/edu-sharing'
+    timeout: 60
+    status_code: 200
+  register: esresult
+  until: esresult.status == 200
+  retries: 5
+  delay: 1
+  tags:
+  - edu-sharing-users
+
+- name: "get access token"
+  uri:
+    url: 'http://{{edu_sharing_host}}/edu-sharing/oauth2/token'
+    method: POST
+    body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password={{alf_password}}'
+    return_content: yes
+    status_code: [200, 401]
+  register: accesstokenreply
+  no_log: true
+  tags:
+  - edu-sharing-users
+
+- name: "get access token for default user"
+  uri:
+    url: 'http://{{edu_sharing_host}}/edu-sharing/oauth2/token'
+    method: POST
+    body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password=admin'
+    return_content: yes
+  register: accesstokenreplydefault
+  when: "accesstokenreply['status'] == 401"
+  no_log: true
+  tags:
+  - edu-sharing-users
+
+- name: "set access token"
+  vars:
+    reply: '{{accesstokenreply if accesstokenreply["status"] == 200 else accesstokenreplydefault}}'
+    jsonVar: '{{reply.content | from_json}}'
+  set_fact:
+    accesstoken: '{{jsonVar.access_token}}'
+  no_log: true
+  tags:
+  - edu-sharing-users
+
+- name: "change default password"
+  uri:
+    url: 'http://{{edu_sharing_host}}/edu-sharing/rest/iam/v1/people/-home-/admin/credential'
+    method: PUT
+    body_format: json
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+    body:
+      newPassword: '{{alf_password}}'
+  when: "accesstokenreply['status'] == 401"
+  no_log: true
+  tags:
+  - edu-sharing-users
