@@ -19,8 +19,6 @@
     path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
     line: '<entry key="applicationfiles">\g<start>\g<end>,app-esrender.properties.xml</entry>'
     regexp: '^\s*<entry key="applicationfiles">(?P<start>(?:(?!,app-esrender.properties.xml).)*)(,app-esrender.properties.xml)?(?P<end>.*?)</entry>'
-  tags:
-    - test
 
 - name: register esrender at edu-sharing - add tomcat/shared/classes/app-esrender.properties.xml
   template:
