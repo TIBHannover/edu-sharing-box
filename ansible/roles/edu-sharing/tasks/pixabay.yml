@@ -1,0 +1,11 @@
+- name: register pixabay - add app-pixabay.properties.xml
+  template:
+    src: pixabay.properties.xml
+    dest: '{{tomcat_home}}/shared/classes/app-pixabay.properties.xml'
+
+- name: register pixabay - edit applicationfiles in ccapp-registry.properties.xml
+  lineinfile:
+    backrefs: yes
+    path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
+    line: '<entry key="applicationfiles">\g<start>\g<end>,app-pixabay.properties.xml</entry>'
+    regexp: '^\s*<entry key="applicationfiles">(?P<start>(?:(?!,app-pixabay.properties.xml).)*)(,app-pixabay.properties.xml)?(?P<end>.*?)</entry>'
