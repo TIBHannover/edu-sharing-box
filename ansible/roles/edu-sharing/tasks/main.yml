@@ -7,3 +7,5 @@
   - include: users.yml
   - include: pixabay.yml
     when: connect_content_pixabay
+  - include: youtube.yml
+    when: connect_content_youtube

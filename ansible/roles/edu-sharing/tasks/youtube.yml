@@ -1,0 +1,11 @@
+- name: register youtube - add app-youtube.properties.xml
+  template:
+    src: youtube.properties.xml
+    dest: '{{tomcat_home}}/shared/classes/app-youtube.properties.xml'
+
+- name: register youtube - edit applicationfiles in ccapp-registry.properties.xml
+  lineinfile:
+    backrefs: yes
+    path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
+    line: '<entry key="applicationfiles">\g<start>\g<end>,app-youtube.properties.xml</entry>'
+    regexp: '^\s*<entry key="applicationfiles">(?P<start>(?:(?!,app-youtube.properties.xml).)*)(,app-youtube.properties.xml)?(?P<end>.*?)</entry>'
