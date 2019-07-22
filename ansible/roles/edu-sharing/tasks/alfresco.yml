@@ -39,6 +39,9 @@
     - "{{alf_home}}/web-server/webapps/alfresco.war"
     - "{{alf_home}}/web-server/webapps/share.war"
 
+- name: Ensures {{tomcat_home}}/shared dir exists
+  file: path={{tomcat_home}}/shared/ state=directory
+
 - name: copy alresco default tomcat config
   copy:
     src: "{{alf_home}}/web-server/shared/classes"
