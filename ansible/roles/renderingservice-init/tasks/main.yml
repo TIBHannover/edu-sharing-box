@@ -53,3 +53,24 @@
     body_format: form-urlencoded
     body: step=3&LANG=1&send=
   when: "esrender_init_meta['status'] == 500"
+
+- name: esrender update login
+  uri:
+    url: '{{esrender_url}}/admin/?login=1'
+    method: POST
+    body_format: form-urlencoded
+    body:
+      username: '{{esrender_db.user}}'
+      password: '{{esrender_db.password}}'
+  register: esrender_login
+
+- name: esrender update
+  uri:
+    url: '{{esrender_url}}/admin/?'
+    method: POST
+    body_format: form-urlencoded
+    headers:
+      Cookie: "{{esrender_login.set_cookie}}"
+    body:
+      action: doupdate
+    return_content: yes

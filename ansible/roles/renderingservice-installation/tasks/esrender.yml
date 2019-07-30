@@ -16,10 +16,8 @@
   - packages
   - root-task
 
-#- name: TEST - esrender sources
-#  copy:
-#    src: renderingservice-4.1.11.tar.gz
-#    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
+- name: Ensures inst-dir exists
+  file: path='{{esrender_download_dir}}' state=directory
 
 - name: download esrender sources
   get_url:
@@ -33,7 +31,6 @@
     owner: "www-data"
     group: "www-data"
     dest: '{{esrender_document_root}}'
-    creates: '{{esrender_base_dir}}'
     extra_opts:
       - --transform
       - s/^renderingservice-[0-9.]*/esrender/
