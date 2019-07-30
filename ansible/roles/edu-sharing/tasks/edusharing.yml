@@ -88,6 +88,14 @@
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
     line: '<entry key="appcaption">{{edu_repo_caption}}</entry>'
     regexp: '<entry key="appcaption">'
+    insertbefore: '</properties>'
+
+- name: edit appid in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="appid">{{edu_repo_id}}</entry>'
+    regexp: '<entry key="appid">'
+    insertbefore: '</properties>'
 
 - name: start alfresco
   shell: '{{tomcat_start_command}}'
