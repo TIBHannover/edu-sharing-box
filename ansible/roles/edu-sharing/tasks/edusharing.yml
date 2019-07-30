@@ -83,5 +83,11 @@
     line: '<entry key="clientport">80</entry>'
     regexp: '<entry key="clientport">'
 
+- name: edit appcaption in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="appcaption">{{edu_repo_caption}}</entry>'
+    regexp: '<entry key="appcaption">'
+
 - name: start alfresco
   shell: '{{tomcat_start_command}}'

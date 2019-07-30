@@ -16,3 +16,5 @@ edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/dow
 
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
+
+edu_repo_caption: local-repo-vmtest
