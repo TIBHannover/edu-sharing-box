@@ -62,7 +62,7 @@ stop_tomcat() {
         if [ $TOMCAT_ASTOMCATUSER -eq 1 ]; then
             $TOMCAT_BINDIR/daemon.sh stop
         else
-            $TOMCAT_BINDIR/shutdown.sh 300 -force
+            $TOMCAT_BINDIR/shutdown.sh 5 -force
         fi
     sleep 2
     is_tomcat_running
