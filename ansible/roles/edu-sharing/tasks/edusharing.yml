@@ -2,10 +2,8 @@
 - name: stop alfresco
   shell: '{{tomcat_stop_command}}'
 
-#- name: TEST - edu-sharing sources
-#  copy:
-#    src: edu-sharing_4.1.1.2018-12-13-42d9dfed.zip
-#    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+- name: Ensures inst-dir exists
+  file: path='{{edu_inst_dir}}' state=directory
 
 - name: download edu-sharing sources
   get_url:

@@ -9,6 +9,10 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
-edu_inst_dir: "{{base_dir}}"
-edu_home: "{{edu_inst_dir}}/edu-sharing"
+edu_version: 4.1.7
+#edu_version: 4.2.2
 edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.1.7/edu-sharing_4.1.7.2019-05-15-9ca4a3a2.zip
+#edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.2.2/edu-sharing_4.2.2.2019-07-23-5a3bfb26.zip
+
+edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
+edu_home: "{{edu_inst_dir}}/edu-sharing"
