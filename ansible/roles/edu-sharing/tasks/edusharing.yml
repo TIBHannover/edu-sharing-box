@@ -97,5 +97,20 @@
     regexp: '<entry key="appid">'
     insertbefore: '</properties>'
 
+- name: edit mail properties in tomcat/shared/classes/ccmail.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/ccmail.properties.xml'
+    line: '<entry key="{{item[0]}}">{{item[1]}}</entry>'
+    regexp: '<entry key="{{item[0]}}">'
+    insertbefore: '</properties>'
+  loop:
+    - ["mail.report.receiver", '{{edu_mail_report_receiver | default("")}}']
+    - ["mail.authtype", '{{ edu_mail_authtype | default("") }}']
+    - ["mail.smtp.server", '{{ edu_mail_smtp_server | default("") }}']
+    - ["mail.smtp.passwd", '{{ edu_mail_smtp_passwd | default("") }}']
+    - ["mail.smtp.username", '{{ edu_mail_smtp_username | default("") }}']
+    - ["mail.smtp.port", '{{ edu_mail_smtp_port | default("25") }}']
+    - ["mail.smtp.from", '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}']
+
 - name: start alfresco
   shell: '{{tomcat_start_command}}'

@@ -21,3 +21,16 @@ edu_home: "{{edu_inst_dir}}/edu-sharing"
 
 edu_repo_caption: local-repo-vmtest
 edu_repo_id: local
+
+# the receiver address where to send mails
+edu_mail_report_receiver:
+# the encryption used to send mails, at the moment only "tls" or none (blank) is supported
+edu_mail_authtype: tls
+edu_mail_smtp_server:
+# the credentials on the mail server needed to send mails, leave blank if not needed
+edu_mail_smtp_username:
+edu_mail_smtp_passwd:
+# the mail server port
+edu_mail_smtp_port: 25
+# the sender address used to send mails
+edu_mail_smtp_from: pleasechange@nodomain.com
