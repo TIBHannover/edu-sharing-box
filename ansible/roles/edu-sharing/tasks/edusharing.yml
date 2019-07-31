@@ -53,49 +53,20 @@
   args:
     chdir: '{{ edu_home }}'
 
-- name: edit password in tomcat/shared/classes/homeApplication.properties.xml
+- name: add or edit properties in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="password">{{alf_password}}</entry>'
-    regexp: '<entry key="password">'
-
-- name: edit host in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="host">{{edu_sharing_host}}</entry>'
-    regexp: '<entry key="host">'
-
-- name: edit domain in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="domain">{{edu_sharing_domain}}</entry>'
-    regexp: '<entry key="domain">'
-
-- name: edit port in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="port">80</entry>'
-    regexp: '<entry key="port">'
-
-- name: edit port in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="clientport">80</entry>'
-    regexp: '<entry key="clientport">'
-
-- name: edit appcaption in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="appcaption">{{edu_repo_caption}}</entry>'
-    regexp: '<entry key="appcaption">'
+    line: '<entry key="{{item[0]}}">{{item[1]}}</entry>'
+    regexp: '<entry key="{{item[0]}}">'
     insertbefore: '</properties>'
-
-- name: edit appid in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="appid">{{edu_repo_id}}</entry>'
-    regexp: '<entry key="appid">'
-    insertbefore: '</properties>'
+  loop:
+    - ["appid", '{{edu_repo_id}}']
+    - ["appcaption", '{{edu_repo_caption}}']
+    - ["clientport", '80']
+    - ["port", '80']
+    - ["domain", '{{edu_sharing_domain}}']
+    - ["host", '{{edu_sharing_host}}']
+    - ["password", '{{alf_password}}']
 
 - name: edit mail properties in tomcat/shared/classes/ccmail.properties.xml
   lineinfile:
