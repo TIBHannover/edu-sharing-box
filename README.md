@@ -21,3 +21,17 @@ Die Anmeldung an der VM via SSH erfolgt in diesem Beispiel noch vereinfacht und 
 ```
 vagrant ssh
 ```
+
+## Update
+
+### edu-sharing aktualisieren
+
+* Update Notes prüfen unter https://docs.edu-sharing.com/confluence/edp/en/updating-en/updating-the-repository und ggf. Prozess anpassen
+* *edu_version* und *edu_sharing_archive_url* anpassen in den edusharing-vars
+* playbook ausführen
+
+### renderingservice aktualisieren
+
+* Update Notes prüfen unter https://docs.edu-sharing.com/confluence/edp/en/updating-en/updating-the-rendering-service und ggf. Prozess anpassen
+* *esrender_version* anpassen in den renderingservice-vars
+* playbook ausführen
