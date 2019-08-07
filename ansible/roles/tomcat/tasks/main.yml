@@ -30,3 +30,9 @@
       src: tomcat.sh
       dest: '{{tomcat_bin}}/tomcat.sh'
       mode: 'a+x'
+
+  - name: Creates an crontab entry "@reboot {{tomcat_bin}}/tomcat.sh"
+    cron:
+      name: "tomcat start at reboot"
+      special_time: reboot
+      job: "{{tomcat_bin}}/tomcat.sh start"
