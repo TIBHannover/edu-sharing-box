@@ -7,7 +7,7 @@ Dieses Projekt bietet die Möglichkeit, ein edu-sharing mit minimalem Aufwand in
 
 Die folgenden Schritte im Terminal (Linux/macOS) oder in der GitBash (Windows) ausführen.
 ```
-git clone https://git.tib.eu/boxes/edu-sharing-box.git
+git clone https://github.com/TIBHannover/edu-sharing-box.git
 cd edu-sharing-box
 vagrant up
 ```
