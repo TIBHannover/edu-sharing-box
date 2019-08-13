@@ -25,6 +25,48 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
+- name: set imprint url
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/imprintUrl'
+    value: '{{ edu_imprinturl | default("") }}'
+    pretty_print: yes
+  tags: edu-sharing-config
+
+- name: set privacyInformation url
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/privacyInformationUrl'
+    value: '{{ edu_privacyInformationUrl | default("") }}'
+    pretty_print: yes
+  tags: edu-sharing-config
+
+- name: set banner url
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/banner/url'
+    value: '{{ edu_banner_url | default("") }}'
+    pretty_print: yes
+  tags: edu-sharing-config
+
+- name: clear banner components
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/banner/components'
+    state: absent
+    pretty_print: yes
+  tags: edu-sharing-config
+
+- name: set banner components
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/banner'
+    add_children: '<components>{{ item }}</components>'
+    input_type: xml
+    pretty_print: yes
+  with_items: '{{edu_banner_components}}'
+  tags: edu-sharing-config
+
 - name: edit edu-sharing build.properties
   lineinfile:
     path: '{{ edu_home }}/build.properties'

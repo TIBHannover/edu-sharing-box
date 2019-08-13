@@ -1,0 +1,8 @@
+# when 'edu_banner_path' is set, the banner will be copied into the edu-sharing instance
+# => you may use 'edu_banner_url=http://{{edu_sharing_host}}/edu-sharing/images/logos/<banner-name>' then
+- name: Copy custom banner
+  copy:
+    src: '{{edu_banner_path}}'
+    dest: '{{edu_home}}/war/edu_sharing/images/logos/'
+  when: (edu_banner_path is defined) and (edu_banner_path != "") and (edu_banner_path is not none)
+  tags: edu-sharing-config
