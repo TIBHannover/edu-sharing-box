@@ -125,5 +125,7 @@
     - ["mail.smtp.port", '{{ edu_mail_smtp_port | default("25") }}']
     - ["mail.smtp.from", '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}']
 
+- include: metadatasets.yml
+
 - name: start alfresco
   shell: '{{tomcat_start_command}}'
