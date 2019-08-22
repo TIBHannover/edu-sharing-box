@@ -3,6 +3,8 @@
 Dieses Projekt bietet die Möglichkeit, ein edu-sharing mit minimalem Aufwand in einer virtuellen Maschine aufzusetzen. Voraussetzung ist die Installation von
 [Git](https://git-scm.com/downloads),  [Vagrant](https://www.vagrantup.com/downloads.html) und [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 
+Außerdem kann eine Moodle-Instanz an das Repositorium angebunden werden. Siehe hierfür [Moodle-Integration](#moodle-integration)
+
 ## Installation
 
 Die folgenden Schritte im Terminal (Linux/macOS) oder in der GitBash (Windows) ausführen.
@@ -35,3 +37,11 @@ vagrant ssh
 * Update Notes prüfen unter https://docs.edu-sharing.com/confluence/edp/en/updating-en/updating-the-rendering-service und ggf. Prozess anpassen
 * *esrender_version* anpassen in den renderingservice-vars
 * playbook ausführen
+
+## Moodle Integration
+
+- zunächst Edu-Sharing-Box wie in [Installation](#installation) geschildert installieren
+- nach erfolgreicher Installation die [Moodle-Box](https://github.com/TIBHannover/moodle-box) installieren. Dabei darauf achten, dass im Vagrantfile `ansible.skip_tags = [ "edu-sharing-plugin" ]` auskommentiert ist, damit das Plugin installiert wird
+- anschließend im Vagrantfile der Edu-Sharing-Box die Auskommentierung von `ansible.skip_tags = [ "moodle-registration" ]` entfernen
+- im edu-sharing-box-Verzeichnis den Befehl `vagrant reload --provision`ausführen
+- nun sollte in moodle eine Einbindung des edu-sharing Repositoriums erfolgt sein
