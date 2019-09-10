@@ -1,0 +1,115 @@
+---
+# Register the Moodle App in esrepo
+- name: Ensure necessary packages are present
+  apt:
+    name: '{{ packages }}'
+    state: present
+  become: yes
+  vars:
+    packages:
+      - python-lxml
+  tags:
+  - packages
+  - root-task
+
+- name: get moodle metadata info
+  uri:
+    url: '{{ moodle_url }}/mod/edusharing/metadata.php'
+    method: GET
+    return_content: yes
+  register: moodle_meta
+
+- name: get moodle appid
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='appid']
+    content: 'text'
+  register: moodle_appid
+
+- name: get moodle type
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='type']
+    content: 'text'
+  register: moodle_type
+
+- name: get moodle subtype
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='subtype']
+    content: 'text'
+  register: moodle_subtype
+
+- name: get moodle domain
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='domain']
+    content: 'text'
+  register: moodle_domain
+
+- name: get moodle host
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='host']
+    content: 'text'
+  register: moodle_host
+
+- name: get moodle trustedclient
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='trustedclient']
+    content: 'text'
+  register: moodle_trustedclient
+
+- name: get moodle hasTeachingPermission
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='hasTeachingPermission']
+    content: 'text'
+  register: moodle_hasTeachingPermission
+
+- name: get moodle public_key
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='public_key']
+    content: 'text'
+  register: moodle_public_key
+
+- name: get moodle appcaption
+  xml:
+    xmlstring: "{{moodle_meta.content}}"
+    xpath: /properties/entry[@key='appcaption']
+    content: 'text'
+  register: moodle_appcaption
+
+# Stop and start alfresco later to recognize changes
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
+
+- name: Copy app-moodle.properties.xml to tomcat
+  template:
+    src: app-moodle.properties.xml.j2
+    dest: '{{tomcat_home}}/shared/classes/app-moodle.properties.xml'
+    mode: 0644
+
+- name: Add moodle-app in ccapp-registry.properties.xml
+  xml:
+    path: '{{tomcat_home}}/shared/classes/ccapp-registry.properties.xml'
+    xpath: /properties/entry[@key='applicationfiles']
+    content: 'text'
+  register: current_applicationfiles
+
+- name: Set up a string variable
+  set_fact:
+    updated_applicationfiles_with_moodle: "{{current_applicationfiles.matches[0]['entry'] + ',app-moodle.properties.xml' }}"
+  when: "'app-moodle.properties.xml' not in current_applicationfiles.matches"
+
+- name: Copy ccapp-registry.properties.xml to tomcat
+  template:
+    src: ccapp-registry.properties.xml.j2
+    dest: '{{tomcat_home}}/shared/classes/ccapp-registry.properties.xml'
+    mode: 0644
+  when: "'app-moodle.properties.xml' not in current_applicationfiles.matches[0]['entry']"
+
+- name: start alfresco
+  shell: '{{tomcat_start_command}}'

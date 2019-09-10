@@ -36,3 +36,9 @@
     - edu-sharing
     - renderingservice-init
     - renderingservice-registration
+
+- hosts: edusharing
+  roles:
+    - moodle-registration
+  tags:
+    - moodle-registration
