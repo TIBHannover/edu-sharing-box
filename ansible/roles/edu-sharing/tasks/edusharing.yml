@@ -104,8 +104,10 @@
   loop:
     - ["appid", '{{edu_repo_id}}']
     - ["appcaption", '{{edu_repo_caption}}']
-    - ["clientport", '80']
-    - ["port", '80']
+    - ["clientport", '{{ edu_sharing_clientport | default("80") }}']
+    - ["port", '{{ edu_sharing_port | default("80") }}']
+    - ["protocol", '{{ edu_sharing_protocol | default("http") }}']
+    - ["clientprotocol", '{{ edu_sharing_clientprotocol | default("http") }}']
     - ["domain", '{{edu_sharing_domain}}']
     - ["host", '{{edu_sharing_host}}']
     - ["password", '{{alf_password}}']
