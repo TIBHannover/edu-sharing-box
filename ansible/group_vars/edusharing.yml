@@ -9,6 +9,10 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
+register_moodle: false
+moodle_host: 192.168.98.105
+moodle_url: "http://{{moodle_host}}"
+
 #edu_version: 4.1.7
 edu_version: 4.1.8
 # edu_version: 4.2.2

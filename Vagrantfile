@@ -50,6 +50,5 @@ Vagrant.configure("2") do |config|
         "timezone" => "Europe/Berlin"
       }
     }
-    ansible.skip_tags = [ "moodle-registration" ]
   end
 end

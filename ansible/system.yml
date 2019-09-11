@@ -39,6 +39,7 @@
 
 - hosts: edusharing
   roles:
-    - moodle-registration
+    - role: moodle-registration
+      when: register_moodle
   tags:
     - moodle-registration
