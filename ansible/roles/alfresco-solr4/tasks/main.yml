@@ -1,4 +1,14 @@
 ---
+- name: undeploy alresco war-files from tomcat
+  file:
+    path: "{{tomcat_home}}/webapps/solr4.war"
+    state: absent
+
+- name: wait for war-file-undeployment
+  wait_for:
+    path: "{{tomcat_home}}/webapps/solr4/"
+    state: absent
+
 - name: download alfresco sources
   get_url:
     url: '{{alf_sources_url}}'

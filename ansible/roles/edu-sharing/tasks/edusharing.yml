@@ -1,9 +1,16 @@
 ---
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
-
 - name: Ensures inst-dir exists
   file: path='{{edu_inst_dir}}' state=directory
+
+- name: undeploy edu-sharing war-files from tomcat
+  file:
+    path: "{{tomcat_home}}/webapps/edu-sharing/"
+    state: absent
+
+- name: wait for war-file-undeployment
+  wait_for:
+    path: "{{tomcat_home}}/work/Catalina/localhost/edu-sharing/"
+    state: absent
 
 - name: download edu-sharing sources
   get_url:
@@ -24,6 +31,9 @@
     src: '{{edu_inst_dir}}/edu-sharing.zip'
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
+
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
 
 - name: set imprint url
   xml:
