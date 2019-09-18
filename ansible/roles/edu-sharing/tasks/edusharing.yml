@@ -2,16 +2,6 @@
 - name: Ensures inst-dir exists
   file: path='{{edu_inst_dir}}' state=directory
 
-- name: undeploy edu-sharing war-files from tomcat
-  file:
-    path: "{{tomcat_home}}/webapps/edu-sharing/"
-    state: absent
-
-- name: wait for war-file-undeployment
-  wait_for:
-    path: "{{tomcat_home}}/work/Catalina/localhost/edu-sharing/"
-    state: absent
-
 - name: download edu-sharing sources
   get_url:
     url: '{{edu_sharing_archive_url}}'
@@ -94,6 +84,16 @@
     path: '{{ edu_home }}/call-ant.sh'
     replace: '-classpath '
     regexp: '-Djava.ext.dirs='
+
+- name: make edu-sharing call-ant.sh executable
+  file:
+    path: '{{ edu_home }}/call-ant.sh'
+    mode: 'a+x'
+
+- name: undeploy edu-sharing
+  shell: '{{ edu_home }}/call-ant.sh undeploy'
+  args:
+    chdir: '{{ edu_home }}'
 
 - name: make edu-sharing install.sh executable
   file:
