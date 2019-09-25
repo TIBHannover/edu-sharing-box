@@ -1,0 +1,49 @@
+---
+- name: Ensure postgres python packages are present
+  package:
+    name: python-psycopg2
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+# postgres requires commands (like db creation) to be executed as local user 'postgres' per default
+# -> we are not able to use this procedure, because of the 'become unpriv user problem' in ansible
+# switching the auth-method from peer is no option either
+# -> our procedure: set postgres-pw for db configurationo and remove afterwards
+- name: Set postgres password
+  become: yes
+  shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD ''{{postgres_tmp_root_password}}'';\""'
+  tags:
+  - packages
+  - root-task
+
+- name: Create a new database with name 'esrender'
+  postgresql_db:
+    login_password: '{{postgres_tmp_root_password}}'
+    login_host: localhost
+    name: '{{esrender_db.name}}'
+    encoding: 'utf8'
+    state: present
+  become: yes
+  tags:
+  - root-task
+
+- name: Create esrender database user
+  postgresql_user:
+    login_password: '{{postgres_tmp_root_password}}'
+    login_host: localhost
+    db: '{{esrender_db.name}}'
+    name: '{{esrender_db.user}}'
+    password: '{{esrender_db.password}}'
+    priv: 'ALL'
+  become: yes
+  tags:
+  - root-task
+
+- name: remove postgres password
+  become: yes
+  shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD null;\""'
+  tags:
+  - packages
+  - root-task

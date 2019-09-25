@@ -44,7 +44,28 @@
       DB_PASS: '{{esrender_db.password}}'
       DB_NAME: '{{esrender_db.name}}'
       send: ''
-  when: "esrender_init_meta['status'] == 500"
+  when: "esrender_init_meta['status'] == 500 and esrender_db_type == 'mariadb'"
+
+- name: esrender installation step 2
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    body:
+      step: 2
+      LANG: 1
+      RS_URL: '{{esrender_url}}/'
+      BASE_DIR: '{{esrender_base_dir}}/'
+      DATA_DIR: '{{esrender_cache_dir}}/'
+      REPO_URL: 'http://{{edu_sharing_host}}/edu-sharing/'
+      DB_DRIVER: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '{{postgresql_port}}'
+      DB_USER: '{{esrender_db.user}}'
+      DB_PASS: '{{esrender_db.password}}'
+      DB_NAME: '{{esrender_db.name}}'
+      send: ''
+  when: "esrender_init_meta['status'] == 500 and esrender_db_type == 'postgresql'"
 
 - name: esrender installation step 3
   uri:

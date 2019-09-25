@@ -8,9 +8,14 @@ dir.keystore=${dir.root}/keystore
 # database connection properties
 db.username={{alfresco_db.user}}
 db.password={{alfresco_db.password}}
+{% if alfresco_db_type == 'postgresql' %}
+db.driver=org.postgresql.Driver
+db.url=jdbc:postgresql://localhost:{{postgresql_port}}/{{alfresco_db.name}}
+{% elif alfresco_db_type == 'mariadb' %}
 db.driver=com.mysql.jdbc.Driver
 db.url=jdbc:mysql://localhost/{{alfresco_db.name}}?useUnicode=yes&characterEncoding=UTF-8
 hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+{% endif %}
 
 index.subsystem.name=solr4
 # TODO solr host have to be configured first: allow access from alfresco host

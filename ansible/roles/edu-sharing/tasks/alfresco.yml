@@ -20,6 +20,14 @@
     url: '{{mysql_jconnector_url}}'
     dest: "{{tomcat_home}}/lib/mysql-connector-java.jar"
     force: yes # necessary for driver updates
+  when: alfresco_db_type == 'mariadb'
+
+- name: download postgres jconnector
+  get_url:
+    url: '{{postgresql_jconnector_url}}'
+    dest: "{{tomcat_home}}/lib/postgresql.jar"
+    force: yes # necessary for driver updates
+  when: alfresco_db_type == 'postgresql'
 
 - name: download alfresco sources
   get_url:
@@ -67,7 +75,7 @@
 
 - name: Configure alfresco-global.properties
   template:
-    src: alfresco-global.properties
+    src: alfresco-global.properties.j2
     dest: '{{tomcat_home}}/shared/classes/alfresco-global.properties'
 
 - name: Ensure python-lxml packages are present
