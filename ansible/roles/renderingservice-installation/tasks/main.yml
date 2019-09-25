@@ -1,3 +1,6 @@
 ---
   - include: mariadb.yml
+    when: esrender_db_type == 'mariadb'
+  - include: postgresql.yml
+    when: esrender_db_type == 'postgresql'
   - include: esrender.yml

@@ -10,13 +10,26 @@
   become: yes
   roles:
     - apache
-    - mariadb
+  tags:
+    - root-task
+
+- hosts: edusharing
+  become: yes
+  roles:
+    - role: postgresql
+      when: alfresco_db_type == 'postgresql'
+    - role: mariadb
+      when: alfresco_db_type == 'mariadb'
   tags:
     - root-task
 
 - hosts: renderingservice
   become: yes
   roles:
+    - role: postgresql
+      when: esrender_db_type == 'postgresql'
+    - role: mariadb
+      when: esrender_db_type == 'mariadb'
     - renderingservice-installation
   tags:
     - root-task

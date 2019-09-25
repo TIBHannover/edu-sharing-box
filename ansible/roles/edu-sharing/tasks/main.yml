@@ -1,5 +1,8 @@
 ---
   - include: mariadb.yml
+    when: alfresco_db_type == 'mariadb'
+  - include: postgresql.yml
+    when: alfresco_db_type == 'postgresql'
   - include: imagemagick.yml
   - include: libreoffice.yml
   - include: alfresco.yml

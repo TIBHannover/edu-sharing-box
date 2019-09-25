@@ -8,10 +8,15 @@ esrender_host: 192.168.98.102
 esrender_url: 'http://{{esrender_host}}/esrender'
 
 mariadb_port: 3306
+postgresql_port: 5432
+# db_types: 'postgresql', 'mariadb' (no migration on change)
+esrender_db_type: postgresql
 esrender_db:
   name: esrender
   user: esrender
   password: esrender
+  
+postgres_tmp_root_password: xxx
 
 tomcat_port: 8080
 tomcat_shutdown_port: 8005
