@@ -1,6 +1,6 @@
 - name: "wait for tomcat to come up"
   uri:
-    url: 'http://{{edu_sharing_host}}/edu-sharing'
+    url: '{{edu_sharing_url}}'
     timeout: 60
     status_code: 200
   register: esresult
@@ -12,7 +12,7 @@
 
 - name: "get access token"
   uri:
-    url: 'http://{{edu_sharing_host}}/edu-sharing/oauth2/token'
+    url: '{{edu_sharing_url}}/oauth2/token'
     method: POST
     body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password={{alf_password}}'
     return_content: yes
@@ -24,7 +24,7 @@
 
 - name: "get access token for default user"
   uri:
-    url: 'http://{{edu_sharing_host}}/edu-sharing/oauth2/token'
+    url: '{{edu_sharing_url}}/oauth2/token'
     method: POST
     body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password=admin'
     return_content: yes
@@ -46,7 +46,7 @@
 
 - name: "change default password"
   uri:
-    url: 'http://{{edu_sharing_host}}/edu-sharing/rest/iam/v1/people/-home-/admin/credential'
+    url: '{{edu_sharing_url}}/rest/iam/v1/people/-home-/admin/credential'
     method: PUT
     body_format: json
     headers:
@@ -60,7 +60,7 @@
 
 - name: "add esguest user"
   uri:
-    url: 'http://{{edu_sharing_host}}/edu-sharing/rest/iam/v1/people/-home-/esguest'
+    url: '{{edu_sharing_url}}/rest/iam/v1/people/-home-/esguest'
     method: POST
     body_format: json
     status_code: [200, 400]
@@ -78,7 +78,7 @@
 
 - name: "change esguest password"
   uri:
-    url: 'http://{{edu_sharing_host}}/edu-sharing/rest/iam/v1/people/-home-/esguest/credential'
+    url: '{{edu_sharing_url}}/rest/iam/v1/people/-home-/esguest/credential'
     method: PUT
     body_format: json
     headers:
