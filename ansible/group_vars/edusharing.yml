@@ -50,5 +50,5 @@ edu_valuespaces_i18n_paths:
 
 edu_sharing_port:
 edu_sharing_clientport:
-edu_sharing_protocol:
+edu_sharing_protocol: http
 edu_sharing_clientprotocol:
