@@ -41,6 +41,8 @@
     pretty_print: yes
   tags: edu-sharing-config
 
+- include: banner.yml
+
 - name: set banner url
   xml:
     path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
