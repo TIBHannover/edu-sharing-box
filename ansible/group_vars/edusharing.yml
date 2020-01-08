@@ -14,9 +14,9 @@ moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
 
 edu_version: 4.1.8
-#edu_version: 4.2.3
+#edu_version: 4.2.6
 edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.1.8/edu-sharing_4.1.8.2019-07-29-b7fa22d8.zip
-#edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.2.3/edu-sharing_4.2.3.2019-08-06-194429d4.zip
+#edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.2.6/edu-sharing_4.2.6.2019-11-21-728c84f09.zip
 
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
