@@ -52,3 +52,5 @@ edu_sharing_port:
 edu_sharing_clientport:
 edu_sharing_protocol: http
 edu_sharing_clientprotocol:
+  
+edu_enable_statistics_api: "false"

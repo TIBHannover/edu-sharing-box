@@ -69,6 +69,12 @@
   with_items: '{{edu_banner_components}}'
   tags: edu-sharing-config
 
+- name: edit enable_statistics_api in edu-sharing.properties
+  lineinfile:
+    path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
+    line: 'enable_statistics_api={{edu_enable_statistics_api}}'
+    regexp: '^enable_statistics_api=.*$'
+
 - name: edit edu-sharing build.properties
   lineinfile:
     path: '{{ edu_home }}/build.properties'
