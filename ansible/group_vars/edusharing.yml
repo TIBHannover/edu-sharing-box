@@ -37,6 +37,8 @@ edu_mail_smtp_from: pleasechange@nodomain.com
 
 edu_imprinturl:
 edu_privacyInformationUrl:
+# set to "true" to enable local registration of users
+edu_register_local: "false"
 edu_banner_url:
 edu_banner_components:
   - search
