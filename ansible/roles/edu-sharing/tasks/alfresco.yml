@@ -1,19 +1,18 @@
 ---
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
+
 - name: undeploy alresco war-files from tomcat
   file:
     path: "{{item}}"
     state: absent
   with_items:
     - "{{tomcat_home}}/webapps/alfresco.war"
+    - "{{tomcat_home}}/webapps/alfresco"
+    - "{{tomcat_home}}/work/Catalina/localhost/alfresco"
     - "{{tomcat_home}}/webapps/share.war"
-
-- name: wait for war-file-undeployment
-  wait_for:
-    path: "{{item}}"
-    state: absent
-  with_items:
-    - "{{tomcat_home}}/webapps/alfresco/"
-    - "{{tomcat_home}}/webapps/share/"
+    - "{{tomcat_home}}/webapps/share"
+    - "{{tomcat_home}}/work/Catalina/localhost/share"
 
 - name: download mysql jconnector (mariadb driver not supported by alfresco)
   get_url:
@@ -72,6 +71,17 @@
     path: '{{ tomcat_home }}/conf/catalina.properties'
     line: 'shared.loader=${catalina.base}/shared/classes'
     regexp: 'shared.loader='
+
+- name: set javax.xml properties
+  lineinfile:
+    path: '{{ tomcat_home }}/conf/catalina.properties'
+    line: '{{item[0]}}={{item[1]}}'
+    regexp: '{{item[0]}}='
+  loop:
+    - ["javax.xml.parsers.DocumentBuilderFactory", 'com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl']
+    - ["javax.xml.transform.TransformerFactory", 'com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl']
+    - ["javax.xml.parsers.SAXParserFactory", 'com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl']
+    - ["javax.xml.datatype.DatatypeFactory", 'com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl']
 
 - name: Configure alfresco-global.properties
   template:

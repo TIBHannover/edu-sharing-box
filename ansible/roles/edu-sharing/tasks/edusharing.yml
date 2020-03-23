@@ -122,13 +122,6 @@
   args:
     chdir: '{{ edu_home }}'
 
-# without xercesImpl, we get the following error in edu-sharing 5.0:
-# org.xml.sax.SAXNotRecognizedException: Feature 'http://javax.xml.XMLConstants/feature/secure-processing' not recognized
-- name: download xerces
-  get_url:
-    url: 'https://search.maven.org/remotecontent?filepath=xerces/xercesImpl/2.9.1/xercesImpl-2.9.1.jar'
-    dest: "{{tomcat_home}}/webapps/edu-sharing/WEB-INF/lib/xercesImpl-2.9.1.jar"
-    
 - name: add or edit properties in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'

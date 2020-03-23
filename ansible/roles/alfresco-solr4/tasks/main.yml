@@ -1,13 +1,15 @@
 ---
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
+
 - name: undeploy alresco war-files from tomcat
   file:
-    path: "{{tomcat_home}}/webapps/solr4.war"
+    path: "{{item}}"
     state: absent
-
-- name: wait for war-file-undeployment
-  wait_for:
-    path: "{{tomcat_home}}/webapps/solr4/"
-    state: absent
+  with_items:
+    - "{{tomcat_home}}/webapps/solr4.war"
+    - "{{tomcat_home}}/webapps/solr4"
+    - "{{tomcat_home}}/work/Catalina/localhost/solr4"
 
 - name: download alfresco sources
   get_url:
