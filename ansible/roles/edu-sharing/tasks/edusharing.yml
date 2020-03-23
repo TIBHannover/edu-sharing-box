@@ -121,7 +121,16 @@
   shell: '{{ edu_home }}/install.sh'
   args:
     chdir: '{{ edu_home }}'
-
+    
+- name: EDU-SHARING-5-FIX remove jackson-jars that edu-sharing installed in the last step, because it causes version conflicts
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-annotations-2.4.5.jar"
+    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.4.5.jar"
+    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.4.5.jar"
+    
 - name: add or edit properties in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
