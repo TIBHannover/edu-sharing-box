@@ -44,6 +44,7 @@ edu_banner_components:
   - search
 # path to a custom banner that will be copied into the edu-sharing instance
 edu_banner_path:
+edu_logo_path:
 edu_mds_override_paths:
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
