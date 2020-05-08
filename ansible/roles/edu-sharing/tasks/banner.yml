@@ -20,3 +20,10 @@
     dest: '{{edu_home}}/war/edu_sharing/assets/images/edu-sharing-loading-animation.svg'
   when: (edu_logo_path is defined) and (edu_logo_path != "") and (edu_logo_path is not none)
   tags: edu-sharing-config
+
+- name: Copy custom login logo
+  copy:
+    src: '{{edu_login_logo_path}}'
+    dest: '{{edu_home}}/war/edu_sharing/assets/images/logo.svg'
+  when: (edu_login_logo_path is defined) and (edu_login_logo_path != "") and (edu_login_logo_path is not none)
+  tags: edu-sharing-config
