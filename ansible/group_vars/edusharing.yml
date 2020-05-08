@@ -48,6 +48,8 @@ edu_logo_path:
 edu_mds_override_paths:
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
+# path for custom login logo will be copied into the edu-shaing instance
+edu_login_logo_path:
 
 edu_sharing_port:
 edu_sharing_clientport:
