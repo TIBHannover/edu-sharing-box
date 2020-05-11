@@ -83,6 +83,15 @@
     line: 'enable_statistics_api={{edu_enable_statistics_api}}'
     regexp: '^enable_statistics_api=.*$'
 
+- name: edit i18n
+  lineinfile:
+    backrefs: yes
+    path: '{{ edu_home }}/war//edu_sharing/assets/i18n/{{item[0]}}'
+    line: '\g<start>{{item[2]}}\g<end>'
+    regexp: '(?P<start>^\s*"{{item[1]}}":").*(?P<end>".*)'
+  loop: '{{edu_i18n_adjustments}}'
+  when: (edu_i18n_adjustments is defined) and (edu_i18n_adjustments is not none)
+
 - name: edit edu-sharing build.properties
   lineinfile:
     path: '{{ edu_home }}/build.properties'

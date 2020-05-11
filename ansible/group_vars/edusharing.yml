@@ -48,6 +48,9 @@ edu_logo_path:
 edu_mds_override_paths:
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
+# a list of adjustments; format of each entry: [<i18n-file-path>, <KEY>, <NEW-VALUE>]
+# example: ['common/de.json', 'USER_TUTORIAL_HEADING', 'Profil']
+edu_i18n_adjustments:
 
 edu_sharing_port:
 edu_sharing_clientport:
