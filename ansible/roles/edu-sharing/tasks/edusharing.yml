@@ -77,6 +77,23 @@
   with_items: '{{edu_banner_components}}'
   tags: edu-sharing-config
 
+- name: clear HelpMenuOptions
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: "/config/values/helpMenuOptions[key='{{item[0]}}']"
+    state: absent
+    pretty_print: yes
+  loop: '{{ edu_help_menu_options | default([], true) }}'
+
+- name: edit HelpMenuOptions
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: "/config/values"
+    add_children: '<helpMenuOptions><key>{{item[0]}}</key><icon>{{item[1]}}</icon><url>{{item[2]}}</url></helpMenuOptions>'
+    input_type: xml
+    pretty_print: yes
+  loop: '{{ edu_help_menu_options | default([], true) }}'
+
 - name: edit enable_statistics_api in edu-sharing.properties
   lineinfile:
     path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
