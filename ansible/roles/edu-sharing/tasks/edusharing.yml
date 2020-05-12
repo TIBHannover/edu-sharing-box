@@ -89,8 +89,7 @@
     path: '{{ edu_home }}/war//edu_sharing/assets/i18n/{{item[0]}}'
     line: '\g<start>{{item[2]}}\g<end>'
     regexp: '(?P<start>^\s*"{{item[1]}}":").*(?P<end>".*)'
-  loop: '{{edu_i18n_adjustments}}'
-  when: (edu_i18n_adjustments is defined) and (edu_i18n_adjustments is not none)
+  loop: '{{ edu_i18n_adjustments | default([], true) }}'
 
 - name: edit edu-sharing build.properties
   lineinfile:
