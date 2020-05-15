@@ -89,3 +89,16 @@
   when : 'use_esguest_user'
   tags:
   - edu-sharing-users
+
+- name: "change esguest permissions"
+  uri:
+    url: '{{edu_sharing_url}}/rest/admin/v1/toolpermissions/esguest'
+    method: PUT
+    body_format: json
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+    body: '{{ esguest_permissions }}'
+  no_log: true
+  when : 'use_esguest_user and (esguest_permissions is defined) and (esguest_permissions is not none)'
+  tags:
+    - edu-sharing-users
