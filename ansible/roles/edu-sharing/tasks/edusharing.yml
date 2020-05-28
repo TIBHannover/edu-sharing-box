@@ -2,10 +2,21 @@
 - name: Ensures inst-dir exists
   file: path='{{edu_inst_dir}}' state=directory
 
+- name: Copy local edu-sharing artifact
+  copy:
+    src: "{{ edu_sharing_local_archive_path }}"
+    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+  when: edu_sharing_archive_retrieve_method == "copy-local"
+
+- name: Remove old installation for local artifacts
+  file: path='{{edu_home}}' state=absent
+  when: edu_sharing_archive_retrieve_method == "copy-local"
+
 - name: download edu-sharing sources
   get_url:
     url: '{{edu_sharing_archive_url}}'
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
+  when: edu_sharing_archive_retrieve_method == "download"
 
 - name: Ensure unzip is present
   package:

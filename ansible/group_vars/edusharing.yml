@@ -20,6 +20,11 @@ moodle_url: "http://{{moodle_host}}"
 
 edu_version: 5.0.0
 edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/5.0.0/edu-sharing_5.0.0.2020-02-05-5f0546557.zip
+# method how to retrieve the edu-sharing archive that should be installed
+#  'download' - use the archive from 'edu_sharing_archive_url'
+#  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
+edu_sharing_archive_retrieve_method: download
+edu_sharing_local_archive_path:
 
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
