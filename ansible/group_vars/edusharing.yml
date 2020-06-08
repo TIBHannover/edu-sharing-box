@@ -26,6 +26,10 @@ edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/dow
 edu_sharing_archive_retrieve_method: download
 edu_sharing_local_archive_path:
 
+# possibility to add an archive with custom modifications to edu-home
+edu_sharing_custom_installation: false
+edu_sharing_custom_archive_path:
+
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
 

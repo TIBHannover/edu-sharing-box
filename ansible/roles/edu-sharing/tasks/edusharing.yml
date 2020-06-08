@@ -33,6 +33,9 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
+- include: custom.yml
+  when: edu_sharing_custom_installation
+
 - name: stop alfresco
   shell: '{{tomcat_stop_command}}'
 
