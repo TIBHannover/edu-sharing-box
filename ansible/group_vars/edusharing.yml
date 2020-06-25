@@ -67,6 +67,8 @@ edu_valuespaces_i18n_paths:
 edu_i18n_adjustments:
 # a list of additional help menu items; format of each entry: [<key>, <icon>, <url>]
 edu_help_menu_options:
+# a (string-)list of allowed licenses ("NONE","CC_0","CC_BY","SCHULFUNK","UNTERRICHTS_UND_LEHRMEDIEN","COPYRIGHT","CUSTOM")
+edu_allowed_licenses:
 
 edu_sharing_port:
 edu_sharing_clientport:

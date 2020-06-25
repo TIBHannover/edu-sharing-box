@@ -108,6 +108,25 @@
     pretty_print: yes
   loop: '{{ edu_help_menu_options | default([], true) }}'
 
+- name: clear allowedLicenses
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/allowedLicenses'
+    state: absent
+    pretty_print: yes
+  tags: edu-sharing-config
+
+- name: set allowedLicenses
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values'
+    add_children: '<allowedLicenses>{{ item }}</allowedLicenses>'
+    input_type: xml
+    pretty_print: yes
+  with_items: '{{edu_allowed_licenses}}'
+  when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none)
+  tags: edu-sharing-config
+
 - name: edit enable_statistics_api in edu-sharing.properties
   lineinfile:
     path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
