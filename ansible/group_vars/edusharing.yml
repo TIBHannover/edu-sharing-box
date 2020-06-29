@@ -59,6 +59,9 @@ edu_banner_components:
 # path to a custom banner that will be copied into the edu-sharing instance
 edu_banner_path:
 edu_logo_path:
+# a list of custom images that should be copied into edu_sharing/assets/images; format of each entry: [<source-file-path>, <destination under edu_sharing/assets/images>]
+# example: ['local/path/example.svg', 'example.svg']
+edu_custom_images:
 edu_mds_override_paths:
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
