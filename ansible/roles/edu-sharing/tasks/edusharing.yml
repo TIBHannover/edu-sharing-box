@@ -63,7 +63,7 @@
     pretty_print: yes
   tags: edu-sharing-config
 
-- include: banner.yml
+- include: images.yml
 
 - name: set banner url
   xml:
