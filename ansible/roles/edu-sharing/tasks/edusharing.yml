@@ -185,9 +185,9 @@
     path: "{{item}}"
     state: absent
   with_items:
-    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-annotations-2.4.5.jar"
-    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.4.5.jar"
-    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.4.5.jar"
+    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-annotations-2.8.3.jar"
+    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.8.3.jar"
+    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.8.3.jar"
     
 - name: add or edit properties in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
