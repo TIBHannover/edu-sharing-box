@@ -73,6 +73,14 @@
     pretty_print: yes
   tags: edu-sharing-config
 
+- name: set banner href
+  xml:
+    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    xpath: '/config/values/banner/href'
+    value: '{{ edu_banner_href | default("") }}'
+    pretty_print: yes
+  tags: edu-sharing-config
+  
 - name: clear banner components
   xml:
     path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
