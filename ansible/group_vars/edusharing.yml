@@ -54,6 +54,8 @@ edu_privacyInformationUrl:
 # set to "true" to enable local registration of users
 edu_register_local: "false"
 edu_banner_url:
+# set a href to enable Homebutton on banner image  e.g http://wwww.your-domain/edu-sharing/
+edu_banner_href:
 edu_banner_components:
   - search
 # path to a custom banner that will be copied into the edu-sharing instance
