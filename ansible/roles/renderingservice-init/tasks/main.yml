@@ -4,7 +4,11 @@
     url: '{{esrender_url}}/application/esmain/metadata.php'
     method: GET
     status_code: [200, 500]
+    return_content: true
   register: esrender_init_meta
+
+- set_fact:
+    esrender_init_complete: "{{ (esrender_init_meta['status'] == 200) and (esrender_init_meta['content'].startswith('<?xml')) }}"
 
 - name: "wait for tomcat to come up"
   uri:
@@ -15,7 +19,7 @@
   until: result.status == 200
   retries: 5
   delay: 1
-  when: "esrender_init_meta['status'] == 500"
+  when: not esrender_init_complete
 
 - name: esrender installation step 1
   uri:
@@ -23,7 +27,8 @@
     method: POST
     body_format: form-urlencoded
     body: step=1&LANG=1&terms_accepted=0&terms_accepted=1&send=
-  when: "esrender_init_meta['status'] == 500"
+    return_content: true
+  when: not esrender_init_complete
 
 - name: esrender installation step 2
   uri:
@@ -44,7 +49,8 @@
       DB_PASS: '{{esrender_db.password}}'
       DB_NAME: '{{esrender_db.name}}'
       send: ''
-  when: "esrender_init_meta['status'] == 500 and esrender_db_type == 'mariadb'"
+    return_content: true
+  when: "(not esrender_init_complete) and esrender_db_type == 'mariadb'"
 
 - name: esrender installation step 2
   uri:
@@ -65,7 +71,8 @@
       DB_PASS: '{{esrender_db.password}}'
       DB_NAME: '{{esrender_db.name}}'
       send: ''
-  when: "esrender_init_meta['status'] == 500 and esrender_db_type == 'postgresql'"
+    return_content: true
+  when: "(not esrender_init_complete) and esrender_db_type == 'postgresql'"
 
 - name: esrender installation step 3
   uri:
@@ -73,7 +80,8 @@
     method: POST
     body_format: form-urlencoded
     body: step=3&LANG=1&send=
-  when: "esrender_init_meta['status'] == 500"
+    return_content: true
+  when: not esrender_init_complete
 
 - name: esrender update login
   uri:
