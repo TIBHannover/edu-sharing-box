@@ -9,3 +9,7 @@ esrender_download_dir: "{{base_dir}}/esrender_{{esrender_version}}"
 esrender_remove_existing: false
 # download the renderingservice archive file every time, even if the file exists (yes|no)
 esrender_force_download: no
+
+# use http or cli to process install/update of renderingservice (cli|http)
+# NOTE: currently (2020 July) there are errors in 'cli' mode with postgresql -> 'cli' works just with mariadb/mysql
+esrender_exec_method: http

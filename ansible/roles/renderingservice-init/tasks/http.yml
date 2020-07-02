@@ -1,0 +1,85 @@
+---
+# tries to reproduce the installation/update via browser
+# does not depend on the host system
+- name: esrender installation step 1
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    body: step=1&LANG=1&terms_accepted=0&terms_accepted=1&send=
+    return_content: true
+  when: not esrender_init_complete
+
+- name: esrender installation step 2
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    body:
+      step: 2
+      LANG: 1
+      RS_URL: '{{esrender_url}}/'
+      BASE_DIR: '{{esrender_base_dir}}/'
+      DATA_DIR: '{{esrender_cache_dir}}/'
+      REPO_URL: 'http://{{edu_sharing_host}}/edu-sharing/'
+      DB_DRIVER: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '{{mariadb_port}}'
+      DB_USER: '{{esrender_db.user}}'
+      DB_PASS: '{{esrender_db.password}}'
+      DB_NAME: '{{esrender_db.name}}'
+      send: ''
+    return_content: true
+  when: "(not esrender_init_complete) and esrender_db_type == 'mariadb'"
+
+- name: esrender installation step 2
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    body:
+      step: 2
+      LANG: 1
+      RS_URL: '{{esrender_url}}/'
+      BASE_DIR: '{{esrender_base_dir}}/'
+      DATA_DIR: '{{esrender_cache_dir}}/'
+      REPO_URL: 'http://{{edu_sharing_host}}/edu-sharing/'
+      DB_DRIVER: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '{{postgresql_port}}'
+      DB_USER: '{{esrender_db.user}}'
+      DB_PASS: '{{esrender_db.password}}'
+      DB_NAME: '{{esrender_db.name}}'
+      send: ''
+    return_content: true
+  when: "(not esrender_init_complete) and esrender_db_type == 'postgresql'"
+
+- name: esrender installation step 3
+  uri:
+    url: '{{esrender_url}}/install/install.php'
+    method: POST
+    body_format: form-urlencoded
+    body: step=3&LANG=1&send=
+    return_content: true
+  when: not esrender_init_complete
+
+- name: esrender update login
+  uri:
+    url: '{{esrender_url}}/admin/?login=1'
+    method: POST
+    body_format: form-urlencoded
+    body:
+      username: '{{esrender_db.user}}'
+      password: '{{esrender_db.password}}'
+  register: esrender_login
+
+- name: esrender update
+  uri:
+    url: '{{esrender_url}}/admin/?'
+    method: POST
+    body_format: form-urlencoded
+    headers:
+      Cookie: "{{esrender_login.set_cookie}}"
+    body:
+      action: doupdate
+    return_content: yes

@@ -1,0 +1,29 @@
+---
+# installation/update via command line
+# can just be executed on the renderingservice host
+# NOTE: currently (2020 July) there are errors with postgresql, works just with mariadb/mysql
+- name: create config.ini
+  template:
+    src: config.ini
+    dest: '{{esrender_base_dir}}/admin/cli/config.autoupdate.ini'
+    owner: "www-data"
+    group: "www-data"
+
+- name: Call cli installation script
+  shell:
+    cmd: 'php install.php -c "config.autoupdate.ini"'
+    chdir: '{{esrender_base_dir}}/admin/cli'
+  when: not esrender_init_complete
+
+- name: Call cli update script
+  shell:
+    cmd: 'php update.php'
+    chdir: '{{esrender_base_dir}}/admin/cli'
+
+- name: Change owner and group
+  file:
+    path: '{{esrender_base_dir}}'
+    state: directory
+    owner: "www-data"
+    group: "www-data"
+    recurse: yes
