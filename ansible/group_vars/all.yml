@@ -29,3 +29,5 @@ base_dir: "{{ansible_env.HOME}}"
 esrender_document_root: '/var/www'
 esrender_base_dir: '{{esrender_document_root}}/esrender'
 esrender_cache_dir: '/var/cache/esrender'
+
+alf_password: admin

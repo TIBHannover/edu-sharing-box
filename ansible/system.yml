@@ -23,17 +23,6 @@
   tags:
     - root-task
 
-- hosts: renderingservice
-  become: yes
-  roles:
-    - role: postgresql
-      when: esrender_db_type == 'postgresql'
-    - role: mariadb
-      when: esrender_db_type == 'mariadb'
-    - renderingservice-installation
-  tags:
-    - root-task
-
 - hosts: alfrescosolr4, edusharing
   roles:
     - java
@@ -47,6 +36,20 @@
 - hosts: edusharing
   roles:
     - edu-sharing
+
+- hosts: renderingservice
+  become: yes
+  roles:
+    - role: postgresql
+      when: esrender_db_type == 'postgresql'
+    - role: mariadb
+      when: esrender_db_type == 'mariadb'
+    - renderingservice-installation
+  tags:
+    - root-task
+
+- hosts: renderingservice
+  roles:
     - renderingservice-init
     - renderingservice-registration
 

@@ -3,7 +3,6 @@ mysql_jconnector_url: https://repo1.maven.org/maven2/mysql/mysql-connector-java/
 postgresql_jconnector_url: https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.8/postgresql-42.2.8.jar
 
 alf_sources_url: 'https://download.alfresco.com/release/community/201707-build-00028/{{alf_name}}.zip'
-alf_password: admin
 
 alf_name: alfresco-community-distribution-201707
 alf_inst_dir: "{{base_dir}}"
