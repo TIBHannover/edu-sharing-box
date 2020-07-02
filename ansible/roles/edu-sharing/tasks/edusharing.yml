@@ -41,7 +41,7 @@
 
 - name: set imprint url
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/imprintUrl'
     value: '{{ edu_imprinturl | default("") }}'
     pretty_print: yes
@@ -49,7 +49,7 @@
 
 - name: set privacyInformation url
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/privacyInformationUrl'
     value: '{{ edu_privacyInformationUrl | default("") }}'
     pretty_print: yes
@@ -57,7 +57,7 @@
 
 - name: set local registration
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/register/local'
     value: '{{ edu_register_local }}'
     pretty_print: yes
@@ -67,7 +67,7 @@
 
 - name: set banner url
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/banner/url'
     value: '{{ edu_banner_url | default("") }}'
     pretty_print: yes
@@ -75,7 +75,7 @@
 
 - name: set banner href
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/banner/href'
     value: '{{ edu_banner_href | default("") }}'
     pretty_print: yes
@@ -83,7 +83,7 @@
   
 - name: clear banner components
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/banner/components'
     state: absent
     pretty_print: yes
@@ -91,7 +91,7 @@
 
 - name: set banner components
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/banner'
     add_children: '<components>{{ item }}</components>'
     input_type: xml
@@ -101,7 +101,7 @@
 
 - name: clear HelpMenuOptions
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: "/config/values/helpMenuOptions[key='{{item[0]}}']"
     state: absent
     pretty_print: yes
@@ -109,7 +109,7 @@
 
 - name: edit HelpMenuOptions
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: "/config/values"
     add_children: '<helpMenuOptions><key>{{item[0]}}</key><icon>{{item[1]}}</icon><url>{{item[2]}}</url></helpMenuOptions>'
     input_type: xml
@@ -118,7 +118,7 @@
 
 - name: clear allowedLicenses
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/allowedLicenses'
     state: absent
     pretty_print: yes
@@ -126,7 +126,7 @@
 
 - name: set allowedLicenses
   xml:
-    path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+    path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values'
     add_children: '<allowedLicenses>{{ item }}</allowedLicenses>'
     input_type: xml
