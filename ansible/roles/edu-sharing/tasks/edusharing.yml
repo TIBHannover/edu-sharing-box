@@ -135,12 +135,6 @@
   when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none)
   tags: edu-sharing-config
 
-- name: edit enable_statistics_api in edu-sharing.properties
-  lineinfile:
-    path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
-    line: 'enable_statistics_api={{edu_enable_statistics_api}}'
-    regexp: '^enable_statistics_api=.*$'
-
 - name: edit i18n
   lineinfile:
     backrefs: yes
