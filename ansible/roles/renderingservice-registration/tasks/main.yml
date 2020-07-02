@@ -1,39 +1,56 @@
 ---
-- name: get esrender meta info
+- name: "wait for tomcat to come up"
   uri:
-    url: '{{esrender_url}}/application/esmain/metadata.php'
-    method: GET
+    url: '{{edu_sharing_url}}'
+    timeout: 60
+    status_code: 200
+  register: esresult
+  until: esresult.status == 200
+  retries: 5
+  delay: 1
+  tags:
+    - esrender-registration
+  
+- name: "get access token"
+  uri:
+    url: '{{edu_sharing_url}}/oauth2/token'
+    method: POST
+    body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password={{alf_password}}'
     return_content: yes
-  register: esrender_meta
+  register: accesstokenreply
+  no_log: true
+  tags:
+    - esrender-registration
 
-- name: get esrender public key
-  xml:
-    xmlstring: "{{esrender_meta.content}}"
-    xpath: /properties/entry[@key='public_key']
-    content: 'text'
-  register: esrender_public_key
+- name: "set access token"
+  vars:
+    jsonVar: '{{accesstokenreply.content | from_json}}'
+  set_fact:
+    accesstoken: '{{jsonVar.access_token}}'
+  no_log: true
+  tags:
+    - esrender-registration
 
-- name: register esrender at edu-sharing - edit applicationfiles in tomcat/shared/classes/ccapp-registry.properties.xml
-  lineinfile:
-    backrefs: yes
-    path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
-    line: '<entry key="applicationfiles">\g<start>\g<end>,app-esrender.properties.xml</entry>'
-    regexp: '^\s*<entry key="applicationfiles">(?P<start>(?:(?!,app-esrender.properties.xml).)*)(,app-esrender.properties.xml)?(?P<end>.*?)</entry>'
+- name: "remove existing esrender registration"
+  uri:
+    url: '{{edu_sharing_url}}/rest/admin/v1/applications/esrender'
+    method: DELETE
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+      Accept: application/json
+    status_code: [200, 500] # 500 if not existing
+  no_log: true
+  tags:
+    - esrender-registration
 
-- name: register esrender at edu-sharing - add tomcat/shared/classes/app-esrender.properties.xml
-  template:
-    src: app-esrender.properties.xml
-    dest: '{{tomcat_home}}/shared/classes/app-esrender.properties.xml'
-
-- name: edit contenturl in tomcat/shared/classes/homeApplication.properties.xml
-  lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
-    line: '<entry key="contenturl">{{esrender_url}}/application/esmain/index.php</entry>'
-    regexp: '<entry key="contenturl">'
-    insertbefore: '</properties>'
-
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
-
-- name: start alfresco
-  shell: '{{tomcat_start_command}}'
+- name: "register esrender"
+  uri:
+    url: '{{edu_sharing_url}}/rest/admin/v1/applications?url={{ (esrender_url + "/application/esmain/metadata.php") | urlencode }}'
+    method: PUT
+    body_format: json
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+      Accept: application/json
+  no_log: true
+  tags:
+    - esrender-registration
