@@ -7,6 +7,15 @@
   - packages
   - root-task
 
+- name: Remove existing database with name 'esrender'
+  mysql_db:
+    name: '{{esrender_db.name}}'
+    state: absent
+  become: yes
+  when: esrender_remove_existing
+  tags:
+  - root-task
+
 - name: Create a new database with name 'esrender'
   mysql_db:
     name: '{{esrender_db.name}}'

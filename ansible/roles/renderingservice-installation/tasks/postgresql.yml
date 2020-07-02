@@ -18,6 +18,17 @@
   - packages
   - root-task
 
+- name: Remove existing database with name 'esrender'
+  postgresql_db:
+    login_password: '{{postgres_tmp_root_password}}'
+    login_host: localhost
+    name: '{{esrender_db.name}}'
+    state: absent
+  become: yes
+  when: esrender_remove_existing
+  tags:
+  - root-task
+
 - name: Create a new database with name 'esrender'
   postgresql_db:
     login_password: '{{postgres_tmp_root_password}}'

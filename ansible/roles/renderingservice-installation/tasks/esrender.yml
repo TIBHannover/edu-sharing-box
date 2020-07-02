@@ -23,6 +23,15 @@
   get_url:
     url: '{{esrender_archive_url}}'
     dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
+    force: '{{ esrender_force_download }}'
+
+- name: Remove old esrender installation (base dir)
+  file: path='{{ esrender_base_dir }}' state=absent
+  when: esrender_remove_existing
+
+- name: Remove old esrender installation (cache dir)
+  file: path='{{ esrender_cache_dir }}' state=absent
+  when: esrender_remove_existing
 
 - name: extract esrender sources
   unarchive:

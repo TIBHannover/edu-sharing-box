@@ -4,3 +4,8 @@ esrender_vhost: true
 esrender_version: 5.0.0
 esrender_archive_url: 'https://github.com/edu-sharing/renderingservice/archive/{{esrender_version}}.tar.gz'
 esrender_download_dir: "{{base_dir}}/esrender_{{esrender_version}}"
+
+# remove existing renderingservice before new installation (true|false)
+esrender_remove_existing: false
+# download the renderingservice archive file every time, even if the file exists (yes|no)
+esrender_force_download: no
