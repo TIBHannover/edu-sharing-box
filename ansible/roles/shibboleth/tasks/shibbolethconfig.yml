@@ -1,0 +1,70 @@
+
+- name: Add shib config to apache2
+  template:
+    src: shib.conf.j2
+    dest: /etc/apache2/conf-available/shib.conf
+  notify:
+    - restart apache2
+
+- name: Enable apache shib config
+  command: a2enconf shib
+  args:
+    creates: /etc/apache2/conf-enabled/shib.conf
+  notify:
+    - restart apache2
+
+- name: Add shibboleth2.xml config
+  template:
+    src: '{{ shibboleth_sp_config_template }}'
+    dest: /etc/shibboleth/shibboleth2.xml
+  notify:
+    - restart apache2
+    - restart shibd
+    
+- name: Add shib-error.css file
+  copy:
+    src: '{{ shibboleth_sp_error_css_file }}'
+    dest: /etc/shibboleth/shib-error.css
+  notify:
+    - restart apache2
+    - restart shibd
+
+- name: Add attribute-map.xml file
+  copy:
+    src: '{{ shibboleth_sp_attribute_map_file }}'
+    dest: /etc/shibboleth/attribute-map.xml
+  notify:
+    - restart apache2
+    - restart shibd
+
+- name: Get metadata provider certificate
+  get_url:
+    url: '{{ shibboleth_sp_metadata_provider_certificate }}'
+    dest: "/etc/shibboleth/{{ shibboleth_sp_metadata_provider_certificate | basename }}"
+  notify:
+    - restart apache2
+    - restart shibd
+        
+- name: Add shibboleth cert files
+  copy:
+    src: "{{ item.certificate_file }}"
+    dest: "/etc/shibboleth/{{ item.certificate_file | basename }}"
+    owner: _shibd
+    group: _shibd
+    mode: "u=rw,g=r,o=r"
+  with_items: '{{ shibboleth_sp_credential_files }}'
+  notify:
+    - restart apache2
+    - restart shibd
+
+- name: Add shibboleth key files
+  copy:
+    src: "{{ item.key_file }}"
+    dest: "/etc/shibboleth/{{ item.key_file | basename }}"
+    owner: _shibd
+    group: _shibd
+    mode: "600"
+  with_items: '{{ shibboleth_sp_credential_files }}'
+  notify:
+    - restart apache2
+    - restart shibd

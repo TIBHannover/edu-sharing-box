@@ -1,0 +1,127 @@
+<!--{{ ansible_managed }} -->
+
+<SPConfig xmlns="urn:mace:shibboleth:3.0:native:sp:config"
+    xmlns:conf="urn:mace:shibboleth:3.0:native:sp:config"
+    clockSkew="180">
+
+    <OutOfProcess tranLogFormat="%u|%s|%IDP|%i|%ac|%t|%attr|%n|%b|%E|%S|%SS|%L|%UA|%a" />
+  
+    <!--
+    By default, in-memory StorageService, ReplayCache, ArtifactMap, and SessionCache
+    are used. See example-shibboleth2.xml for samples of explicitly configuring them.
+    -->
+
+    <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
+    <ApplicationDefaults entityID="{{ shibboleth_sp_entity_id }}"
+                         REMOTE_USER="eduPersonUniqueId persistent-id eppn"
+                         sessionHook="/Shibboleth.sso/AttrChecker"
+                         attributePrefix="AJP_"
+                         metadataAttributePrefix="Meta-"
+                         cipherSuites="DEFAULT:!EXP:!LOW:!aNULL:!eNULL:!DES:!IDEA:!SEED:!RC4:!3DES:!kRSA:!SSLv2:!SSLv3:!TLSv1:!TLSv1.1">
+
+        <!--
+        Controls session lifetimes, address checks, cookie handling, and the protocol handlers.
+        Each Application has an effectively unique handlerURL, which defaults to "/Shibboleth.sso"
+        and should be a relative path, with the SP computing the full value based on the virtual
+        host. Using handlerSSL="true" will force the protocol to be https. You should also set
+        cookieProps to "https" for SSL-only sites. Note that while we default checkAddress to
+        "false", this makes an assertion stolen in transit easier for attackers to misuse.
+        -->
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+                  checkAddress="false" consistentAddress="true"  
+                  handlerSSL="true" cookieProps="https" redirectLimit="host">
+
+            <!--
+            Configures SSO for a default IdP. To properly allow for >1 IdP, remove
+            entityID property and adjust discoveryURL to point to discovery service.
+            You can also override entityID on /Login query string, or in RequestMap/htaccess.
+            -->
+            <SSO discoveryProtocol="SAMLDS" discoveryURL="{{ shibboleth_sp_discovery_service_url }}">
+              SAML2
+            </SSO>
+
+            <!-- SAML and local-only logout. -->
+            <Logout>SAML2 Local</Logout>
+
+            <!-- Administrative logout. -->
+            <LogoutInitiator type="Admin" Location="/Logout/Admin" acl="127.0.0.1 ::1" />
+          
+            <!-- Extension service that generates "approximate" metadata based on SP configuration. -->
+            <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
+
+            <!-- Status reporting service. -->
+            <Handler type="Status" Location="/Status" acl="127.0.0.1 ::1"/>
+
+            <!-- Session diagnostic service. -->
+            <Handler type="Session" Location="/Session" showAttributeValues="true"/>
+            
+            <!-- Check some necessary attributes for existence. -->
+            <Handler type="AttributeChecker" Location="/AttrChecker"
+                     template="attrChecker.html" flushSession="true">
+                <AND>
+                    <OR>
+                        <Rule require="eduPersonUniqueId"/>
+                        <Rule require="eppn"/>
+                    </OR>
+                    <Rule require="mail"/>
+                    <Rule require="sn"/>
+                </AND>
+            </Handler>
+
+            <!-- JSON feed of discovery information. -->
+            <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+        </Sessions>
+
+        <!--
+        Allows overriding of error template information/filenames. You can
+        also add your own attributes with values that can be plugged into the
+        templates, e.g., helpLocation below.
+        -->
+        <Errors supportContact="{{ shibboleth_sp_support_contact }}"
+            helpLocation="{{ shibboleth_sp_help_location }}"
+            logoLocation="https://wiki.aai.dfn.de/_media/logo.png"
+            styleSheet="shib-error.css"/>
+            
+        <Notify Channel="back" Location="http://localhost:{{tomcat_port}}/edu-sharing/services/LogoutNotification"/>
+
+        <!-- Metadaten der Test-Föderation aktivieren -->
+        <!-- den Pfad zum Zertifikat zur Signaturüberprüfung den lokalen Gegebenheiten anpassen! -->
+        <MetadataProvider type="XML" url="{{ shibboleth_sp_metadata_provider_url }}"
+              validate="true" backingFilePath="/var/log/shibboleth/{{ shibboleth_sp_metadata_provider_url | basename }}" reloadInterval="7200">
+            <MetadataFilter type="RequireValidUntil" maxValidityInterval="2419200"/>
+            <MetadataFilter type="Signature" certificate="/etc/shibboleth/{{ shibboleth_sp_metadata_provider_certificate | basename }}"/>
+        </MetadataProvider>
+
+        <!-- Map to extract attributes from SAML assertions. -->
+        <AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map.xml"/>
+        
+        <!-- Extracts support information for IdP from its metadata. -->
+        <AttributeExtractor type="Metadata" errorURL="errorURL"
+              DisplayName="displayName" InformationURL="informationURL"
+              PrivacyStatementURL="privacyStatementURL"
+              OrganizationURL="organizationURL">
+            <ContactPerson id="Support-Contact" contactType="support" formatter="$EmailAddress" />
+            <Logo id="Small-Logo" height="16" width="16" formatter="$_string"/>
+        </AttributeExtractor>
+
+        <!-- Default filtering policy for recognized attributes, lets other data pass. -->
+        <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+
+        <!-- Pfadangaben zu den Zertifikat-Dateien -->
+        <CredentialResolver type="Chaining">
+{% for credential_files in shibboleth_sp_credential_files %}
+            <CredentialResolver type="File"
+                                key="{{ credential_files.key_file | basename }}" 
+                                certificate="{{ credential_files.certificate_file | basename }}"/>
+{% endfor %}
+        </CredentialResolver>
+        
+    </ApplicationDefaults>
+    
+    <!-- Policies that determine how to process and authenticate runtime messages. -->
+    <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+
+    <!-- Low-level configuration about protocols and bindings available for use. -->
+    <ProtocolProvider type="XML" validate="true" reloadChanges="false" path="protocols.xml"/>
+
+</SPConfig>

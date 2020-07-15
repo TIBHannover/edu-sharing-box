@@ -1,0 +1,38 @@
+# {{ ansible_managed }}
+
+#
+# Turn this on to support "require valid-user" rules from other
+# mod_authn_* modules, and use "require shib-session" for anonymous
+# session-based authorization in mod_shib.
+#
+ShibCompatValidUser Off
+
+#
+# Ensures handler will be accessible.
+#
+<Location /Shibboleth.sso>
+  AuthType None
+  Require all granted
+</Location>
+
+#
+# Used for example style sheet in error templates.
+#
+<IfModule mod_alias.c>
+  <Location /shibboleth-sp>
+    AuthType None
+    Require all granted
+  </Location>
+  Alias /shibboleth-sp/main.css /usr/share/shibboleth/main.css
+</IfModule>
+
+#
+# Add areas that should be protected by shibboleth
+#
+<Location {{ shibboleth_sp_protected_path }}>
+  AuthType shibboleth
+  ShibRequestSetting requireSession 1
+  # TODO necessary?
+  ShibRequestSetting exportStdVars 1
+  require shib-session
+</Location>
