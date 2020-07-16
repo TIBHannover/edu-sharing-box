@@ -13,6 +13,7 @@
   apt:
     update_cache: yes
     default_release: stretch-backports
+    state: latest
     name: ["init-system-helpers", "libxerces-c3.2"]
 
 - name: Install shibboleth package for debian stretch
