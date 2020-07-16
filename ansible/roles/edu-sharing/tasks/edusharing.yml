@@ -33,6 +33,10 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
+- include: shibboleth.yml
+  when: install_shibboleth is defined and install_shibboleth
+  tags: shibboleth
+
 - include: custom.yml
   when: edu_sharing_custom_installation
 
