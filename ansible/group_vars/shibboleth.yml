@@ -34,6 +34,8 @@ shibboleth_sp_config_template: dfn-aai-shibboleth2.xml.j2 # the template that sh
 shibboleth_sp_attribute_map_file: attribute-map.xml       # the file that is used as /etc/shibboleth/attribute-map.xml
 shibboleth_sp_error_css_file: shib-error.css              # stylesheet used for error pages
 shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/fileadmin/metadata/dfn-aai.pem # DFN AAI certificate that should be used for validation of the metadata
+shibboleth_sp_sessions_handler_ssl: true                  # Set Sessions attribute handlerSSL
+shibboleth_sp_sessions_cookie_props: '{{ "https" if shibboleth_sp_sessions_handler_ssl else "http" }}' # Set Sessions attribute cookieProps
 
 # allow additional local edu-sharing login, otherwise login redirects directly to 'edu_login_shib_url' 'true'|'false'
 edu_login_allow_local: 'true'
