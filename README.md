@@ -45,3 +45,7 @@ vagrant ssh
 - anschließend in der Datei _group_vars/edusharing.yml_ der Edu-Sharing-Box den Eintrag `register_moodle` auf `true` setzen
 - im edu-sharing-box-Verzeichnis den Befehl `vagrant reload --provision`ausführen
 - nun sollte in moodle eine Einbindung des edu-sharing Repositoriums erfolgt sein
+
+## DFN-AAI / Shibboleth Integration
+
+Siehe [SHIBBOLETH.md](SHIBBOLETH.md)
