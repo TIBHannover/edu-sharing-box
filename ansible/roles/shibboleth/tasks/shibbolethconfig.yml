@@ -12,6 +12,13 @@
     creates: /etc/apache2/conf-enabled/shib.conf
   notify:
     - restart apache2
+    
+- name: Create missing certificate for shib sp
+  command: 'shib-keygen -f -u _shibd -h {{ edu_sharing_domain }} -y 3 -e {{ shibboleth_sp_entity_id }} -o /etc/shibboleth -n tmp'
+  when: ansible_distribution == 'Debian' and (shibboleth_sp_credential_files | default([], true)) | length == 0
+  notify:
+    - restart apache2
+    - restart shibd
 
 - name: Add shibboleth2.xml config
   template:
@@ -52,7 +59,7 @@
     owner: _shibd
     group: _shibd
     mode: "u=rw,g=r,o=r"
-  with_items: '{{ shibboleth_sp_credential_files }}'
+  with_items: '{{ shibboleth_sp_credential_files | default([], true) }}'
   notify:
     - restart apache2
     - restart shibd
@@ -64,7 +71,7 @@
     owner: _shibd
     group: _shibd
     mode: "600"
-  with_items: '{{ shibboleth_sp_credential_files }}'
+  with_items: '{{ shibboleth_sp_credential_files | default([], true) }}'
   notify:
     - restart apache2
     - restart shibd

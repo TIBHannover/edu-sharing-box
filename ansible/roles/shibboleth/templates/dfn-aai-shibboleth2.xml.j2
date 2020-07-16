@@ -110,11 +110,17 @@
 
         <!-- Pfadangaben zu den Zertifikat-Dateien -->
         <CredentialResolver type="Chaining">
+{% if ((shibboleth_sp_credential_files | default([], true)) | length == 0) %}
+<CredentialResolver type="File"
+                    key="tmp-key.pem" 
+                    certificate="tmp-cert.pem"/>
+{% else %}
 {% for credential_files in shibboleth_sp_credential_files %}
             <CredentialResolver type="File"
                                 key="{{ credential_files.key_file | basename }}" 
                                 certificate="{{ credential_files.certificate_file | basename }}"/>
 {% endfor %}
+{% endif %}
         </CredentialResolver>
         
     </ApplicationDefaults>

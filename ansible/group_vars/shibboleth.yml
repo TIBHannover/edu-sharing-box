@@ -1,5 +1,8 @@
 # TODO check embedded discovery service
 
+# -------------------------
+# Start mandatory variables
+# -------------------------
 # shibboleth installation enabled/disabled true|false
 install_shibboleth: false
 
@@ -14,6 +17,7 @@ shibboleth_sp_discovery_service_url: https://wayf.aai.dfn.de/DFN-AAI-Basic/wayf 
 #shibboleth_sp_metadata_provider_url: http://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml # TEST
 shibboleth_sp_metadata_provider_url: https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml # PROD
 # Set the path to your (key and certificate) credential files.
+# If not set a new (tmp) cert and key file will be generated. You can find these files in /etc/shibboleth/tmp-cert.pem and /etc/shibboleth/tmp-key.pem.
 # If you need to replace the existing credential files, you can
 #   - add the new credentials at the end of the list
 #   - wait 24h
@@ -22,12 +26,16 @@ shibboleth_sp_metadata_provider_url: https://www.aai.dfn.de/fileadmin/metadata/d
 #   - remove the old credentials
 # -> see https://doku.tid.dfn.de/de:certificates#zertifikatstausch
 shibboleth_sp_credential_files:
-  - certificate_file: /some/path/testcert.pem
-    key_file: /some/path/test.key.pem
+#  - certificate_file: /some/path/testcert.pem
+#    key_file: /some/path/test.key.pem
 #  - certificate_file: /some/path/test2
 #    key_file: /some/path/test2.key
 
-# internal default variables - no need to set them
+# -------------------------
+# End mandatory variables
+# -------------------------
+
+# from here: internal default variables - no need to set them
 shibboleth_switchaai_apt_source_debian_stretch_package_url: https://pkg.switch.ch/switchaai/debian/dists/stretch/main/binary-all/misc/switchaai-apt-source_1.0.0~bpo9+1_all.deb
 shibboleth_sp_protected_path: /edu-sharing/shibboleth     # path to edu-sharing shibboleth
 shibboleth_sp_config_template: dfn-aai-shibboleth2.xml.j2 # the template that should be used for shibboleth2.xml
