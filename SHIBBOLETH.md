@@ -24,7 +24,7 @@ Ansible-Skripte für weitere Systeme können unter [ansible/roles/shibboleth/tas
 ## selbst-signiertes Zertifikat erstellen
 
 * Ein selbst-signiertes Zertifikat kann mit folgenden Methoden erstellt und eingebunden werden:
-     * (Empfohlen) TODO sKript
+     * (Empfohlen) Erstellen des Zertifikates mit dem Skript [ansible/roles/shibboleth/files/generate-cert.sh](ansible/roles/shibboleth/files/generate-cert.sh). Dann generiertes cert+key eintragen in **_shibboleth_sp_credential_files_**.
      * (Alternative) wird die Ansible-Variable **_shibboleth_sp_credential_files_** bei der Installation leer gelassen, so werden automatisch cert und key generiert unter _/etc/shibboleth/tmp-cert.pem_ und _/etc/shibboleth/tmp-key.pem_. Diese können dann zB mit scp kopiert werden und im Inventory unter **_shibboleth_sp_credential_files_** fest eingebunden werden
      ```
      scp -i ~/.vagrant.d/insecure_private_key vagrant@192.168.98.101:/etc/shibboleth/tmp*.pem .
