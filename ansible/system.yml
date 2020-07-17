@@ -59,3 +59,13 @@
       when: register_moodle
   tags:
     - moodle-registration
+    
+- hosts: edusharing
+  become: yes
+  roles:
+    - role: antivirus
+      when: install_antivirus is defined and install_antivirus
+  tags:
+    - root-task
+    - antivirus
+    

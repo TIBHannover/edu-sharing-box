@@ -1,0 +1,7 @@
+
+- name: Install clamav packages
+  apt:
+    name: ["clamav", "clamav-daemon"]
+    state: "present"
+  notify:
+    - restart clamav-daemon
