@@ -58,13 +58,13 @@ img.exe=/usr/bin/convert
 #
 # Outbound Email Configuration
 #-------------
-#mail.host=
-#mail.port=25
-#mail.username=anonymous
-#mail.password=
-#mail.encoding=UTF-8
-#mail.from.default=alfresco@alfresco.org
-#mail.smtp.auth=false
+mail.host={{ edu_mail_smtp_server | default("") }}
+mail.port={{ edu_mail_smtp_port | default("25") }}
+mail.username={{ edu_mail_smtp_username | default("") }}
+mail.password={{ edu_mail_smtp_passwd | default("") }}
+mail.encoding=UTF-8
+mail.from.default={{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}
+mail.smtp.auth=false
 
 #
 # Alfresco Email Service and Email Server
