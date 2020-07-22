@@ -1,0 +1,5 @@
+
+- name: Install Alfresco Share
+  command:
+    chdir: '{{ alf_home }}/bin'
+    cmd: 'java -jar alfresco-mmt.jar install ../amps/alfresco-share-services.amp {{tomcat_home}}/webapps/alfresco.war -verbose -nobackup'

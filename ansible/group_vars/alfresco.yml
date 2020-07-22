@@ -14,3 +14,6 @@ alfresco_db:
   name: alfresco
   user: alfresco
   password: alfresco
+
+# Install alfresco share true|false
+alfresco_share_install: false

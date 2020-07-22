@@ -6,6 +6,8 @@
   - include: imagemagick.yml
   - include: libreoffice.yml
   - include: alfresco.yml
+  - include: share.yml
+    when: alfresco_share_install is defined and alfresco_share_install
   - include: edusharing.yml
   - include: users.yml
   - include: pixabay.yml
