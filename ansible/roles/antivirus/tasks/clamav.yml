@@ -5,3 +5,16 @@
     state: "present"
   notify:
     - restart clamav-daemon
+
+- name: Determine group of alfresco user
+  become: no
+  command: "id -g"
+  register: alfresco_group_id
+
+- name: Adding clamav user to alfresco group
+  user:
+    name: clamav
+    groups: '{{ alfresco_group_id.stdout }}'
+    append: yes
+  notify:
+    - restart clamav-daemon
