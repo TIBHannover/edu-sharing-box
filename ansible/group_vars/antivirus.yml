@@ -2,3 +2,6 @@
 # install the antivirus software
 install_antivirus: false
 
+antivirus_alfviral_version: 1.3.4
+antivirus_alfviral_amp_filename: 'alfviral-{{ antivirus_alfviral_version }}.amp'
+antivirus_alfviral_command: clamdscan # command of the virusscanner alfviral should execute (e.g. clamdscan or clamscan)

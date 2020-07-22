@@ -128,3 +128,22 @@ alfresco.rmi.services.host=0.0.0.0
 #
 #monitor.rmi.service.port=50508
 authentication.ticket.useSingleTicketPerUser=false
+{% if install_antivirus is defined and install_antivirus %}
+
+########################
+## Alfivral Properties #
+########################
+alfviral.mode=COMMAND
+alfviral.command.exec={{ antivirus_alfviral_command }}
+alfviral.file.exceptions=
+
+# Delete node on content update if the content-file is infected
+alfviral.on_update.delete=true
+
+alfviral.notify.user=true
+alfviral.notify.admin=true
+# NOTE currently not possible to send the notification asynchronously when the node will be deleted, because the node is required for the notification template
+alfviral.notify.asynchronously=false
+alfviral.notify.user.template=notify_user_en.html.ftl
+alfviral.notify.admin.template=notify_admin_en.html.ftl
+{% endif %}

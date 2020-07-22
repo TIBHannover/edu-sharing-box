@@ -1,0 +1,10 @@
+
+- name: Copy alfviral AMP
+  copy:
+    src: '{{ antivirus_alfviral_amp_filename }}'
+    dest: "{{ alf_home }}/amps/"
+
+- name: Install alfviral
+  command:
+    chdir: '{{ alf_home }}/bin'
+    cmd: 'java -jar alfresco-mmt.jar install ../amps/{{ antivirus_alfviral_amp_filename | basename }} {{tomcat_home}}/webapps/alfresco.war -verbose -nobackup'

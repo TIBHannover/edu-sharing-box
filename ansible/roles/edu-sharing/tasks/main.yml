@@ -8,6 +8,10 @@
   - include: alfresco.yml
   - include: share.yml
     when: alfresco_share_install is defined and alfresco_share_install
+  - include: alfviral.yml
+    when: install_antivirus is defined and install_antivirus
+    tags:
+      - antivirus
   - include: edusharing.yml
   - include: users.yml
   - include: pixabay.yml
