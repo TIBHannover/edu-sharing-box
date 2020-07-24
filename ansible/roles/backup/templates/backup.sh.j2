@@ -64,7 +64,7 @@ echo "MariaDB-Backup NOT SUPPORTED ATM"
 # alfresco-Backup
 # ---------------------------------------
 alfrescoBackupExit=-1
-alfrescoBackupFile={{ alf_home | basename }}
+alfrescoBackupFile={{ alf_home | basename }}/alf_data
 date +"*** %Y-%m-%d %H:%M:%S start alfresco-Backup: $alfrescoBackupFile" | tee -a "$logFile"
 if test -r "{{ alf_inst_dir }}/$alfrescoBackupFile" ; then
   tar -czf ${dstPath}/alfresco.tar.gz ${alfrescoBackupFile} --directory {{ alf_inst_dir }}

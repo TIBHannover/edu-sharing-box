@@ -24,7 +24,7 @@ Die folgenden Schritte durchführen
 
 ```
 # Aktuelle Daten löschen
-rm -rf ~/alfresco-community-distribution-201707
+rm -rf ~/alfresco-community-distribution-201707/alf_data
 sudo -u postgres psql -c 'DROP DATABASE <alfresco-db>;'
 ```
 
