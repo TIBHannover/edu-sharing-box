@@ -41,6 +41,20 @@
   tags:
   - root-task
 
+- name: Configure alfesco database backup user
+  postgresql_user:
+    login_password: '{{postgres_tmp_root_password}}'
+    login_host: localhost
+    db: '{{alfresco_db.name}}'
+    name: '{{backup_db_user}}'
+    password: '{{ backup_db_password }}'
+    priv: 'ALL'
+    role_attr_flags: SUPERUSER
+    state: '{{ backup_process_state }}'
+  become: yes
+  tags:
+  - root-task
+
 - name: remove postgres password
   become: yes
   shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD null;\""'

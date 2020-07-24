@@ -31,3 +31,11 @@ esrender_base_dir: '{{esrender_document_root}}/esrender'
 esrender_cache_dir: '/var/cache/esrender'
 
 alf_password: admin
+
+# enable / disable the edu-sharing backup process: present|absent
+backup_process_state: absent
+backup_db_user: oerbackup
+backup_db_password: changeme
+backup_schedule_hour: 2
+backup_path: '{{ base_dir }}/backup'
+backup_bin: '{{ base_dir }}/bin'

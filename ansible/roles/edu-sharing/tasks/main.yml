@@ -3,6 +3,8 @@
     when: alfresco_db_type == 'mariadb'
   - include: postgresql.yml
     when: alfresco_db_type == 'postgresql'
+    tags:
+      - backup
   - include: imagemagick.yml
   - include: libreoffice.yml
   - include: alfresco.yml
