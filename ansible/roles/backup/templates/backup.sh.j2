@@ -67,7 +67,7 @@ alfrescoBackupExit=-1
 alfrescoBackupFile={{ alf_home | basename }}/alf_data
 date +"*** %Y-%m-%d %H:%M:%S start alfresco-Backup: $alfrescoBackupFile" | tee -a "$logFile"
 if test -r "{{ alf_inst_dir }}/$alfrescoBackupFile" ; then
-  tar -czf ${dstPath}/alfresco.tar.gz ${alfrescoBackupFile} --directory {{ alf_inst_dir }}
+  tar -czf ${dstPath}/alfresco.tar.gz --directory {{ alf_inst_dir }} ${alfrescoBackupFile}
   alfrescoBackupExit=$?
 else
   echo >&2 "WARNING: could not read backup-dir: {{ alf_inst_dir }}/$alfrescoBackupFile"
