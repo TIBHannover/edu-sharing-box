@@ -1,0 +1,10 @@
+# Debian Buster (10)
+- name: Install switchaai debian buster installation package
+  apt:
+    deb: '{{ shibboleth_switchaai_apt_source_debian_buster_package_url }}'
+
+- name: Install shibboleth package for debian buster
+  apt:
+    update_cache: yes
+    install_recommends: yes
+    name: shibboleth
