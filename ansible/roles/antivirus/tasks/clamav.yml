@@ -6,6 +6,9 @@
   notify:
     - restart clamav-daemon
 
+- name: start clamav-daemon
+  service: name=clamav-daemon state=started
+
 - name: Determine group of alfresco user
   become: no
   command: "id -g"
