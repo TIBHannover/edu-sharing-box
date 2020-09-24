@@ -32,9 +32,9 @@
     state: "present"
 
 - name: a2dissite default
-  command: a2dissite 000-default
-  args:
-    removes: /etc/apache2/sites-enabled/000-default.conf
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
   notify:
     - restart apache2
 
@@ -44,8 +44,9 @@
     dest: /etc/apache2/sites-available/edu-sharing.conf
 
 - name: a2ensite esrender
-  command: a2ensite edu-sharing
-  args:
-    creates: /etc/apache2/sites-enabled/edu-sharing.conf
+  file:
+    path: /etc/apache2/sites-enabled/edu-sharing.conf
+    src: ../sites-available/edu-sharing.conf
+    state: link
   notify:
     - restart apache2

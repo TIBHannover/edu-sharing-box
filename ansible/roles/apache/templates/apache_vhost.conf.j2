@@ -6,6 +6,8 @@
           AllowOverride All
           Require all granted
         </Directory>
+        Alias "/edu-sharing/esrender" "{{esrender_base_dir}}"
+        ProxyPass /edu-sharing/esrender        !
 {% endif %}
 
 {% if es_proxy_vhost is defined and es_proxy_vhost %}
