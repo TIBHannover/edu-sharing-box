@@ -6,6 +6,19 @@ Es ist möglich den Single-Sign-On (SSO) Zugang via DFN-AAI (Shibboleth) automat
 
 * Anmeldung des Service Provider (SP) bei DFN AAI: [https://doku.tid.dfn.de/de:registration](https://doku.tid.dfn.de/de:registration)
 * Daten des SP in die Metadaten der DFN-AAI Testföderation eintragen
+     * Unter https://www.aai.dfn.de/verwaltung/metadaten/ => "neuen SP anlegen"
+     * Eigene Daten einpflegen bzw URL zum eigenen SP angeben (zB http://192.168.98.101/Shibboleth.sso/Metadata)
+     * Benötigte Attribute
+     ```
+     ... FriendlyName="eduPersonScopedAffiliation"  ... isRequired="true"
+     ... FriendlyName="uid"                         ... isRequired="true"
+     ... FriendlyName="mail"                        ... isRequired="true"
+     ... FriendlyName="eduPersonUniqueId"           ... isRequired="true"
+     ... FriendlyName="sn"                          ... isRequired="true"
+     ... FriendlyName="givenName"                   ... isRequired="true"
+     ... FriendlyName="o"                           ... isRequired="true"
+
+     ```
 
 ## Unterstützte Systeme
 
