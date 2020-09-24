@@ -30,6 +30,7 @@
         <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
                   checkAddress="false" consistentAddress="true"
                   handlerSSL="{{ shibboleth_sp_sessions_handler_ssl | string | lower }}"
+                  handlerURL="{{ shibboleth_sp_base_path }}/Shibboleth.sso"
                   cookieProps="{{ shibboleth_sp_sessions_cookie_props }}" redirectLimit="host">
 
             <!--

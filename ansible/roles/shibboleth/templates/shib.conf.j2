@@ -10,7 +10,7 @@ ShibCompatValidUser Off
 #
 # Ensures handler will be accessible.
 #
-<Location /Shibboleth.sso>
+<Location {{ shibboleth_sp_base_path }}/Shibboleth.sso>
   AuthType None
   Require all granted
 </Location>
