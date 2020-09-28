@@ -1,16 +1,4 @@
 ---
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
-
-- name: undeploy alresco war-files from tomcat
-  file:
-    path: "{{item}}"
-    state: absent
-  with_items:
-    - "{{tomcat_home}}/webapps/solr4.war"
-    - "{{tomcat_home}}/webapps/solr4"
-    - "{{tomcat_home}}/work/Catalina/localhost/solr4"
-
 - name: download alfresco sources
   get_url:
     url: '{{alf_sources_url}}'
@@ -30,6 +18,18 @@
     src: '{{alf_inst_dir}}/{{alf_name}}.zip'
     dest: "{{alf_inst_dir}}"
     creates: "{{alf_home}}"
+
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
+
+- name: undeploy alresco war-files from tomcat
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - "{{tomcat_home}}/webapps/solr4.war"
+    - "{{tomcat_home}}/webapps/solr4"
+    - "{{tomcat_home}}/work/Catalina/localhost/solr4"
 
 - name: copy alresco-solr war-file to tomcat
   copy:
