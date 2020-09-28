@@ -1,19 +1,4 @@
 ---
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
-
-- name: undeploy alresco war-files from tomcat
-  file:
-    path: "{{item}}"
-    state: absent
-  with_items:
-    - "{{tomcat_home}}/webapps/alfresco.war"
-    - "{{tomcat_home}}/webapps/alfresco"
-    - "{{tomcat_home}}/work/Catalina/localhost/alfresco"
-    - "{{tomcat_home}}/webapps/share.war"
-    - "{{tomcat_home}}/webapps/share"
-    - "{{tomcat_home}}/work/Catalina/localhost/share"
-
 - name: download mysql jconnector (mariadb driver not supported by alfresco)
   get_url:
     url: '{{mysql_jconnector_url}}'
@@ -48,7 +33,23 @@
     dest: "{{alf_inst_dir}}"
     creates: "{{alf_home}}"
 
-- name: copy alresco war-files to tomcat
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
+  tags: edu-sharing-config
+
+- name: undeploy alresco war-files from tomcat
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - "{{tomcat_home}}/webapps/alfresco.war"
+    - "{{tomcat_home}}/webapps/alfresco"
+    - "{{tomcat_home}}/work/Catalina/localhost/alfresco"
+    - "{{tomcat_home}}/webapps/share.war"
+    - "{{tomcat_home}}/webapps/share"
+    - "{{tomcat_home}}/work/Catalina/localhost/share"
+
+- name: copy alfresco war-files to tomcat
   copy:
     src: "{{item}}"
     dest: "{{tomcat_home}}/webapps"
@@ -87,6 +88,7 @@
   template:
     src: alfresco-global.properties.j2
     dest: '{{tomcat_home}}/shared/classes/alfresco-global.properties'
+  tags: edu-sharing-config
 
 - name: Ensure python-lxml packages are present
   apt:
@@ -102,3 +104,4 @@
     xpath: /Server/Service/Connector
     attribute: address
     value: 127.0.0.1
+  tags: edu-sharing-config

@@ -4,7 +4,6 @@
     dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/metadataset/v2/xml/'
   when: (edu_mds_override_paths is defined) and (edu_mds_override_paths != "") and (edu_mds_override_paths is not none)
   with_items: '{{edu_mds_override_paths}}'
-  tags: edu-sharing-config
 
 - name: Copy valuespaces
   copy:
@@ -12,7 +11,6 @@
     dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/metadataset/v2/xml/valuespaces/'
   when: (edu_valuespaces_paths is defined) and (edu_valuespaces_paths != "") and (edu_valuespaces_paths is not none)
   with_items: '{{edu_valuespaces_paths}}'
-  tags: edu-sharing-config
 
 - name: Copy i18n
   copy:
@@ -20,4 +18,3 @@
     dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/metadataset/v2/i18n/'
   when: (edu_valuespaces_i18n_paths is defined) and (edu_valuespaces_i18n_paths != "") and (edu_valuespaces_i18n_paths is not none)
   with_items: '{{edu_valuespaces_i18n_paths}}'
-  tags: edu-sharing-config
