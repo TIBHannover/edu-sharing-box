@@ -217,6 +217,18 @@
     - ["password", '{{alf_password}}']
   tags: edu-sharing-config
 
+- name: activate guest-user in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="{{item[0]}}">{{item[1]}}</entry>'
+    regexp: '<entry key="{{item[0]}}">'
+    insertbefore: '</properties>'
+  loop:
+    - ["guest_username", 'esguest']
+    - ["guest_password", 'esguest']
+  when : 'use_esguest_user'
+  tags: edu-sharing-config
+
 - name: edit mail properties in tomcat/shared/classes/ccmail.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/ccmail.properties.xml'
