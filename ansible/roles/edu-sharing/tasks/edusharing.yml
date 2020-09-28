@@ -209,6 +209,7 @@
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
     regexp: '<entry key="{{item}}">'
+    state: absent
   loop:
     - guest_username
     - guest_password
