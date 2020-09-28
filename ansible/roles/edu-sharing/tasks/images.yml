@@ -5,32 +5,27 @@
     src: '{{edu_banner_path}}'
     dest: '{{edu_home}}/war/edu_sharing/images/logos/'
   when: (edu_banner_path is defined) and (edu_banner_path != "") and (edu_banner_path is not none)
-  tags: edu-sharing-config
 
 - name: Copy custom logo
   copy:
     src: '{{edu_logo_path}}'
     dest: '{{edu_home}}/war/edu_sharing/assets/images/edu-sharing-loading.svg'
   when: (edu_logo_path is defined) and (edu_logo_path != "") and (edu_logo_path is not none)
-  tags: edu-sharing-config
 
 - name: Copy custom logo animation
   copy:
     src: '{{edu_logo_path}}'
     dest: '{{edu_home}}/war/edu_sharing/assets/images/edu-sharing-loading-animation.svg'
   when: (edu_logo_path is defined) and (edu_logo_path != "") and (edu_logo_path is not none)
-  tags: edu-sharing-config
 
 - name: Copy custom login logo
   copy:
     src: '{{edu_login_logo_path}}'
     dest: '{{edu_home}}/war/edu_sharing/assets/images/logo.svg'
   when: (edu_login_logo_path is defined) and (edu_login_logo_path != "") and (edu_login_logo_path is not none)
-  tags: edu-sharing-config
 
 - name: Copy custom images
   copy:
     src: '{{item[0]}}'
     dest: '{{edu_home}}/war/edu_sharing/assets/images/{{item[1]}}'
   loop: '{{ edu_custom_images | default([], true) }}'
-  tags: edu-sharing-config

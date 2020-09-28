@@ -38,6 +38,7 @@
 
 - name: stop alfresco
   shell: '{{tomcat_stop_command}}'
+  tags: edu-sharing-config
 
 - name: set imprint url
   xml:
@@ -64,6 +65,7 @@
   tags: edu-sharing-config
 
 - include: images.yml
+  tags: edu-sharing-config
 
 - name: set banner url
   xml:
@@ -106,6 +108,7 @@
     state: absent
     pretty_print: yes
   loop: '{{ edu_help_menu_options | default([], true) }}'
+  tags: edu-sharing-config
 
 - name: edit HelpMenuOptions
   xml:
@@ -115,6 +118,7 @@
     input_type: xml
     pretty_print: yes
   loop: '{{ edu_help_menu_options | default([], true) }}'
+  tags: edu-sharing-config
 
 - name: clear allowedLicenses
   xml:
@@ -142,12 +146,14 @@
     line: '\g<start>{{item[2]}}\g<end>'
     regexp: '(?P<start>^\s*"{{item[1]}}":").*(?P<end>".*)'
   loop: '{{ edu_i18n_adjustments | default([], true) }}'
+  tags: edu-sharing-config
 
 - name: edit edu-sharing build.properties
   lineinfile:
     path: '{{ edu_home }}/build.properties'
     line: 'webserver.home={{tomcat_home}}'
     regexp: '^webserver.home=.*$'
+  tags: edu-sharing-config
 
 - name: edit edu-sharing call-ant.sh
   replace:
@@ -171,6 +177,7 @@
   args:
     chdir: '{{ edu_home }}'
     removes: '{{ tomcat_home }}/webapps/edu-sharing'
+  tags: edu-sharing-config
 
 - name: make edu-sharing install.sh executable
   file:
@@ -181,7 +188,8 @@
   shell: '{{ edu_home }}/install.sh'
   args:
     chdir: '{{ edu_home }}'
-    
+  tags: edu-sharing-config
+
 - name: EDU-SHARING-5-FIX remove jackson-jars that edu-sharing installed in the last step, because it causes version conflicts
   file:
     path: "{{item}}"
@@ -207,6 +215,7 @@
     - ["domain", '{{edu_sharing_domain}}']
     - ["host", '{{edu_sharing_host}}']
     - ["password", '{{alf_password}}']
+  tags: edu-sharing-config
 
 - name: edit mail properties in tomcat/shared/classes/ccmail.properties.xml
   lineinfile:
@@ -222,8 +231,11 @@
     - ["mail.smtp.username", '{{ edu_mail_smtp_username | default("") }}']
     - ["mail.smtp.port", '{{ edu_mail_smtp_port | default("25") }}']
     - ["mail.smtp.from", '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}']
+  tags: edu-sharing-config
 
 - include: metadatasets.yml
+  tags: edu-sharing-config
 
 - name: start alfresco
   shell: '{{tomcat_start_command}}'
+  tags: edu-sharing-config

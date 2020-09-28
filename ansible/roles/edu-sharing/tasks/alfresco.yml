@@ -35,6 +35,7 @@
 
 - name: stop alfresco
   shell: '{{tomcat_stop_command}}'
+  tags: edu-sharing-config
 
 - name: undeploy alresco war-files from tomcat
   file:
@@ -48,7 +49,7 @@
     - "{{tomcat_home}}/webapps/share"
     - "{{tomcat_home}}/work/Catalina/localhost/share"
 
-- name: copy alresco war-files to tomcat
+- name: copy alfresco war-files to tomcat
   copy:
     src: "{{item}}"
     dest: "{{tomcat_home}}/webapps"
@@ -87,6 +88,7 @@
   template:
     src: alfresco-global.properties.j2
     dest: '{{tomcat_home}}/shared/classes/alfresco-global.properties'
+  tags: edu-sharing-config
 
 - name: Ensure python-lxml packages are present
   apt:
@@ -102,3 +104,4 @@
     xpath: /Server/Service/Connector
     attribute: address
     value: 127.0.0.1
+  tags: edu-sharing-config
