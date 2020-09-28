@@ -1,0 +1,9 @@
+
+- name: set shibboleth settings in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    line: '<entry key="{{item[0]}}">{{item[1]}}</entry>'
+    regexp: '<entry key="{{item[0]}}">'
+    insertbefore: '</properties>'
+  loop:
+    - ["allowed_authentication_types", 'shibboleth']

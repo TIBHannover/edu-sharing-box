@@ -33,9 +33,11 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
-- include: shibboleth.yml
+- include: shibboleth_before.yml
   when: install_shibboleth is defined and install_shibboleth
-  tags: shibboleth
+  tags:
+    - shibboleth
+    - edu-sharing-config
 
 - include: custom.yml
   when: edu_sharing_custom_installation
@@ -203,6 +205,16 @@
     - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.8.3.jar"
     - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.8.3.jar"
     
+- name: remove optional lines in tomcat/shared/classes/homeApplication.properties.xml
+  lineinfile:
+    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    regexp: '<entry key="{{item}}">'
+  loop:
+    - guest_username
+    - guest_password
+    - allowed_authentication_types
+  tags: edu-sharing-config
+
 - name: add or edit properties in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
@@ -248,6 +260,12 @@
     - ["mail.smtp.port", '{{ edu_mail_smtp_port | default("25") }}']
     - ["mail.smtp.from", '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}']
   tags: edu-sharing-config
+
+- include: shibboleth_after.yml
+  when: install_shibboleth is defined and install_shibboleth
+  tags:
+    - shibboleth
+    - edu-sharing-config
 
 - include: metadatasets.yml
   tags: edu-sharing-config
