@@ -12,6 +12,7 @@
     - apache
   tags:
     - root-task
+    - shibboleth
 
 - hosts: edusharing
   become: yes
