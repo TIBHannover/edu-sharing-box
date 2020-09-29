@@ -57,3 +57,5 @@ edu_login_shib_url: '{{ edu_sharing_url }}/shibboleth'
 # NOTE: this is not implemented here!
 #edu_login_providers_url: 'test'
 #edu_login_provider_target_url: 'test'
+
+edu_sso_context_path: edu-sharing-sso-context.xml # absolut or relative path to edu-sharing-sso-context.xml
