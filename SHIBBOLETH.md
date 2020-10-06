@@ -34,6 +34,14 @@ Ansible-Skripte für weitere Systeme können unter [ansible/roles/shibboleth/tas
      * Siehe [https://doku.tid.dfn.de/de:certificates#informationen_fuer_service_provider](https://doku.tid.dfn.de/de:certificates#informationen_fuer_service_provider)
      * Diese Zertifikate müssen vor der Aufnahme in die DFN-AAI Produktivumgebung verifiziert werden.
      * Zertifikaterstellung s.u.
+
+### Shibboleth Service Provider hinter Reverse Proxy konfigurieren
+
+* Client greift auf das geschützte edu-sharing bzw. den Shibboleth-SP via Reverse Proxy zu, zB über https://proxy.example.org/edu-sharing auf http://abc.example.org/edu-sharing
+* Dann muss der Reverse Proxy so konfiguriert werden, dass auch _Shibboleth.sso_ zugänglich ist, zB über https://proxy.example.org/path/Shibboleth.sso auf http://abc.example.org/path/Shibboleth.sso
+* Falls als Pfad nicht der Standard-Pfad _/Shibboleth.sso_ verwendet werden soll, so kann der Pfad in **_shibboleth_sp_base_path_** konfiguriert werden.
+* Bei der Konfiguration der Metadaten bei DFN-AAI muss dann die Proxy-URL verwendet werden, zB https://proxy.example.org/path/Shibboleth.sso
+* In der Apache-Konfiguration, auf dem Shibboleth-Host müssen dann die Properies _ServerName_ und _UseCanonicalName_ gesetzt werden, damit Shibboleth korrekte URLs erstellen kann. Dies sollte über die Ansible-Variablen **_apache_conf_servername_** und **_apache_conf_usecanonicalname_** automatisiert passieren, zB `apache_conf_servername: https://proxy.example.org:443` und `apache_conf_usecanonicalname: 'On'`
      
 ## selbst-signiertes Zertifikat erstellen
 

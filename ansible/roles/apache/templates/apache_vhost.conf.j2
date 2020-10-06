@@ -1,4 +1,10 @@
 <VirtualHost *:80>
+{% if apache_conf_servername is defined and apache_conf_servername is not none and apache_conf_servername != "" %}
+        ServerName        {{ apache_conf_servername }}
+{% endif %}
+{% if apache_conf_usecanonicalname is defined and apache_conf_usecanonicalname is not none and apache_conf_usecanonicalname != "" %}
+        UseCanonicalName  {{ apache_conf_usecanonicalname }}
+{% endif %}
 {% if esrender_vhost is defined and esrender_vhost %}
         DocumentRoot {{esrender_document_root}}
         <Directory {{esrender_base_dir}}/>
