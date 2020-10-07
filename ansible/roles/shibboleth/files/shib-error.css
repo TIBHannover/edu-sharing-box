@@ -1,64 +1,6 @@
-html {
-	background-color: white;
-
-}
-
-body
-{
-	background-color: white;
-	font-family:Verdana, Geneva, sans-serif;
-	width: 400px;
-	margin-top: 150px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 10px;
-	text-align: left;
-	box-shadow: 1px 1px 8px #999999;
-	border-radius: 13px;  
-	-webkit-box-shadow: 1px 1px 8px #999999;
-	-webkit-border-radius: 13px;
-	-moz-box-shadow: 1px 1px 8px #999999;
-	-moz-border-radius: 13px;
-	overflow: hidden;
-	padding: 24px;
-	filter: progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=0, Strength=5)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=45, Strength=4)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=90, Strength=5)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=135, Strength=4)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=180, Strength=5)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=225, Strength=4)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=260, Strength=5)
-		progid:DXImageTransform.Microsoft.Shadow(color='#CCCCCC', Direction=305, Strength=4);
-}
-
-h1
-{
-	color: #00247D;
-	font-size: 13px;
-	margin-top: 40px;
-}
 
 img
 {
-	float: right;
-}
-
-p
-{
-	font-size: 14px;
-}
-
-a {
-	color: #00247D;
-	text-decoration: underline;
-}
-
-a:visited {
-	color: #00247D;
-	text-decoration: underline;
-}
-
-a:focus, a:hover, a:active {
-	color: #F39800;
-	text-decoration: underline;
+	max-width:200px;
+	max-height:200px;
 }

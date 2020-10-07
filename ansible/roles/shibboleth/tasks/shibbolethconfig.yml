@@ -39,7 +39,7 @@
 - name: Add shib-error.css file
   copy:
     src: '{{ shibboleth_sp_error_css_file }}'
-    dest: /etc/shibboleth/shib-error.css
+    dest: /usr/share/shibboleth/shib-error.css
   notify:
     - restart apache2
     - restart shibd
