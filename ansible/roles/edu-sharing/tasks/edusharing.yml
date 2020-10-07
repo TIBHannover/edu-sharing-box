@@ -150,7 +150,7 @@
     backrefs: yes
     path: '{{ edu_home }}/war//edu_sharing/assets/i18n/{{item[0]}}'
     line: '\g<start>{{item[2]}}\g<end>'
-    regexp: '(?P<start>^\s*"{{item[1]}}":").*(?P<end>".*)'
+    regexp: '(?P<start>^\s*"{{item[1]}}"\s*:\s*").*(?P<end>".*)'
   loop: '{{ edu_i18n_adjustments | default([], true) }}'
   tags: edu-sharing-config
 
