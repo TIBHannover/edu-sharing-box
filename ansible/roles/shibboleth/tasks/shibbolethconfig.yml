@@ -28,6 +28,14 @@
     - restart apache2
     - restart shibd
     
+- name: Add attrChecker.html
+  template:
+    src: '{{ shibboleth_sp_attr_checker_template }}'
+    dest: /etc/shibboleth/attrChecker.html
+  notify:
+    - restart apache2
+    - restart shibd
+
 - name: Add shib-error.css file
   copy:
     src: '{{ shibboleth_sp_error_css_file }}'

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"DTD/xhtml1-strict.dtd">
+	
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+  <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<title>Login abgelehnt wegen fehlender Attribute</title>
+  <script>
+  $(document).ready(function() {
+      $("#textarea").val(
+       $('#textarea').val().replace(/\ \*\ (\r\n|\n|\r)/ig,"")
+      );
+      var mailto = "<shibmlp Meta-Support-Contact/>";
+      var target = "{{ shibboleth_sp_entity_id }}";
+      var target = target.replace("&#58;", ":");
+      mailto = mailto.split("&#58;").pop();
+      $("#email").attr('href','mailto:' + mailto + '?subject=Fehlende Attribute für den Service Provider ' + encodeURIComponent(target) + '&cc=<shibmlp supportContact/>' + '&body=' + encodeURIComponent(document.getElementById('textarea').value));
+      
+      $('#showdetails').click(function() {
+        $('#details').slideToggle("fast");
+      });
+      $('#showdetails2').click(function() {
+        $('#details').slideToggle("fast");
+      });
+
+      document.getElementById("support").innerHTML=mailto;
+      document.getElementById("support2").innerHTML=mailto;
+  });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="hero-unit">
+			<shibmlpif Meta-Small-Logo><img src="<shibmlp Meta-Small-Logo />"></shibmlpif>
+      <shibmlpif logoLocation><img src="<shibmlp logoLocation/>" alt="Logo" align="right" /></shibmlpif>
+      <h3>Login abgelehnt wegen fehlender Attribute.</h3>
+
+      <p>Leider konnten Sie sich nicht am Dienst anmelden, da Ihre Institution <shibmlpif Meta-displayName>(<shibmlp Meta-displayName />)</shibmlpif>
+      nicht alle notwendigen Informationen &uuml;ber Sie zur Verf&uuml;gung gestellt hat, die zur Nutzung des Dienstes n&ouml;tig sind.
+      </p>
+
+      <a href="#" id="showdetails">Show details</a>
+      <br/>
+      <div id="details" style="display:none">
+        <hr>
+         Die folgenden Nutzerinformationen in Form von SAML Attributen werden f&uuml;r den Service ben&ouml;tigt. Notwendige aber fehlende Attribute sind rot markiert.
+        <div class="row">
+          <div class="col-sm-5">
+            <table class="table table-sm">
+              <thead>
+                <tr><th colspan=2>Zusammenfassung</th></tr>
+              </thead>
+              <tr>
+                <th>IdP</th>
+                <td><shibmlp Meta-displayName /></td>
+              </tr>
+               <tr>
+                 <th>entityId</th>
+                 <td><shibmlp entityID/></td>
+              </tr>
+              <tr>
+                <th>SP</th>
+                <td>{{ shibboleth_sp_entity_id }}</td>
+              </tr>
+              <tr>
+                <th>URL</th>
+                <td><shibmlp target /></td>
+              </tr>
+              <tr>
+                <th>Zeit</th>
+                <td><shibmlp now/></td>
+              </tr>
+              <tr>
+                <th>Kontakt</th>
+                <td id="support"><shibmlp Meta-Support-Contact/></td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-sm-7">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Attribut</th>
+                  <th>Wert</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!--TableStart-->
+                <tr <shibmlpifnot givenName>class="warning text-danger"</shibmlpifnot>>
+                  <td>givenName</td>
+                  <td><shibmlp givenName /></td>
+                </tr>
+                <tr <shibmlpifnot sn>class="warning text-danger"</shibmlpifnot>>
+                  <td>sn</td>
+                  <td><shibmlp sn /></td>
+                </tr>
+                <tr <shibmlpifnot mail>class="warning text-danger"</shibmlpifnot>>
+                  <td>mail</td>
+                  <td><shibmlp mail /></td>
+                </tr>
+                <tr <shibmlpifnot eduPersonUniqueId>class="warning text-danger"</shibmlpifnot>>
+                  <td>eduPersonUniqueId</td>
+                  <td><shibmlp eduPersonUniqueId /></td>
+                </tr>
+                <tr <shibmlpifnot eppn>class="warning text-danger"</shibmlpifnot>>
+                  <td>eduPersonPrincipalName</td>
+                  <td><shibmlp eppn /></td>
+                </tr>
+                <tr <shibmlpifnot persistent-id>class="warning text-danger"</shibmlpifnot>>
+                  <td>persistent-id</td>
+                  <td><shibmlp persistent-id /></td>
+                </tr>
+                <tr <shibmlpifnot affiliation>class="warning text-danger"</shibmlpifnot>>
+                  <td>eduPersonScopedAffiliation</td>
+                  <td><shibmlp affiliation /></td>
+                </tr>
+                <!--TableEnd-->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        Email Template f&uuml;r Ihren IdP Administrator
+        <textarea id="textarea" style="width:100%;height:100px;">
+Lieber <shibmlpif Meta-displayName><shibmlp Meta-displayName /> </shibmlpif>IdP Administrator,
+
+ich habe versucht mich beim Service Provider mit der entityID "{{ shibboleth_sp_entity_id }}" heute anzumelden (<shibmlp now />). Leider ist die Anmeldung fehlgeschlagen, weil der <shibmlpif Meta-displayName><shibmlp Meta-displayName /> </shibmlpif>Identity Provider dem Service nicht die angefragten Attribute zur Verf&uuml;gung gestellt hat. Um den Service nutzen zu k&ouml;nnen, m&ouml;chte ich Sie freundlich bitten, die notwendigen Attribute f&uuml;r den SP "{{ shibboleth_sp_entity_id }}" freizuschalten. Es folgt eine Zusammenfassung des Anmeldeversuchs.
+
+Die ben&ouml;tigten aber nicht erhaltenen Attribute sind:
+<shibmlpifnot givenName> * givenName
+</shibmlpifnot><shibmlpifnot sn> * sn
+</shibmlpifnot><shibmlpifnot mail> * mail
+</shibmlpifnot><shibmlpifnot eduPersonUniqueId><shibmlpifnot eppn> * eduPersonPrincipalName ODER eduPersonUniqueId
+</shibmlpifnot></shibmlpifnot><shibmlpifnot persistent-id> * persistent-id
+</shibmlpifnot><shibmlpifnot affiliation> * eduPersonScopedAffiliation
+</shibmlpifnot>
+
+Verbindungszusammenfassung:
+ * IdP:  <shibmlpif Meta-displayName><shibmlp Meta-displayName /></shibmlpif> 
+ * SP:   {{ shibboleth_sp_entity_id }}
+ * URL:  <shibmlp target />
+ * Time: <shibmlp now/>
+
+Mit freundlichen Gr&uuml;ßen
+        </textarea>
+        <hr>
+      </div>
+      <p>
+      Bitte kontaktieren Sie den IT-Support Ihrer Einrichtung (hier: <span id="support2"><shibmlp Meta-Support-Contact/></span>) und bitten um die Freigabe der fehlenden Attribute. Sie k&ouml;nnen daf&uuml;r den Knopf unten benutzen. Dadurch wird Ihr Mailprogramm gestartet mit einer vorgefertigten Nachricht, die die notwendigen technischen Informationen enth&auml;lt. Sie k&ouml;nnen zus&auml;tzliche Informationen hinzuf&uuml;gen bevor Sie die Nachricht absenden. Alternativ k&ouml;nnen Sie die Anfrage aus der Textbox <a href="#" id="showdetails2">Details</a> kopieren und selbst eine Mail verfassen.
+      </p>
+      <a id="email" class="btn btn-primary btn-large" href="#">Anfrage ans Helpdesk Ihrer Einrichtung</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -41,6 +41,7 @@ shibboleth_switchaai_apt_source_debian_buster_package_url: https://pkg.switch.ch
 shibboleth_sp_base_path: "" # When you want to use another path for shibboleth SP, set the base path here. For example '/oer/shib-sp' to use '/oer/shib-sp/Shibboleth.sso'
 shibboleth_sp_protected_path: /edu-sharing/shibboleth     # path to edu-sharing shibboleth
 shibboleth_sp_config_template: dfn-aai-shibboleth2.xml.j2 # the template that should be used for shibboleth2.xml
+shibboleth_sp_attr_checker_template: attrChecker.html.j2  # the template that should be used for attrChecker.html
 shibboleth_sp_attribute_map_file: attribute-map.xml       # the file that is used as /etc/shibboleth/attribute-map.xml
 shibboleth_sp_error_css_file: shib-error.css              # stylesheet used for error pages
 shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/fileadmin/metadata/dfn-aai.pem # DFN AAI certificate that should be used for validation of the metadata
