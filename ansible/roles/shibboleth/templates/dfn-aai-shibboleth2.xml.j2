@@ -82,7 +82,7 @@
         <Errors supportContact="{{ shibboleth_sp_support_contact }}"
             helpLocation="{{ shibboleth_sp_help_location }}"
             logoLocation="{{ shibboleth_sp_error_templates_logo_location }}"
-            styleSheet="/shibboleth-sp/shib-error.css"/>
+            styleSheet="{{ shibboleth_sp_base_path }}/shibboleth-sp/shib-error.css"/>
             
         <Notify Channel="back" Location="http://localhost:{{tomcat_port}}/edu-sharing/services/LogoutNotification"/>
 

@@ -19,12 +19,12 @@ ShibCompatValidUser Off
 # Used for example style sheet in error templates.
 #
 <IfModule mod_alias.c>
-  <Location /shibboleth-sp>
+  <Location {{ shibboleth_sp_base_path }}/shibboleth-sp>
     AuthType None
     Require all granted
   </Location>
-  Alias /shibboleth-sp/main.css /usr/share/shibboleth/main.css
-  Alias /shibboleth-sp/shib-error.css /usr/share/shibboleth/shib-error.css
+  Alias {{ shibboleth_sp_base_path }}/shibboleth-sp/main.css /usr/share/shibboleth/main.css
+  Alias {{ shibboleth_sp_base_path }}/shibboleth-sp/shib-error.css /usr/share/shibboleth/shib-error.css
 </IfModule>
 
 #
