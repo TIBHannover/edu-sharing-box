@@ -34,7 +34,7 @@
     creates: "{{edu_home}}"
 
 - include: shibboleth_before.yml
-  when: install_shibboleth is defined and install_shibboleth
+  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
   tags:
     - shibboleth
     - edu-sharing-config
@@ -46,6 +46,21 @@
   shell: '{{tomcat_stop_command}}'
   tags: edu-sharing-config
 
+- name: clear optional properties in client config
+  xml:
+    path: '{{ edu_client_config_xml_path }}'
+    xpath: '{{ item }}'
+    state: absent
+    pretty_print: yes
+  loop:
+    - '/config/values/allowedLicenses'
+    - '/config/values/banner/components'
+    - '/config/values/loginUrl'
+    - '/config/values/loginAllowLocal'
+    - '/config/values/loginProvidersUrl'
+    - '/config/values/loginProviderTargetUrl'
+  tags: edu-sharing-config
+  
 - name: set imprint url
   xml:
     path: '{{ edu_client_config_xml_path }}'
@@ -89,14 +104,6 @@
     pretty_print: yes
   tags: edu-sharing-config
   
-- name: clear banner components
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/banner/components'
-    state: absent
-    pretty_print: yes
-  tags: edu-sharing-config
-
 - name: set banner components
   xml:
     path: '{{ edu_client_config_xml_path }}'
@@ -124,14 +131,6 @@
     input_type: xml
     pretty_print: yes
   loop: '{{ edu_help_menu_options | default([], true) }}'
-  tags: edu-sharing-config
-
-- name: clear allowedLicenses
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/allowedLicenses'
-    state: absent
-    pretty_print: yes
   tags: edu-sharing-config
 
 - name: set allowedLicenses
@@ -263,7 +262,7 @@
   tags: edu-sharing-config
 
 - include: shibboleth_after.yml
-  when: install_shibboleth is defined and install_shibboleth
+  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
   tags:
     - shibboleth
     - edu-sharing-config

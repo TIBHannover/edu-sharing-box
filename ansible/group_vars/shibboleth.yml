@@ -49,6 +49,7 @@ shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/fileadmin/me
 shibboleth_sp_sessions_handler_ssl: true                  # Set Sessions attribute handlerSSL
 shibboleth_sp_sessions_cookie_props: '{{ "https" if shibboleth_sp_sessions_handler_ssl else "http" }}' # Set Sessions attribute cookieProps
 
+edu_configure_shibboleth: '{{ install_shibboleth }}'  # Activate shibboleth authentication in edu-sharing true|false (if set to false and 'install_shibboleth' to true, you can install shibboleth without activation in edu-sharing)
 # allow additional local edu-sharing login, otherwise login redirects directly to 'edu_login_shib_url' 'true'|'false'
 edu_login_allow_local: 'true'
 # the login url that should be used for shibboleth login
