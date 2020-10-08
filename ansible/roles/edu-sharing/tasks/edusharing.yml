@@ -46,6 +46,7 @@
     - '/config/values/loginAllowLocal'
     - '/config/values/loginProvidersUrl'
     - '/config/values/loginProviderTargetUrl'
+    - '/config/values/logout'
   tags: edu-sharing-config
   
 - include: shibboleth_before.yml

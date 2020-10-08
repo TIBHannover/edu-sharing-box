@@ -48,6 +48,7 @@ shibboleth_sp_error_templates_logo_location: 'https://wiki.aai.dfn.de/_media/log
 shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/fileadmin/metadata/dfn-aai.pem # DFN AAI certificate that should be used for validation of the metadata
 shibboleth_sp_sessions_handler_ssl: true                  # Set Sessions attribute handlerSSL
 shibboleth_sp_sessions_cookie_props: '{{ "https" if shibboleth_sp_sessions_handler_ssl else "http" }}' # Set Sessions attribute cookieProps
+shibboleth_sp_handler_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}{{ shibboleth_sp_base_path }}/Shibboleth.sso'
 
 edu_configure_shibboleth: '{{ install_shibboleth }}'  # Activate shibboleth authentication in edu-sharing true|false (if set to false and 'install_shibboleth' to true, you can install shibboleth without activation in edu-sharing)
 # allow additional local edu-sharing login, otherwise login redirects directly to 'edu_login_shib_url' 'true'|'false'

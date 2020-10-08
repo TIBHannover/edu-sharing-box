@@ -14,6 +14,10 @@
       value: '{{ edu_login_providers_url | default("") }}'
     - xpath: /config/values/loginProviderTargetUrl
       value: '{{ edu_login_provider_target_url | default("") }}'
+    - xpath: /config/values/logout/url
+      value: '{{ shibboleth_sp_handler_url }}/Logout?return={{ edu_sharing_url }}/components/login'
+    - xpath: /config/values/logout/destroySession
+      value: 'true'
 
 - name: Copy edu-sharing-sso-context.xml
   copy:
