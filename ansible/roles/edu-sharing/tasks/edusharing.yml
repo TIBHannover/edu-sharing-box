@@ -33,19 +33,6 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
-- include: shibboleth_before.yml
-  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
-  tags:
-    - shibboleth
-    - edu-sharing-config
-
-- include: custom.yml
-  when: edu_sharing_custom_installation
-
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
-  tags: edu-sharing-config
-
 - name: clear optional properties in client config
   xml:
     path: '{{ edu_client_config_xml_path }}'
@@ -61,6 +48,19 @@
     - '/config/values/loginProviderTargetUrl'
   tags: edu-sharing-config
   
+- include: shibboleth_before.yml
+  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
+  tags:
+    - shibboleth
+    - edu-sharing-config
+
+- include: custom.yml
+  when: edu_sharing_custom_installation
+
+- name: stop alfresco
+  shell: '{{tomcat_stop_command}}'
+  tags: edu-sharing-config
+
 - name: set imprint url
   xml:
     path: '{{ edu_client_config_xml_path }}'
