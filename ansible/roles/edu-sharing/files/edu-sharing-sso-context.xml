@@ -13,7 +13,7 @@
 		<property name="hashGroupNames" value="false" />
 		<property name="updateMemberships" value="true" />
 		<property name="debug" value="true" />
-		<property name="organisationParam" value="affiliation" />
+		<property name="organisationParam" value="Meta-displayName" />
 		<property name="globalGroupsParam" value="globalgroups" />
 
 	</bean>
