@@ -2,7 +2,7 @@
 # install the antivirus software
 install_antivirus: false
 
-antivirus_alfviral_version: 1.3.4
+antivirus_alfviral_version: 1.4.0-TIB.1
 antivirus_alfviral_amp_filename: 'alfviral-{{ antivirus_alfviral_version }}.amp'
 antivirus_alfviral_command: clamdscan # command of the virusscanner alfviral should execute (e.g. clamdscan or clamscan)
 # NOTE currently not possible to send the notification asynchronously when the node will be deleted, because the node is required for the notification template
