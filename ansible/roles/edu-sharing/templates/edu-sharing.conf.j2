@@ -1,0 +1,10 @@
+// {{ ansible_managed }}
+
+repository: {
+    // statistics endpoints (for providing public information about content counts, user counts, etc.)
+    statistics:{
+        api:{
+            enabled:{{ edu_enable_statistics_api }}
+        }
+    }
+}

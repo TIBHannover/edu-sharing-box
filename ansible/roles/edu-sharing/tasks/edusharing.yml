@@ -153,6 +153,20 @@
     regexp: '(?P<start>^\s*"{{item[1]}}"\s*:\s*").*(?P<end>".*)'
   loop: '{{ edu_i18n_adjustments | default([], true) }}'
   tags: edu-sharing-config
+  
+- name: Check if edu-sharing.properties exists for versions before 5.1
+  stat:
+    path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
+  register: es_properties_stat_result
+  tags: edu-sharing-config
+
+- name: edit enable_statistics_api in edu-sharing.properties for versions before 5.1
+  lineinfile:
+    path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
+    line: 'enable_statistics_api={{ edu_enable_statistics_api }}'
+    regexp: '^enable_statistics_api=.*$'
+  when: es_properties_stat_result.stat.exists
+  tags: edu-sharing-config
 
 - name: edit edu-sharing build.properties
   lineinfile:
@@ -205,6 +219,19 @@
     - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.8.3.jar"
     - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.8.3.jar"
     
+- name: Check if edu-sharing conf dir exists for versions gt 5.1
+  stat:
+    path: '{{tomcat_home}}/shared/classes/config'
+  register: es_confdir_stat_result
+  tags: edu-sharing-config
+
+- name: create edu-sharing.conf
+  template:
+    src: edu-sharing.conf.j2
+    dest: '{{tomcat_home}}/shared/classes/config/edu-sharing.conf'
+  when: es_confdir_stat_result.stat.exists
+  tags: edu-sharing-config
+
 - name: remove optional lines in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
     path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
