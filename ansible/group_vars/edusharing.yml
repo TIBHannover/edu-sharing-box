@@ -38,6 +38,7 @@ edu_repo_id: local
 
 # path of the client.config.xml (edu_version < 5.1: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml' and edu_version >= 5.1: '{{ edu_home }}/config/client.config.xml')
 edu_client_config_xml_path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
+edu_log4j_properties_path:  # path of custom log4j.properties. if undefined, use the default - see https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/log4j.properties
 
 # the receiver address where to send mails
 edu_mail_report_receiver:

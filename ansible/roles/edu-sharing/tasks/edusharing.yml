@@ -168,6 +168,13 @@
   when: es_properties_stat_result.stat.exists
   tags: edu-sharing-config
 
+- name: use custom logging configuration if available
+  copy:
+    src: '{{ edu_log4j_properties_path }}'
+    dest: '{{ edu_home }}/war/WEB-INF/classes/log4j.properties'
+  when: (edu_log4j_properties_path is defined) and (edu_log4j_properties_path != "") and (edu_log4j_properties_path is not none)
+  tags: edu-sharing-config
+  
 - name: edit edu-sharing build.properties
   lineinfile:
     path: '{{ edu_home }}/build.properties'
