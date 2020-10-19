@@ -60,7 +60,7 @@
   </bean>
   
 	<bean id="conditionAffiliationFaculty" class="org.edu_sharing.service.authentication.sso.config.ConditionRegEx">
-		<property name="regex" value="(^|.+;)(faculty)(@[a-zA-Z0-9.-]+)?(;.+)?" />
+		<property name="regex" value="(^|.+;)(employee|faculty|staff)(@[a-zA-Z0-9.-]+)?(;.+)?" />
 		<property name="attribute" value="affiliation" />
 	</bean>
 
