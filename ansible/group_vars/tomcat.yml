@@ -3,8 +3,8 @@
 java_name: zulu8.44.0.11-ca-jdk8.0.242-linux_x64
 java_archive_url: 'https://cdn.azul.com/zulu/bin/{{java_name}}.tar.gz'
 
-tomcat_name: apache-tomcat-9.0.21
-tomcat_archive_url: 'https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.21/bin/{{tomcat_name}}.tar.gz'
+tomcat_name: apache-tomcat-9.0.39
+tomcat_archive_url: 'https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.39/bin/{{tomcat_name}}.tar.gz'
 
 java_inst_dir: "{{base_dir}}"
 java_home: "{{java_inst_dir}}/java"
@@ -14,3 +14,4 @@ tomcat_bin: "{{tomcat_inst_dir}}/bin"
 tomcat_home: "{{tomcat_inst_dir}}/tomcat"
 tomcat_start_command: "nohup {{tomcat_bin}}/tomcat.sh start </dev/null >/dev/null 2>&1 &"
 tomcat_stop_command: "{{tomcat_bin}}/tomcat.sh stop"
+tomcat_log_dir: "{{ base_dir }}/log/tomcat" # if set, link tomcat-logs directory to this directory
