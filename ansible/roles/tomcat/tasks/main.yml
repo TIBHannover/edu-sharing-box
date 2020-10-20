@@ -26,13 +26,13 @@
 
   - name: Configure tomcat-users.xml
     template:
-      src: tomcat-users.xml.j2
-      dest: '{{tomcat_home}}/conf/tomcat-users.xml'
+      src: '{{ tomcat_users_xml_template }}'
+      dest: '{{ tomcat_home }}/conf/tomcat-users.xml'
 
   - name: Configure server.xml
     template:
-      src: server.xml
-      dest: '{{tomcat_home}}/conf/server.xml'
+      src: '{{ tomcat_server_xml_template }}'
+      dest: '{{ tomcat_home }}/conf/server.xml'
 
   - name: Ensures tomcat_bin dir exists
     file: path='{{tomcat_bin}}' state=directory

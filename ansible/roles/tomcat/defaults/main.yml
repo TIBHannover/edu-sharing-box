@@ -17,3 +17,7 @@ tomcat_cleanup_logdelete_items:
   - startingPoint: "{{ tomcat_home }}/logs/"
     expressions: "-name '*.bz2'"
     mtime: "{{ logdelete_mtime }}"
+
+tomcat_server_xml_template: server.xml.j2
+tomcat_users_xml_template: tomcat-users.xml.j2
+tomcat_access_log_active: false
