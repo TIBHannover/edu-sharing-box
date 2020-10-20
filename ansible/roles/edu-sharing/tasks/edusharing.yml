@@ -145,6 +145,16 @@
   when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none)
   tags: edu-sharing-config
 
+
+- name: set workspace viewType 'list view' mode
+  xml:
+    path: '{{ edu_client_config_xml_path }}'
+    xpath: '/config/values/workSpaceViewType'
+    value: '{{ edu_workSpace_viewType | default(0) }}'
+    pretty_print: yes
+  tags: edu-sharing-config
+
+
 - name: edit i18n
   lineinfile:
     backrefs: yes
