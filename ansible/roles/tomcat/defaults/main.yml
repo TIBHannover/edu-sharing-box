@@ -1,0 +1,19 @@
+
+tomcat_cleanup_logfiles: true # cleanup logfiles of tomcat true|false - 'tomcat_home' has to be defined for this
+tomcat_cleanup_cron_hour: '1'
+tomcat_cleanup_cron_minute: '0'
+logcompress_mtime: '+2' # default mtime value for file-compression (find command - see 'man find')
+logdelete_mtime: '+20' # default mtime value for file-deletion (find command - see 'man find')
+
+tomcat_cleanup_logrotate_items:
+  - startingPoint: "{{ tomcat_home }}/logs/catalina.out"
+    expressions: "-iname 'catalina.out'"
+    datePattern: "%Y-%m-%d-%H-%M-%S"
+tomcat_cleanup_logcompress_items:
+  - startingPoint: "{{ tomcat_home }}/logs/"
+    expressions: "! -name '*.pid' ! -name '*.bz2'"
+    mtime: "{{ logcompress_mtime }}"
+tomcat_cleanup_logdelete_items:
+  - startingPoint: "{{ tomcat_home }}/logs/"
+    expressions: "-name '*.bz2'"
+    mtime: "{{ logdelete_mtime }}"

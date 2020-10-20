@@ -1,0 +1,33 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+{% if maintenance_logrotate_items is defined and maintenance_logrotate_items is not none %}
+# logrotate
+date +"*** %Y-%m-%d %H:%M:%S start logrotate"
+{% for item in maintenance_logrotate_items %}
+find "{{ item.startingPoint }}" -type f {{ item.expressions }} | while read logfile ; do
+    test -w "$logfile" \
+      && cat "$logfile" > `date +"${logfile}.{{ item.datePattern }}"` \
+      && cat /dev/null > "$logfile"
+done
+{% endfor %}
+date +"*** %Y-%m-%d %H:%M:%S end logrotate"
+{% endif %}
+
+{% if maintenance_logcompress_items is defined and maintenance_logcompress_items is not none %}
+# compress
+date +"*** %Y-%m-%d %H:%M:%S start compress"
+{% for item in maintenance_logcompress_items %}
+find "{{ item.startingPoint }}" -type f -mtime {{ item.mtime }} {{ item.expressions }} -print0 | xargs -0r bzip2 -9v
+{% endfor %}
+date +"*** %Y-%m-%d %H:%M:%S end compress"
+{% endif %}
+
+{% if maintenance_logdelete_items is defined and maintenance_logdelete_items is not none %}
+# delete old
+date +"*** %Y-%m-%d %H:%M:%S start delete"
+{% for item in maintenance_logdelete_items %}
+find "{{ item.startingPoint }}" -type f -mtime {{ item.mtime }} {{ item.expressions }} -print0 | xargs -0r rm -vf
+{% endfor %}
+date +"*** %Y-%m-%d %H:%M:%S end delete"
+{% endif %}
