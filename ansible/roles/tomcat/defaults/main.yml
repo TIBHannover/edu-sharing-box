@@ -4,6 +4,13 @@ tomcat_name: 'apache-tomcat-{{ tomcat_version }}'
 tomcat_major_version: '{{ tomcat_version.split(".")[0] }}'
 tomcat_archive_url: 'https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/{{ tomcat_name }}.tar.gz'
 
+# list of tomcat users in tomcat-users.xml (parameters of each entry: username, password, roles - see example below)
+tomcat_users: []
+#  - username: "user"
+#    password: "secret"
+#    roles: "tomcat"
+tomcat_user_roles: [] # list of roles to configure in tomcat-users.xml (entry is just a string - the rolename)
+
 tomcat_cleanup_logfiles: true # cleanup logfiles of tomcat true|false - 'tomcat_home' has to be defined for this
 tomcat_cleanup_cron_hour: '1'
 tomcat_cleanup_cron_minute: '0'

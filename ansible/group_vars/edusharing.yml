@@ -1,6 +1,14 @@
 ---
 es_proxy_vhost: true
-tomcat_user_solr_identity: true
+
+tomcat_users:
+  - username: "CN=Alfresco Repository Client, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
+    password: "null"
+    roles: "repoclient"
+  - username: "CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
+    password: "null"
+    roles: "repository"
+
 use_esguest_user: true
 # map of permssions that should be adjusted for the esguest user
 # key: Key of the permission (see list of available permissions: curl -X GET --header 'Accept: application/json' 'http://<YOURHOST>/edu-sharing/rest/admin/v1/toolpermissions/esguest')
