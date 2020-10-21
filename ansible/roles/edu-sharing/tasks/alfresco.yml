@@ -58,8 +58,14 @@
     - "{{alf_home}}/web-server/webapps/alfresco.war"
     - "{{alf_home}}/web-server/webapps/share.war"
 
-- name: Ensures {{tomcat_home}}/shared dir exists
-  file: path={{tomcat_home}}/shared/ state=directory
+- name: Ensures {{tomcat_shared_dir}} dir exists
+  file: path={{ tomcat_shared_dir }} state=directory
+
+- name: create symlink for {{tomcat_shared_dir}} directory
+  file:
+    path: '{{tomcat_home}}/shared'
+    src: '{{ tomcat_shared_dir }}'
+    state: link
 
 - name: copy alresco default tomcat config
   copy:

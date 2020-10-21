@@ -17,3 +17,5 @@ alfresco_db:
 
 # Install alfresco share true|false
 alfresco_share_install: false
+
+tomcat_shared_dir: "{{ alf_inst_dir }}/conf/shared"
