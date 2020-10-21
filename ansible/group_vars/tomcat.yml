@@ -4,6 +4,11 @@ java_name: zulu8.44.0.11-ca-jdk8.0.242-linux_x64
 java_archive_url: 'https://cdn.azul.com/zulu/bin/{{java_name}}.tar.gz'
 
 tomcat_version: '9.0.39'
+tomcat_cleanup_logfiles: true # cleanup logfiles of tomcat true|false
+tomcat_cleanup_cron_hour: '1'
+tomcat_cleanup_cron_minute: '0'
+logcompress_mtime: '+2' # default mtime value for file-compression (find command - see 'man find')
+logdelete_mtime: '+20' # default mtime value for file-deletion (find command - see 'man find')
 
 java_inst_dir: "{{base_dir}}"
 java_home: "{{java_inst_dir}}/java"
