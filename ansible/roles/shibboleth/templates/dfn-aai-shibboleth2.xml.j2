@@ -13,7 +13,7 @@
 
     <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
     <ApplicationDefaults entityID="{{ shibboleth_sp_entity_id }}"
-                         REMOTE_USER="eduPersonUniqueId persistent-id eppn"
+                         REMOTE_USER="{{ shibboleth_sp_remote_user_attributes }}"
                          sessionHook="{{ shibboleth_sp_base_path }}/Shibboleth.sso/AttrChecker"
                          attributePrefix="AJP_"
                          metadataAttributePrefix="Meta-"
