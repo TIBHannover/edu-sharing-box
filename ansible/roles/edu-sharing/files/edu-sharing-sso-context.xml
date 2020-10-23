@@ -13,7 +13,7 @@
 		<property name="hashGroupNames" value="false" />
 		<property name="updateMemberships" value="true" />
 		<property name="debug" value="true" />
-		<property name="organisationParam" value="Meta-displayName" />
+		<property name="organisationParam" value="organization" />
 		<property name="globalGroupsParam" value="globalgroups" />
 
 	</bean>
@@ -53,6 +53,9 @@
         <value>persistent-id</value>
         <value>schacHomeOrganization</value>
         <value>sn</value>
+				<value>simpleAffiliation</value>
+				<value>simpleScope</value>
+				<value>organization</value>
         <value>Meta-displayName</value>	
         <value>Shib-Identity-Provider</value>	 		
       </list>
