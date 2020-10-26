@@ -4,8 +4,10 @@
     - '../vars/versions/{{ edu_version }}.yml'
     - '../vars/versions/default.yml'
   include_vars: '{{ item }}'
-  tags: edu-sharing-config
-    
+  tags:
+    - edu-sharing-config
+    - shibboleth
+
 - name: Ensures inst-dir exists
   file: path='{{edu_inst_dir}}' state=directory
 
