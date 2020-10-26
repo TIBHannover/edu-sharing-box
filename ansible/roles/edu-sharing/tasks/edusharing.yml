@@ -39,72 +39,19 @@
     xpath: '{{ item }}'
     state: absent
     pretty_print: yes
-  loop:
-    - '/config/values/allowedLicenses'
-    - '/config/values/banner/components'
-    - '/config/values/loginUrl'
-    - '/config/values/loginAllowLocal'
-    - '/config/values/loginProvidersUrl'
-    - '/config/values/loginProviderTargetUrl'
-    - '/config/values/logout'
-  tags: edu-sharing-config
-  
-- include: shibboleth_before.yml
-  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
-  tags:
-    - shibboleth
-    - edu-sharing-config
-
-- include: custom.yml
-  when: edu_sharing_custom_installation
-
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
+  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("cleanup", "undefined") | map(attribute="cleanup") | list }}'
   tags: edu-sharing-config
 
-- name: set imprint url
+- name: set standard entries in client config
   xml:
     path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/imprintUrl'
-    value: '{{ edu_imprinturl | default("") }}'
+    xpath: '{{ item.xpath }}'
+    value: '{{ item.value }}'
     pretty_print: yes
+  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("value", "undefined") | list }}'
   tags: edu-sharing-config
 
-- name: set privacyInformation url
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/privacyInformationUrl'
-    value: '{{ edu_privacyInformationUrl | default("") }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- name: set local registration
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/register/local'
-    value: '{{ edu_register_local }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- include: images.yml
-  tags: edu-sharing-config
-
-- name: set banner url
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/banner/url'
-    value: '{{ edu_banner_url | default("") }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- name: set banner href
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/banner/href'
-    value: '{{ edu_banner_href | default("") }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-  
+# non-standard entries in client config
 - name: set banner components
   xml:
     path: '{{ edu_client_config_xml_path }}'
@@ -143,6 +90,22 @@
     pretty_print: yes
   with_items: '{{edu_allowed_licenses}}'
   when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none)
+  tags: edu-sharing-config
+
+- include: shibboleth_before.yml
+  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
+  tags:
+    - shibboleth
+    - edu-sharing-config
+
+- include: custom.yml
+  when: edu_sharing_custom_installation
+
+- name: stop alfresco
+  shell: '{{ tomcat_stop_command }}'
+  tags: edu-sharing-config
+
+- include: images.yml
   tags: edu-sharing-config
 
 - name: edit i18n
