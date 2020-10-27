@@ -55,7 +55,9 @@ edu_mail_smtp_from: pleasechange@nodomain.com
 
 edu_imprinturl:
 edu_privacyInformationUrl:
-# set viewType for workSpace can accept only 0 | 1 
+# set viewType for workSpace, it can accept only 0 | 1 
+#  -  0 = Tile view 
+#  -  1 = List view 
 edu_workSpace_viewType:
 # set to "true" to enable local registration of users
 edu_register_local: "false"
