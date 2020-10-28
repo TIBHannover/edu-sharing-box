@@ -19,3 +19,39 @@ tomcat_home: "{{tomcat_inst_dir}}/tomcat"
 tomcat_start_command: "nohup {{tomcat_bin}}/tomcat.sh start </dev/null >/dev/null 2>&1 &"
 tomcat_stop_command: "{{tomcat_bin}}/tomcat.sh stop"
 tomcat_log_dir: "{{ tomcat_inst_dir }}/log/tomcat" # if set, link tomcat-logs directory to this directory
+
+tomcat_connectors:
+  - port: '{{ tomcat_port }}'
+    protocol: 'HTTP/1.1'
+    attributes:
+      - 'connectionTimeout="20000"'
+      - 'redirectPort="{{ tomcat_ssl_port }}"'
+      - 'address="127.0.0.1"'
+  - port: '{{ tomcat_ssl_port }}'
+    protocol: 'org.apache.coyote.http11.Http11NioProtocol'
+    attributes:
+      - 'URIEncoding="UTF-8"'
+      - 'SSLEnabled="true"'
+      - 'maxThreads="150"'
+      - 'scheme="https"'
+      - 'keystoreFile="{{ alf_home }}/alf_data/keystore/ssl.keystore"'
+      - 'keystorePass="kT9X6oe68t"'
+      - 'keystoreType="JCEKS"'
+      - 'secure="true"'
+      - 'connectionTimeout="240000"'
+      - 'truststoreFile="{{ alf_home }}/alf_data/keystore/ssl.truststore"'
+      - 'truststorePass="kT9X6oe68t"'
+      - 'truststoreType="JCEKS"'
+      - 'clientAuth="optionalNoCA"'
+      - 'sslProtocol="TLS"'
+      - 'allowUnsafeLegacyRenegotiation="true"'
+      - 'maxHttpHeaderSize="32768"'
+      - 'address="127.0.0.1"'
+  - port: '{{ tomcat_ajp_port }}'
+    protocol: 'AJP/1.3'
+    attributes:
+      - 'redirectPort="{{ tomcat_ssl_port }}"'
+      - 'secretRequired="false"'
+      - 'allowedRequestAttributesPattern=".*"'
+      - 'tomcatAuthentication="false"'
+      - 'address="127.0.0.1"'
