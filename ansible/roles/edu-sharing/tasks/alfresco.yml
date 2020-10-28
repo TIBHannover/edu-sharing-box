@@ -103,11 +103,3 @@
   tags:
   - packages
   - root-task
-
-- name: modify tomcat config - allow only local access
-  xml:
-    path: '{{tomcat_home}}/conf/server.xml'
-    xpath: /Server/Service/Connector
-    attribute: address
-    value: 127.0.0.1
-  tags: edu-sharing-config
