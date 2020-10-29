@@ -106,7 +106,7 @@
   xml:
     path: '{{ edu_client_config_xml_path }}'
     xpath: '/config/values/workspaceViewType'
-    value: '{{ edu_workSpace_viewType | default(0) }}'
+    value: '{{ "1" if (edu_workspace_viewType | default("list")) == "tile" else "0" }}'
     pretty_print: yes
   tags: edu-sharing-config
 
