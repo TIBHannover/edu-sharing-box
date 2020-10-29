@@ -1,6 +1,14 @@
 ---
 es_proxy_vhost: true
-tomcat_user_solr_identity: true
+
+tomcat_users:
+  - username: "CN=Alfresco Repository Client, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
+    password: "null"
+    roles: "repoclient"
+  - username: "CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
+    password: "null"
+    roles: "repository"
+
 use_esguest_user: true
 # map of permssions that should be adjusted for the esguest user
 # key: Key of the permission (see list of available permissions: curl -X GET --header 'Accept: application/json' 'http://<YOURHOST>/edu-sharing/rest/admin/v1/toolpermissions/esguest')
@@ -19,7 +27,6 @@ moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
 
 edu_version: 5.0.0
-edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/5.0.0/edu-sharing_5.0.0.2020-02-05-5f0546557.zip
 # method how to retrieve the edu-sharing archive that should be installed
 #  'download' - use the archive from 'edu_sharing_archive_url'
 #  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
@@ -36,8 +43,6 @@ edu_home: "{{edu_inst_dir}}/edu-sharing"
 edu_repo_caption: local-repo-vmtest
 edu_repo_id: local
 
-# path of the client.config.xml (edu_version < 5.1: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml' and edu_version >= 5.1: '{{ edu_home }}/config/client.config.xml')
-edu_client_config_xml_path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
 edu_log4j_properties_path:  # path of custom log4j.properties. if undefined, use the default - see https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/log4j.properties
 
 # the receiver address where to send mails

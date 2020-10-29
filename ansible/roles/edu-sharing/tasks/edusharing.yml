@@ -1,4 +1,13 @@
 ---
+- name: load version variables
+  with_first_found:
+    - '../vars/versions/{{ edu_version }}.yml'
+    - '../vars/versions/default.yml'
+  include_vars: '{{ item }}'
+  tags:
+    - edu-sharing-config
+    - shibboleth
+
 - name: Ensures inst-dir exists
   file: path='{{edu_inst_dir}}' state=directory
 
@@ -39,72 +48,19 @@
     xpath: '{{ item }}'
     state: absent
     pretty_print: yes
-  loop:
-    - '/config/values/allowedLicenses'
-    - '/config/values/banner/components'
-    - '/config/values/loginUrl'
-    - '/config/values/loginAllowLocal'
-    - '/config/values/loginProvidersUrl'
-    - '/config/values/loginProviderTargetUrl'
-    - '/config/values/logout'
-  tags: edu-sharing-config
-  
-- include: shibboleth_before.yml
-  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
-  tags:
-    - shibboleth
-    - edu-sharing-config
-
-- include: custom.yml
-  when: edu_sharing_custom_installation
-
-- name: stop alfresco
-  shell: '{{tomcat_stop_command}}'
+  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("cleanup", "undefined") | map(attribute="cleanup") | list }}'
   tags: edu-sharing-config
 
-- name: set imprint url
+- name: set standard entries in client config
   xml:
     path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/imprintUrl'
-    value: '{{ edu_imprinturl | default("") }}'
+    xpath: '{{ item.xpath }}'
+    value: '{{ item.value }}'
     pretty_print: yes
+  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("value", "undefined") | list }}'
   tags: edu-sharing-config
 
-- name: set privacyInformation url
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/privacyInformationUrl'
-    value: '{{ edu_privacyInformationUrl | default("") }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- name: set local registration
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/register/local'
-    value: '{{ edu_register_local }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- include: images.yml
-  tags: edu-sharing-config
-
-- name: set banner url
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/banner/url'
-    value: '{{ edu_banner_url | default("") }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- name: set banner href
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/banner/href'
-    value: '{{ edu_banner_href | default("") }}'
-    pretty_print: yes
-  tags: edu-sharing-config
-  
+# non-standard entries in client config
 - name: set banner components
   xml:
     path: '{{ edu_client_config_xml_path }}'
@@ -154,6 +110,21 @@
     pretty_print: yes
   tags: edu-sharing-config
 
+- include: shibboleth_before.yml
+  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
+  tags:
+    - shibboleth
+    - edu-sharing-config
+
+- include: custom.yml
+  when: edu_sharing_custom_installation
+
+- name: stop alfresco
+  shell: '{{ tomcat_stop_command }}'
+  tags: edu-sharing-config
+
+- include: images.yml
+  tags: edu-sharing-config
 
 - name: edit i18n
   lineinfile:
@@ -164,18 +135,12 @@
   loop: '{{ edu_i18n_adjustments | default([], true) }}'
   tags: edu-sharing-config
   
-- name: Check if edu-sharing.properties exists for versions before 5.1
-  stat:
-    path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
-  register: es_properties_stat_result
-  tags: edu-sharing-config
-
 - name: edit enable_statistics_api in edu-sharing.properties for versions before 5.1
   lineinfile:
     path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
     line: 'enable_statistics_api={{ edu_enable_statistics_api }}'
     regexp: '^enable_statistics_api=.*$'
-  when: es_properties_stat_result.stat.exists
+  when: edu_config_file == 'edu-sharing.properties'
   tags: edu-sharing-config
 
 - name: use custom logging configuration if available
@@ -236,17 +201,11 @@
     - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.8.3.jar"
     - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.8.3.jar"
     
-- name: Check if edu-sharing conf dir exists for versions gt 5.1
-  stat:
-    path: '{{tomcat_home}}/shared/classes/config'
-  register: es_confdir_stat_result
-  tags: edu-sharing-config
-
 - name: create edu-sharing.conf
   template:
     src: edu-sharing.conf.j2
     dest: '{{tomcat_home}}/shared/classes/config/edu-sharing.conf'
-  when: es_confdir_stat_result.stat.exists
+  when: edu_config_file == 'edu-sharing.conf'
   tags: edu-sharing-config
 
 - name: remove optional lines in tomcat/shared/classes/homeApplication.properties.xml

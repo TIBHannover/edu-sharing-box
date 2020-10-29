@@ -19,10 +19,10 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
               version="1.0">
-{% if tomcat_user_solr_identity is defined and tomcat_user_solr_identity %}
-  <user username="CN=Alfresco Repository Client, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB" roles="repoclient" password="null"/>
-{% endif %}
-{% if tomcat_user_alfresco_identity is defined and tomcat_user_alfresco_identity %}
-  <user username="CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB" roles="repository" password="null"/>
-{% endif %}
+{% for role in tomcat_user_roles %}
+  <role rolename="{{ role }}"/>
+{% endfor %}
+{% for user in tomcat_users %}
+  <user username="{{ user.username }}" password="{{ user.password }}" roles="{{ user.roles }}"/>
+{% endfor %}
 </tomcat-users>
