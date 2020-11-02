@@ -265,6 +265,9 @@
 - include: metadatasets.yml
   tags: edu-sharing-config
 
+- include: model.yml
+  tags: edu-sharing-config
+
 - name: start alfresco
   shell: '{{tomcat_start_command}}'
   tags: edu-sharing-config

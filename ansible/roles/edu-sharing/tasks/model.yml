@@ -1,0 +1,10 @@
+---
+
+- name: adjustments of the edu-sharing alfresco extension model xmls
+  xml:
+    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/model/{{ item.modelfile }}'
+    xpath: '{{ item.xpath }}'
+    value: '{{ item.value }}'
+    namespaces: '{{ item.namespaces }}'
+    pretty_print: yes
+  loop: '{{ edu_model_adjustments | default([], true) }}'

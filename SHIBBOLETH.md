@@ -42,6 +42,23 @@ Ansible-Skripte für weitere Systeme können unter [ansible/roles/shibboleth/tas
 * Falls als Pfad nicht der Standard-Pfad _/Shibboleth.sso_ verwendet werden soll, so kann der Pfad in **_shibboleth_sp_base_path_** konfiguriert werden.
 * Bei der Konfiguration der Metadaten bei DFN-AAI muss dann die Proxy-URL verwendet werden, zB https://proxy.example.org/path/Shibboleth.sso
 * In der Apache-Konfiguration, auf dem Shibboleth-Host müssen dann die Properies _ServerName_ und _UseCanonicalName_ gesetzt werden, damit Shibboleth korrekte URLs erstellen kann. Dies sollte über die Ansible-Variablen **_apache_conf_servername_** und **_apache_conf_usecanonicalname_** automatisiert passieren, zB `apache_conf_servername: https://proxy.example.org:443` und `apache_conf_usecanonicalname: 'On'`
+
+### Standard-Werte für neue User in edu-sharing konfigurieren
+
+Um Default-Werte für die Felder _cm:sizeQuota_ und _cm:eduSchoolPrimaryAffiliation_ in edu-sharing zu konfigurieren existiert derzeit keine offizielle, allgemeingültige Konfigurationsmöglichkeit. Daher gibt es die Möglichkeit durch die Box automatisiert Default-Werte in der *ccContentModel.xml* zu setzen. Diese greifen bei erstmaliger Anmeldung eines Nutzers über shibboleth. Dazu müssen folgende Ansible-Variablen im Inventory gesetzt werden:
+```
+edu_model_adjustments:
+  - modelfile: "ccContentModel.xml"
+    xpath: "/a:model/a:types/a:type[@name='cm:person']/a:properties/a:property[@name='cm:sizeQuota']/a:default"
+    namespaces:
+      a: http://www.alfresco.org/model/dictionary/1.0
+    value: "524288000" # sizeQuote in Bytes (500MB)
+  - modelfile: "ccContentModel.xml"
+    xpath: "/a:model/a:types/a:type[@name='cm:person']/a:properties/a:property[@name='cm:eduSchoolPrimaryAffiliation']/a:default"
+    namespaces:
+      a: http://www.alfresco.org/model/dictionary/1.0
+    value: "teacher"
+```
      
 ## selbst-signiertes Zertifikat erstellen
 

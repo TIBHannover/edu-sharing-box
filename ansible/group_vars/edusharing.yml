@@ -90,3 +90,16 @@ edu_sharing_protocol: http
 edu_sharing_clientprotocol:
 
 edu_enable_statistics_api: "false"
+
+# define custom adjustments here to the model.xml-files under tomcat/shared/classes/alfresco/extension/model/
+# format:
+#   modelfile   - filename of the model-file (for example 'ccContentModel.xml')
+#   xpath       - xpath where to set the value (has to include the mapping-key of the namespace-mapping)
+#   namespaces  - namespace that is used in the xpath (for example 'a: http://www.alfresco.org/model/dictionary/1.0' for 'ccContentModel.xml')
+#   value       - value to set
+edu_cccontentmodel_adjustments:
+#  - modelfile: "ccContentModel.xml"
+#    xpath: "/a:model/a:types/a:type[@name='cm:person']/a:properties/a:property[@name='cm:sizeQuota']/a:default"
+#    namespaces:
+#      a: http://www.alfresco.org/model/dictionary/1.0
+#    value: "524288000" # sizeQuota in Bytes (500MB)
