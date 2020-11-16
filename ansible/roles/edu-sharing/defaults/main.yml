@@ -1,0 +1,32 @@
+---
+
+# (internal) cleanup / set values in client.config.xml
+# format:
+#   xpath   - xpath where to set the value
+#   value   - xml value
+#   cleanup - xpath. if set, remove from client.config.xml before set values
+edu_client_config_xml_standard_entries:
+  - xpath: '/config/values/imprintUrl'
+    value: '{{ edu_imprinturl | default("") }}'
+  - xpath: '/config/values/privacyInformationUrl'
+    value: '{{ edu_privacyInformationUrl | default("") }}'
+  - xpath: '/config/values/register/local'
+    value: '{{ edu_register_local }}'
+  - xpath: '/config/values/banner/url'
+    value: '{{ edu_banner_url | default("") }}'
+    cleanup: '/config/values/banner'
+  - xpath: '/config/values/banner/href'
+    value: '{{ edu_banner_href | default("") }}'
+    cleanup: '/config/values/banner'
+  - cleanup: '/config/values/allowedLicenses'
+  - cleanup: '/config/values/loginUrl'
+  - cleanup: '/config/values/loginAllowLocal'
+  - cleanup: '/config/values/loginProvidersUrl'
+  - cleanup: '/config/values/loginProviderTargetUrl'
+  - cleanup: '/config/values/logout'
+
+# path of the client.config.xml (edu_version < 5.1: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml' and edu_version >= 5.1: '{{ edu_home }}/config/client.config.xml')
+edu_client_config_xml_path: '{{ edu_home }}/config/client.config.xml'
+
+# edu-sharing configuration type (edu_version < 5.1: 'edu-sharing.properties' and edu_version >= 5.1: 'edu-sharing.conf'
+edu_config_file: 'edu-sharing.conf'

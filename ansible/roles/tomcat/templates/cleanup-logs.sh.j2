@@ -6,9 +6,11 @@
 date +"*** %Y-%m-%d %H:%M:%S start logrotate"
 {% for item in maintenance_logrotate_items %}
 find "{{ item.startingPoint }}" -type f {{ item.expressions }} | while read logfile ; do
-    test -w "$logfile" \
-      && cat "$logfile" > `date +"${logfile}.{{ item.datePattern }}"` \
-      && cat /dev/null > "$logfile"
+  newfile=`date +"${logfile}.{{ item.datePattern }}"`
+  test -w "$logfile" \
+    && cat "$logfile" > "$newfile" \
+    && cat /dev/null > "$logfile" \
+    && echo "  $logfile > $newfile"
 done
 {% endfor %}
 date +"*** %Y-%m-%d %H:%M:%S end logrotate"

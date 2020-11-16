@@ -1,0 +1,11 @@
+---
+
+- name: adjustments of the edu-sharing alfresco extension model ccContentModel.xml
+  xml:
+    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/model/ccContentModel.xml'
+    xpath: '{{ item.xpath }}'
+    value: '{{ item.value }}'
+    namespaces:
+      ns: http://www.alfresco.org/model/dictionary/1.0
+    pretty_print: yes
+  loop: '{{ edu_cccontentmodel_adjustments | default([], true) }}'
