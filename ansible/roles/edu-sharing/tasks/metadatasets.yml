@@ -18,10 +18,3 @@
     dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/metadataset/v2/i18n/'
   when: (edu_valuespaces_i18n_paths is defined) and (edu_valuespaces_i18n_paths != "") and (edu_valuespaces_i18n_paths is not none)
   with_items: '{{edu_valuespaces_i18n_paths}}'
-
-- name: Copy mail template
-  copy:
-    src: '{{item}}'
-    dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/repository/server/tools/mailtemplates/'
-  when: (edu_sharing_mail_template_override is defined) and (edu_sharing_mail_template_override != "") and (edu_sharing_mail_template_override is not none)
-  with_items: '{{edu_sharing_mail_template_override}}'
