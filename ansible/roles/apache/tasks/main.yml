@@ -6,35 +6,21 @@
   tags:
   - packages
 
-- name: apache - add virtual host
+- name: apache - add virtual hosts
   template:
-    src: apache_vhost.conf.j2
-    dest: /etc/apache2/sites-available/edu-sharing.conf
+    src: '{{ item.path }}'
+    dest: '/etc/apache2/sites-available/{{ item.name }}.conf'
+  loop: '{{ apache2_conf_templates }}'
+  notify:
+    - restart apache2
 
-- name: apache - enabled mod_rewrite
+- name: apache - enabled mod
   apache2_module:
-    name: "rewrite"
+    name: "{{ item }}"
     state: "present"
-
-- name: apache - enabled mod_headers
-  apache2_module:
-    name: "headers"
-    state: "present"
-
-- name: apache - enabled mod_proxy
-  apache2_module:
-    name: "proxy"
-    state: "present"
-
-- name: apache - enabled mod_proxy_ajp
-  apache2_module:
-    name: "proxy_ajp"
-    state: "present"
-
-- name: apache - enabled mod_proxy_http
-  apache2_module:
-    name: "proxy_http"
-    state: "present"
+  loop: '{{ apache2_modules }}'
+  notify:
+    - restart apache2
 
 - name: a2dissite default
   file:
@@ -43,10 +29,11 @@
   notify:
     - restart apache2
 
-- name: a2ensite esrender
+- name: a2ensite
   file:
-    path: /etc/apache2/sites-enabled/edu-sharing.conf
-    src: ../sites-available/edu-sharing.conf
+    path: '/etc/apache2/sites-enabled/{{ item.name }}.conf'
+    src: '../sites-available/{{ item.name }}.conf'
     state: link
+  loop: '{{ apache2_conf_templates }}'
   notify:
     - restart apache2

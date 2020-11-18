@@ -1,0 +1,10 @@
+---
+apache2_modules:
+  - rewrite
+  - headers
+  - proxy
+  - proxy_ajp
+  - proxy_http
+apache2_conf_templates: # list of all templates that should be installed in sites-available/sites-enabled. Required for each entry: 'name', 'path'
+  - name: edu-sharing
+    path: apache_vhost.conf.j2 # path to the apache-conf-template. you could use your custom template here
