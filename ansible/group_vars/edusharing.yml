@@ -101,3 +101,44 @@ edu_enable_statistics_api: "false"
 edu_cccontentmodel_adjustments:
 #    xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:sizeQuota']/ns:default"
 #    value: "524288000" # sizeQuota in Bytes (500MB)
+
+
+
+# define a custom property here to ccmodel.xml under tomcat/shared/classes/alfresco/extensions/ccmodel.xml
+# ----------------------- example -------------------------------
+# <property name='namespace:name_property'>   example ccm:customType
+#   <type>d:text</type>
+#   <multiple>false</multiple>
+#   <index enabled='true'>
+#     <atomic>true</atomic>
+#     <tokenised>false</tokenised>
+#   </index>
+# </property>
+# -----------------------------------------------------
+#   xpath       - xpath where to set the value (has to include the mapping-key of the namespace-mapping)
+#   properties:  - list of properties that should be added
+#     - property: 
+#         name: "ccm:example"
+#          _:
+#            - type: "d:text"
+#            - multiple: "false"
+#            - index: 
+#               enabled: "true"
+#               _: 
+#               - atomic: "true"
+#               - tokenised: "false" 
+
+#  or as a string 
+#   properties: 
+#       - > 
+#       <property name='ccm:inhaltstyp'>
+#         <type>d:text</type>
+#         <multiple>false</multiple>
+#         <index enabled='true'>
+#             <atomic>true</atomic>
+#             <tokenised>false</tokenised>
+#         </index>
+#       </property>
+
+alfresco_ccmodel_add_custom_properties:
+          
