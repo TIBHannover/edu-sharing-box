@@ -101,6 +101,15 @@
   when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none)
   tags: edu-sharing-config
 
+# change the view type in workspace
+- name: set workspace viewType 'list view' mode
+  xml:
+    path: '{{ edu_client_config_xml_path }}'
+    xpath: '/config/values/workspaceViewType'
+    value: '{{ "1" if (edu_workspace_viewType | default("list")) == "tile" else "0" }}'
+    pretty_print: yes
+  tags: edu-sharing-config
+
 - include: shibboleth_before.yml
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
   tags:
