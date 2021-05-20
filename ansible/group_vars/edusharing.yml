@@ -115,6 +115,7 @@ edu_cccontentmodel_adjustments:
 #   </index>
 # </property>
 # -----------------------------------------------------
+#   path       - xpath to file where you want to add or modify the property
 #   xpath       - xpath where to set the value (has to include the mapping-key of the namespace-mapping)
 #   properties:  - list of properties that should be added
 #     - property: 
@@ -141,4 +142,3 @@ edu_cccontentmodel_adjustments:
 #       </property>
 
 alfresco_ccmodel_add_custom_properties:
-          

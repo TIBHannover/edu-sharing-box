@@ -11,11 +11,11 @@
   loop: '{{ edu_cccontentmodel_adjustments | default([], true) }}'
 
 
-- name: Add custom property in alfresco extension model es_models/ccmodel.xml
+- name: Add or modify custom property in alfresco extension models
   xml:
-    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/es_models/ccmodel.xml'
+    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/{{item.path}}'
     xpath: '{{ item.xpath }}'
-    add_children: '{{ item.properties }}'
+    set_children: '{{ item.properties }}'
     input_type: xml
     # with_items: '{{ item.children }}'
     namespaces:
