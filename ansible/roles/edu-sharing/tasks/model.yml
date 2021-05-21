@@ -1,8 +1,8 @@
 ---
 
-- name: adjustments of the edu-sharing alfresco extension model ccContentModel.xml
+- name: adjustments of the edu-sharing alfresco extension models
   xml:
-    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/model/ccContentModel.xml'
+    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/{{item.path}}'
     xpath: '{{ item.xpath }}'
     value: '{{ item.value }}'
     namespaces:
@@ -11,11 +11,11 @@
   loop: '{{ edu_cccontentmodel_adjustments | default([], true) }}'
 
 
-- name: Add or modify custom property in alfresco extension models
+- name: Add custom property in alfresco extension models
   xml:
     path: '{{ tomcat_home }}/shared/classes/alfresco/extension/{{item.path}}'
     xpath: '{{ item.xpath }}'
-    set_children: '{{ item.properties }}'
+    add_children: '{{ item.properties }}'
     input_type: xml
     # with_items: '{{ item.children }}'
     namespaces:
