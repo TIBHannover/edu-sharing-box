@@ -100,7 +100,7 @@ edu_enable_statistics_api: "false"
 #   xpath       - xpath where to set the value (has to include the mapping-key of the namespace-mapping)
 #   value       - value to set
 edu_cccontentmodel_adjustments:
-#  - path: "es_models/ccmodel.xml"
+#  - path: "model/ccContentModel.xml"
 #    xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:sizeQuota']/ns:default"
 #    value: "524288000" # sizeQuota in Bytes (500MB)
 
