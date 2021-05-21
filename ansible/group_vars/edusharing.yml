@@ -97,9 +97,11 @@ edu_enable_statistics_api: "false"
 # define custom adjustments here to the ccContentModel.xml under tomcat/shared/classes/alfresco/extension/model/
 # use the mapping 'ns' for the namespace "http://www.alfresco.org/model/dictionary/1.0" in the xpath
 # format:
+#   path        - path to file where you want to add or modify the property 
 #   xpath       - xpath where to set the value (has to include the mapping-key of the namespace-mapping)
 #   value       - value to set
 edu_cccontentmodel_adjustments:
+#  - path: "model/ccContentModel.xml"
 #    xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:sizeQuota']/ns:default"
 #    value: "524288000" # sizeQuota in Bytes (500MB)
 
@@ -116,6 +118,7 @@ edu_cccontentmodel_adjustments:
 #   </index>
 # </property>
 # -----------------------------------------------------
+#   path       - path to file where you want to add or modify the property
 #   xpath       - xpath where to set the value (has to include the mapping-key of the namespace-mapping)
 #   properties:  - list of properties that should be added
 #     - property: 
@@ -142,4 +145,3 @@ edu_cccontentmodel_adjustments:
 #       </property>
 
 alfresco_ccmodel_add_custom_properties:
-          

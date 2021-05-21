@@ -48,9 +48,11 @@ Ansible-Skripte für weitere Systeme können unter [ansible/roles/shibboleth/tas
 Um Default-Werte für die Felder _cm:sizeQuota_ und _cm:eduSchoolPrimaryAffiliation_ in edu-sharing zu konfigurieren existiert derzeit keine offizielle, allgemeingültige Konfigurationsmöglichkeit. Daher gibt es die Möglichkeit durch die Box automatisiert Default-Werte in der *ccContentModel.xml* zu setzen. Diese greifen bei erstmaliger Anmeldung eines Nutzers über shibboleth. Dazu müssen folgende Ansible-Variablen im Inventory gesetzt werden:
 ```
 edu_cccontentmodel_adjustments:
-  - xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:sizeQuota']/ns:default"
+  - path: "model/ccContentModel.xml"
+    xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:sizeQuota']/ns:default"
     value: "524288000" # sizeQuote in Bytes (500MB)
-  - xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:eduSchoolPrimaryAffiliation']/ns:default"
+  - path: "model/ccContentModel.xml"
+    xpath: "/ns:model/ns:types/ns:type[@name='cm:person']/ns:properties/ns:property[@name='cm:eduSchoolPrimaryAffiliation']/ns:default"
     value: "teacher"
 ```
      
