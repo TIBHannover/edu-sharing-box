@@ -115,7 +115,8 @@
             <Regex match="([^@]+@)?([a-zA-Z0-9.-]+)" dest="simpleScope">$2</Regex>
         </AttributeResolver>
         <AttributeResolver type="Transform" source="Meta-displayName">
-            <Regex match="([^/]+)/?(.*)" dest="organization">$1 $2</Regex>
+            <Regex match="^([^/]+)/([^/]+)/(.*)$" dest="organization">$1 $2 $3</Regex>
+            <Regex match="^([^/]+)/?([^/]*)$" dest="organization">$1 $2</Regex>
         </AttributeResolver>
 
         <!-- Default filtering policy for recognized attributes, lets other data pass. -->
