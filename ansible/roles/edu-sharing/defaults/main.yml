@@ -30,3 +30,8 @@ edu_client_config_xml_path: '{{ edu_home }}/config/client.config.xml'
 
 # edu-sharing configuration type (edu_version < 5.1: 'edu-sharing.properties' and edu_version >= 5.1: 'edu-sharing.conf'
 edu_config_file: 'edu-sharing.conf'
+
+# trusted client configuration for oauthTokenService
+edu_oauth_trusted_clients:
+  - client: "eduApp"
+    password: "secret"

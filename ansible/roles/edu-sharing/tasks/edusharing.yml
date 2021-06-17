@@ -116,6 +116,9 @@
     - shibboleth
     - edu-sharing-config
 
+- include: auth.yml
+  tags: edu-sharing-config
+
 - include: custom.yml
   when: edu_sharing_custom_installation
 
