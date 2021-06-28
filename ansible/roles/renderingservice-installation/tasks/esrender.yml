@@ -24,12 +24,12 @@
     url: '{{esrender_archive_url}}'
     dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
     force: '{{ esrender_force_download }}'
-  when: esrender_custom_source == download"
+  when: esrender_custom_source == "download"
 
 - name: Copy local esrender sources
   copy:
     src: "{{ esrender_local_archive_path }}"
-    dest: "{{esrender_download_dir}}/esrenderingservice.zip"
+    dest: "{{esrender_download_dir}}/esrenderingservice.tar.gz"
   when: esrender_custom_source == "copy-local"
 
 - name: Remove old esrender installation (base dir)
@@ -39,14 +39,6 @@
 - name: Remove old esrender installation (cache dir)
   file: path='{{ esrender_cache_dir }}' state=absent
   when: esrender_remove_existing
-
-- name: Ensure unzip is present
-  package:
-    name: ["unzip"]
-  become: yes
-  tags:
-  - packages
-  - root-task
 
 
 - name: extract esrender sources
