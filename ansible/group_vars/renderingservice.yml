@@ -6,10 +6,16 @@ esrender_archive_url: 'https://github.com/edu-sharing/renderingservice/archive/{
 esrender_download_dir: "{{base_dir}}/esrender_{{esrender_version}}"
 
 # remove existing renderingservice before new installation (true|false)
-esrender_remove_existing: false
+esrender_remove_existing: true
 # download the renderingservice archive file every time, even if the file exists (yes|no)
-esrender_force_download: no
+esrender_force_download: yes
 
 # use http or cli to process install/update of renderingservice (cli|http)
 # NOTE: currently (2020 July) there are errors in 'cli' mode with postgresql -> 'cli' works just with mariadb/mysql
 esrender_exec_method: http
+
+# method how to retrieve the esrender archive that should be installed
+#  'download' - use the archive from 'esrender_archive_url'
+#  'copy-local' - copy the archive from the local host in 'esrender_local_archive_path'
+esrender_custom_source: download
+esrender_local_archive_path:
