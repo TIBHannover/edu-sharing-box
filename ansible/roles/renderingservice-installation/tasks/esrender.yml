@@ -40,7 +40,6 @@
   file: path='{{ esrender_cache_dir }}' state=absent
   when: esrender_remove_existing
 
-
 - name: extract esrender sources
   unarchive:
     remote_src: yes
