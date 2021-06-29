@@ -49,7 +49,7 @@
     dest: '{{esrender_document_root}}'
     extra_opts:
       - --transform
-      - s/^renderingservice-[0-9.a-z]*/esrender/
+      - s/^renderingservice-[0-9.a-z-]*/esrender/
   notify:
     - restart apache2
 
