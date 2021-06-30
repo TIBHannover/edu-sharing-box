@@ -53,6 +53,9 @@
   notify:
     - restart apache2
 
+- name: chown esrender (base dir)
+  file: path='{{ esrender_base_dir }}' state=directory owner=www-data group=www-data
+
 - name: create /var/cache/esrender
   file:
     path: '{{esrender_cache_dir}}'
