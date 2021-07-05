@@ -27,6 +27,8 @@ edu_client_config_xml_standard_entries:
   - xpath: '/config/values/workspaceViewType'
     value: '{{ "1" if (edu_workspace_viewType | default("list")) == "tile" else "0" }}'
     cleanup: '/config/values/workspaceViewType'
+  - xpath: '/config/values/upload/postDialog'
+    value: '{{ edu_upload_post_dialog }}'
 
 # path of the client.config.xml (edu_version < 5.1: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml' and edu_version >= 5.1: '{{ edu_home }}/config/client.config.xml')
 edu_client_config_xml_path: '{{ edu_home }}/config/client.config.xml'
