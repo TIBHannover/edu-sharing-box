@@ -50,7 +50,6 @@ nginx_port: 8081
 nginx_key_file:
 nginx_cert_file:
 # list of configuration files
-# localName
 nginx_configuration_files:
 # - ["example.conf.j2","example.conf"]
 
