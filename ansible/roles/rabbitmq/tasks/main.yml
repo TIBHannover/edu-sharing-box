@@ -1,0 +1,83 @@
+---
+
+- name: Verify Python is installed
+  apt: pkg=python state=present
+
+- name: Run apt update
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install Erlang package
+  apt:
+    name: "erlang"
+    update_cache: yes
+    install_recommends: yes
+    state: present
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+- name: Install RabbitMQ package
+  apt:
+    name: "rabbitmq-server"
+    update_cache: yes
+    install_recommends: yes
+    state: present
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+- name: Enable RabbitMQ plugins
+  rabbitmq_plugin:
+    names: rabbitmq_management
+    state: enabled
+  become: yes
+  notify:
+    - restart rabbitmq    
+  tags:
+  - root-task
+
+- name: Create RabbitMQ default vhost
+  rabbitmq_vhost:
+    name: "{{ rabbitmq_vhost }}"
+    tracing: no
+    state: present
+  become: yes
+  notify:
+  - restart rabbitmq 
+
+- name: ensure RabbitMQ host is present
+  rabbitmq_vhost: name={{ rabbitmq_vhost }} state=present
+  become: yes
+
+- name: Add RabbitMQ User
+  no_log: true
+  rabbitmq_user:
+    user: "{{ rabbitmq_user}}"
+    password: "{{ rabbitmq_password }}"
+    tags: administrator,deploy, {{ rabbitmq_user}}
+    vhost: "{{ rabbitmq_vhost }}"
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+  become: yes
+  notify:
+  - restart rabbitmq 
+# remove default user only if we have another user defined different from guest
+- name: Remove RabbitMQ default user
+  no_log: true
+  rabbitmq_user:
+    user: guest
+    state: absent  
+  become: yes
+  when: rabbitmq_user !="guest" 
+  notify:
+  - restart rabbitmq
+
+
+
+  
