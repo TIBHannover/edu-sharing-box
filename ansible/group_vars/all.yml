@@ -44,6 +44,15 @@ backup_bin: '{{ base_dir }}/bin'
 apache_conf_servername: # use as apache2 ServerName Directive, if set - see http://httpd.apache.org/docs/2.2/en/mod/core.html#servername
 apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if set. Example: On - see http://httpd.apache.org/docs/2.2/en/mod/core.html#usecanonicalname
 
+# NGINX configuration
+# since apache use port 80  we will set another port for nginx 
+nginx_port: 8081
+nginx_key_file:
+nginx_cert_file:
+# list of configuration files
+# localName
+nginx_configuration_files:
+# - ["example.conf.j2","example.conf"]
 
 # RabbitMQ default configuration
 rabbitmq_host: "localhost"

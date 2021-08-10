@@ -55,6 +55,7 @@
   roles:
     - renderingservice-init
     - renderingservice-registration
+    - nginx
 
 - hosts: edusharing
   roles:

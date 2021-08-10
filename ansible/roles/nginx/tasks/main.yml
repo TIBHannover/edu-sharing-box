@@ -1,0 +1,91 @@
+---
+# Since apache and nginx are running in same port
+# we need to stop the apache, install nginx change port for nginx, and then restart both apache and nginx.
+- name: stop apache2 
+  service: name=apache2 state=stopped
+  become: yes
+#  nginx-extras is same as nginx but more rich with features
+- name: Install nginx-extras
+  apt: 
+    name: nginx-extras
+    update_cache: yes
+    state: present
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+- name: Configure nginx.conf
+  become: true
+  template:
+    src: "nginx.conf"
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+
+- name: create directory for ssl certificates
+  file: path=/etc/nginx/ssl state=directory
+  become: yes
+ 
+
+- name: copy TLS key
+  copy:
+    src: "{{nginx_key_file}}"
+    dest: /etc/nginx/ssl/nginx.key
+  when: (nginx_key_file is defined) and (nginx_key_file != "") and (nginx_key_file is not none)
+  notify:
+    - restart nginx
+
+
+- name: copy TLS certificate
+  copy:
+    src: "{{nginx_cert_file}}"
+    dest: /etc/nginx/ssl/nginx.crt
+  when: (nginx_cert_file is defined) and (nginx_cert_file != "") and (nginx_cert_file is not none)
+  notify:
+    - restart nginx
+
+
+- name: Remove the default configuration
+  become: yes
+  file:
+    path: "/etc/nginx/{{item}}/default"
+    state: absent
+  with_items: 
+    - sites-enabled
+    - sites-available
+  notify:
+    - restart nginx
+
+
+- name: copy nginx config file
+  become: yes
+  template:
+    src: "{{item[0]}}"
+    dest: /etc/nginx/sites-available/{{item[1]}}
+    force: yes
+  loop: '{{ nginx_configuration_files | default([], true) }}'
+  notify:
+    - restart nginx
+
+- name: enable configurations
+  become: yes
+  file:
+    src: '/etc/nginx/sites-available/{{item[1]}}'
+    dest: '/etc/nginx/sites-enabled/{{item[1]}}'
+    state: link
+    # force: yes
+  loop: '{{ nginx_configuration_files | default([], true) }}'
+  notify:
+    - restart nginx
+
+- name: Force nginx notified handlers to run before we restart apache2
+  meta: flush_handlers
+
+# Restart again apache2
+- name: restart apache2 
+  service: name=apache2 state=restarted
+  become: yes
+
+
+
