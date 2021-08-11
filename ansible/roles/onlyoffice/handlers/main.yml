@@ -1,0 +1,11 @@
+---
+- name: restart onlyoffice
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+  - 'ds:converter'
+  - 'ds:docservice'
+  - 'ds:metrics'
+  # - 'ds:example'  # uncomment this if we want to start also the example service 
+  become: yes

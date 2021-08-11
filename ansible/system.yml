@@ -57,6 +57,7 @@
     - renderingservice-registration
     - nginx
     - rabbitmq
+    - onlyoffice
 
 - hosts: edusharing
   roles:

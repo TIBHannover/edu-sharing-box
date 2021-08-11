@@ -1,0 +1,44 @@
+---
+- name: Set up dbType
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.services.CoAuthoring.sql.type  = "{{ onlyoffice.db_type }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.db_type != "" | default("postgres")
+
+- name: Set up dbHost
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.services.CoAuthoring.sql.dbHost  = "{{ onlyoffice.db_host }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.db_host != "" | default("localhost")
+
+- name: Set up dbPort
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.services.CoAuthoring.sql.dbPort  = "{{ onlyoffice.db_port }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.db_port != "" | default("5432")
+
+- name: Set up DB dbName
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.services.CoAuthoring.sql.dbName  = "{{ onlyoffice.db_name }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.db_name != "" | default("onlyoffice")
+
+- name: Set up DB dbUser
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.services.CoAuthoring.sql.dbUser  = "{{ onlyoffice.db_user }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.db_user != "" | default("onlyoffice")
+
+- name: Set up DB dbPass
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.services.CoAuthoring.sql.dbPass  = "{{ onlyoffice.db_password }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.db_password != "" | default("onlyoffice")
+
+# Rabbit MQ configuration
+
+- name: Set up rabbitmq url
+  become: yes
+  shell: '{{ onlyoffice.json}} -I -e ''this.rabbitmq.url  = "{{ onlyoffice.rabbitmq_url }}"'''
+  notify: restart onlyoffice
+  when: onlyoffice.rabbitmq_url != "" | default("amqp://onlyoffice:onlyoffice@localhost:5672/")

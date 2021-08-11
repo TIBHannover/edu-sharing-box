@@ -1,0 +1,29 @@
+---
+
+- name: Gather package_facts
+  package_facts:
+    manager: "auto"
+# since onlyoffice is recommended to use postgres, we will install it if is not installed.
+- name: Install postgresql if not installed 
+  include_role:
+   name: postgresql
+   tasks_from: main
+  when: esrender_db_type != 'postgresql'
+
+
+- name: create user and database for onlyoffice
+  include: postgress.yml
+
+- name: Update Onlyoffice document server configuration if is installed
+  include: update-onlyoffice.yml
+  static: no
+  when: "onlyoffice.package_name in ansible_facts.packages"
+
+- name: Install Onlyoffice document server 
+  include: install-onlyoffice.yml
+  static: no
+  when: "onlyoffice.package_name not in ansible_facts.packages"
+   
+
+
+

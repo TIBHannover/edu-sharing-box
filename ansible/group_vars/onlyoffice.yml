@@ -1,0 +1,45 @@
+# OnlyOffice variable
+#
+# INFORMATION !!!! 
+#
+# System requirements
+#   * CPU dual core 2 GHz or better
+#   * RAM 2 GB or more
+#   * HDD at least 40 GB of free space
+#   * Additional requirements at least 4 GB of swap
+#   * OS 64-bit Debian, Ubuntu or other compatible distribution with kernel version 3.13 or later
+#   * Additional requirements
+#     * PostgreSQL: version 9.1 or later
+#     * NGINX: version 1.3.13 or later
+#     * libstdc++6: version 4.8.4 or later
+#     * RabbitMQ
+
+
+onlyoffice:
+  package_name: "onlyoffice-documentserver"
+  ds_port: {{nginx_port}}
+  
+  debian_repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }} contrib"  # Since Microsoft ttf-mscorefonts-installer is not in main repository we need to update with contrib 
+  package_repo: "deb http://download.onlyoffice.com/repo/debian squeeze main"                # add onlyOffice package repository  
+  
+  # onlyoffice comes with a npm package "json",  we can use for modify configuration
+  json: "/var/www/onlyoffice/documentserver/npm/json -q -f /etc/onlyoffice/documentserver/local.json " # use npm json to change the configuration
+  #  onlyoffice service port 
+  docservice_port: #default=8000 
+
+  # for more details, see https://api.onlyoffice.com/editors/signature/
+  jwt_enabled: #default=false
+  jwt_header:  #default="Authorization"
+  jwt_secret:  #default=""
+  remove_db:   #default=false
+ 
+  # database configuration
+  db_type: #default="postgres"
+  db_host: #default="localhost"
+  db_name: #default="onlyoffice" 
+  db_user: #default="onlyoffice" 
+  db_password: #default="onlyoffice"
+  db_port: "{{ postgresql_port }}"
+  # url connection with rabbitMQ
+  rabbitmq_url: "amqp://{{ rabbitmq_user}}:{{ rabbitmq_password}}@{{ rabbitmq_host}}:{{ rabbitmq_port}}{{ rabbitmq_vhost}}"
+
