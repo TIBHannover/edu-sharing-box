@@ -42,6 +42,7 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "alfrescosolr4" => ["edu-sharing-vm"],
       "edusharing" => ["edu-sharing-vm"],
+      "onlyoffice" => ["esrender-vm"],
       "renderingservice" => ["esrender-vm"],
       "tomcat:children" => ["alfrescosolr4", "edusharing"],
       "alfresco:children" => ["alfrescosolr4", "edusharing"],
