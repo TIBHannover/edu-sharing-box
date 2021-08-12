@@ -52,7 +52,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/accepted-onlyoffice-license
-    value: "true"
+    value: true
     vtype: boolean
   become: yes
 
@@ -60,7 +60,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/ds-port
-    value: "{{ onlyoffice.ds_port | default('8081') }}"
+    value: "{{ onlyoffice.ds_port | default('8081',true) }}"
     vtype: string
   become: yes
 
@@ -68,7 +68,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/db-host
-    value: "{{ onlyoffice.db_host | default('localhost') }}"
+    value: "{{ onlyoffice.db_host | default('localhost',true) }}"
     vtype: string
   become: yes
 
@@ -76,7 +76,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/db-name
-    value: "{{ onlyoffice.db_name | default('onlyoffice') }}"
+    value: "{{ onlyoffice.db_name | default('onlyoffice',true) }}"
     vtype: string
   become: yes
 
@@ -84,7 +84,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/db-port
-    value: "{{ onlyoffice.db_port | default('5432') }}"
+    value: "{{ onlyoffice.db_port | default('5432',true) }}"
     vtype: string
   become: yes
 
@@ -92,7 +92,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/db-user
-    value: "{{ onlyoffice.db_user | default('onlyoffice') }}"
+    value: "{{ onlyoffice.db_user | default('onlyoffice',true) }}"
     vtype: string
   become: yes
 
@@ -100,7 +100,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/db-pwd
-    value: "{{onlyoffice.db_password | default('onlyoffice') }}"
+    value: "{{onlyoffice.db_password | default('onlyoffice',true) }}"
     vtype: password
   no_log: true
   become: yes
@@ -109,7 +109,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/db-type
-    value: "{{onlyoffice.db_type | default('postgres') }}"
+    value: "{{onlyoffice.db_type | default('postgres',true) }}"
     vtype: string
   become: yes
 
@@ -117,7 +117,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/docservice-port
-    value: "{{ onlyoffice.docservice_port | default('8000') }}"
+    value: "{{ onlyoffice.docservice_port | default('8000',true) }}"
     vtype: string
   become: yes
 
@@ -125,7 +125,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/docservice-port
-    value: "{{ onlyoffice.example_port | default('3000') }}"
+    value: "{{ onlyoffice.example_port | default('3000',true) }}"
     vtype: string
   become: yes
 
@@ -133,7 +133,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/jwt-enabled
-    value: "{{ onlyoffice.jwt_enabled | default(False) }}"
+    value: "{{ onlyoffice.jwt_enabled | default(false,true) }}"
     vtype: boolean
   become: yes
 
@@ -141,7 +141,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/jwt-header
-    value: "{{ onlyoffice.jwt_header | default('Authorization') }}"
+    value: "{{ onlyoffice.jwt_header | default('Authorization',true) }}"
     vtype: string
   become: yes
 
@@ -149,7 +149,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/jwt-secret
-    value: "{{onlyoffice.jwt_secret | default('') }}"
+    value: "{{onlyoffice.jwt_secret | default('',true) }}"
     vtype: password
   no_log: true
   become: yes
@@ -158,7 +158,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/remove-db
-    value: "{{ onlyoffice_remove_db | default('False') }}"
+    value: "{{ onlyoffice_remove_db | default('false',true) }}"
     vtype: boolean
   become: yes
 
@@ -166,7 +166,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/rabbitmq-host
-    value: "{{rabbitmq_host  | default('localhost') }}"
+    value: "{{rabbitmq_host  | default('localhost',true) }}"
     vtype: string
   become: yes
 
@@ -174,7 +174,7 @@
   debconf:
     name: onlyoffice
     question: onlyoffice/spellchecker-port
-    value: "{{ onlyoffice_spellchecker_port | default('8082') }}"
+    value: "{{ onlyoffice_spellchecker_port | default('8082',true) }}"
     vtype: text
   become: yes
 
@@ -182,7 +182,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/rabbitmq-user
-    value: "{{rabbitmq_user  | default('guest')  }}"
+    value: "{{rabbitmq_user  | default('guest',true) }}"
     vtype: string
   become: yes
 
@@ -190,7 +190,7 @@
   debconf:
     name: "{{ onlyoffice.package_name }}"
     question: onlyoffice/rabbitmq-pwd
-    value: "{{rabbitmq_password | default('guest')}}"
+    value: "{{rabbitmq_password | default('guest',true) }}"
     vtype: password
   no_log: true
   become: yes

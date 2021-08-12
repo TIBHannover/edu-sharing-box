@@ -3,11 +3,14 @@
 - name: Gather package_facts
   package_facts:
     manager: "auto"
+
 # since onlyoffice is recommended to use postgres, we will install it if is not installed.
 - name: Install postgresql if not installed 
   include_role:
    name: postgresql
    tasks_from: main
+   apply:
+      become: yes
   when: esrender_db_type != 'postgresql'
 
 

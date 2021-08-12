@@ -4,9 +4,8 @@
     name: python-psycopg2
   become: yes
   tags:
-  - packages
-  - root-task
-
+    - packages
+    - root-task
 
 # postgres requires commands (like db creation) to be executed as local user 'postgres' per default
 # -> we are not able to use this procedure, because of the 'become unpriv user problem' in ansible
@@ -16,51 +15,47 @@
   become: yes
   shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD ''{{postgres_tmp_root_password}}'';\""'
   tags:
-  - packages
-  - root-task
+    - packages
+    - root-task
 
-- name: "Create only office database"
+- name: "Create onlyoffice database"
   postgresql_db:
-    login_password: '{{postgres_tmp_root_password}}'
+    login_password: "{{postgres_tmp_root_password}}"
     login_host: localhost
-    name: '{{onlyoffice.db_name | default("onlyoffice")}}'
-    encoding: 'utf8'
+    name: "{{ onlyoffice.db_name | default('onlyoffice',true) }}"
+    encoding: "utf8"
     state: present
   become: yes
   tags:
-  - root-task
-
+    - root-task
 
 - name: "Create db user"
   postgresql_user:
-    login_password: '{{postgres_tmp_root_password}}'
+    login_password: "{{postgres_tmp_root_password}}"
     login_host: localhost
     state: present
-    name: "{{ onlyoffice.db_user | default("onlyoffice") }}"
-    password: "{{ onlyoffice.db_password | default("onlyoffice")}}"
+    name: "{{ onlyoffice.db_user | default('onlyoffice',true) }}"
+    password: "{{ onlyoffice.db_password | default('onlyoffice',true) }}"
   become: yes
   tags:
-  - root-task
-
+    - root-task
 
 - name: "Grant db user access to app db"
   postgresql_privs:
-    login_password: '{{postgres_tmp_root_password}}'
+    login_password: "{{postgres_tmp_root_password}}"
     login_host: localhost
     type: database
-    database: "{{ onlyoffice.db_name | default("onlyoffice")}}"
-    roles: "{{ onlyoffice.db_user | default("onlyoffice")}}"
+    database: "{{ onlyoffice.db_name | default('onlyoffice',true) }}"
+    roles: "{{ onlyoffice.db_user | default('onlyoffice',true) }}"
     grant_option: no
     privs: ALL
   become: yes
   tags:
-  - root-task
+    - root-task
 
 - name: remove postgres password
   become: yes
   shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD null;\""'
   tags:
-  - packages
-  - root-task
-
-  
+    - packages
+    - root-task

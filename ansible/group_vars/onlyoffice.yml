@@ -17,7 +17,7 @@
 
 onlyoffice:
   package_name: "onlyoffice-documentserver"
-  ds_port: {{nginx_port}}
+  ds_port: "{{nginx_port}}"
   
   debian_repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }} contrib"  # Since Microsoft ttf-mscorefonts-installer is not in main repository we need to update with contrib 
   package_repo: "deb http://download.onlyoffice.com/repo/debian squeeze main"                # add onlyOffice package repository  
@@ -26,7 +26,8 @@ onlyoffice:
   json: "/var/www/onlyoffice/documentserver/npm/json -q -f /etc/onlyoffice/documentserver/local.json " # use npm json to change the configuration
   #  onlyoffice service port 
   docservice_port: #default=8000 
-
+  example_port:    #default=3000
+  onlyoffice_spellchecker_port:    #default=8082
   # for more details, see https://api.onlyoffice.com/editors/signature/
   jwt_enabled: #default=false
   jwt_header:  #default="Authorization"
