@@ -1,0 +1,38 @@
+onlyoffice_package_name: "onlyoffice-documentserver"
+onlyoffice_ds_port: 80
+onlyoffice_start_example_service: false
+  
+onlyoffice_debian_repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }} contrib"  # Since Microsoft ttf-mscorefonts-installer is not in main repository we need to update with contrib 
+onlyoffice_package_repo: "deb http://download.onlyoffice.com/repo/debian squeeze main"                # add onlyOffice package repository  
+  
+  # onlyoffice comes with a npm package "json",  we can use for modify configuration
+onlyoffice_json: "/var/www/onlyoffice/documentserver/npm/json -q -f /etc/onlyoffice/documentserver/local.json " # use npm json to change the configuration
+  
+  #  onlyoffice service port 
+onlyoffice_docservice_port: 8000 
+onlyoffice_example_port: 3000
+onlyoffice_onlyoffice_spellchecker_port: 8082
+  
+  # for more details, see https://api.onlyoffice.com/editors/signature/
+onlyoffice_jwt_enabled: false
+onlyoffice_jwt_header: "Authorization"
+onlyoffice_jwt_secret: ""
+onlyoffice_remove_db:  false
+ 
+  # database configuration
+onlyoffice_db_type: "postgres"
+onlyoffice_db_host: "localhost"
+onlyoffice_db_name: "onlyoffice" 
+onlyoffice_db_user: "onlyoffice" 
+onlyoffice_db_password: "onlyoffice"
+onlyoffice_db_port: "5432"
+
+onlyoffice_rabbitmq_host: localhost
+onlyoffice_rabbitmq_user: onlyoffice
+onlyoffice_rabbitmq_pass: onlyoffice
+onlyoffice_rabbitmq_vpath: /
+onlyoffice_rabbitmq_port: 5672
+
+  
+  # url connection with rabbitMQ
+onlyoffice_rabbitmq_url: "amqp://{{ onlyoffice_rabbitmq_user}}:{{ onlyoffice_rabbitmq_pass}}@{{ onlyoffice_rabbitmq_host}}:{{ onlyoffice_rabbitmq_port}}{{ onlyoffice_rabbitmq_vpath}}"
