@@ -9,6 +9,10 @@ esrender_host: 192.168.98.102
 esrender_proxy: '{{ esrender_host }}'
 esrender_url: '{{ edu_sharing_protocol | default("http") }}://{{ esrender_proxy }}/edu-sharing/esrender'
 
+# enable/disable onlyoffice installation
+# enable: true
+enable_only_office: false
+
 mariadb_port: 3306
 postgresql_port: 5432
 # db_types: 'postgresql', 'mariadb' (no migration on change)
