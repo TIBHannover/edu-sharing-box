@@ -20,3 +20,5 @@
     when: connect_content_pixabay
   - include: youtube.yml
     when: connect_content_youtube
+  - include: oersi.yml
+    when: connect_content_oersi

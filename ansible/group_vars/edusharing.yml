@@ -22,6 +22,8 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
+connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (experimental)
+
 register_moodle: false
 moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
