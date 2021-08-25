@@ -33,29 +33,6 @@
   notify:
     - restart nginx
 
-- name: create directory for ssl certificates
-  file: path=/etc/nginx/ssl state=directory
-  become: yes
- 
-
-- name: copy TLS key
-  copy:
-    src: "{{nginx_key_file}}"
-    dest: /etc/nginx/ssl/nginx.key
-  when: (nginx_key_file is defined) and (nginx_key_file != "") and (nginx_key_file is not none)
-  notify:
-    - restart nginx
-
-
-- name: copy TLS certificate
-  copy:
-    src: "{{nginx_cert_file}}"
-    dest: /etc/nginx/ssl/nginx.crt
-  when: (nginx_cert_file is defined) and (nginx_cert_file != "") and (nginx_cert_file is not none)
-  notify:
-    - restart nginx
-
-
 - name: Remove the default configuration
   become: yes
   file:
