@@ -9,7 +9,7 @@
 - name:   Add specified repository into sources list
   become: yes
   apt_repository:
-    repo: "{{ onlyoffice.package_repo }}"
+    repo: "{{ onlyoffice_package_repo }}"
     state: present
     filename: onlyoffice
     update_cache: yes
@@ -25,7 +25,7 @@
 # Since Microsoft ttf-mscorefonts-installer is not in main repository we need to update with non-free and contrib
 - name:  Add debian contrib repositories
   apt_repository:
-    repo: "{{ onlyoffice.debian_repo }}"
+    repo: "{{ onlyoffice_debian_repo }}"
     state: present
   when: ansible_distribution == 'Debian'
   become: yes
@@ -50,7 +50,7 @@
 
 - name:   Accept license
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/accepted-onlyoffice-license
     value: true
     vtype: boolean
@@ -58,105 +58,105 @@
 
 - name:   Set up onlyOffice port
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/ds-port
-    value: "{{ onlyoffice.ds_port | default('8081',true) }}"
+    value: "{{ onlyoffice_ds_port | default('8081',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up db host name
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/db-host
-    value: "{{ onlyoffice.db_host | default('localhost',true) }}"
+    value: "{{ onlyoffice_db_host | default('localhost',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up db name
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/db-name
-    value: "{{ onlyoffice.db_name | default('onlyoffice',true) }}"
+    value: "{{ onlyoffice_db_name | default('onlyoffice',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up db port
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/db-port
-    value: "{{ onlyoffice.db_port | default('5432',true) }}"
+    value: "{{ onlyoffice_db_port | default('5432',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up db user
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/db-user
-    value: "{{ onlyoffice.db_user | default('onlyoffice',true) }}"
+    value: "{{ onlyoffice_db_user | default('onlyoffice',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up db password
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/db-pwd
-    value: "{{onlyoffice.db_password | default('onlyoffice',true) }}"
+    value: "{{onlyoffice_db_password | default('onlyoffice',true) }}"
     vtype: password
   no_log: true
   become: yes
 
 - name:   Set up db type
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/db-type
-    value: "{{onlyoffice.db_type | default('postgres',true) }}"
+    value: "{{onlyoffice_db_type | default('postgres',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up docservice-port
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/docservice-port
-    value: "{{ onlyoffice.docservice_port | default('8000',true) }}"
+    value: "{{ onlyoffice_docservice_port | default('8000',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up example-port
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/docservice-port
-    value: "{{ onlyoffice.example_port | default('3000',true) }}"
+    value: "{{ onlyoffice_example_port | default('3000',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up jwt-enabled
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/jwt-enabled
-    value: "{{ onlyoffice.jwt_enabled | default(false,true) }}"
+    value: "{{ onlyoffice_jwt_enabled | default(false,true) }}"
     vtype: boolean
   become: yes
 
 - name:   Set up jwt-header
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/jwt-header
-    value: "{{ onlyoffice.jwt_header | default('Authorization',true) }}"
+    value: "{{ onlyoffice_jwt_header | default('Authorization',true) }}"
     vtype: string
   become: yes
 
 - name:   Set up jwt-secret
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/jwt-secret
-    value: "{{onlyoffice.jwt_secret | default('',true) }}"
+    value: "{{onlyoffice_jwt_secret | default('',true) }}"
     vtype: password
   no_log: true
   become: yes
 
 - name:   Set up remove-db
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/remove-db
     value: "{{ onlyoffice_remove_db | default('false',true) }}"
     vtype: boolean
@@ -164,9 +164,9 @@
 
 - name:   Set up rabbitmq host
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/rabbitmq-host
-    value: "{{rabbitmq_host  | default('localhost',true) }}"
+    value: "{{onlyoffice_rabbitmq_host  | default('localhost',true) }}"
     vtype: string
   become: yes
 
@@ -180,17 +180,17 @@
 
 - name:   Set up rabbitmq user
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/rabbitmq-user
-    value: "{{rabbitmq_user  | default('guest',true) }}"
+    value: "{{onlyoffice_rabbitmq_user  | default('guest',true) }}"
     vtype: string
   become: yes
 
 - name:  Set up rabbitmq password
   debconf:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     question: onlyoffice/rabbitmq-pwd
-    value: "{{rabbitmq_password | default('guest',true) }}"
+    value: "{{onlyoffice_rabbitmq_pass | default('guest',true) }}"
     vtype: password
   no_log: true
   become: yes
@@ -198,7 +198,7 @@
 - name: Install onlyoffice document-server
   become: yes
   apt:
-    name: "{{ onlyoffice.package_name }}"
+    name: "{{ onlyoffice_package_name }}"
     update_cache: yes
     cache_valid_time: 3600
   notify: restart onlyoffice  
