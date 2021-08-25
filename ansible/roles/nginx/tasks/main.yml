@@ -1,9 +1,19 @@
 ---
-# Since apache and nginx are running in same port
+
+
+# SCheck if apache is installed or available
 # we need to stop the apache, install nginx change port for nginx, and then restart both apache and nginx.
+- name: Check if Apache is running
+  command: systemctl status apache2
+  ignore_errors: yes
+  changed_when: false
+  register: service_apache_status
+
 - name: stop apache2 
   service: name=apache2 state=stopped
   become: yes
+  when: (service_apache_status.stdout != "" ) or ( service_apache_status.failed==false)
+
 #  nginx-extras is same as nginx but more rich with features
 - name: Install nginx-extras
   apt: 
@@ -82,10 +92,11 @@
 - name: Force nginx notified handlers to run before we restart apache2
   meta: flush_handlers
 
-# Restart again apache2
+# Restart again apache2 only if exist
 - name: restart apache2 
   service: name=apache2 state=restarted
   become: yes
+  when: (service_apache_status.stdout != "" ) or ( service_apache_status.failed==false)
 
 
 
