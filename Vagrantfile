@@ -39,6 +39,7 @@ Vagrant.configure("2") do |config|
     ansible.compatibility_mode = "2.0"
     #ansible.verbose = "vvv"
     ansible.playbook = "ansible/system.yml"
+    ansible.galaxy_role_file = "requirements.yml"
     ansible.groups = {
       "alfrescosolr4" => ["edu-sharing-vm"],
       "edusharing" => ["edu-sharing-vm"],
