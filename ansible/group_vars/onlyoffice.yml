@@ -14,8 +14,13 @@
 #     * libstdc++6: version 4.8.4 or later
 #     * RabbitMQ
 
-# ./onlyoffice/defaults/main.yml contains all default values, 
-#  you can overrides them here
+# ./onlyoffice/defaults/main.yml contains all default values, you can overrides them here
+
+# rabbitmq_daemon: rabbitmq-server
+# candidates for rabbitmq_version is 3.7.18 || or check by running:  apt-cache policy rabbitmq-server
+rabbitmq_version: "3.7.18" 
+rabbitmq_state: started
+rabbitmq_enabled: true
 
 
 onlyoffice_db_name: "onlyoffice" 
