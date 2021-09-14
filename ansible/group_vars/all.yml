@@ -55,8 +55,3 @@ nginx_port:
 nginx_configuration_files:
 # - ["example.conf.j2","example.conf"]
 
-# rabbitmq_daemon: rabbitmq-server
-# # candidates for rabbitmq_version is 3.7.18 || or check by running:  apt-cache policy rabbitmq-server
-rabbitmq_version: "3.7.18" 
-rabbitmq_state: started
-rabbitmq_enabled: true
