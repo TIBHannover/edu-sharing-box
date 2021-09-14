@@ -48,6 +48,10 @@
     - role: mariadb
       when: esrender_db_type == 'mariadb'
     - renderingservice-installation
+    - role: geerlingguy.docker
+      when: install_splash is defined and install_splash
+    - role: splash
+      when: install_splash is defined and install_splash
   tags:
     - root-task
 

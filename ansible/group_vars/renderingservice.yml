@@ -19,6 +19,5 @@ esrender_exec_method: http
 #  'copy-local' - copy the archive from the local host in 'esrender_local_archive_path'
 esrender_archive_retrieve_method: download
 esrender_local_archive_path:
-#  a list of configuration files 
-esrender_custom_config_files:
-  # - ["config.php","office/config.php"]
+
+install_splash: false # install splash on renderingservice-hosts - see https://splash.readthedocs.io/en/stable/index.html

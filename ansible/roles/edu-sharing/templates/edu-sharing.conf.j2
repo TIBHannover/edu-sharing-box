@@ -7,4 +7,11 @@ repository: {
             enabled:{{ edu_enable_statistics_api }}
         }
     }
+{% if edu_splash_url is defined and edu_splash_url is not none and edu_splash_url != "" %}
+    communication:{
+        splash:{
+            url: "{{ edu_splash_url }}"
+        }
+    }
+{% endif %}
 }

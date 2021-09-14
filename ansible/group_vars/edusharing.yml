@@ -22,6 +22,8 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
+connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (experimental)
+
 register_moodle: false
 moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
@@ -58,6 +60,7 @@ edu_mail_smtp_port: 25
 # the sender address used to send mails
 edu_mail_smtp_from: pleasechange@nodomain.com
 
+edu_splash_url: # "http://{{ esrender_host }}:8050/render.png" # URL of the splash-service for http previews
 edu_imprinturl:
 edu_privacyInformationUrl:
 edu_workspace_viewType:   # 'tile' | 'list'

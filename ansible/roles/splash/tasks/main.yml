@@ -1,0 +1,11 @@
+---
+- name: Stop running docker-container, if exists
+  shell: "sg docker -c \"docker ps --format '{{ '{{' }}.Image{{ '}}' }}' | grep -q 'scrapinghub/splash' && docker stop splash\""
+  ignore_errors: yes  # exit code 1, if container does not exist
+
+- name: Remove docker-container, if exists
+  shell: "sg docker -c \"docker ps -a --format '{{ '{{' }}.Image{{ '}}' }}' | grep -q 'scrapinghub/splash' && docker rm splash\""
+  ignore_errors: yes  # exit code 1, if container does not exist
+
+- name: Run splash docker-container
+  shell: "sg docker -c \"docker run --name splash --restart=always -d -p {{ splash_port }}:8050 scrapinghub/splash\""

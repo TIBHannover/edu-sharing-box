@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>oersi as remote repo for search</comment>
+  <entry key="searchable">true</entry>
+  <entry key="auth_by_app_sendmail">false</entry>
+  <entry key="appcaption">oersi</entry>
+  <entry key="appid">oersi</entry>
+  <entry key="devmode">false</entry>
+  <entry key="is_home_node">false</entry>
+  <entry key="type">REPOSITORY</entry>
+  <entry key="repositorytype">OERSI</entry>
+  <entry key="searchclass">org.edu_sharing.repository.server.MCAlfrescoAPIClient</entry>
+  <entry key="searchService">org.edu_sharing.service.search.SearchServiceOersiImpl</entry>
+  <entry key="permissionService">org.edu_sharing.service.permission.PermissionServiceCCPublish</entry>
+  <entry key="nodeService">org.edu_sharing.service.nodeservice.NodeServiceOersiImpl</entry>
+  <entry key="remote_provider">org.edu_sharing.service.provider.OersiProvider</entry>
+  <entry key="trustedclient">false</entry>
+</properties>
