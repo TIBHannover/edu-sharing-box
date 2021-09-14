@@ -48,10 +48,10 @@ backup_bin: '{{ base_dir }}/bin'
 apache_conf_servername: # use as apache2 ServerName Directive, if set - see http://httpd.apache.org/docs/2.2/en/mod/core.html#servername
 apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if set. Example: On - see http://httpd.apache.org/docs/2.2/en/mod/core.html#usecanonicalname
 
-# NGINX configuration
-# since apache use port 80  we will set another port for nginx 
-nginx_port: 
-# list of configuration files
-nginx_configuration_files:
-# - ["example.conf.j2","example.conf"]
+# For now we don't need NGINX Configurations since OnlyOffice in installation make all necessary configuration.
+
+# NGINX configuration  
+# # list of configuration files
+# nginx_configuration_files:
+# # - ["example.conf.j2","example.conf"]
 
