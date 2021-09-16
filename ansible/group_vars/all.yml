@@ -9,6 +9,10 @@ esrender_host: 192.168.98.102
 esrender_proxy: '{{ esrender_host }}'
 esrender_url: '{{ edu_sharing_protocol | default("http") }}://{{ esrender_proxy }}/edu-sharing/esrender'
 
+# enable/disable onlyoffice installation
+# enable: true
+enable_only_office: false
+
 mariadb_port: 3306
 postgresql_port: 5432
 # db_types: 'postgresql', 'mariadb' (no migration on change)
@@ -43,3 +47,11 @@ backup_bin: '{{ base_dir }}/bin'
 
 apache_conf_servername: # use as apache2 ServerName Directive, if set - see http://httpd.apache.org/docs/2.2/en/mod/core.html#servername
 apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if set. Example: On - see http://httpd.apache.org/docs/2.2/en/mod/core.html#usecanonicalname
+
+# For now we don't need NGINX Configurations since OnlyOffice in installation make all necessary configuration.
+
+# NGINX configuration  
+# # list of configuration files
+# nginx_configuration_files:
+# # - ["example.conf.j2","example.conf"]
+

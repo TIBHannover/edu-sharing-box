@@ -59,6 +59,19 @@
   roles:
     - renderingservice-init
     - renderingservice-registration
+    
+
+- hosts: onlyoffice
+  become: yes
+  roles:
+    - role: postgresql
+      when: enable_only_office is defined and enable_only_office
+    - role: geerlingguy.rabbitmq
+      when: enable_only_office is defined and enable_only_office
+    - role: nginx
+      when: enable_only_office is defined and enable_only_office
+    - role: onlyoffice
+      when: enable_only_office is defined and enable_only_office
 
 - hosts: edusharing
   roles:

@@ -1,0 +1,42 @@
+---
+
+- name: Create RabbitMQ default vhost
+  rabbitmq_vhost:
+    name: "{{ onlyoffice_rabbitmq_vpath }}"
+    tracing: no
+    state: present
+  become: yes
+  notify:
+  - restart rabbitmq 
+
+- name: ensure RabbitMQ host is present
+  rabbitmq_vhost: name={{ onlyoffice_rabbitmq_vpath }} state=present
+  become: yes
+
+
+# remove default user only if we have another user defined different from guest
+- name: Remove RabbitMQ default user
+  no_log: true
+  rabbitmq_user:
+    user: guest
+    state: absent  
+  become: yes
+  notify:
+  - restart rabbitmq
+
+
+- name: Add RabbitMQ User
+  no_log: true
+  rabbitmq_user:
+    user: "{{ onlyoffice_rabbitmq_user}}"
+    password: "{{ onlyoffice_rabbitmq_pass }}"
+    tags: administrator,deploy, {{ onlyoffice_rabbitmq_user}}
+    vhost: "{{ onlyoffice_rabbitmq_vpath }}"
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+  become: yes
+  notify:
+  - restart rabbitmq
+  

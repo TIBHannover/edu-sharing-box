@@ -1,0 +1,61 @@
+---
+- name: Ensure postgres python packages are present
+  package:
+    name: python-psycopg2
+  become: yes
+  tags:
+    - packages
+    - root-task
+
+# postgres requires commands (like db creation) to be executed as local user 'postgres' per default
+# -> we are not able to use this procedure, because of the 'become unpriv user problem' in ansible
+# switching the auth-method from peer is no option either
+# -> our procedure: set postgres-pw for db configuration and remove afterwards
+- name: Set postgres password
+  become: yes
+  shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD ''{{postgres_tmp_root_password}}'';\""'
+  tags:
+    - packages
+    - root-task
+
+- name: "Create onlyoffice database"
+  postgresql_db:
+    login_password: "{{postgres_tmp_root_password}}"
+    login_host: localhost
+    name: "{{ onlyoffice_db_name | default('onlyoffice',true) }}"
+    encoding: "utf8"
+    state: present
+  become: yes
+  tags:
+    - root-task
+
+- name: "Create db user"
+  postgresql_user:
+    login_password: "{{postgres_tmp_root_password}}"
+    login_host: localhost
+    state: present
+    name: "{{ onlyoffice_db_user | default('onlyoffice',true) }}"
+    password: "{{ onlyoffice_db_password | default('onlyoffice',true) }}"
+  become: yes
+  tags:
+    - root-task
+
+- name: "Grant db user access to app db"
+  postgresql_privs:
+    login_password: "{{postgres_tmp_root_password}}"
+    login_host: localhost
+    type: database
+    database: "{{ onlyoffice_db_name | default('onlyoffice',true) }}"
+    roles: "{{ onlyoffice_db_user | default('onlyoffice',true) }}"
+    grant_option: no
+    privs: ALL
+  become: yes
+  tags:
+    - root-task
+
+- name: remove postgres password
+  become: yes
+  shell: 'su postgres -c "psql --command=\"ALTER USER postgres WITH PASSWORD null;\""'
+  tags:
+    - packages
+    - root-task

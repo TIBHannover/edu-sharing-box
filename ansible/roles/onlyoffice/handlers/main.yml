@@ -1,0 +1,10 @@
+---
+- name: restart onlyoffice
+  supervisorctl:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+  - 'ds:converter'
+  - 'ds:docservice'
+  - 'ds:metrics'
+  become: yes
