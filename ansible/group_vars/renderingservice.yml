@@ -21,3 +21,7 @@ esrender_archive_retrieve_method: download
 esrender_local_archive_path:
 
 install_splash: false # install splash on renderingservice-hosts - see https://splash.readthedocs.io/en/stable/index.html
+
+#  a list of configuration files for esrender
+esrender_custom_config_files:
+  # - ["config.php.j2","office/config.php"]

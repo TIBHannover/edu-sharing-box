@@ -66,7 +66,7 @@
     - restart apache2
 
 - name: Copy custom configuration files for esrender application
-  copy:
+  template:
     src: '{{item[0]}}'
     dest: '{{ esrender_base_dir }}/modules/{{item[1]}}'
   loop: '{{ esrender_custom_config_files | default([], true) }}'
