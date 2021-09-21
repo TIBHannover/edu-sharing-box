@@ -43,3 +43,5 @@ edu_config_file: 'edu-sharing.conf'
 edu_oauth_trusted_clients:
   - client: "eduApp"
     password: "secret"
+
+mirror_vocabs_hour: "4"

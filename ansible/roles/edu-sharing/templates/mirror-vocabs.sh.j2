@@ -1,0 +1,6 @@
+#!/bin/sh
+
+{% for mirror in mirror_vocabularies %}
+wget -q --mirror "{{ mirror.url }}" -P {{ mirror.target_directory }}
+chown -R www-data:www-data {{ mirror.target_directory }}
+{% endfor %}

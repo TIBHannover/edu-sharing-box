@@ -99,6 +99,12 @@ edu_sharing_clientprotocol:
 
 edu_enable_statistics_api: "false"
 
+mirror_vocabularies: # list of vocabularies a local mirror should be created for (url - url of the source, target_directory - directory where the mirror should be stored)
+#  - url: "https://w3id.org/kim/hochschulfaechersystematik/scheme.json"
+#    target_directory: "/var/www/oer/vocabs-mirror"
+#  - url: "https://w3id.org/kim/hcrt/scheme.json"
+#    target_directory: "/var/www/oer/vocabs-mirror"
+
 # define custom adjustments here to the ccContentModel.xml under tomcat/shared/classes/alfresco/extension/model/
 # use the mapping 'ns' for the namespace "http://www.alfresco.org/model/dictionary/1.0" in the xpath
 # format:
