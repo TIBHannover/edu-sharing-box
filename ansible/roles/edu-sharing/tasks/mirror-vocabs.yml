@@ -7,7 +7,7 @@
     state: directory
     group: "www-data"
     owner: "www-data"
-  loop: "{{ mirror_vocabularies }}"
+  loop: "{{ mirror_vocabularies | default([], true) }}"
 
 - name: Create mirror-script
   become: true
