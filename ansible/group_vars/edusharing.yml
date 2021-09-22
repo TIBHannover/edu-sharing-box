@@ -105,6 +105,11 @@ mirror_vocabularies: # list of vocabularies a local mirror should be created for
 #  - url: "https://w3id.org/kim/hcrt/scheme.json"
 #    target_directory: "/var/www/oer/vocabs-mirror"
 
+edu_migration_replace_mapping: # replace mapping jobs that should be executed during edu-sharing update (startFolder - root node, property - property that should be migrated, data - csv mapping)
+#  - startFolder: 869665e9-7e42-49af-bd30-6469e59904c5
+#    property: ccm:taxonid
+#    data: "{{ lookup('file', 'esconf/migration/mapping_taxonid.csv') }}"
+
 # define custom adjustments here to the ccContentModel.xml under tomcat/shared/classes/alfresco/extension/model/
 # use the mapping 'ns' for the namespace "http://www.alfresco.org/model/dictionary/1.0" in the xpath
 # format:

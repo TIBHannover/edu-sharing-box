@@ -18,6 +18,7 @@
       - antivirus
   - include: edusharing.yml
   - include: users.yml
+  - include: jobs.yml
   - include: pixabay.yml
     when: connect_content_pixabay
   - include: youtube.yml
