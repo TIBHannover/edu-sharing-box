@@ -36,6 +36,8 @@ edu_client_config_xml_standard_entries:
 # path of the client.config.xml (edu_version < 5.1: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml' and edu_version >= 5.1: '{{ edu_home }}/config/client.config.xml')
 edu_client_config_xml_path: '{{ edu_home }}/config/client.config.xml'
 
+edu_sharing_workaround_jar_cleanup: [] # sometimes there are jar-conflicts that causes errors in some tomcat versions -> workaround removes invalid jars (depending on the edu-sharing version), root-dir is tomcat-webapps-dir
+
 # edu-sharing configuration type (edu_version < 5.1: 'edu-sharing.properties' and edu_version >= 5.1: 'edu-sharing.conf'
 edu_config_file: 'edu-sharing.conf'
 

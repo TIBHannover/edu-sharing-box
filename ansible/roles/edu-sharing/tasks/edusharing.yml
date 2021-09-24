@@ -195,14 +195,11 @@
     chdir: '{{ edu_home }}'
   tags: edu-sharing-config
 
-- name: EDU-SHARING-5-FIX remove jackson-jars that edu-sharing installed in the last step, because it causes version conflicts
+- name: Workaround - remove libs that edu-sharing installed in the last step, because it causes version conflicts
   file:
-    path: "{{item}}"
+    path: "{{ tomcat_home }}/webapps/{{ item }}"
     state: absent
-  with_items:
-    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-annotations-2.8.3.jar"
-    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-core-2.8.3.jar"
-    - "{{tomcat_home}}/webapps/alfresco/WEB-INF/lib/jackson-databind-2.8.3.jar"
+  loop: '{{ edu_sharing_workaround_jar_cleanup }}'
     
 - name: create edu-sharing.conf
   template:

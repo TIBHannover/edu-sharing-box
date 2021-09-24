@@ -1,5 +1,4 @@
 ---
-edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/6.0.0/edu-sharing_6.0.0.2021-07-07-f300bed71.zip
 edu_sharing_workaround_jar_cleanup:
   - edu-sharing/WEB-INF/lib/httpclient-4.3.1.jar
   - edu-sharing/WEB-INF/lib/httpcore-4.3.jar
