@@ -2,9 +2,14 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <comment>oersi as remote repo for search</comment>
+  <entry key="host">{{ oersi_host }}</entry>
+  <entry key="port">{{ oersi_port }}</entry>
+  <entry key="protocol">{{ oersi_scheme }}</entry>
+  <entry key="pathprefix">{{ oersi_pathprefix }}</entry>
+  <entry key="index">{{ oersi_index }}</entry>
   <entry key="searchable">true</entry>
   <entry key="auth_by_app_sendmail">false</entry>
-  <entry key="appcaption">Überregionale Suche</entry>
+  <entry key="appcaption">{{ oersi_caption }}</entry>
   <entry key="appid">oersi</entry>
   <entry key="devmode">false</entry>
   <entry key="is_home_node">false</entry>

@@ -22,7 +22,7 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
-connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (experimental)
+connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
 register_moodle: false
 moodle_host: 192.168.98.105
