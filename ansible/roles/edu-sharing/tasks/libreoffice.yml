@@ -6,3 +6,9 @@
     tags:
     - packages
     - root-task
+
+  - name: Remove gst-plugins-bad, since they have security issues 
+    apt:
+      name: ['libgstreamer-plugins-bad1.0-0', 'gstreamer1.0-plugins-bad']
+      state: absent
+    become: yes
