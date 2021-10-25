@@ -138,8 +138,6 @@
   - root-task
 
 - include_tasks: custom-license.yml
-  # vars:
-  #     custom_license: "{{item}}"
   with_items: '{{ edu_custom_licenses | default([], true) }}'
   loop_control:
     loop_var: custom_license
