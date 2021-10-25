@@ -129,6 +129,21 @@
 - include: images.yml
   tags: edu-sharing-config
 
+- name: Ensure jq is present
+  become: true
+  package:
+    name: ["jq"]
+  tags:
+  - packages
+  - root-task
+
+- include_tasks: custom-license.yml
+  # vars:
+  #     custom_license: "{{item}}"
+  with_items: '{{ edu_custom_licenses | default([], true) }}'
+  loop_control:
+    loop_var: custom_license
+
 - name: edit i18n
   lineinfile:
     backrefs: yes

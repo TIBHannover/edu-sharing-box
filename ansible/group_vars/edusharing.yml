@@ -161,3 +161,14 @@ edu_cccontentmodel_adjustments:
 #       </property>
 
 alfresco_ccmodel_add_custom_properties:
+
+#  define a list custom licenses,  
+#  format: 
+#     - name: "Apache" # Required
+#       url: "https://opensource.org/licenses/Apache-2.0"  # Optional, since for now is not implemented in Edu-sharing
+#       position: 1    # Optional, if empty will be added in the end of dropdown
+#       description: "short  Description about the license, you can include the URL too"
+#       groups: "APACHE LICENSE" # Required
+#       image: "apache.svg"  # Required
+# 
+edu_custom_licenses:
