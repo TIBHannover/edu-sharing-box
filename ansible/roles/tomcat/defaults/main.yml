@@ -7,6 +7,9 @@ tomcat_shutdown_port: 8005
 tomcat_ssl_port: 8443
 tomcat_ajp_port: 8009
 
+tomcat_min_heap_size: 512m
+tomcat_max_heap_size: 2048m
+
 # list of tomcat users in tomcat-users.xml (parameters of each entry: username, password, roles - see example below)
 tomcat_users: []
 #  - username: "user"

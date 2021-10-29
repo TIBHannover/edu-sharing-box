@@ -5,6 +5,8 @@ TOMCAT_BINDIR=${CATALINA_HOME}/bin
 JRE_HOME={{java_home}}
 CATALINA_PID=${CATALINA_HOME}/logs/catalina.pid
 export CATALINA_PID
+CATALINA_OPTS="-Xms{{ tomcat_min_heap_size }} -Xmx{{ tomcat_max_heap_size }}"
+export CATALINA_OPTS
 TOMCAT_STATUS=""
 ERROR=0
 PID=""
