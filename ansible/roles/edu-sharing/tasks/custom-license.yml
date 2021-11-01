@@ -28,20 +28,37 @@
       when: custom_license is not none
       tags: edu-sharing-config        
 
-    # let's add/update the Key,value in ..common/[en/de].json files 
-    - name: set License name to ../common/[en-de].json
+    # let's add/update the Key,value for license NAME in ../common/[en/de].json files 
+    - name: set License NAME to ../common/[en-de].json
       # become: yes
       shell: | 
-        jq '.LICENSE.NAMES.{{custom_license.name|upper }} ="{{custom_license.name}}" |
-            .LICENSE.DESCRIPTION.{{custom_license.name|upper }} ="{{custom_license.description}}" | 
-            .LICENSE.GROUPS.{{custom_license.name|upper }} ="{{custom_license.groups}}"' {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item}} >tmp.json && mv tmp.json {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item}}
+        jq '.LICENSE.NAMES.{{custom_license.name|upper }} ="{{custom_license.name}}"' \
+        {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item}} >tmp.json && mv tmp.json {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item}}
       with_items:
         - de.json
         - en.json
       when: custom_license is not none
       tags: edu-sharing-config
 
-    #  add/update logo, for specific license
+      # let's add/update the Key,value for license DESCRIPTION in ../common/[en/de].json files 
+    - name: set License DESCRIPTION to ../common/[en-de].json
+      # become: yes
+      shell: | 
+        jq '.LICENSE.DESCRIPTION.{{custom_license.name|upper }} ="{{item[1]}}"' \ 
+        {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item[0]}}.json >tmp.json && mv tmp.json {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item[0]}}.json
+      loop: '{{ custom_license.description | default([], true) }}'
+      tags: edu-sharing-config        
+
+    # let's add/update the Key,value for license GROUPS in ../common/[en/de].json files 
+    - name: set License GROUP name to ../common/[en-de].json
+      # become: yes
+      shell: | 
+        jq '.LICENSE.GROUPS.{{custom_license.name|upper }} ="{{item[1]}}"' \
+        {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item[0]}}.json >tmp.json && mv tmp.json {{ edu_home }}/war/edu_sharing/assets/i18n/common/{{item[0]}}.json
+      loop: '{{ custom_license.groups | default([], true) }}'
+      tags: edu-sharing-config
+
+    # add/update logo, for specific license
     - name: set logo for custom license
       # become: yes
       copy:
