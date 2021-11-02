@@ -1,0 +1,27 @@
+---
+- name: checkout opencast-importer repo
+  git:
+    repo: 'https://github.com/virtUOS/edusharing-opencast-importer.git'
+    dest: '{{ opencast_importer_dir }}'
+    force: yes
+    version: '{{ opencast_importer_repo_version }}'
+
+- name: Configure .env
+  template:
+    src: 'env.j2'
+    dest: '{{ opencast_importer_dir }}/.env'
+
+- name: Configure config.oc-instances.js
+  template:
+    src: 'config.oc-instances.js.j2'
+    dest: '{{ opencast_importer_dir }}/src/config/config.oc-instances.js'
+
+- name: Run npm install via docker-container
+  shell: "sg docker -c \"docker run -it -v {{ opencast_importer_dir }}:/work --rm node:14 /bin/bash -c 'cd /work && npm install'\""
+
+- name: Configure cron schedule - execute opencast-import
+  cron:
+    name: "opencast-import"
+    hour: '{{ opencast_importer_cron_hour }}'
+    minute: '{{ opencast_importer_cron_minute }}'
+    job: "docker run -v {{ opencast_importer_dir }}:/work --rm node:14 /bin/bash -c 'cd /work && npm start'"

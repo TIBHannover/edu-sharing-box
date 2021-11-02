@@ -1,0 +1,10 @@
+module.exports = [
+{% for oc_instance in opencast_importer_instances %}
+{
+  orgName: '{{ oc_instance.orgName }}',
+  orgUrl: '{{ oc_instance.orgUrl }}',
+  protocol: '{{ oc_instance.protocol }}',
+  domain: '{{ oc_instance.domain }}'
+},
+{% endfor %}
+]

@@ -1,4 +1,2 @@
 ---
 splash_port: 8050
-docker_users:
-  - "{{ ansible_user }}"

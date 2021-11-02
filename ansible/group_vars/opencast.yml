@@ -1,0 +1,15 @@
+---
+# Import opencast Videos into edu-sharing periodically via https://github.com/virtUOS/edusharing-opencast-importer
+
+install_opencast_importer: false  # activate / deactivate the feature
+
+opencast_importer_es_user: opencast   # user in edu-sharing that handles the opencast data (ask your edu-sharing admin)
+opencast_importer_es_password: changeme   # password for the edu-sharing user above
+opencast_importer_instances:  # configure the opencast-instances that should be imported
+  - orgName: 'Opencast'
+    orgUrl: 'https://opencast.org'
+    protocol: 'https'
+    domain: 'develop.opencast.org'
+
+opencast_importer_cron_hour: 4
+opencast_importer_cron_minute: 0

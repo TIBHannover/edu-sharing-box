@@ -1,0 +1,3 @@
+---
+opencast_importer_repo_version: main
+opencast_importer_dir: "{{ base_dir }}/edusharing-opencast-importer"
