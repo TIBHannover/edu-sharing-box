@@ -70,6 +70,8 @@
   roles:
     - role: opencast-import
       when: install_opencast_importer is defined and install_opencast_importer
+  tags:
+    - opencast
 
 - hosts: renderingservice
   roles:

@@ -10,6 +10,7 @@ opencast_importer_instances:  # configure the opencast-instances that should be 
     orgUrl: 'https://opencast.org'
     protocol: 'https'
     domain: 'develop.opencast.org'
+    blacklistedIds: []
 
 opencast_importer_cron_hour: 4
 opencast_importer_cron_minute: 0
