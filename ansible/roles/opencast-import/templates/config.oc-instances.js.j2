@@ -3,6 +3,9 @@ module.exports = [
 {
   orgName: '{{ oc_instance.orgName }}',
   orgUrl: '{{ oc_instance.orgUrl }}',
+{% if oc_instance.orgRor is defined %}
+  orgRor: '{{ oc_instance.orgRor }}',
+{% endif %}
   protocol: '{{ oc_instance.protocol }}',
   domain: '{{ oc_instance.domain }}',
   blacklistedIds: [ {{ oc_instance.blacklistedIds | map('regex_replace','^(.*)$', "'\\1'") | join(', ') }} ]

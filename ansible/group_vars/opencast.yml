@@ -8,6 +8,7 @@ opencast_importer_es_password: changeme   # password for the edu-sharing user ab
 opencast_importer_instances:  # configure the opencast-instances that should be imported
   - orgName: 'Opencast'
     orgUrl: 'https://opencast.org'
+    #orgRor: '04qmmjx98'
     protocol: 'https'
     domain: 'develop.opencast.org'
     blacklistedIds: []
