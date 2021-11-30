@@ -44,6 +44,7 @@ Vagrant.configure("2") do |config|
       "alfrescosolr4" => ["edu-sharing-vm"],
       "edusharing" => ["edu-sharing-vm"],
       "onlyoffice" => ["esrender-vm"],
+      "educonnector" => ["esrender-vm"],
       "opencast" => ["esrender-vm"],
       "renderingservice" => ["esrender-vm"],
       "tomcat:children" => ["alfrescosolr4", "edusharing"],
