@@ -3,3 +3,4 @@
   - include: mariadb.yml
   - include: install.yml
   - include: configure.yml
+  - include: registration.yml
