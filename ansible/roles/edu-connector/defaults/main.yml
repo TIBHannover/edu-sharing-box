@@ -1,0 +1,31 @@
+---
+
+#  php version
+php_version: 'php'
+# php packages list 
+php_packages:
+  - "{{php_version}}"
+  - "{{php_version}}-cli"
+  - "{{php_version}}-gd"
+  - "{{php_version}}-curl"
+  - "{{php_version}}-mysql"
+  - "{{php_version}}-pgsql"
+  - "{{php_version}}-xml"
+  - "{{php_version}}-zip"
+  - "{{php_version}}-soap"
+  - "{{php_version}}-mbstring"
+  - "{{php_version}}-dom"
+  - "{{php_version}}-iconv"
+  - "{{php_version}}-fileinfo"
+  - "{{php_version}}-sockets"
+  - "{{php_version}}-wddx"
+  - "{{php_version}}-date"
+  - "{{php_version}}-common"
+  - "{{php_version}}-json"
+  - "{{php_version}}-fpm"
+  - "{{php_version}}-sqlite3"
+  - "{{php_version}}-intl"
+
+
+# php composer URL (default last version)
+phar_composer_url: "https://getcomposer.org/download/latest-stable/composer.phar"

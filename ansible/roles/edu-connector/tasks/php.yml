@@ -1,0 +1,41 @@
+- name: Ensure python-lxml packages are present
+  apt:
+    name: ["python-lxml"]
+  become: yes
+  tags:
+    - packages
+    - root-task
+    - educonnector
+
+
+- name: php - install base packages
+  apt:
+    name: '{{php_packages}}'
+    state: "present"
+  # with_items: '{{php_packages}}'
+  become: yes
+  tags:
+    - packages
+    - root-task
+    - educonnector
+
+- name: Check if composer exists
+  stat:
+    path: /usr/local/bin/composer
+  register: composer_file
+
+- name: Download/install Composer if it doesn't exist
+  get_url:
+    url: "{{phar_composer_url}}"
+    dest: "/usr/local/bin/composer"
+    mode: "0775"
+    force: "{{edu_connector_force_download}}"
+  when: composer_file.stat.isreg is not defined or not composer_file.stat.isreg
+  tags:
+    - packages
+    - root-task
+    - educonnector
+
+- name: Check composer version
+  shell: composer -V
+
