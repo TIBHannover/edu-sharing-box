@@ -15,3 +15,40 @@ repository: {
     }
 {% endif %}
 }
+
+// Default connectors for the repository will be none
+connectorList:{
+    connectors:[]
+}
+
+
+{% if enable_edu_connector is defined and enable_edu_connector and edu_connector_enable_modules.tiny_mce %}
+// enable TINYMCE
+connectorList.connectors +=  {
+   id:"H5P", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
+   filetypes:[
+     {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
+   ]
+}
+{% endif %}
+{% if enable_edu_connector is defined and enable_edu_connector and edu_connector_enable_modules.h5p %}
+// enable H5P
+connectorList.connectors +=  {
+   id:"H5P", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
+   filetypes:[
+     {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
+   ]
+}
+{% endif %}
+
+{% if enable_only_office is defined and enable_only_office and edu_connector_enable_modules.only_office %}
+// enable ONLY_OFFICE
+connectorList.connectors +=  {
+   id:"ONLY_OFFICE", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
+   filetypes:[
+     {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true},
+     {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true},
+     {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true},
+   ]
+}
+{% endif %}
