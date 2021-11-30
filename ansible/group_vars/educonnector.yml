@@ -24,3 +24,6 @@ edu_connector:
 # will remove existing files and clean DB (Db will be backuped in eduConnector_backup directory)
 edu_connector_remove_existing: false
 
+ # Download  file here : https://github.com/edu-sharing/edu-connector/blob/develop/config.dist.php, and make all the necessary changes to it.
+# add the path to your config.php file here.
+edu_connector_config_path:
