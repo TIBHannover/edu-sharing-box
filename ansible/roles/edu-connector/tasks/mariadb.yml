@@ -1,0 +1,64 @@
+---
+- name: Ensure mysql python packages are present
+  package:
+    name: python-mysqldb
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+- name: Ensures backup_path dir exists
+  file: path='{{ edu_connector_backup_dir }}' state=directory
+
+- name: Ensure database exists
+  mysql_db:
+    name: "{{edu_connector.db_name}}"
+    state: present
+  become: yes
+  register: db_exists
+  tags:
+  - database
+  - root-task
+
+- name: backup existing database with name 'eduConnector'
+  mysql_db:
+    name: eduConnector
+    state: dump
+    target: "{{edu_connector_backup_dir}}/eduConnector.sql"
+    config_file: /etc/my.cnf.d/mysql.cnf
+  become: yes
+  when: edu_connector_remove_existing
+  tags:
+  - root-task
+  - educonnector
+
+- name: Remove existing database with name 'eduConnector'
+  mysql_db:
+    name: '{{edu_connector.db_name}}'
+    state: absent
+  become: yes
+  when: edu_connector_remove_existing
+  tags:
+  - root-task
+  - educonnector
+
+- name: Create a new database with name 'eduConnector'
+  mysql_db:
+    name: '{{edu_connector.db_name}}'
+    config_file: /etc/my.cnf.d/mysql.cnf
+    state: present
+  become: yes
+  when: edu_connector_remove_existing
+  tags:
+  - root-task
+  - educonnector
+
+- name: Create eduConnector database user
+  mysql_user:
+    name: '{{edu_connector.db_user}}'
+    password: '{{edu_connector.db_password}}'
+    priv: '{{edu_connector.db_name}}.*:ALL'
+  become: yes
+  tags:
+  - root-task
+  - educonnector

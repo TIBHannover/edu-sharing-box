@@ -1,0 +1,16 @@
+
+
+
+# backup DB path
+edu_connector_backup_dir: '/var/eduConnector_backup'
+
+# database configuration
+edu_connector:
+  db_host: 'localhost'
+  db_name: 'eduConnector'
+  db_user: 'eduConnector'
+  db_password: 'eduConnector'
+
+# will remove existing files and clean DB (Db will be backuped in eduConnector_backup directory)
+edu_connector_remove_existing: false
+
