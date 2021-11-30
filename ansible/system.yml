@@ -10,7 +10,7 @@
   roles: 
     - init-facts
 
-- hosts: renderingservice, edusharing
+- hosts: renderingservice, edusharing, educonnector
   become: yes
   roles:
     - apache
@@ -89,6 +89,16 @@
       when: enable_only_office is defined and enable_only_office
     - role: onlyoffice
       when: enable_only_office is defined and enable_only_office
+
+- hosts: educonnector
+  become: yes
+  roles:
+    - role: mariadb
+      when: enable_edu_connector is defined and enable_edu_connector
+    - role: edu-connector
+      when: enable_edu_connector is defined and enable_edu_connector
+  tags:
+    - educonnector
 
 - hosts: edusharing
   roles:
