@@ -1,0 +1,53 @@
+---
+
+- name: Ensures inst-dir exists
+  file: 
+    path: '{{edu_connector_download_dir}}' 
+    state: directory
+  tags:
+    - educonnector
+
+- name: download edu-connector sources
+  get_url:
+    url: '{{edu_connector_archive_url}}'
+    dest: "{{edu_connector_download_dir}}/educonnector.tar.gz"
+    force: '{{ edu_connector_force_download }}'
+  tags:
+    - educonnector
+
+
+- name: Remove old edu-connector  installation (base dir)
+  file: path='{{ edu_connector_base_dir }}' state=absent
+  when: edu_connector_remove_existing
+  tags:
+    - educonnector
+
+
+- name: Remove old  edu-connector  installation (cache dir)
+  file: path='{{ edu_connector_cache_dir }}' state=absent
+  when: edu_connector_remove_existing
+  tags:
+    - educonnector
+
+- name: extract  edu-connector  sources
+  unarchive:
+    remote_src: yes
+    src: '{{edu_connector_download_dir}}/educonnector.tar.gz'
+    dest: '{{edu_connector_document_root}}'
+    extra_opts:
+      - --transform
+      - s/^edu-connector-[0-9.a-zA-Z-]*/eduConnector/
+  notify:
+    - restart apache2
+  tags:
+    - educonnector
+
+- name: create /var/cache/eduConnector
+  file: 
+    path: '{{ edu_connector_cache_dir }}' 
+    state: "directory"
+
+- name: Force all notified handlers to run at this point
+  meta: flush_handlers
+  tags:
+    - educonnector

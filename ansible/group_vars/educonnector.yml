@@ -1,6 +1,16 @@
+edu_connector_vhost: true
 
+edu_connector_version: develop
+edu_connector_archive_url: 'https://github.com/edu-sharing/edu-connector/archive/{{edu_connector_version}}.tar.gz' 
+edu_connector_download_dir: "{{base_dir}}/edu_connector_{{edu_connector_version}}"
 
+# download even if exist 
+edu_connector_force_download: yes
 
+# edu-connector paths
+edu_connector_document_root: '/var/www'
+edu_connector_base_dir: '{{edu_connector_document_root}}/eduConnector'
+edu_connector_cache_dir: '/var/cache/eduConnector'
 # backup DB path
 edu_connector_backup_dir: '/var/eduConnector_backup'
 
