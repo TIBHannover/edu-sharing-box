@@ -21,3 +21,10 @@
     become: yes
     tags:
     - root-task
+
+  - name: Remove libservlet3.1-java, since it has security issues and is unused
+    become: yes
+    apt:
+      name: ['libservlet3.1-java']
+      state: absent
+    when: security_cleanup_remove_package_libservlet
