@@ -176,3 +176,8 @@ alfresco_ccmodel_add_custom_properties:
 #       image: "apache.svg"  # Required
 # 
 edu_custom_licenses:
+
+edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-sharing (appid - id of the LMS, public_key - public key of the LMS (from the xml-file), host - public IP of the LMS)
+#  - appid: ""
+#    public_key: ""
+#    host: ""
