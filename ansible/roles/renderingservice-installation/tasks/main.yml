@@ -3,4 +3,8 @@
     when: esrender_db_type == 'mariadb'
   - include: postgresql.yml
     when: esrender_db_type == 'postgresql'
-  - include: esrender.yml
+  - include: esrender.yml  
+  - include: clean-cache-job.yml
+    when: activate_auto_clean_cache and activate_auto_clean_cache == true
+    become: true
+    tags: root-task
