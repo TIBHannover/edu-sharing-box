@@ -14,6 +14,6 @@
     name: "delete old cache"
     hour: 5   # every day at 5:00 am
     minute: 0
-    day: "{{ clean_cache_schedule_day | default('*/15',true) }}"
+    day: "{{ clean_cache_schedule_day | default('*',true) }}"
     job: "php {{ esrender_base_dir }}/func/classes.new/Helper/cacheCleaner.php"
     state: '{{ clean_cache_state }}'
