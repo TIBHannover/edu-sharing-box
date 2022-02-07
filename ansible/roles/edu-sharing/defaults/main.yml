@@ -62,7 +62,7 @@ classification_keywords_update_interval: 15
 # must be public folder: example: /var/www/oer/
 classification_keywords_dir: "classification-keywords"
 #  classification keywords base dir
-classification_keywords_base_dir: "/var/www/html/{{classification_keywords_dir}}"
+classification_keywords_base_dir: "/var/www/{{classification_keywords_dir}}"
 # define the classification-keyword file name example: classification_keywords.xml
 classification_keywords_file: "classification_keywords.xml"
 # Classification-Keywords-URL (for download)
