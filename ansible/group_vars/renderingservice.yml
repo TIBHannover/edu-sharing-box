@@ -25,3 +25,13 @@ install_splash: false # install splash on renderingservice-hosts - see https://s
 #  a list of configuration files for esrender
 esrender_custom_config_files:
   # - ["config.php.j2","office/config.php"]
+
+# Activate cleaning of cache automatically
+# more information see: https://docs.edu-sharing.com/confluence/edp/en/installation-en/installation-of-the-edu-sharing-rendering-service/admin-tools-cache-cleaner
+activate_auto_clean_cache: false
+# Cleaning of cache is done after: <every x> days, example: "*/15" = every 15 days
+clean_cache_schedule_day:
+# Cron job state (present|absent)
+clean_cache_state: present
+# Define Limit uf used space for cache (Decimal number between 0.0 and 1.0),default is 0.8==80%
+esrender_cache_limit: 

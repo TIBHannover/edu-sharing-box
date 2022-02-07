@@ -293,6 +293,9 @@
 - include: model.yml
   tags: edu-sharing-config
 
+- include: lms.yml
+  tags: edu-sharing-config
+
 - name: Copy mail template
   copy:
     src: '{{item}}'

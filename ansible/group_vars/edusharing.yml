@@ -206,3 +206,9 @@ classification_keywords_file:
 classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
 # Override the default local file 
 classification_keywords_force_download: false
+
+
+edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-sharing (appid - id of the LMS, public_key - public key of the LMS (from the xml-file), host - public IP of the LMS)
+#  - appid: ""
+#    public_key: ""
+#    host: ""
