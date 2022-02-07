@@ -11,15 +11,15 @@
 
 - name : delete old classification_keywords.xml
   file:
-    path: "{{classification_keywords_dir}}/{{classification_keywords_file}}"
+    path: "{{classification_keywords_base_dir}}/{{classification_keywords_file}}"
     state: absent
   when: classification_keywords_force_download
   tags:
   - classification-keyword
 
-- name: Ensure classification_keywords_dir dir exists
+- name: Ensure classification_keywords_base_dir dir exists
   file: 
-    path: "{{ classification_keywords_dir }}" 
+    path: "{{ classification_keywords_base_dir }}" 
     state: directory
     group: "www-data"
     owner: "www-data"
@@ -27,7 +27,7 @@
   - classification-keyword
 
 - name: check if classification_keywords xml file exist
-  stat: path="{{classification_keywords_dir}}/{{classification_keywords_file}}"
+  stat: path="{{classification_keywords_base_dir}}/{{classification_keywords_file}}"
   register: classification_keywords_xml_file_exist
   tags: 
   - classification-keyword
@@ -35,7 +35,7 @@
 - name: download classification keywords gz format
   get_url:
     url: '{{classification_keywords_url}}'
-    dest: "{{classification_keywords_dir}}/{{classification_keywords_file}}.gz"
+    dest: "{{classification_keywords_base_dir}}/{{classification_keywords_file}}.gz"
     group: "www-data"
     owner: "www-data"
     force: yes
@@ -43,27 +43,23 @@
   tags:
   - classification-keyword
 
-
-
-
 - name: unzip classification keywords gz format
   command:
-    chdir: '{{classification_keywords_dir}}/'
+    chdir: '{{classification_keywords_base_dir}}/'
     cmd: 'gunzip {{classification_keywords_file}}.gz'
-    creates: '{{classification_keywords_dir}}/{{classification_keywords_file}}'
+    creates: '{{classification_keywords_base_dir}}/{{classification_keywords_file}}'
   when: not classification_keywords_xml_file_exist.stat.exists
   tags:
   - classification-keyword
 
 - name: remove gz file
-  file: path="{{classification_keywords_dir}}/{{classification_keywords_file}}.gz" state=absent
+  file: path="{{classification_keywords_base_dir}}/{{classification_keywords_file}}.gz" state=absent
   tags:
   - classification-keyword
 
-
-
-
-
-
-
-
+- name: Add job for classification keywords
+  set_fact:
+    edu_jobs_all: "{{ edu_jobs_all | default([], true) + [{'jobClass': classification_keywords_job.jobClass, 'params': { 'fileUri':classification_keywords_job.params.fileUri} }] }}"
+  when: classification_keywords_job.jobClass is defined and classification_keywords_job.params is defined
+  tags:
+  - classification-keyword
