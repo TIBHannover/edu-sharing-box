@@ -1,0 +1,69 @@
+---
+
+- name: Ensure gzip is present
+  package:
+    name: ["gzip"]
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+
+- name : delete old classification_keywords.xml
+  file:
+    path: "{{classification_keywords_dir}}/{{classification_keywords_file}}"
+    state: absent
+  when: classification_keywords_force_download
+  tags:
+  - classification-keyword
+
+- name: Ensure classification_keywords_dir dir exists
+  file: 
+    path: "{{ classification_keywords_dir }}" 
+    state: directory
+    group: "www-data"
+    owner: "www-data"
+  tags:
+  - classification-keyword
+
+- name: check if classification_keywords xml file exist
+  stat: path="{{classification_keywords_dir}}/{{classification_keywords_file}}"
+  register: classification_keywords_xml_file_exist
+  tags: 
+  - classification-keyword
+
+- name: download classification keywords gz format
+  get_url:
+    url: '{{classification_keywords_url}}'
+    dest: "{{classification_keywords_dir}}/{{classification_keywords_file}}.gz"
+    group: "www-data"
+    owner: "www-data"
+    force: yes
+  when: not classification_keywords_xml_file_exist.stat.exists
+  tags:
+  - classification-keyword
+
+
+
+
+- name: unzip classification keywords gz format
+  command:
+    chdir: '{{classification_keywords_dir}}/'
+    cmd: 'gunzip {{classification_keywords_file}}.gz'
+    creates: '{{classification_keywords_dir}}/{{classification_keywords_file}}'
+  when: not classification_keywords_xml_file_exist.stat.exists
+  tags:
+  - classification-keyword
+
+- name: remove gz file
+  file: path="{{classification_keywords_dir}}/{{classification_keywords_file}}.gz" state=absent
+  tags:
+  - classification-keyword
+
+
+
+
+
+
+
+

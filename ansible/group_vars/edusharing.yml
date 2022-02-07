@@ -176,3 +176,24 @@ alfresco_ccmodel_add_custom_properties:
 #       image: "apache.svg"  # Required
 # 
 edu_custom_licenses:
+
+
+# define config for classifications keywords
+# After activated the classification-keywords, you need to add an edu-sharing job in "edu_migration_replace_mapping" variable
+# example: 
+# edu_migration_replace_mapping:
+    # - jobClass: "org.edu_sharing.repository.server.jobs.quartz.ImportFactualTermMarc21"
+    #  parameters:
+    #    - fileUri: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/oer/{{classification_keywords_file}}'
+
+# activate the classification-keyword (true/false)
+activate_classification_keywords: false
+# give the path to the file where you want download the classification-keywords
+# must be public folder: example: /var/www/oer/ 
+classification_keywords_dir: 
+# define the classification-keyword file name example: classification_keywords.xml
+classification_keywords_file: 
+# Classification-Keywords-URL (for download)
+classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
+# Override the default local file 
+classification_keywords_force_download: false
