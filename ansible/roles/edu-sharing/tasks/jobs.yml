@@ -1,8 +1,10 @@
 ---
 - name: add replace-mapping-jobs to list of all jobs
   set_fact:
-    edu_jobs_all: "{{ edu_jobs_all | default([], true) + [{'jobClass': 'org.edu_sharing.repository.server.jobs.quartz.BulkEditNodesJob', 'params': {'startFolder': item.startFolder, 'mode': 'ReplaceMapping', 'property': item.property, 'types': 'ccm:io', 'recurseMode': 'All', 'FILE_DATA': item.data}}, {'jobClass': 'org.edu_sharing.repository.server.jobs.quartz.BulkEditNodesJob', 'params': {'startFolder': item.startFolder, 'mode': 'RemoveDuplicates', 'property': item.property, 'types': 'ccm:io', 'recurseMode': 'All'}}] }}"
-  loop: '{{ edu_migration_replace_mapping | default([], true) }}'
+    edu_jobs_all: "{{ edu_jobs_all | default([], true) + [{'jobClass': item.0.jobClass, 'params': item.1 }] }}"
+  with_subelements:
+    - '{{ edu_migration_replace_mapping | default([], true) }}'
+    - parameters
 
 - name: "wait for tomcat to come up"
   uri:
