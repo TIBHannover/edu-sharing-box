@@ -188,6 +188,10 @@ edu_custom_licenses:
 
 # activate the classification-keyword (true/false)
 activate_classification_keywords: false
+# activate the classification-keyword update (true/false)
+activate_classification_keywords_update: false
+# define the classification-keyword interval in days = 1 means every day
+classification_keywords_update_interval: 
 # give the path to the file where you want download the classification-keywords
 # must be public folder: example: /var/www/oer/ 
 classification_keywords_dir: 
