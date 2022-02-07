@@ -54,3 +54,21 @@ oersi_port: "443"
 oersi_scheme: "https"
 oersi_pathprefix: "/resources/api-internal/search"
 oersi_index: "oer_data"
+
+# Default values for classifications keywords
+# define the classification-keyword interval in days = 1 means every day
+classification_keywords_update_interval: 15
+# give the path to the file where you want download the classification-keywords
+# must be public folder: example: /var/www/oer/
+classification_keywords_dir: "classification-keywords"
+#  classification keywords base dir
+classification_keywords_base_dir: "/var/www/html/{{classification_keywords_dir}}"
+# define the classification-keyword file name example: classification_keywords.xml
+classification_keywords_file: "classification_keywords.xml"
+# Classification-Keywords-URL (for download)
+classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
+# classification-keywords initial by job
+classification_keywords_job:
+    jobClass: "org.edu_sharing.repository.server.jobs.quartz.ImportFactualTermMarc21"
+    params:
+       fileUri: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/{{classification_keywords_dir}}/{{classification_keywords_file}}'

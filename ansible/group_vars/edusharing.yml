@@ -106,13 +106,9 @@ mirror_vocabularies: # list of vocabularies a local mirror should be created for
 #    target_directory: "/var/www/oer/vocabs-mirror"
 
 edu_migration_replace_mapping: # replace mapping jobs that should be executed during edu-sharing update (startFolder - root node, property - property that should be migrated, data - csv mapping)
-  #  - jobClass: "org.edu_sharing.repository.server.jobs.quartz.BulkEditNodesJob"
-  #    paramaeters:
-  #      - startFolder: "869665e9-7e42-49af-bd30-6469e59904c5"
-  #        property: "ccm:taxonid"
-  #        data: "{{ lookup('file', 'esconf/migration/mapping_taxonid.csv') }}"
-  #        recurseMode: "All"
-  #        mode: "ReplaceMapping"
+#  - startFolder: 869665e9-7e42-49af-bd30-6469e59904c5
+#    property: ccm:taxonid
+#    data: "{{ lookup('file', 'esconf/migration/mapping_taxonid.csv') }}"
 
 
 # define custom adjustments here to the ccContentModel.xml under tomcat/shared/classes/alfresco/extension/model/
@@ -184,26 +180,15 @@ edu_custom_licenses:
 
 
 # define config for classifications keywords
-# After activated the classification-keywords, you need to add an edu-sharing job in "edu_migration_replace_mapping" variable
-# example: 
-# edu_migration_replace_mapping:
-    # - jobClass: "org.edu_sharing.repository.server.jobs.quartz.ImportFactualTermMarc21"
-    #  parameters:
-    #    - fileUri: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/oer/{{classification_keywords_file}}'
-
+# they are also some default configurations in /roles/edu-sharing/default/main/yml
 # activate the classification-keyword (true/false)
 activate_classification_keywords: false
 # activate the classification-keyword update (true/false)
 activate_classification_keywords_update: false
-# define the classification-keyword interval in days = 1 means every day
-classification_keywords_update_interval: 
-# give the path to the file where you want download the classification-keywords
-# must be public folder: example: /var/www/oer/ 
+# must be public folder: example: /oer/classification-keywords
 classification_keywords_dir: 
 # define the classification-keyword file name example: classification_keywords.xml
 classification_keywords_file: 
-# Classification-Keywords-URL (for download)
-classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
 # Override the default local file 
 classification_keywords_force_download: false
 
