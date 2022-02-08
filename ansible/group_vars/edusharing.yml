@@ -110,7 +110,6 @@ edu_migration_replace_mapping: # replace mapping jobs that should be executed du
 #    property: ccm:taxonid
 #    data: "{{ lookup('file', 'esconf/migration/mapping_taxonid.csv') }}"
 
-
 # define custom adjustments here to the ccContentModel.xml under tomcat/shared/classes/alfresco/extension/model/
 # use the mapping 'ns' for the namespace "http://www.alfresco.org/model/dictionary/1.0" in the xpath
 # format:
