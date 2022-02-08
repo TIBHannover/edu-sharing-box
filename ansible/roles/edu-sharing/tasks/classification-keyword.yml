@@ -63,7 +63,3 @@
          {{ edu_jobs_all | default([], true) + [{'jobClass': 'org.edu_sharing.repository.server.jobs.quartz.ImportFactualTermMarc21', 'params': { 'fileUri': '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/classification-keywords/classification_keywords.xml' } }] }}
   tags:
   - classification-keyword
-
-- name: debug edu_jobs_all
-  debug:
-    var: edu_jobs_all
