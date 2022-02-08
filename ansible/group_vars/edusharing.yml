@@ -181,7 +181,7 @@ edu_custom_licenses:
 
 # define config for classifications keywords
 # activate the classification-keyword (true/false)
-activate_classification_keywords: true
+activate_classification_keywords: false
 # activate the classification-keyword update (true/false)
 activate_classification_keywords_update: false
 # Override the default local file 
