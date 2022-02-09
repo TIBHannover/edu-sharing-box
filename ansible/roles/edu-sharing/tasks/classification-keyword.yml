@@ -53,7 +53,7 @@
   - classification-keyword
 
 - name: remove gz file
-  file: path="/var/www/{{edu_classification_keyword_path | basename }}.gz" state=absent
+  file: path="/var/www/{{edu_classification_keyword_path}}.gz" state=absent
   tags:
   - classification-keyword
 
