@@ -24,6 +24,16 @@
         ProxyPass /edu-sharing  ajp://localhost:{{tomcat_ajp_port}}/edu-sharing
 {% endif %}
 
+{% if activate_classification_keywords is defined and activate_classification_keywords %}
+        DocumentRoot /var/www
+        
+        <Directory classification-keywords/ >
+          Options Indexes FollowSymLinks MultiViews
+          AllowOverride All
+          Require all granted
+        </Directory>
+{% endif %}
+
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

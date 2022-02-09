@@ -18,6 +18,9 @@
       - antivirus
   - include: edusharing.yml
   - include: users.yml
+  - include: classification-keyword.yml
+    become: true
+    when: activate_classification_keywords is defined and activate_classification_keywords
   - include: jobs.yml
   - include: pixabay.yml
     when: connect_content_pixabay

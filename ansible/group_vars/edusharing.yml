@@ -177,6 +177,20 @@ alfresco_ccmodel_add_custom_properties:
 # 
 edu_custom_licenses:
 
+
+# define config for classifications keywords
+# activate the classification-keyword (true/false)
+activate_classification_keywords: false
+# activate the classification-keyword update (true/false)
+activate_classification_keywords_update: false
+# Override the default local file 
+classification_keywords_force_download: false
+# define the classification-keyword interval in days = 1 means every day
+classification_keywords_update_interval: 15
+# Classification-Keywords-URL (for download)
+classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
+
+
 edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-sharing (appid - id of the LMS, public_key - public key of the LMS (from the xml-file), host - public IP of the LMS)
 #  - appid: ""
 #    public_key: ""

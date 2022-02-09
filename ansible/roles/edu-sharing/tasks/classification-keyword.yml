@@ -1,0 +1,65 @@
+---
+
+- name: Ensure gzip is present
+  package:
+    name: ["gzip"]
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+
+- name : delete old classification_keywords.xml
+  file:
+    path: "/var/www/classification-keywords/classification_keywords.xml"
+    state: absent
+  when: classification_keywords_force_download
+  tags:
+  - classification-keyword
+
+- name: Ensure classification keywords dir exists
+  file: 
+    path: "/var/www/classification-keywords" 
+    state: directory
+    group: "www-data"
+    owner: "www-data"
+  tags:
+  - classification-keyword
+
+- name: check if classification_keywords xml file exist
+  stat: path="/var/www/classification-keywords/classification_keywords.xml"
+  register: classification_keywords_xml_file_exist
+  tags: 
+  - classification-keyword
+
+- name: download classification keywords gz format
+  get_url:
+    url: '{{classification_keywords_url}}'
+    dest: "/var/www/classification-keywords/classification_keywords.xml.gz"
+    group: "www-data"
+    owner: "www-data"
+    force: yes
+  when: not classification_keywords_xml_file_exist.stat.exists
+  tags:
+  - classification-keyword
+
+- name: unzip classification keywords gz format
+  command:
+    chdir: '/var/www/classification-keywords/'
+    cmd: 'gunzip classification_keywords.xml.gz'
+    creates: '/var/www/classification-keywords/classification_keywords.xml'
+  when: not classification_keywords_xml_file_exist.stat.exists
+  tags:
+  - classification-keyword
+
+- name: remove gz file
+  file: path="/var/www/classification-keywords/classification_keywords.xml.gz" state=absent
+  tags:
+  - classification-keyword
+
+- name: Add job for classification keywords
+  set_fact:
+    edu_jobs_all: > 
+         {{ edu_jobs_all | default([], true) + [{'jobClass': 'org.edu_sharing.repository.server.jobs.quartz.ImportFactualTermMarc21', 'params': { 'fileUri': '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/classification-keywords/classification_keywords.xml' } }] }}
+  tags:
+  - classification-keyword
