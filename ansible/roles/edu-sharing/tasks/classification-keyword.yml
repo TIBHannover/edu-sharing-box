@@ -11,7 +11,7 @@
 
 - name : delete old classification_keywords.xml
   file:
-    path: "/var/www/{{edu_classification_keyword_default_path}}"
+    path: "/var/www/{{edu_classification_keyword_path}}"
     state: absent
   when: classification_keywords_force_download
   tags:
