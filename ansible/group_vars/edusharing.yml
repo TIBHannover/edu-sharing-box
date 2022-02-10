@@ -189,6 +189,8 @@ classification_keywords_force_download: false
 classification_keywords_update_interval: 15
 # Classification-Keywords-URL (for download)
 classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
+# classification keyword default file 
+edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
 
 
 edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-sharing (appid - id of the LMS, public_key - public key of the LMS (from the xml-file), host - public IP of the LMS)

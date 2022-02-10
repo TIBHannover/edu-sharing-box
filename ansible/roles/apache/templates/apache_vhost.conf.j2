@@ -26,8 +26,7 @@
 
 {% if activate_classification_keywords is defined and activate_classification_keywords %}
         DocumentRoot /var/www
-        
-        <Directory classification-keywords/ >
+        <Directory /var/www/{{edu_classification_keyword_path | dirname }} >
           Options Indexes FollowSymLinks MultiViews
           AllowOverride All
           Require all granted
