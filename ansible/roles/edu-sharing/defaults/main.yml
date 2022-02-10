@@ -54,6 +54,3 @@ oersi_port: "443"
 oersi_scheme: "https"
 oersi_pathprefix: "/resources/api-internal/search"
 oersi_index: "oer_data"
-
-# classification keyword default file
-edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
