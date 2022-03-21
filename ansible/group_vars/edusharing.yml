@@ -222,5 +222,5 @@ edu_custom_options: # list of custom options for the edu-sharing
     #         <openInNew>true</openInNew>
     #         <mode>nodes</mode>
     #         <isDirectory>false</isDirectory>
-    #         <url>http://192.168.98.101/edu-sharing/components/render/:id</url>
+    #         <url>{{edu_sharing_url}}/components/render/:id</url>
     #     </customOptions>
