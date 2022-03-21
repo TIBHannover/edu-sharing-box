@@ -195,3 +195,12 @@ edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-shar
 #  - appid: ""
 #    public_key: ""
 #    host: ""
+
+# Define a list of jobs that should be executed on script run
+#  Since doesn't have a documetation yet, in edu-sharing, you can find all the jobs in rest-api: https://{{base_Url}}/edu-sharing/rest/admin/v1/jobs/all
+#  example:
+#  - job_class: "org.edu_sharing.repository.server.jobs.quartz.TrashcanCleanerJob"
+#    parameters:
+#      - timeToKeep: "30" # in days ex. keep last 30 days
+#        batchSize:  "5000" # how many nodes should be run in one batch
+edu_system_jobs: # list of system jobs.
