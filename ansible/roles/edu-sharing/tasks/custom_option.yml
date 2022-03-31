@@ -1,0 +1,36 @@
+---
+
+# Implment custom_option task
+
+
+- name: Add custom Option 
+  block:
+   # first remove all custom options
+    - name: clear the custom options, before we add it.
+      xml:
+        path: '{{ edu_client_config_xml_path }}'
+        xpath: "/config/values/customOptions"
+        state: absent
+        pretty_print: yes
+      tags: edu-sharing-config
+
+    # then we will add again it in client.config.xml
+    - name: Adding custom option to client.config.xml
+      xml:
+        path: '{{ edu_client_config_xml_path }}'
+        xpath: /config/values
+        add_children: "{{ edu_custom_options | default([], true) }}"
+        input_type: "xml"
+        pretty_print: yes
+      when: edu_custom_options | default([], true) | length>0
+      tags: edu-sharing-config
+
+  rescue:
+    - name: clear the custom options, if something goes wrong.
+      xml:
+        path: '{{ edu_client_config_xml_path }}'
+        xpath: "/config/values/customOptions"
+        state: absent
+        pretty_print: yes
+      when: edu_custom_options | default([], true) | length>0
+      tags: edu-sharing-config

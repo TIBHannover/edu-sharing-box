@@ -198,6 +198,36 @@ edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-shar
 #    public_key: ""
 #    host: ""
 
+
+
+# Edu-sharing doesn't have a documentation for this yet, but I will write here some of property that can be used in the configuration
+# if you need to know more about the properties, see the https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/org/edu_sharing/alfresco/service/config/model/ContextMenuEntry.java
+#  Additional custom menu items as an array with the following attributes
+#  - position: "Position in menu, if negative value, count from end"
+#  - icon : "Material icon"
+#  - name : "Name of the entry, can also contain language strings"
+#  - url : "Url when called (use :id for the node id) "
+#  - path : "(Optional instead of url): Internal path (e.g. 'workspace')"
+#  - scope : "(from 5.0) Specification of the scope to support highlighting depending on the environment (e.g. 'workspace')"
+#  - isSeparate : "Should the menu item be separated (with a line above it) (optional)"
+#  - isDisabled : "If true, the button is greyed out and has no function (optional)"
+#  - onlyDesktop : "If true, the button is only shown on desktop (optional)"
+#  - openInNew: "If true, the button opens in a new tab (optional)"
+#  - onlyWeb: "Optional, default: false. If 'true' the entry will not be displayed in Cordova apps"
+
+edu_custom_options: # list of custom options for the edu-sharing
+    # - > 
+    #     <customOptions>
+    #         <group>View</group>
+    #         <name>Im neuen Fenster öffnen</name>
+    #         <icon>open_in_new</icon>
+    #         <openInNew>true</openInNew>
+    #         <mode>nodes</mode>
+    #         <isDirectory>false</isDirectory>
+    #         <url>{{edu_sharing_url}}/components/render/:id</url>
+    #     </customOptions>
+
+
 # Define a list of jobs that should be executed on script run
 #  Since doesn't have a documetation yet, in edu-sharing, you can find all the jobs in rest-api: https://{{base_Url}}/edu-sharing/rest/admin/v1/jobs/all
 #  example:
