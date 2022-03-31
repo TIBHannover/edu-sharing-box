@@ -28,7 +28,7 @@ register_moodle: false
 moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
 
-edu_version: 5.0.0
+edu_version: 6.0.1
 # method how to retrieve the edu-sharing archive that should be installed
 #  'download' - use the archive from 'edu_sharing_archive_url'
 #  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
@@ -189,6 +189,8 @@ classification_keywords_force_download: false
 classification_keywords_update_interval: 15
 # Classification-Keywords-URL (for download)
 classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
+# classification keyword default file 
+edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
 
 
 edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-sharing (appid - id of the LMS, public_key - public key of the LMS (from the xml-file), host - public IP of the LMS)
@@ -224,3 +226,13 @@ edu_custom_options: # list of custom options for the edu-sharing
     #         <isDirectory>false</isDirectory>
     #         <url>{{edu_sharing_url}}/components/render/:id</url>
     #     </customOptions>
+
+
+# Define a list of jobs that should be executed on script run
+#  Since doesn't have a documetation yet, in edu-sharing, you can find all the jobs in rest-api: https://{{base_Url}}/edu-sharing/rest/admin/v1/jobs/all
+#  example:
+#  - job_class: "org.edu_sharing.repository.server.jobs.quartz.TrashcanCleanerJob"
+#    parameters:
+#      - timeToKeep: "30" # in days ex. keep last 30 days
+#        batchSize:  "5000" # how many nodes should be run in one batch
+edu_system_jobs: # list of system jobs.
