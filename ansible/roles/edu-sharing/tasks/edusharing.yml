@@ -141,7 +141,8 @@
   with_items: '{{ edu_custom_licenses | default([], true) }}'
   loop_control:
     loop_var: custom_license
-
+#  add custom options task
+- include_tasks: custom_option.yml
 - name: edit i18n
   lineinfile:
     backrefs: yes
