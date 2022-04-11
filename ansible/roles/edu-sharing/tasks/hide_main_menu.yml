@@ -1,6 +1,4 @@
 ---
-
-
 - name: Clear hideMainMenu entries from client config
   xml:
     path: '{{ edu_client_config_xml_path }}'
