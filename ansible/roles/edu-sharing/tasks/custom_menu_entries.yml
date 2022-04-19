@@ -6,12 +6,12 @@
 #   - name: "SIDEBAR.EXAMPLE"  # (Required)  without SIDEBAR. prefix it will not be translated, just show the name
 #     scope: "workspace"          # (Optional) for now doesn't work, you can remove it, default is "workspace"
 #     labels:                  #(Optional) use for translation, work only if name has prefix SIDEBAR.
-#       - ["en","Twillo Search"]
-#       - ["de","Twillo Suche"]
+#       - ["en","Example Search"]
+#       - ["de","Example Suche"]
 #     icon: "open_in_new"       # (Optional) Material icon  default is "open_in_new"
 #     position: 2               # (Optional) Position in menu, if negative value, count from end, higher value means higher position, default is -1
 #     path: "search"            # (Optional) Internal path, if path is set, url must be removed from the menu entry
-#     url: "https://www.twillo.de/" # (Optional) url, if url is set, path must be removed from the menu entry
+#     url: "https://www.example.de/" # (Optional) url, if url is set, path must be removed from the menu entry
 #     isDisabled: 'false'         # (Optional) if true, the button is greyed out and has no function, default: 'false'
 #     onlyDesktop: 'false'        # (Optional) if true, the button is only shown on desktop, default: 'false'
 #     onlyWeb: 'false'            # (Optional) if true, the button is not shown in Cordova apps, default: 'false'
