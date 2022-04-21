@@ -242,3 +242,16 @@ edu_custom_options: # list of custom options for the edu-sharing
 #      - timeToKeep: "30" # in days ex. keep last 30 days
 #        batchSize:  "5000" # how many nodes should be run in one batch
 edu_system_jobs: # list of system jobs.
+
+# Define a list of custom menus that should be added to the edu-sharing main menu
+# if you need to know more about the properties, see: ../ansible/roles/edu-sharing/tasks/custom_menu_entries.yml
+edu_custom_menu_entries: # list of custom menu entries
+    # - name: "SIDEBAR.EXAMPLE"
+    #   scope: "workspace"
+    #   labels:
+    #     - ["en","EXAMPLE Search"]
+    #     - ["de","EXAMPLE Suche"]
+    #   icon: "open_in_new"
+    #   position: 2
+    #   openInNew: true
+    #   url: "https://www.example.de/"
