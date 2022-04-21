@@ -73,6 +73,12 @@ edu_banner_url:
 edu_banner_href:
 edu_banner_components:
   - search
+# list of main menus to be hidden
+# example:
+# edu_hidden_menus:
+#  - 'search'
+#  - 'collections'
+edu_hide_main_menus:
 # path to a custom banner that will be copied into the edu-sharing instance
 edu_banner_path:
 edu_logo_path:
