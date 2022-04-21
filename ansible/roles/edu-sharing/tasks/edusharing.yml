@@ -110,6 +110,9 @@
     pretty_print: yes
   tags: edu-sharing-config
 
+# hide main menu entries
+- include: hide_main_menu.yml
+
 - include: shibboleth_before.yml
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
   tags:
