@@ -1,6 +1,6 @@
 ---
 # need to downgrade java, because alfresco 5.2 cannot run out-of-the-box with later versions (problems with modularization in java 9)
-java_name: zulu8.54.0.21-ca-jdk8.0.292-linux_x64
+java_name: zulu8.62.0.19-ca-jdk8.0.332-linux_x64
 java_archive_url: 'https://cdn.azul.com/zulu/bin/{{java_name}}.tar.gz'
 
 tomcat_version: '9.0.54'
