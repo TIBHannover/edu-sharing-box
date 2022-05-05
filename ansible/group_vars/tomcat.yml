@@ -3,7 +3,7 @@
 java_name: zulu8.62.0.19-ca-jdk8.0.332-linux_x64
 java_archive_url: 'https://cdn.azul.com/zulu/bin/{{java_name}}.tar.gz'
 
-tomcat_version: '9.0.54'
+tomcat_version: '9.0.62'
 tomcat_cleanup_logfiles: true # cleanup logfiles of tomcat true|false
 tomcat_cleanup_cron_hour: '1'
 tomcat_cleanup_cron_minute: '0'
