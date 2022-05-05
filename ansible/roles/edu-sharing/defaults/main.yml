@@ -49,7 +49,7 @@ edu_oauth_trusted_clients:
 mirror_vocabs_hour: "4"
 
 oersi_caption: "Überregionale Suche"
-oersi_host: "oersi.de"
+oersi_host: "oersi.org"
 oersi_port: "443"
 oersi_scheme: "https"
 oersi_pathprefix: "/resources/api-internal/search"
