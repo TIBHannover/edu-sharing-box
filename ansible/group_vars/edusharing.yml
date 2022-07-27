@@ -22,7 +22,7 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
-connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
+connect_content_oersi: true  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
 register_moodle: false
 moodle_host: 192.168.98.105
@@ -86,6 +86,7 @@ edu_logo_path:
 # example: ['local/path/example.svg', 'example.svg']
 edu_custom_images:
 edu_mds_override_paths:
+  - mds_oersi_override.xml
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
 # List of email template you want to override.
