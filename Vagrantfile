@@ -34,8 +34,6 @@ Vagrant.configure("2") do |config|
     ansible.install_mode = "pip"
     ansible.pip_install_cmd = "sudo apt-get install -y python3-distutils && curl -s https://bootstrap.pypa.io/get-pip.py | sudo python3"
     ansible.version = "2.9.27"
-    #ansible.version = "latest"
-#  config.vm.provision "ansible" do |ansible|
     ansible.compatibility_mode = "2.0"
     #ansible.verbose = "vvv"
     ansible.playbook = "ansible/system.yml"
