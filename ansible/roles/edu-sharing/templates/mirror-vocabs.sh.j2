@@ -1,6 +1,11 @@
 #!/bin/sh
 
 {% for mirror in mirror_vocabularies %}
-wget -q --mirror "{{ mirror.url }}" -P {{ mirror.target_directory }}
+dest="{{mirror.target_directory}}/{{mirror.sheme_folder}}"
+wget -q --mirror "{{ mirror.url }}" -P {{ mirror.target_directory }} 
 chown -R www-data:www-data {{ mirror.target_directory }}
+{% if mirror.isSorted == 'true' %}
+jq --raw-output  '.hasTopConcept | map(.) | sort_by(.prefLabel.de) | "{hasTopConcept:\(.)}"' "$dest"/scheme.json > "$dest"/sorted_scheme.json
+cp "$dest"/sorted_scheme.json "$dest"/scheme.json
+{% endif %}
 {% endfor %}
