@@ -111,6 +111,8 @@ mirror_vocabularies: # list of vocabularies a local mirror should be created for
 #    target_directory: "/var/www/oer/vocabs-mirror"
 #  - url: "https://w3id.org/kim/hcrt/scheme.json"
 #    target_directory: "/var/www/oer/vocabs-mirror"
+#    isSorted: "true"
+#    variant: "true"
 
 edu_migration_replace_mapping: # replace mapping jobs that should be executed during edu-sharing update (startFolder - root node, property - property that should be migrated, data - csv mapping)
 #  - startFolder: 869665e9-7e42-49af-bd30-6469e59904c5
