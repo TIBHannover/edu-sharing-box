@@ -1,10 +1,10 @@
 #!/bin/sh
 
 {% for mirror in mirror_vocabularies %}
-    wget -q --mirror "{{ mirror.url }}" -P {{ mirror.target_directory }}
-    chown -R www-data:www-data {{ mirror.target_directory }}
-    {% if ((mirror.isSorted | default("false") == 'true') and (mirror.variant | default("false") == 'true')) %}
-        path={{ mirror.url | regex_replace('^(.*?)https://(.*)$', '\\1\\2') | regex_replace('^(.*?)scheme.json(.*)$', '\\1\\2')}}
-         jq --raw-output  '.hasTopConcept | map(.) | sort_by(.prefLabel.de) | "{hasTopConcept:\(.)}"' {{ mirror.target_directory }}/$path/scheme.json > {{ mirror.target_directory }}/$path/scheme_sort.json
-    {% endif %}
+wget -q --mirror "{{ mirror.url }}" -P {{ mirror.target_directory }}
+chown -R www-data:www-data {{ mirror.target_directory }}
+{% if ((mirror.isSorted | default("false") == 'true') and (mirror.createVariant | default("false") == 'true')) %}
+path={{ mirror.url [8:] | dirname }}
+jq --raw-output  '.hasTopConcept | map(.) | sort_by(.prefLabel.de) | "{hasTopConcept:\(.)}"' {{ mirror.target_directory }}/$path/scheme.json > {{ mirror.target_directory }}/$path/scheme_sort.json
+{% endif %}
 {% endfor %}
