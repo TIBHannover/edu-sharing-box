@@ -4,7 +4,7 @@
 wget -q --mirror "{{ mirror.url }}" -P {{ mirror.target_directory }}
 chown -R www-data:www-data {{ mirror.target_directory }}
 {% if ((mirror.isSorted | default("false") == 'true') and (mirror.createVariant | default("false") == 'true')) %}
-path={{ mirror.url | regex_replace('^http?s://') | dirname }}
+path={{ mirror.url | regex_replace('^https?://') | dirname }}
 jq --raw-output '.hasTopConcept | map(.) | sort_by(.prefLabel.de) | "{hasTopConcept:\(.)}"' {{ mirror.target_directory }}/$path/{{ mirror.url | basename }}> {{ mirror.target_directory }}/$path/scheme_sort.json
 {% endif %}
 {% endfor %}
