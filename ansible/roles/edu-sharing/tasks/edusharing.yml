@@ -123,6 +123,7 @@
   with_items: '{{ edu_custom_menu_entries | default([], true) }}'
   loop_control:
     loop_var: custom_menu_entry
+  tags: edu-sharing-config
 
 # -------- Menu entries (END)-------- #
 
