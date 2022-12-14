@@ -10,8 +10,10 @@ opencast_importer_instances:  # configure the opencast-instances that should be 
     orgUrl: 'https://opencast.org'
     #orgRor: '04qmmjx98'
     protocol: 'https'
+    #defaultThumbnailUrl: ''
     domain: 'develop.opencast.org'
     blacklistedIds: []
+    useSeriesDescriptionInEpisodes: 'false'
 
 opencast_importer_cron_hour: 4
 opencast_importer_cron_minute: 0

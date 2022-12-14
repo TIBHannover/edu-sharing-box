@@ -7,8 +7,10 @@ module.exports = [
   orgRor: '{{ oc_instance.orgRor }}',
 {% endif %}
   protocol: '{{ oc_instance.protocol }}',
+  defaultThumbnailUrl: '{{ oc_instance.defaultThumbnailUrl | default('') }}',
   domain: '{{ oc_instance.domain }}',
-  blacklistedIds: [ {{ oc_instance.blacklistedIds | map('regex_replace','^(.*)$', "'\\1'") | join(', ') }} ]
+  blacklistedIds: [ {{ oc_instance.blacklistedIds | map('regex_replace','^(.*)$', "'\\1'") | join(', ') }} ],
+  useSeriesDescriptionInEpisodes: {{ oc_instance.useSeriesDescriptionInEpisodes | default('false') }}
 },
 {% endfor %}
 ]
