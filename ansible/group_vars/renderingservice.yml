@@ -31,6 +31,8 @@ esrender_custom_config_files:
 activate_auto_clean_cache: false
 # Cleaning of cache is done after: <every x> days, example: "*/15" = every 15 days
 clean_cache_schedule_day:
+# Cleaning of cache is done after: <every x> hours, example: "*/15" = every 15 hours
+clean_cache_schedule_hour:
 # Cron job state (present|absent)
 clean_cache_state: present
 # Define Limit uf used space for cache (Decimal number between 0.0 and 1.0),default is 0.8==80%
