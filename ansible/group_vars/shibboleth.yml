@@ -14,8 +14,8 @@ shibboleth_sp_support_contact: pleasechange@nodomain.com
 shibboleth_sp_help_location: /contact.html
 #shibboleth_sp_discovery_service_url: https://wayf.aai.dfn.de/DFN-AAI-Test/wayf # TEST
 shibboleth_sp_discovery_service_url: https://wayf.aai.dfn.de/DFN-AAI-Basic/wayf # PROD
-#shibboleth_sp_metadata_provider_url: http://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml # TEST
-shibboleth_sp_metadata_provider_url: https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml # PROD
+#shibboleth_sp_metadata_provider_url: http://www.aai.dfn.de/metadata/dfn-aai-test-metadata.xml # TEST
+shibboleth_sp_metadata_provider_url: http://www.aai.dfn.de/metadata/dfn-aai-idp-metadata.xml # PROD
 # Set the path to your (key and certificate) credential files.
 # If not set a new (tmp) cert and key file will be generated. You can find these files in /etc/shibboleth/tmp-cert.pem and /etc/shibboleth/tmp-key.pem.
 # If you need to replace the existing credential files, you can
@@ -46,7 +46,7 @@ shibboleth_sp_attribute_map_file: attribute-map.xml       # the file that is use
 shibboleth_sp_remote_user_attributes: 'eduPersonUniqueId eppn' # 'eduPersonUniqueId persistent-id eppn' # attributes that should be used for the remote user - see https://wiki.shibboleth.net/confluence/display/SP3/ApplicationDefaults -> REMOTE_USER for details
 shibboleth_sp_error_css_file: shib-error.css              # stylesheet used for error pages
 shibboleth_sp_error_templates_logo_location: 'https://wiki.aai.dfn.de/_media/logo.png'    # logo that is used in the error templates
-shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/fileadmin/metadata/dfn-aai.pem # DFN AAI certificate that should be used for validation of the metadata
+shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/metadata/dfn-aai.pem # DFN AAI certificate that should be used for validation of the metadata
 shibboleth_sp_sessions_handler_ssl: true                  # Set Sessions attribute handlerSSL
 shibboleth_sp_sessions_cookie_props: '{{ "https" if shibboleth_sp_sessions_handler_ssl else "http" }}' # Set Sessions attribute cookieProps
 shibboleth_sp_handler_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}{{ shibboleth_sp_base_path }}/Shibboleth.sso'

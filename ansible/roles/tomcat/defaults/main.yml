@@ -1,5 +1,5 @@
 ---
-tomcat_version: '9.0.54'
+tomcat_version: '9.0.62'
 tomcat_inst_dir: /opt
 
 tomcat_port: 8080

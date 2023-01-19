@@ -22,13 +22,13 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
-connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
+connect_content_oersi: true  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
 register_moodle: false
 moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
 
-edu_version: 5.0.0
+edu_version: 6.0.1
 # method how to retrieve the edu-sharing archive that should be installed
 #  'download' - use the archive from 'edu_sharing_archive_url'
 #  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
@@ -73,6 +73,12 @@ edu_banner_url:
 edu_banner_href:
 edu_banner_components:
   - search
+# list of main menus to be hidden
+# example:
+# edu_hidden_menus:
+#  - 'search'
+#  - 'collections'
+edu_hide_main_menus:
 # path to a custom banner that will be copied into the edu-sharing instance
 edu_banner_path:
 edu_logo_path:
@@ -80,6 +86,7 @@ edu_logo_path:
 # example: ['local/path/example.svg', 'example.svg']
 edu_custom_images:
 edu_mds_override_paths:
+  - mds_oersi_override.xml
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
 # List of email template you want to override.
@@ -176,3 +183,76 @@ alfresco_ccmodel_add_custom_properties:
 #       image: "apache.svg"  # Required
 # 
 edu_custom_licenses:
+
+
+# define config for classifications keywords
+# activate the classification-keyword (true/false)
+activate_classification_keywords: false
+# activate the classification-keyword update (true/false)
+activate_classification_keywords_update: false
+# Override the default local file 
+classification_keywords_force_download: false
+# define the classification-keyword interval in days = 1 means every day
+classification_keywords_update_interval: 15
+# Classification-Keywords-URL (for download)
+classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
+# classification keyword default file 
+edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
+
+
+edu_connected_lms: # list of LMS configurations. Connect these LMS with edu-sharing (appid - id of the LMS, public_key - public key of the LMS (from the xml-file), host - public IP of the LMS)
+#  - appid: ""
+#    public_key: ""
+#    host: ""
+
+
+
+# Edu-sharing doesn't have a documentation for this yet, but I will write here some of property that can be used in the configuration
+# if you need to know more about the properties, see the https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/org/edu_sharing/alfresco/service/config/model/ContextMenuEntry.java
+#  Additional custom menu items as an array with the following attributes
+#  - position: "Position in menu, if negative value, count from end"
+#  - icon : "Material icon"
+#  - name : "Name of the entry, can also contain language strings"
+#  - url : "Url when called (use :id for the node id) "
+#  - path : "(Optional instead of url): Internal path (e.g. 'workspace')"
+#  - scope : "(from 5.0) Specification of the scope to support highlighting depending on the environment (e.g. 'workspace')"
+#  - isSeparate : "Should the menu item be separated (with a line above it) (optional)"
+#  - isDisabled : "If true, the button is greyed out and has no function (optional)"
+#  - onlyDesktop : "If true, the button is only shown on desktop (optional)"
+#  - openInNew: "If true, the button opens in a new tab (optional)"
+#  - onlyWeb: "Optional, default: false. If 'true' the entry will not be displayed in Cordova apps"
+
+edu_custom_options: # list of custom options for the edu-sharing
+    # - > 
+    #     <customOptions>
+    #         <group>View</group>
+    #         <name>Im neuen Fenster öffnen</name>
+    #         <icon>open_in_new</icon>
+    #         <openInNew>true</openInNew>
+    #         <mode>nodes</mode>
+    #         <isDirectory>false</isDirectory>
+    #         <url>{{edu_sharing_url}}/components/render/:id</url>
+    #     </customOptions>
+
+
+# Define a list of jobs that should be executed on script run
+#  Since doesn't have a documetation yet, in edu-sharing, you can find all the jobs in rest-api: https://{{base_Url}}/edu-sharing/rest/admin/v1/jobs/all
+#  example:
+#  - job_class: "org.edu_sharing.repository.server.jobs.quartz.TrashcanCleanerJob"
+#    parameters:
+#      - timeToKeep: "30" # in days ex. keep last 30 days
+#        batchSize:  "5000" # how many nodes should be run in one batch
+edu_system_jobs: # list of system jobs.
+
+# Define a list of custom menus that should be added to the edu-sharing main menu
+# if you need to know more about the properties, see: ../ansible/roles/edu-sharing/tasks/custom_menu_entries.yml
+edu_custom_menu_entries: # list of custom menu entries
+    # - name: "SIDEBAR.EXAMPLE"
+    #   scope: "workspace"
+    #   labels:
+    #     - ["en","EXAMPLE Search"]
+    #     - ["de","EXAMPLE Suche"]
+    #   icon: "open_in_new"
+    #   position: 2
+    #   openInNew: true
+    #   url: "https://www.example.de/"

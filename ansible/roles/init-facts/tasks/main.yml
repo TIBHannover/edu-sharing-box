@@ -1,2 +1,2 @@
 ---
-- set_fact: work_user="{{ ansible_user }}"
+- set_fact: work_user="{{ ansible_user | default(lookup('env', 'USER')) }}"

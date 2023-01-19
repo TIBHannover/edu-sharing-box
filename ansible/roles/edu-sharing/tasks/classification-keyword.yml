@@ -1,0 +1,65 @@
+---
+
+- name: Ensure gzip is present
+  package:
+    name: ["gzip"]
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+
+- name : delete old classification_keywords.xml
+  file:
+    path: "/var/www/{{edu_classification_keyword_path}}"
+    state: absent
+  when: classification_keywords_force_download
+  tags:
+  - classification-keyword
+
+- name: Ensure classification keywords dir exists
+  file: 
+    path: '/var/www/{{edu_classification_keyword_path | dirname}}'
+    state: directory
+    group: "www-data"
+    owner: "www-data"
+  tags:
+  - classification-keyword
+
+- name: check if classification_keywords xml file exist
+  stat: path="/var/www/{{edu_classification_keyword_path}}"
+  register: classification_keywords_xml_file_exist
+  tags: 
+  - classification-keyword
+
+- name: download classification keywords gz format
+  get_url:
+    url: '{{classification_keywords_url}}'
+    dest: "/var/www/{{edu_classification_keyword_path}}.gz"
+    group: "www-data"
+    owner: "www-data"
+    force: yes
+  when: not classification_keywords_xml_file_exist.stat.exists
+  tags:
+  - classification-keyword
+
+- name: unzip classification keywords gz format
+  command:
+    chdir: '/var/www/{{edu_classification_keyword_path | dirname  }}'
+    cmd: 'gunzip {{edu_classification_keyword_path | basename }}.gz'
+    creates: '/var/www/{{edu_classification_keyword_path}}'
+  when: not classification_keywords_xml_file_exist.stat.exists
+  tags:
+  - classification-keyword
+
+- name: remove gz file
+  file: path="/var/www/{{edu_classification_keyword_path}}.gz" state=absent
+  tags:
+  - classification-keyword
+
+- name: Add job for classification keywords
+  set_fact:
+    edu_jobs_all: > 
+         {{ edu_jobs_all | default([], true) + [{'jobClass': 'org.edu_sharing.repository.server.jobs.quartz.ImportFactualTermMarc21', 'params': { 'fileUri': '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/{{edu_classification_keyword_path}}' } }] }}
+  tags:
+  - classification-keyword

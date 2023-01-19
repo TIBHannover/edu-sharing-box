@@ -15,3 +15,9 @@
     chdir: '{{ tomcat_home }}/shared/classes'
     cmd: '{{ java_home }}/bin/jar xf {{ tomcat_home }}/webapps/edu-sharing/WEB-INF/lib/{{ item }} org'
   loop: "{{ edu_sharing_plugin_files | default([], true) }}"
+
+- name: Extract plugin files into edu-sharing classes
+  command:
+    chdir: '{{ tomcat_home }}/webapps/edu-sharing/WEB-INF/classes'
+    cmd: '{{ java_home }}/bin/jar xf {{ tomcat_home }}/webapps/edu-sharing/WEB-INF/lib/{{ item }} org'
+  loop: "{{ edu_sharing_plugin_files | default([], true) }}"

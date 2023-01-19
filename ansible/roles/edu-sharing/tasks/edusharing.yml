@@ -110,6 +110,26 @@
     pretty_print: yes
   tags: edu-sharing-config
 
+# -------- Menu entries (BEGIN) --------#
+- name: Remove all menuEntries from client config 
+  xml:
+    path: '{{ edu_client_config_xml_path }}'
+    xpath: "/config/values/menuEntries"
+    state: absent
+    pretty_print: yes
+  tags: edu-sharing-config
+
+- include_tasks: custom_menu_entries.yml
+  with_items: '{{ edu_custom_menu_entries | default([], true) }}'
+  loop_control:
+    loop_var: custom_menu_entry
+  tags: edu-sharing-config
+
+# -------- Menu entries (END)-------- #
+
+# hide main menu entries
+- include: hide_main_menu.yml
+
 - include: shibboleth_before.yml
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
   tags:
@@ -141,7 +161,8 @@
   with_items: '{{ edu_custom_licenses | default([], true) }}'
   loop_control:
     loop_var: custom_license
-
+#  add custom options task
+- include_tasks: custom_option.yml
 - name: edit i18n
   lineinfile:
     backrefs: yes
@@ -291,6 +312,9 @@
   tags: edu-sharing-config
 
 - include: model.yml
+  tags: edu-sharing-config
+
+- include: lms.yml
   tags: edu-sharing-config
 
 - name: Copy mail template
