@@ -6,7 +6,7 @@ The [edu-sharing connector](https://github.com/edu-sharing/edu-connector) allows
 
 to install **edu-sharing connector**  in server you need enable, by making true the variable  `enable_edu_connector: true` (default is **false**)  in [*/group_vars/all.yml*](https://github.com/TIBHannover/edu-sharing-box/blob/master/ansible/group_vars/all.yml)
 
-In same file, You can enable/disable edu-connector modules like H5P,OnlyOffice,TINYMCE ( default all modules are enabled)
+In same file, You can enable/disable edu-connector modules like H5P,TINYMCE ( default all modules are enabled)
 
 ```yml
   # Edu-connector enabled modules (default active all modules)

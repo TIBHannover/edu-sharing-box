@@ -9,7 +9,7 @@
 
 - name: install composer dependencies
   shell:
-    cmd: 'composer install'
+    cmd: 'composer install --ignore-platform-reqs'
     chdir: '{{ edu_connector_base_dir }}'
   when: composer_json_exists.stat.exists
   tags:
@@ -29,32 +29,6 @@
   shell:
     cmd: "php install/install.php"
     chdir: '{{ edu_connector_base_dir }}'
-  tags:
-    - educonnector
-
-- name: Ensures  /var/cache/eduConnector has write access for www-data
-  file: 
-    path: '{{ edu_connector_cache_dir }}' 
-    state: "directory"
-    owner: "www-data"
-    group: "www-data"
-    mode: "0755"
-    recurse: yes
-  notify:
-    - restart apache2
-  tags:
-    - educonnector
-  
-- name: Ensures www/eduConnector has write access for www-data
-  file: 
-    path: '{{ edu_connector_base_dir }}' 
-    state: "directory"
-    owner: "www-data"
-    group: "www-data"
-    mode: "0755"
-    recurse: yes
-  notify:
-    - restart apache2
   tags:
     - educonnector
 

@@ -15,7 +15,7 @@ enable_only_office: false
 
 # enable/disable edu-connector installation
 # enable: true
-enable_edu_connector: true
+enable_edu_connector: false
 edu_connector_host: '{{ esrender_host }}'
 edu_connector_url: '{{ edu_sharing_protocol | default("http") }}://{{ edu_connector_host }}/eduConnector'
 # Edu-connector enabled modules (default active all modules)

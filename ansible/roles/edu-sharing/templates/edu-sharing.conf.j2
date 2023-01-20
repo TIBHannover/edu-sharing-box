@@ -25,9 +25,9 @@ connectorList:{
 {% if enable_edu_connector is defined and enable_edu_connector and edu_connector_enable_modules.tiny_mce %}
 // enable TINYMCE
 connectorList.connectors +=  {
-   id:"H5P", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
+   id:"TINYMCE", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
    filetypes:[
-     {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
+     {mimetype: "application/text",filetype: "html", ccressourcetype: "html", createable: true,editable: true}
    ]
 }
 {% endif %}
@@ -50,6 +50,8 @@ connectorList.connectors +=  {
      {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true},
      {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true},
    ]
+{% endif %}
+
 {% if activate_classification_keywords is defined and activate_classification_keywords and activate_classification_keywords_update is defined and activate_classification_keywords_update %}
 jobs.entries += {
     name: "Import Factual Term Marc 21",
