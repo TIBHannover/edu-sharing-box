@@ -30,7 +30,6 @@
   when: edu_connector_remove_existing
   tags:
   - root-task
-  - educonnector
 
 - name: Remove existing database with name 'eduConnector'
   mysql_db:
@@ -40,7 +39,6 @@
   when: edu_connector_remove_existing
   tags:
   - root-task
-  - educonnector
 
 - name: Create a new database with name 'eduConnector'
   mysql_db:
@@ -51,7 +49,6 @@
   when: edu_connector_remove_existing
   tags:
   - root-task
-  - educonnector
 
 - name: Create eduConnector database user
   mysql_user:
@@ -61,4 +58,3 @@
   become: yes
   tags:
   - root-task
-  - educonnector

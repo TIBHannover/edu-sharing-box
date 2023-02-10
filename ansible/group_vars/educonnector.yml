@@ -26,11 +26,5 @@ edu_connector_remove_existing: false
 
  # Download  file here : https://github.com/edu-sharing/edu-connector/blob/develop/config.dist.php, and make all the necessary changes to it.
 # add the path to your config.php file here.
-edu_connector_config_path: "config.php"
+edu_connector_config_path:
 
-#  edu-sharing credentials 
-edu_connector_credentials:
-  edu_sharing_user: 'admin'
-  edu_sharing_password: '{{alf_password}}'
-  edu_sharing_client_id: 'eduApp'
-  edu_sharing_client_secret: 'secret'

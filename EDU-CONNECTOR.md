@@ -11,9 +11,29 @@ In same file, You can enable/disable edu-connector modules like H5P,TINYMCE ( de
 ```yml
   # Edu-connector enabled modules (default active all modules)
     edu_connector_enable_modules:
-      h5p: true
-      only_office: true
-      tiny_mce: true
+      - id: 'TINYMCE'
+        icon: 'edit'
+        showNew: true
+        onlyDesktop: true
+        hasViewMode: true
+        filetypes:
+          - {mimetype: "text/html",filetype: "html",createable: true,editable: true,editorType: "tinymce"}
+      - id: 'H5P'
+        icon: 'edit'
+        showNew: true
+        onlyDesktop: true
+        hasViewMode: true
+        filetypes:
+          - {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
+      - id: 'ONLY_OFFICE'
+        icon: 'edit'
+        showNew: true
+        onlyDesktop: true
+        hasViewMode: true
+        filetypes:
+          - {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true}
+          - {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true}
+          - {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true}
 ```
  by default edu-connector will be installed in same host with render-service host, but we can separate it if we want to use a dedicate server for this application.
 

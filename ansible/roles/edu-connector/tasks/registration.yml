@@ -15,7 +15,7 @@
   uri:
     url: '{{edu_sharing_url}}/oauth2/token'
     method: POST
-    body: 'grant_type=password&client_id={{edu_connector_credentials.edu_sharing_client_id}}&client_secret={{edu_connector_credentials.edu_sharing_client_secret}}&username={{edu_connector_credentials.edu_sharing_user}}&password={{edu_connector_credentials.edu_sharing_password}}'
+    body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password={{alf_password}}'
     return_content: yes
   register: access_token_reply
   no_log: true

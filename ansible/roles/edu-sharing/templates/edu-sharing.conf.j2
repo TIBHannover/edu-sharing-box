@@ -21,35 +21,27 @@ connectorList:{
     connectors:[]
 }
 
-
-{% if enable_edu_connector is defined and enable_edu_connector and edu_connector_enable_modules.tiny_mce %}
-// enable TINYMCE
-connectorList.connectors +=  {
-   id:"TINYMCE", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
-   filetypes:[
-     {mimetype: "application/text",filetype: "html", ccressourcetype: "html", createable: true,editable: true}
-   ]
-}
-{% endif %}
-{% if enable_edu_connector is defined and enable_edu_connector and edu_connector_enable_modules.h5p %}
-// enable H5P
-connectorList.connectors +=  {
-   id:"H5P", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
-   filetypes:[
-     {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
-   ]
-}
-{% endif %}
-
-{% if enable_only_office is defined and enable_only_office and edu_connector_enable_modules.only_office %}
-// enable ONLY_OFFICE
-connectorList.connectors +=  {
-   id:"ONLY_OFFICE", icon:"edit", showNew: true, onlyDesktop: true, hasViewMode: true,
-   filetypes:[
-     {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true},
-     {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true},
-     {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true},
-   ]
+{% if enable_edu_connector is defined and enable_edu_connector %}
+ {% for module in edu_connector_enable_modules %}
+   connectorList.connectors +=  {
+        id:"{{module.id}}", icon:"{{module.icon}}", showNew: {{module.showNew|string|lower}}, onlyDesktop: {{module.onlyDesktop|string|lower}}, hasViewMode: {{module.hasViewMode|string|lower}},
+        filetypes:[
+            {%for fileType in module.filetypes %}
+            {
+                {%for key, value in fileType.items() %}
+                    {%if value is string %}
+                        {{key}}: "{{value}}",
+                    {%elif value is boolean %}
+                        {{key}}: {{ value|string|lower}},
+                    {%else %}
+                        {{key}}: {{ value}},
+                    {%endif%}
+                {% endfor %}
+            }
+            {% endfor %}
+         ]
+    }
+ {% endfor %}
 {% endif %}
 
 {% if activate_classification_keywords is defined and activate_classification_keywords and activate_classification_keywords_update is defined and activate_classification_keywords_update %}

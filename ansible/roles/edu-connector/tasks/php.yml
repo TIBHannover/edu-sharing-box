@@ -5,7 +5,6 @@
   tags:
     - packages
     - root-task
-    - educonnector
 
 
 - name: php - install base packages
@@ -17,7 +16,6 @@
   tags:
     - packages
     - root-task
-    - educonnector
 
 - name: Check if composer exists
   stat:
@@ -34,7 +32,6 @@
   tags:
     - packages
     - root-task
-    - educonnector
 
 - name: Check composer version
   shell: composer -V

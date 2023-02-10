@@ -1,5 +1,27 @@
 ---
 
+- name: add edu-connector config files
+  template:
+    src: '{{ edu_connector_config_path }}'
+    dest: '{{edu_connector_base_dir}}/config.php'
+    owner: "www-data"
+    group: "www-data"
+    mode: "0777"
+  when: (edu_connector_config_path is defined) and (edu_connector_config_path != "")
+
+- name: install subdirectory and generate SSL keys
+  shell:
+    cmd: "php install/install.php"
+    chdir: '{{ edu_connector_base_dir }}'
+
+- name: Create database tables for H5P Editor
+  shell:
+    cmd: "php install/createDb.php"
+    chdir: '{{ edu_connector_base_dir }}'
+  ignore_errors: yes # ignore errors if database already exists
+  notify:
+    - restart apache2
+
 - name: check if composer.json exists
   stat:
     path: "{{ edu_connector_base_dir }}/composer.json"
@@ -12,32 +34,25 @@
     cmd: 'composer install --ignore-platform-reqs'
     chdir: '{{ edu_connector_base_dir }}'
   when: composer_json_exists.stat.exists
-  tags:
-    - educonnector
 
-- name: add edu-connector config files
-  template:
-    src: '{{ edu_connector_config_path }}'
-    dest: '{{edu_connector_base_dir}}/config.php'
+- name: Ensures  /var/cache/eduConnector has write access for www-data
+  file:
+    path: "{{ edu_connector_cache_dir }}"
+    state: "directory"
     owner: "www-data"
     group: "www-data"
-  when: (edu_connector_config_path is defined) and (edu_connector_config_path != "")
-  tags:
-    - educonnector
-
-- name: install subdirectory and generate SSL keys
-  shell:
-    cmd: "php install/install.php"
-    chdir: '{{ edu_connector_base_dir }}'
-  tags:
-    - educonnector
-
-- name: Create database tables for H5P Editor
-  shell:
-    cmd: "php install/createDb.php"
-    chdir: '{{ edu_connector_base_dir }}'
-  ignore_errors: yes # ignore errors if database already exists
+    mode: "0777"
+    recurse: yes
   notify:
     - restart apache2
-  tags:
-    - educonnector
+
+- name: Ensures www/eduConnector has write access for www-data
+  file:
+    path: "{{ edu_connector_base_dir }}"
+    state: "directory"
+    owner: "www-data"
+    group: "www-data"
+    mode: "0777"
+    recurse: yes
+  notify:
+    - restart apache2
