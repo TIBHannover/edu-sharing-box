@@ -1,0 +1,21 @@
+# configure the backup process
+
+- name: Ensures backup_path dir exists
+  file: path='{{ backup_path }}' state=directory
+
+- name: Ensures backup_bin dir exists
+  file: path='{{ backup_bin }}' state=directory
+
+- name: Configure backup-script
+  template:
+    src: backup-edu-sharing-docker.sh.j2
+    dest: '{{ backup_bin }}/backup-edu-sharing-docker.sh'
+    mode: 'a+x'
+
+- name: Creates an crontab entry for the backup script
+  cron:
+    name: "edu-sharing backup process"
+    hour: '{{ backup_schedule_hour }}'
+    minute: 0
+    job: "test -x {{ backup_bin }}/backup-edu-sharing-docker.sh && {{ backup_bin }}/backup-edu-sharing-docker.sh"
+    state: '{{ backup_process_state }}'

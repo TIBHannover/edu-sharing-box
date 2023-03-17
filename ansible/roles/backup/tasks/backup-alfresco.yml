@@ -1,0 +1,28 @@
+# configure the backup process
+
+- name: Ensures backup_path dir exists
+  file: path='{{ backup_path }}' state=directory
+
+- name: Ensures backup_bin dir exists
+  file: path='{{ backup_bin }}' state=directory
+
+- name: Configure backup-script
+  template:
+    src: backup.sh.j2
+    dest: '{{ backup_bin }}/backup-alfresco.sh'
+    mode: 'a+x'
+
+- name: Configure pgpass for postgres backup
+  template:
+    src: pgpass.j2
+    dest: '{{ base_dir }}/.pgpass'
+    mode: '600'
+  when: alfresco_db_type == 'postgresql'
+
+- name: Creates an crontab entry for the backup script
+  cron:
+    name: "edu-sharing backup process"
+    hour: '{{ backup_schedule_hour }}'
+    minute: 0
+    job: "test -x {{ backup_bin }}/backup-alfresco.sh && {{ backup_bin }}/backup-alfresco.sh"
+    state: '{{ backup_process_state }}'
