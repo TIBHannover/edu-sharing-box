@@ -7,18 +7,13 @@
     - root-task
 
 - hosts: all
-  roles: 
+  roles:
     - init-facts
 
 - hosts: renderingservice, edusharing
   become: yes
   roles:
     - apache
-    - role: geerlingguy.docker
-      when: edu_version is defined and edu_version is version_compare('7.0.0','>=')
-      vars:
-        docker_users:
-          - "{{ work_user }}"
   tags:
     - root-task
     - shibboleth
@@ -26,10 +21,15 @@
 - hosts: edusharing
   become: yes
   roles:
+    - role: geerlingguy.docker
+      when: edu_version is defined and edu_version is version('7.0.0','>=')
+      vars:
+        docker_users:
+          - "{{ work_user }}"
     - role: postgresql
-      when: alfresco_db_type == 'postgresql' and  edu_version is version_compare('7.0.0','<')
+      when: alfresco_db_type == 'postgresql' and  edu_version is version('7.0.0','<')
     - role: mariadb
-      when: alfresco_db_type == 'mariadb' and  edu_version is version_compare('7.0.0','<')
+      when: alfresco_db_type == 'mariadb' and  edu_version is version('7.0.0','<')
   tags:
     - root-task
 
@@ -37,26 +37,25 @@
   roles:
     - java
     - role: tomcat
-      when: edu_version is defined and edu_version is version_compare('7.0.0','<')
-      tags: [ tomcat ]
+      when: edu_version is defined and edu_version is version('7.0.0','<')
+      tags: [tomcat]
 
 - hosts: alfrescosolr4
   roles:
     - role: alfresco-solr4
-      when: edu_version is defined and edu_version is version_compare('7.0.0','<')
+      when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: edusharing
   roles:
     - edu-sharing
     - role: backup
-      when: edu_version is defined and edu_version is version_compare('7.0.0','<')
       tags: backup
 
 - hosts: renderingservice, opencast
   become: yes
   roles:
     - role: geerlingguy.docker
-      when: (install_splash is defined and install_splash) or (install_opencast_importer is defined and install_opencast_importer)
+      when: ((install_splash is defined and install_splash) or (install_opencast_importer is defined and install_opencast_importer)) and  edu_version is version('7.0.0','<')
       vars:
         docker_users:
           - "{{ work_user }}"
@@ -65,56 +64,56 @@
   become: yes
   roles:
     - role: postgresql
-      when: esrender_db_type == 'postgresql' and edu_version is defined and edu_version is version_compare('7.0.0','<')
+      when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
     - role: mariadb
-      when: esrender_db_type == 'mariadb' edu_version is defined and edu_version is version_compare('7.0.0','<')
+      when: esrender_db_type == 'mariadb' and edu_version is version('7.0.0','<')
     - renderingservice-installation
     - role: splash
-      when: install_splash is defined and install_splash
+      when: install_splash is defined and install_splash and edu_version is version('7.0.0','<')
   tags:
     - root-task
 
 - hosts: opencast
   roles:
     - role: opencast-import
-      when: install_opencast_importer is defined and install_opencast_importer
+      when: install_opencast_importer is defined and install_opencast_importer and edu_version is version('7.0.0','<')
   tags:
     - opencast
 
 - hosts: renderingservice
   roles:
     - role: renderingservice-init
-      when: edu_version is defined and edu_version is version_compare('7.0.0','<')
+      when: edu_version is defined and edu_version is version('7.0.0','<')
     - role: renderingservice-registration
-      when: edu_version is defined and edu_version is version_compare('7.0.0','<')
+      when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: onlyoffice
   become: yes
   roles:
     - role: postgresql
-      when: enable_only_office is defined and enable_only_office and edu_version is version_compare('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
     - role: geerlingguy.rabbitmq
-      when: enable_only_office is defined and enable_only_office and edu_version is version_compare('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
     - role: nginx
-      when: enable_only_office is defined and enable_only_office and edu_version is version_compare('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
     - role: onlyoffice
-      when: enable_only_office is defined and enable_only_office and edu_version is version_compare('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
 
 - hosts: edusharing
   roles:
     - role: moodle-registration
-      when: register_moodle and edu_version is version_compare('7.0.0','<')
+      when: register_moodle and edu_version is version('7.0.0','<')
   tags:
     - moodle-registration
-    
+
 - hosts: edusharing
   become: yes
   roles:
     - role: antivirus
-      when: install_antivirus is defined and install_antivirus and edu_version is version_compare('7.0.0','<')
+      when: install_antivirus is defined and install_antivirus and edu_version is version('7.0.0','<')
       tags: antivirus
     - role: shibboleth
-      when: install_shibboleth is defined and install_shibboleth and edu_version is version_compare('7.0.0','<')
+      when: install_shibboleth is defined and install_shibboleth and edu_version is version('7.0.0','<')
       tags: shibboleth
   tags:
     - root-task
