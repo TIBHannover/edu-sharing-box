@@ -1,5 +1,6 @@
 require 'yaml'
 settings = YAML.load_file 'ansible/group_vars/all.yml'
+edu_sharing = YAML.load_file 'ansible/group_vars/edusharing.yml'
 
 Vagrant.configure("2") do |config|
 
@@ -38,6 +39,7 @@ Vagrant.configure("2") do |config|
     #ansible.verbose = "vvv"
     ansible.playbook = "ansible/system.yml"
     ansible.galaxy_role_file = "requirements.yml"
+    ansible.extra_vars = {edu_version: edu_sharing['edu_version']}
     ansible.groups = {
       "alfrescosolr4" => ["edu-sharing-vm"],
       "edusharing" => ["edu-sharing-vm"],
