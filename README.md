@@ -1,5 +1,7 @@
 # edu-sharing-box
 
+### <span style="color: red"> Warning!! Do not use Edu-sharing version 7 for production, we are still working on it</span>
+
 Dieses Projekt bietet die Möglichkeit, ein edu-sharing mit minimalem Aufwand in einer virtuellen Maschine aufzusetzen. Voraussetzung ist die Installation von
 [Git](https://git-scm.com/downloads),  [Vagrant](https://www.vagrantup.com/downloads.html) und [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 
