@@ -54,3 +54,37 @@ oersi_port: "443"
 oersi_scheme: "https"
 oersi_pathprefix: "/resources/api-internal/search"
 oersi_index: "oer_data"
+
+edu_sharing_environment_variable:
+  - key: REPOSITORY_DATABASE_NAME
+    value: '{{alfresco_db.name}}'
+  - key: REPOSITORY_DATABASE_USER
+    value: '{{alfresco_db.user}}'
+  - key: REPOSITORY_DATABASE_PASS
+    value: '{{alfresco_db.password}}'
+  - key: COMMON_BIND_HOST
+    value: '0.0.0.0'
+  - key: REPOSITORY_SERVICE_PORT
+    value: '{{edu_sharing_port | default("8200",true)}}'
+  - key: REPOSITORY_SERVICE_PORT_AJP
+    value: '{{edu_sharing_port | default("8102",true)}}'
+  - key: REPOSITORY_SERVICE_PORT_HTTP
+    value: '{{edu_sharing_port | default("8200",true)}}'
+  - key: REPOSITORY_SERVICE_GUEST_USER
+    value: 'esguest'
+  - key: REPOSITORY_SERVICE_GUEST_PASS
+    value: 'esguest'
+  - key: REPOSITORY_SERVICE_ADMIN_PASS
+    value: '{{alf_password}}'
+  # - key: SERVICES_RENDERING_SERVICE_HOST
+  #   value: '{{edu_sharing_host}}'
+  - key: SERVICES_RENDERING_DATABASE_NAME
+    value: '{{esrender_db.name}}'
+  - key: SERVICES_RENDERING_DATABASE_USER
+    value: '{{esrender_db.user}}'
+  - key: SERVICES_RENDERING_DATABASE_PASS
+    value: '{{esrender_db.password}}'
+  - key: REPOSITORY_SERVICE_HOST
+    value: '{{edu_sharing_host}}'
+  - key: SERVICES_RENDERING_SERVICE_HOST
+    value: '{{edu_sharing_host}}'
