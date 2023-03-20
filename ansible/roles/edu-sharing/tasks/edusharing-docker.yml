@@ -59,10 +59,17 @@
   no_log: true
   with_items: "{{ edu_sharing_environment_variable }}"
 
+- name: Start backup
+  include: backup-alfresco-data.yml
+  when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration
+
 - name: launch edu-sharing in docker
   command:
     chdir: '{{ edu_inst_dir }}'
     cmd: '{{edu_sharing_deploy_command}}'
   no_log: true
+  when: edu_sharing_enable_migration is defined and not edu_sharing_enable_migration
 
-
+- name: Start migration
+  include: migrate-alfresco-data.yml
+  when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration
