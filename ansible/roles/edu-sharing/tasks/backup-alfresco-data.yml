@@ -24,3 +24,8 @@
       format: gz
     tags:
     - migration-alfresco-data
+
+  - name: Ensure tomcat is stopped.
+    shell: '{{tomcat_start_command}}'
+    tags:
+    - backup-alfresco-data

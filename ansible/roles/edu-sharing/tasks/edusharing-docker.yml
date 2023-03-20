@@ -39,8 +39,13 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
-- name: remove all docker images and containers
-  shell: '{{edu_sharing_undeploy_command}}'
+- name: Stop all docker images and containers
+  shell: | 
+    {{edu_sharing_undeploy_command}}
+    {% if edu_sharing_enable_migration is defined and edu_sharing_enable_migration %}
+     yes | sg docker -c "./deploy.sh remove"
+     yes | sg docker -c "./deploy.sh purge"
+    {%endif%}
   args:
     chdir: '{{edu_inst_dir}}/'
 
