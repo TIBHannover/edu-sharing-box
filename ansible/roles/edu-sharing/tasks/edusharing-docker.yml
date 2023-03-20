@@ -1,30 +1,30 @@
 ---
-- name: load version variables
+- name: Load version variables.
   with_first_found:
     - '../vars/versions/{{ edu_version }}.yml'
     - '../vars/versions/default.yml'
   include_vars: '{{ item }}'
 
-- name: Ensures inst-dir exists
+- name: Ensures inst-dir exists.
   file: path='{{edu_inst_dir}}' state=directory
 
-- name: Remove old installation for local artifacts
+- name: Remove old installation for local artifacts.
   file: path='{{edu_inst_dir}}' state=absent
   when: edu_sharing_archive_retrieve_method == "copy-local"
 
-- name: Copy local edu-sharing artifact
+- name: Copy local edu-sharing artifact.
   copy:
     src: "{{ edu_sharing_local_archive_path }}"
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
   when: edu_sharing_archive_retrieve_method == "copy-local"
 
-- name: download edu-sharing sources
+- name: download edu-sharing sources.
   get_url:
     url: '{{edu_sharing_archive_url}}'
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
   when: edu_sharing_archive_retrieve_method == "download"
 
-- name: Ensure unzip is present
+- name: Ensure unzip is present.
   package:
     name: ["unzip"]
   become: yes
@@ -32,30 +32,30 @@
   - packages
   - root-task
 
-- name: extract edu-sharing sources
+- name: Extract edu-sharing sources.
   unarchive:
     remote_src: yes
     src: '{{edu_inst_dir}}/edu-sharing.zip'
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
-- name: Stop all docker images and containers
-  shell: | 
-    {{edu_sharing_undeploy_command}}
-    {% if edu_sharing_enable_migration is defined and edu_sharing_enable_migration %}
-     yes | sg docker -c "./deploy.sh remove"
-     yes | sg docker -c "./deploy.sh purge"
-    {%endif%}
+- name: Stop all docker images and containers.
+  shell: '{{edu_sharing_undeploy_command}}'
   args:
     chdir: '{{edu_inst_dir}}/'
 
+- name: Purge all docker images and containers.
+  shell: '{{edu_sharing_purge_all_command}}'
+  args:
+    chdir: '{{edu_inst_dir}}/'
+  when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration
 
-- name: Copy .env.sample to .env
+- name: Copy .env.sample to .env.
   command: 
     chdir: '{{ edu_inst_dir }}'
     cmd: 'cp -f .env.sample .env'
 
-- name: Adjust values in .env file
+- name: Adjust values in .env file.
   lineinfile:
     path: '{{ edu_inst_dir }}/.env'
     state: present
@@ -64,17 +64,17 @@
   no_log: true
   with_items: "{{ edu_sharing_environment_variable }}"
 
-- name: Start backup
+- name: Start backup.
   include: backup-alfresco-data.yml
-  when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration
+  when: edu_sharing_enable_backup is defined and edu_sharing_enable_backup
 
-- name: launch edu-sharing in docker
+- name: Launch edu-sharing in docker.
   command:
     chdir: '{{ edu_inst_dir }}'
     cmd: '{{edu_sharing_deploy_command}}'
   no_log: true
   when: edu_sharing_enable_migration is defined and not edu_sharing_enable_migration
 
-- name: Start migration
+- name: Start migration.
   include: migrate-alfresco-data.yml
   when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration

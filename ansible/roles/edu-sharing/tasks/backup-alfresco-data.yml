@@ -10,22 +10,22 @@
     tags:
     - backup-alfresco-data
 
-  - name: backup alfresco database 
+  - name: Backup alfresco database 
     no_log: true
     shell: |
-      PGPASSWORD="{{alfresco_db.password}}" pg_dump -h localhost -U {{alfresco_db.user}}  {{alfresco_db.name}}  --serializable-deferrable | gzip > {{backup_path}}/{{alfresco_db.name}}-dump.sql.gz
+      PGPASSWORD="{{alfresco_db.password}}" pg_dump -h localhost -U {{alfresco_db.user}}  {{alfresco_db.name}}  --serializable-deferrable | gzip > {{edu_sharing_sql_backup_file}}
     tags:
     - backup-alfresco-data
 
-  - name: create backup directory for alfresco data.
+  - name: Create backup directory for alfresco data.
     archive:
-      path: "{{ alf_home}}/alf_data/*"
-      dest: "{{ backup_path }}/alfresco-backup.tar.gz"
+      path: '{{ alf_home}}/alf_data/*'
+      dest: '{{ edu_sharing_alfresco_backup_file}}'
       format: gz
     tags:
     - migration-alfresco-data
 
-  - name: Ensure tomcat is stopped.
+  - name: Ensure tomcat is started.
     shell: '{{tomcat_start_command}}'
     tags:
     - backup-alfresco-data
