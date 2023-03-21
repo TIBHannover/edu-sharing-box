@@ -2,4 +2,4 @@ version: '3.7'
 services:
   repository-database:
     volumes:
-      - "{{edu_sharing_sql_backup_file}}:/docker-entrypoint-initdb.d/psqldump.sql.gz"
+      - "{{backup_path}}/{{alfresco_db.name}}-dump.sql.gz:/docker-entrypoint-initdb.d/psqldump.sql.gz"

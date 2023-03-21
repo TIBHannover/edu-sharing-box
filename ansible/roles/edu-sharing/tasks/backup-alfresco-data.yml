@@ -13,14 +13,14 @@
   - name: Backup alfresco database 
     no_log: true
     shell: |
-      PGPASSWORD="{{alfresco_db.password}}" pg_dump -h localhost -U {{alfresco_db.user}}  {{alfresco_db.name}}  --serializable-deferrable | gzip > {{edu_sharing_sql_backup_file}}
+      PGPASSWORD="{{alfresco_db.password}}" pg_dump -h localhost -U {{alfresco_db.user}}  {{alfresco_db.name}}  --serializable-deferrable | gzip > {{backup_path}}/{{alfresco_db.name}}-dump.sql.gz
     tags:
     - backup-alfresco-data
 
   - name: Create backup directory for alfresco data.
     archive:
       path: '{{ alf_home}}/alf_data/*'
-      dest: '{{ edu_sharing_alfresco_backup_file}}'
+      dest: '{{ backup_path }}/alfresco-backup.tar.gz'
       format: gz
     tags:
     - migration-alfresco-data

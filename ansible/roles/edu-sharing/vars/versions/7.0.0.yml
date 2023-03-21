@@ -2,14 +2,7 @@
 edu_sharing_archive_url: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-projects-community-deploy-docker-compose/7.0.0/edu_sharing-projects-community-deploy-docker-compose-7.0.0-bin.zip
 
 # Enable/Disable migration from previous Edu-Sharing version
-# This must run once and then please make it false
-edu_sharing_enable_migration: true
-#  This will create backups for old versions, since previous backup are not compatible
-# Enable/disable backup backup for old versions
-edu_sharing_enable_backup: true
-#  Backup  files 
-edu_sharing_sql_backup_file: '{{backup_path}}/{{alfresco_db.name}}-dump.sql.gz'
-edu_sharing_alfresco_backup_file: '{{ backup_path }}/alfresco-backup.tar.gz'
+edu_sharing_enable_migration: false
 # In newer versions Edu-sharing will change the deploy command so we need to update it here
 # deploy docker images to server
 edu_sharing_deploy_command: 'sg docker -c "./deploy.sh start"'

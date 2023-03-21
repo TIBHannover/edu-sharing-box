@@ -25,13 +25,23 @@
   become: yes
   unarchive:
     remote_src: yes
-    src: '{{edu_sharing_alfresco_backup_file}}'
+    src: '{{ backup_path }}/alfresco-backup.tar.gz'
     dest: "{{alfresco_volume_data.stdout}}"
     mode: '775'
   when: alfresco_volume_data.stdout != ""
   tags:
   - migration-alfresco-data 
 
+- name: Export EDU_SHARING_DOCKER_MIGRATION=true to avoid multiple migration
+  become: yes
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: 
+    - key: EDU_SHARING_DOCKER_MIGRATION
+      value: 'true'
 
 - name: Restart edu-sharing.
   command:

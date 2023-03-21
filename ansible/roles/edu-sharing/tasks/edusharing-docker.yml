@@ -5,6 +5,10 @@
     - '../vars/versions/default.yml'
   include_vars: '{{ item }}'
 
+- name: Check if Migration has been installed before
+  shell: "echo ${EDU_SHARING_DOCKER_MIGRATION:-false}"
+  register: has_been_migrated
+
 - name: Ensures inst-dir exists.
   file: path='{{edu_inst_dir}}' state=directory
 
@@ -29,8 +33,8 @@
     name: ["unzip"]
   become: yes
   tags:
-  - packages
-  - root-task
+    - packages
+    - root-task
 
 - name: Extract edu-sharing sources.
   unarchive:
@@ -51,7 +55,7 @@
   when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration
 
 - name: Copy .env.sample to .env.
-  command: 
+  command:
     chdir: '{{ edu_inst_dir }}'
     cmd: 'cp -f .env.sample .env'
 
@@ -60,21 +64,21 @@
     path: '{{ edu_inst_dir }}/.env'
     state: present
     regexp: "^# {{ item.key }}="
-    line: "{{ item.key }}={{ item.value }}"  
+    line: '{{ item.key }}={{ item.value }}'
   no_log: true
   with_items: "{{ edu_sharing_environment_variable }}"
 
 - name: Start backup.
   include: backup-alfresco-data.yml
-  when: edu_sharing_enable_backup is defined and edu_sharing_enable_backup
+  when: (edu_sharing_enable_migration is defined and edu_sharing_enable_migration) and (has_been_migrated.stdout and not has_been_migrated.stdout|bool)
 
 - name: Launch edu-sharing in docker.
   command:
-    chdir: '{{ edu_inst_dir }}'
-    cmd: '{{edu_sharing_deploy_command}}'
+    chdir: "{{ edu_inst_dir }}"
+    cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
   when: edu_sharing_enable_migration is defined and not edu_sharing_enable_migration
 
 - name: Start migration.
   include: migrate-alfresco-data.yml
-  when: edu_sharing_enable_migration is defined and edu_sharing_enable_migration
+  when: (edu_sharing_enable_migration is defined and edu_sharing_enable_migration) and (has_been_migrated.stdout and not has_been_migrated.stdout|bool)
