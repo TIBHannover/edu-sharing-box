@@ -55,7 +55,7 @@
   become: yes
   roles:
     - role: geerlingguy.docker
-      when: ((install_splash is defined and install_splash) or (install_opencast_importer is defined and install_opencast_importer)) and  edu_version is version('7.0.0','<')
+      when: (install_splash is defined and install_splash) or (install_opencast_importer is defined and install_opencast_importer)
       vars:
         docker_users:
           - "{{ work_user }}"
@@ -67,16 +67,17 @@
       when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
     - role: mariadb
       when: esrender_db_type == 'mariadb' and edu_version is version('7.0.0','<')
-    - renderingservice-installation
+    - role: renderingservice-installation
+      when: edu_version is defined and edu_version is version('7.0.0','<')
     - role: splash
-      when: install_splash is defined and install_splash and edu_version is version('7.0.0','<')
+      when: install_splash is defined and install_splash
   tags:
     - root-task
 
 - hosts: opencast
   roles:
     - role: opencast-import
-      when: install_opencast_importer is defined and install_opencast_importer and edu_version is version('7.0.0','<')
+      when: install_opencast_importer is defined and install_opencast_importer
   tags:
     - opencast
 
@@ -102,7 +103,7 @@
 - hosts: edusharing
   roles:
     - role: moodle-registration
-      when: register_moodle and edu_version is version('7.0.0','<')
+      when: register_moodle
   tags:
     - moodle-registration
 
