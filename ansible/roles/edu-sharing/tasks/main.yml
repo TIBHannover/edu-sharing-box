@@ -1,12 +1,12 @@
 ---
 - name: Run Edu-Sharing version 6 and below
-  include_tasks: edusharing-old.yml
+  include: ./edu-sharing-old/edusharing-old.yml
   when: edu_version is defined and  edu_version is version_compare('7.0.0','<')
   tags: 
     - edu-sharing-old
 
 - name: Run Edu-Sharing version 7 and above
-  include_tasks: edusharing-docker.yml
+  include: ./edu-sharing-docker/edusharing-docker.yml
   when: edu_version is defined and edu_version is version_compare('7.0.0','>=')
   tags: 
     - edu-sharing-docker
