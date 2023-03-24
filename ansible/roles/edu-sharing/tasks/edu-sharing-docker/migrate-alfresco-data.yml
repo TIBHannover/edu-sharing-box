@@ -42,9 +42,3 @@
   with_items: 
     - key: EDU_SHARING_DOCKER_MIGRATION
       value: 'true'
-
-- name: Restart edu-sharing.
-  command:
-    chdir: '{{ edu_inst_dir }}'
-    cmd: '{{edu_sharing_deploy_command}}'
-  no_log: true

@@ -22,7 +22,7 @@
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
   when: edu_sharing_archive_retrieve_method == "copy-local"
 
-- name: download edu-sharing sources.
+- name: Download edu-sharing sources.
   get_url:
     url: '{{edu_sharing_archive_url}}'
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
@@ -48,12 +48,6 @@
   args:
     chdir: '{{edu_inst_dir}}/'
 
-- name: Purge all docker images and containers.
-  shell: '{{edu_sharing_purge_all_command}}'
-  args:
-    chdir: '{{edu_inst_dir}}/'
-  when: (edu_sharing_enable_migration is defined and edu_sharing_enable_migration) and (has_been_migrated.stdout and not has_been_migrated.stdout|bool)
-
 - name: Copy .env.sample to .env.
   command:
     chdir: '{{ edu_inst_dir }}'
@@ -68,19 +62,14 @@
   no_log: true
   with_items: "{{ edu_sharing_environment_variable }}"
 
-- name: Start backup.
-  include: backup-alfresco-data.yml
-  when: (edu_sharing_enable_migration is defined and edu_sharing_enable_migration) and (has_been_migrated.stdout and not has_been_migrated.stdout|bool)
+- name: Start migration.
+  include: migrate-edu-sharing.yml
+  when: has_been_migrated.stdout and not has_been_migrated.stdout|bool
 
 - name: Launch edu-sharing in docker.
   command:
     chdir: "{{ edu_inst_dir }}"
     cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
-  when: (edu_sharing_enable_migration is defined and edu_sharing_enable_migration) and (has_been_migrated.stdout and has_been_migrated.stdout|bool)
-
-- name: Start migration.
-  include: migrate-alfresco-data.yml
-  when: (edu_sharing_enable_migration is defined and edu_sharing_enable_migration) and (has_been_migrated.stdout and not has_been_migrated.stdout|bool)
 
 - include: edu-sharing-config-file.yml
