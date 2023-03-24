@@ -2,6 +2,7 @@
 edu_sharing_host: 192.168.98.101
 edu_sharing_domain: '{{edu_sharing_host}}'
 edu_sharing_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/edu-sharing'
+edu_version: 6.0.1
 
 solr_host: '{{edu_sharing_host}}'
 
