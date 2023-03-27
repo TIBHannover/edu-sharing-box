@@ -125,3 +125,9 @@
   vars:
     edu_client_config_xml_path: '{{edu_sharing_client_xml_path.stdout}}/defaults/client.config.xml'
   when: (edu_sharing_client_xml_path.stdout is defined) and (edu_sharing_client_xml_path.stdout != "")
+
+- include: ./edu-sharing-old/hide_main_menu.yml
+  become: yes
+  vars:
+    edu_client_config_xml_path: '{{edu_sharing_client_xml_path.stdout}}/defaults/client.config.xml'
+  when: (edu_sharing_client_xml_path.stdout is defined) and (edu_sharing_client_xml_path.stdout != "")
