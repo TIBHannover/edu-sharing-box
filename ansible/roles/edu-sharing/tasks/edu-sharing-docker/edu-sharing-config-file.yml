@@ -24,6 +24,13 @@
     - edu-sharing-config
     - youtube
 
+- include: pixabay.yml
+  become: yes
+  when: connect_content_pixabay and repository_volume_config_cluster.stdout != ""
+  tags:
+    - edu-sharing-config
+    - pixabay
+
 - name: Restart edu-sharing.
   command:
     chdir: '{{ edu_inst_dir }}'
