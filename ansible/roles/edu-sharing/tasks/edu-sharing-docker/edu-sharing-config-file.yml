@@ -17,6 +17,13 @@
   when: repository_volume_config_cluster.stdout != "" and  edu_config_file == 'edu-sharing.conf'
   tags: edu-sharing-config
 
+- include: youtube.yml
+  become: yes
+  when: connect_content_youtube and repository_volume_config_cluster.stdout != ""
+  tags: 
+    - edu-sharing-config
+    - youtube
+
 - name: Restart edu-sharing.
   command:
     chdir: '{{ edu_inst_dir }}'
