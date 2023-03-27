@@ -79,6 +79,7 @@
 
 - include: edu-sharing-config-file.yml
 - include: metadatasets.yml
+- include: client-configuration.yml
 - include: images.yml
 
 - name: Launch edu-sharing in docker.

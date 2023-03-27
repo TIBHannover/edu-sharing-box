@@ -1,0 +1,100 @@
+---
+
+- name: Get the path to the edu-sharing config docker volume.
+  shell: "sg docker -c \"docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-config-node')\" "
+  register: edu_sharing_client_xml_path
+  tags:
+  - edu-sharing-config
+
+- name: clear optional properties in client config
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: '{{ item }}'
+    state: absent
+    pretty_print: yes
+  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("cleanup", "undefined") | map(attribute="cleanup") | list }}'
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
+
+- name: set standard entries in client config
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: '{{ item.xpath }}'
+    value: '{{ item.value }}'
+    pretty_print: yes
+  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("value", "undefined") | list }}'
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
+
+# non-standard entries in client config
+- name: set banner components
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: '/config/values/banner'
+    add_children: '<components>{{ item }}</components>'
+    input_type: xml
+    pretty_print: yes
+  with_items: '{{edu_banner_components}}'
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
+
+- name: clear HelpMenuOptions
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: "/config/values/helpMenuOptions[key='{{item[0]}}']"
+    state: absent
+    pretty_print: yes
+  loop: '{{ edu_help_menu_options | default([], true) }}'
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
+
+- name: edit HelpMenuOptions
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: "/config/values"
+    add_children: '<helpMenuOptions><key>{{item[0]}}</key><icon>{{item[1]}}</icon><url>{{item[2]}}</url></helpMenuOptions>'
+    input_type: xml
+    pretty_print: yes
+  loop: '{{ edu_help_menu_options | default([], true) }}'
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
+
+- name: set allowedLicenses
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: '/config/values'
+    add_children: '<allowedLicenses>{{ item }}</allowedLicenses>'
+    input_type: xml
+    pretty_print: yes
+  with_items: '{{edu_allowed_licenses}}'
+  when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none) and 
+        (edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != "")
+  tags: edu-sharing-config
+
+# change the view type in workspace
+- name: set workspace viewType 'list view' mode
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: '/config/values/workspaceViewType'
+    value: '{{ "1" if (edu_workspace_viewType | default("list")) == "tile" else "0" }}'
+    pretty_print: yes
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
+
+# -------- Menu entries (BEGIN) --------#
+- name: Remove all menuEntries from client config 
+  become: yes
+  xml:
+    path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    xpath: "/config/values/menuEntries"
+    state: absent
+    pretty_print: yes
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags: edu-sharing-config
