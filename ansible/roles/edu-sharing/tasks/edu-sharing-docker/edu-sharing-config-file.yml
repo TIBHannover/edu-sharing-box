@@ -19,17 +19,30 @@
 
 - include: youtube.yml
   become: yes
+  vars:
+    youtube_path: '{{repository_volume_config_cluster.stdout}}'
   when: connect_content_youtube and repository_volume_config_cluster.stdout != ""
-  tags: 
+  tags:
     - edu-sharing-config
     - youtube
 
 - include: pixabay.yml
   become: yes
+  vars: 
+    pixabay_path: '{{repository_volume_config_cluster.stdout}}'
   when: connect_content_pixabay and repository_volume_config_cluster.stdout != ""
   tags:
     - edu-sharing-config
     - pixabay
+
+- include: lms.yml
+  become: yes
+  vars:
+    lms_path: '{{repository_volume_config_cluster.stdout}}'
+  when: repository_volume_config_cluster.stdout != ""
+  tags:
+    - edu-sharing-config
+    - lms
 
 - name: Restart edu-sharing.
   command:
