@@ -98,3 +98,10 @@
     pretty_print: yes
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags: edu-sharing-config
+
+
+- include: ./edu-sharing-old/custom_option.yml
+  become: yes
+  vars:
+    edu_client_config_xml_path: '{{edu_sharing_client_xml_path.stdout}}/defaults/client.config.xml'
+  when: (edu_sharing_client_xml_path.stdout is defined) and (edu_sharing_client_xml_path.stdout != "")
