@@ -1,0 +1,56 @@
+---
+
+
+- name: Get the path to the Edu-sharing assets docker volume.
+  shell: "sg docker -c \"docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-config-edu-sharing')\" "
+  register: edu_sharing_assets_path
+  ignore_errors: true
+  tags:
+  - edu-sharing-config
+
+# when 'edu_banner_path' is set, the banner will be copied into the edu-sharing instance
+# => you may use 'edu_banner_url=http://{{edu_sharing_host}}/edu-sharing/images/logos/<banner-name>' then
+- name: Copy custom banner.
+  become: yes
+  copy:
+    src: '{{edu_banner_path}}'
+    dest: '{{edu_sharing_assets_path.stdout}}/images/logos/'
+    mode: '775'
+  when: (edu_banner_path is defined) and (edu_banner_path != "") and (edu_banner_path is not none) and 
+        (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
+
+- name: Copy custom logo.
+  become: yes
+  copy:
+    src: '{{edu_logo_path}}'
+    dest: '{{edu_sharing_assets_path.stdout}}/assets/images/edu-sharing-loading.svg'
+    mode: '775'
+  when: (edu_logo_path is defined) and (edu_logo_path != "") and (edu_logo_path is not none) and 
+        (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
+
+- name: Copy custom logo animation.
+  become: yes
+  copy:
+    src: '{{edu_logo_path}}'
+    dest: '{{edu_sharing_assets_path.stdout}}/assets/images/edu-sharing-loading-animation.svg'
+    mode: '775'
+  when: (edu_logo_path is defined) and (edu_logo_path != "") and (edu_logo_path is not none) and 
+        (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
+
+- name: Copy custom login logo.
+  become: yes
+  copy:
+    src: '{{edu_login_logo_path}}'
+    dest: '{{edu_sharing_assets_path.stdout}}/assets/images/logo.svg'
+    mode: '775'
+  when: (edu_login_logo_path is defined) and (edu_login_logo_path != "") and (edu_login_logo_path is not none) and 
+        (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
+
+- name: Copy custom images.
+  become: yes
+  copy:
+    src: '{{item[0]}}'
+    dest: '{{edu_sharing_assets_path.stdout}}/assets/images/{{item[1]}}'
+    mode: '775'
+  loop: '{{ edu_custom_images | default([], true) }}'
+  when: (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")

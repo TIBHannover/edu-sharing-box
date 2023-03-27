@@ -79,3 +79,10 @@
 
 - include: edu-sharing-config-file.yml
 - include: metadatasets.yml
+- include: images.yml
+
+- name: Launch edu-sharing in docker.
+  command:
+    chdir: "{{ edu_inst_dir }}"
+    cmd: "{{edu_sharing_deploy_command}}"
+  no_log: true
