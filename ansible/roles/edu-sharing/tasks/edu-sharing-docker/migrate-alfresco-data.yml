@@ -18,6 +18,7 @@
 - name: Get the path to the alfresco docker volume.
   shell: "sg docker -c \"docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-data')\" "
   register: alfresco_volume_data
+  ignore_errors: true
   tags:
   - migration-alfresco-data
 

@@ -4,6 +4,7 @@
   shell: | 
     sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-config-cluster')"
   register: repository_volume_config_cluster
+  ignore_errors: true
   tags:
   - edu-sharing-config
 
