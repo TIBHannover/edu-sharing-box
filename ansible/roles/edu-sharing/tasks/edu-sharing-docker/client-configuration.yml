@@ -24,7 +24,7 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags: edu-sharing-config
 
-- name: set standard entries in client config
+- name: Set standard entries in client config.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -36,7 +36,7 @@
   tags: edu-sharing-config
 
 # non-standard entries in client config
-- name: set banner components
+- name: Set banner components.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -48,7 +48,7 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags: edu-sharing-config
 
-- name: clear HelpMenuOptions
+- name: Clear HelpMenuOptions.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -59,7 +59,7 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags: edu-sharing-config
 
-- name: edit HelpMenuOptions
+- name: Edit HelpMenuOptions.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -71,7 +71,7 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags: edu-sharing-config
 
-- name: set allowedLicenses
+- name: Set allowedLicenses.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -85,7 +85,7 @@
   tags: edu-sharing-config
 
 # change the view type in workspace
-- name: set workspace viewType 'list view' mode
+- name: Set workspace viewType 'list view' mode.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -96,7 +96,7 @@
   tags: edu-sharing-config
 
 # -------- Menu entries (BEGIN) --------#
-- name: Remove all menuEntries from client config 
+- name: Remove all menuEntries from client config
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
