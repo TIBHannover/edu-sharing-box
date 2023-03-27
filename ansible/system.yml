@@ -92,13 +92,13 @@
   become: yes
   roles:
     - role: postgresql
-      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office
     - role: geerlingguy.rabbitmq
-      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office
     - role: nginx
-      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office
     - role: onlyoffice
-      when: enable_only_office is defined and enable_only_office and edu_version is version('7.0.0','<')
+      when: enable_only_office is defined and enable_only_office
 
 - hosts: edusharing
   roles:
@@ -111,10 +111,10 @@
   become: yes
   roles:
     - role: antivirus
-      when: install_antivirus is defined and install_antivirus and edu_version is version('7.0.0','<')
+      when: install_antivirus is defined and install_antivirus
       tags: antivirus
     - role: shibboleth
-      when: install_shibboleth is defined and install_shibboleth and edu_version is version('7.0.0','<')
+      when: install_shibboleth is defined and install_shibboleth
       tags: shibboleth
   tags:
     - root-task
