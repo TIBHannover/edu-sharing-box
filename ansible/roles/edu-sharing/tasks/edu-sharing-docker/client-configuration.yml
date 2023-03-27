@@ -6,7 +6,14 @@
   tags:
   - edu-sharing-config
 
-- name: clear optional properties in client config
+- name: Get the path to the Edu-sharing assets docker volume.
+  shell: "sg docker -c \"docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-config-edu-sharing')\" "
+  register: edu_sharing_assets_path
+  ignore_errors: true
+  tags:
+  - edu-sharing-config
+
+- name: Clear optional properties in client config.
   become: yes
   xml:
     path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
@@ -99,6 +106,19 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags: edu-sharing-config
 
+- include_tasks: custom_menu_entries.yml
+  vars:
+    edu_client_config_xml_path: '{{ edu_sharing_client_xml_path.stdout }}/defaults/client.config.xml'
+    edu_sharing_i18n_path: '{{edu_sharing_assets_path.stdout}}/assets/i18n'
+  with_items: "{{ edu_custom_menu_entries | default([], true) }}"
+  loop_control:
+    loop_var: custom_menu_entry
+  when:
+    (edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != "" ) and
+    (edu_sharing_assets_path.stdout is defined and edu_sharing_assets_path.stdout != "" )
+  tags: edu-sharing-config
+
+# -------- Menu entries (END)-------- #
 
 - include: ./edu-sharing-old/custom_option.yml
   become: yes

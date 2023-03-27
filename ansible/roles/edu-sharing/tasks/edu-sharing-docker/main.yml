@@ -28,9 +28,11 @@
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
   when: edu_sharing_archive_retrieve_method == "download"
 
-- name: Ensure unzip is present.
+- name: Ensure 'unzip' and 'jq' is present.
   package:
-    name: ["unzip"]
+    name: 
+      - unzip
+      - jq
   become: yes
   tags:
     - packages
