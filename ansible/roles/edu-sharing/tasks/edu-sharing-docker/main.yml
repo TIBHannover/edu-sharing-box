@@ -1,0 +1,69 @@
+---
+- name: Load version variables.
+  with_first_found:
+    - '../vars/versions/{{ edu_version }}.yml'
+    - '../vars/versions/default.yml'
+  include_vars: '{{ item }}'
+
+- name: Ensures inst-dir exists.
+  file: path='{{edu_inst_dir}}' state=directory
+
+- name: Remove old installation for local artifacts.
+  file: path='{{edu_inst_dir}}' state=absent
+  when: edu_sharing_archive_retrieve_method == "copy-local"
+
+- name: Copy local edu-sharing artifact.
+  copy:
+    src: "{{ edu_sharing_local_archive_path }}"
+    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+  when: edu_sharing_archive_retrieve_method == "copy-local"
+
+- name: Download edu-sharing sources.
+  get_url:
+    url: '{{edu_sharing_archive_url}}'
+    dest: "{{edu_inst_dir}}/edu-sharing.zip"
+  when: edu_sharing_archive_retrieve_method == "download"
+
+- name: Ensure 'unzip' and 'jq' is present.
+  package:
+    name: 
+      - unzip
+      - jq
+  become: yes
+  tags:
+    - packages
+    - root-task
+
+- name: Extract edu-sharing sources.
+  unarchive:
+    remote_src: yes
+    src: '{{edu_inst_dir}}/edu-sharing.zip'
+    dest: "{{edu_inst_dir}}"
+    creates: "{{edu_home}}"
+
+
+- name: Stop all docker images and containers.
+  shell: '{{edu_sharing_undeploy_command}}'
+  args:
+    chdir: '{{edu_inst_dir}}/'
+
+- name: Copy .env.sample to .env.
+  command:
+    chdir: '{{ edu_inst_dir }}'
+    cmd: 'cp -f .env.sample .env'
+
+- name: Adjust values in .env file.
+  lineinfile:
+    path: '{{ edu_inst_dir }}/.env'
+    state: present
+    regexp: "^# {{ item.key }}="
+    line: '{{ item.key }}={{ item.value }}'
+  no_log: true
+  with_items: "{{ edu_sharing_environment_variable }}"
+
+
+- name: Launch edu-sharing in docker.
+  command:
+    chdir: "{{ edu_inst_dir }}"
+    cmd: "{{edu_sharing_deploy_command}}"
+  no_log: true

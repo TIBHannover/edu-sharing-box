@@ -4,3 +4,9 @@
   when: edu_version is defined and  edu_version is version_compare('7.0.0','<')
   tags: 
     - edu-sharing-old
+
+- name: Run Edu-Sharing version 7 and above
+  include: ./edu-sharing-docker/main.yml
+  when: edu_version is defined and edu_version is version_compare('7.0.0','>=')
+  tags: 
+    - edu-sharing-docker
