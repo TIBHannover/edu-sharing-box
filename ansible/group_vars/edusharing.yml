@@ -28,7 +28,6 @@ register_moodle: false
 moodle_host: 192.168.98.105
 moodle_url: "http://{{moodle_host}}"
 
-edu_version: 6.0.1
 # method how to retrieve the edu-sharing archive that should be installed
 #  'download' - use the archive from 'edu_sharing_archive_url'
 #  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
