@@ -66,8 +66,8 @@ edu_sharing_environment_variable:
     value: '0.0.0.0'
   - key: REPOSITORY_SERVICE_PORT
     value: '{{edu_sharing_port | default("8200",true)}}'
-  - key: REPOSITORY_SERVICE_PORT_AJP
-    value: '{{edu_sharing_port | default("8102",true)}}'
+  # - key: REPOSITORY_SERVICE_PORT_AJP
+  #   value: '{{edu_sharing_port | default("8102",true)}}'
   - key: REPOSITORY_SERVICE_PORT_HTTP
     value: '{{edu_sharing_port | default("8200",true)}}'
   - key: REPOSITORY_SERVICE_GUEST_USER

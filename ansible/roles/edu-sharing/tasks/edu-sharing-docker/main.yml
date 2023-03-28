@@ -1,9 +1,13 @@
 ---
 - name: Load version variables.
   with_first_found:
-    - '../vars/versions/{{ edu_version }}.yml'
-    - '../vars/versions/default.yml'
-  include_vars: '{{ item }}'
+    - "../vars/versions/{{ edu_version }}.yml"
+    - "../vars/versions/default.yml"
+  include_vars: "{{ item }}"
+
+- name: Check if Migration has been installed before
+  shell: "echo ${HAS_EDU_SHARING_DOCKER_MIGRATION_PROCEED:-false}"
+  register: has_been_migrated
 
 - name: Ensures inst-dir exists.
   file: path='{{edu_inst_dir}}' state=directory
@@ -20,13 +24,13 @@
 
 - name: Download edu-sharing sources.
   get_url:
-    url: '{{edu_sharing_archive_url}}'
+    url: "{{edu_sharing_archive_url}}"
     dest: "{{edu_inst_dir}}/edu-sharing.zip"
   when: edu_sharing_archive_retrieve_method == "download"
 
 - name: Ensure 'unzip' and 'jq' is present.
   package:
-    name: 
+    name:
       - unzip
       - jq
   become: yes
@@ -37,30 +41,32 @@
 - name: Extract edu-sharing sources.
   unarchive:
     remote_src: yes
-    src: '{{edu_inst_dir}}/edu-sharing.zip'
+    src: "{{edu_inst_dir}}/edu-sharing.zip"
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
-
 - name: Stop all docker images and containers.
-  shell: '{{edu_sharing_undeploy_command}}'
+  shell: "{{edu_sharing_undeploy_command}}"
   args:
-    chdir: '{{edu_inst_dir}}/'
+    chdir: "{{edu_inst_dir}}/"
 
 - name: Copy .env.sample to .env.
   command:
-    chdir: '{{ edu_inst_dir }}'
-    cmd: 'cp -f .env.sample .env'
+    chdir: "{{ edu_inst_dir }}"
+    cmd: "cp -f .env.sample .env"
 
 - name: Adjust values in .env file.
   lineinfile:
-    path: '{{ edu_inst_dir }}/.env'
+    path: "{{ edu_inst_dir }}/.env"
     state: present
     regexp: "^# {{ item.key }}="
-    line: '{{ item.key }}={{ item.value }}'
+    line: "{{ item.key }}={{ item.value }}"
   no_log: true
   with_items: "{{ edu_sharing_environment_variable }}"
 
+- name: Start migration.
+  include: migrate-edu-sharing.yml
+  when: has_been_migrated.stdout and not has_been_migrated.stdout|bool
 
 - name: Launch edu-sharing in docker.
   command:
