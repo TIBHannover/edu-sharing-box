@@ -45,6 +45,11 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
+- name: Copy override files.
+  template:
+    src: '4_repository-service-volume-override-common.yml'
+    dest: '{{edu_inst_dir}}/4_repository-service-volume-override-common.yml'
+
 - name: Stop all docker images and containers.
   shell: "{{edu_sharing_undeploy_command}}"
   args:
