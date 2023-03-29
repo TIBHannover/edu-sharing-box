@@ -78,3 +78,5 @@
     chdir: "{{ edu_inst_dir }}"
     cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
+
+- include: client-configuration.yml
