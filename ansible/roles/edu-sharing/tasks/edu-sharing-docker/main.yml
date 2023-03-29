@@ -51,7 +51,7 @@
 - name: Copy override files.
   template:
     src: '4_repository-service-volume-override-common.yml'
-    dest: '{{edu_inst_dir}}/4_repository-service-volume-override-common.yml'
+    dest: '{{edu_docker_inst_dir}}/4_repository-service-volume-override-common.yml'
 
 - name: Stop all docker images and containers.
   shell: "{{edu_sharing_undeploy_command}}"
@@ -82,4 +82,11 @@
     cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
 
+- include: edu-sharing-config-file.yml
 - include: client-configuration.yml
+
+- name: Launch edu-sharing in docker.
+  command:
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: "{{edu_sharing_deploy_command}}"
+  no_log: true

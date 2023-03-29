@@ -1,0 +1,17 @@
+---
+- name: Get the path to the edu-sharing cluster docker volume.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-config-cluster')"
+  register: repository_volume_config_cluster
+  ignore_errors: true
+  tags:
+    - edu-sharing-config
+    - edu-sharing-docker-config
+
+- include: ./common/edu-sharing-config-file.yml
+    edu_sharing_config_file_path='{{repository_volume_config_cluster.stdout}}/edu-sharing.override.conf'
+  become: yes
+  when: (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
+  tags:
+    - edu-sharing-config
+    - edu-sharing-docker-config

@@ -1,0 +1,6 @@
+---
+- name: create edu-sharing.conf
+  template:
+    src: edu-sharing.conf.j2
+    dest: "{{edu_sharing_config_file_path}}"
+  when: edu_config_file == 'edu-sharing.conf'
