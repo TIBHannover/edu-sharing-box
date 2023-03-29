@@ -21,3 +21,11 @@
   tags:
     - edu-sharing-config
     - edu-sharing-docker-config
+
+- include: ./common/metadatasets.yml
+    metadatasets_directory_path='{{edu_sharing_client_xml_path.stdout}}/defaults/metadatasets'
+  become: yes
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags:
+    - edu-sharing-config
+    - edu-sharing-docker-config
