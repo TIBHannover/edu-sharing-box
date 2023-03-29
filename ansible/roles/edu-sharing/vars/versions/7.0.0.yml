@@ -8,4 +8,3 @@ edu_sharing_deploy_command: 'sg docker -c "./deploy.sh start"'
 edu_sharing_undeploy_command: sg docker -c "./deploy.sh stop"
 edu_sharing_purge_all_command: |
      yes | sg docker -c "./deploy.sh remove"
-     yes | sg docker -c "./deploy.sh purge"

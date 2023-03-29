@@ -2,14 +2,14 @@
 - name: Create the 3_datamigration-common.yml for database migration.
   template:
     src: 3_datamigration-common.yml.j2
-    dest: "{{ edu_inst_dir }}/3_datamigration-common.yml"
+    dest: "{{ edu_docker_inst_dir }}/3_datamigration-common.yml"
     mode: "600"
   tags:
     - migration-alfresco-sql
 
 - name: Launch edu-sharing in docker.
   command:
-    chdir: "{{ edu_inst_dir }}"
+    chdir: "{{ edu_docker_inst_dir }}"
     cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
 
@@ -31,7 +31,7 @@
   tags:
     - migration-alfresco-data
 
-- name: Export HAS_EDU_SHARING_DOCKER_MIGRATION_PROCEED=true to avoid multiple migration
+- name: Export HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED=true to avoid multiple migration
   become: yes
   lineinfile:
     dest: "/etc/environment"
@@ -39,5 +39,5 @@
     regexp: "^{{ item.key }}="
     line: "{{ item.key }}={{ item.value }}"
   with_items:
-    - key: HAS_EDU_SHARING_DOCKER_MIGRATION_PROCEED
+    - key: HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED
       value: "true"
