@@ -22,6 +22,10 @@ Wenn die Installation durchgelaufen ist (einige Minuten, abhängig von der Downl
 
 <http://192.168.98.101/edu-sharing>
 
+```diff
++ Temporally!! only for edu-sharing 7 we will use 
++ <http://192.168.98.101:8200/edu-sharing>
+```
 Die Anmeldung am edu-sharing erfolgt in diesem Beispiel noch vereinfacht mit _admin_/_admin_
 
 Die Anmeldung an der VM via SSH erfolgt in diesem Beispiel noch vereinfacht und ohne Passwort mit dem Benutzer "vagrant". Der Benutzer hat das sudo-Recht.
