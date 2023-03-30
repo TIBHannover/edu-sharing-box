@@ -11,20 +11,7 @@ Vagrant.configure("2") do |config|
 
     srv.vm.provider :virtualbox do |vb|
       vb.name = "edu-sharing"
-      vb.memory = 5120
-      vb.cpus = 2
-    end
-  end
-
-  config.vm.define "esrender-vm" do |srv|
-    srv.vm.box = "debian/buster64"
-    srv.ssh.insert_key = false
-    srv.vm.hostname = "edu-sharing-rendering.box"
-    srv.vm.network :private_network, ip: settings['esrender_host']
-
-    srv.vm.provider :virtualbox do |vb|
-      vb.name = "edu-sharing-rendering"
-      vb.memory = 2024
+      vb.memory = 7168
       vb.cpus = 2
     end
   end
@@ -41,9 +28,9 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "alfrescosolr4" => ["edu-sharing-vm"],
       "edusharing" => ["edu-sharing-vm"],
-      "onlyoffice" => ["esrender-vm"],
-      "opencast" => ["esrender-vm"],
-      "renderingservice" => ["esrender-vm"],
+      "onlyoffice" => ["edu-sharing-vm"],
+      "opencast" => ["edu-sharing-vm"],
+      "renderingservice" => ["edu-sharing-vm"],
       "tomcat:children" => ["alfrescosolr4", "edusharing"],
       "alfresco:children" => ["alfrescosolr4", "edusharing"],
       "all:vars" => {
