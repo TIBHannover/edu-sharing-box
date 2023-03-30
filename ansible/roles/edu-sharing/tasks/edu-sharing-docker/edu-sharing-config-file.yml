@@ -15,3 +15,13 @@
   tags:
     - edu-sharing-config
     - edu-sharing-docker-config
+
+- include: ./common/youtube.yml
+    youtube_path='{{repository_volume_config_cluster.stdout}}/applications'
+  become: yes
+  when: connect_content_youtube and
+    (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
+  tags:
+    - edu-sharing-config
+    - edu-sharing-docker-config
+    - youtube

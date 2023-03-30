@@ -6,13 +6,6 @@
     - edu-sharing-config
     - edu-sharing-docker-config
 
-- name: Get the path to the Edu-sharing assets docker volume.
-  shell: 'sg docker -c "docker volume inspect --format ''{{ ''{{'' }}.Mountpoint{{ ''}}'' }}''  $(docker volume ls -q |grep ''_repository-service-volume-config-edu-sharing'')" '
-  register: edu_sharing_assets_path
-  ignore_errors: true
-  tags:
-    - edu-sharing-config
-    - edu-sharing-docker-config
 
 - include: ./common/client-configuration.yml
     client_configuration_path='{{edu_sharing_client_xml_path.stdout}}/defaults/client.config.xml'
