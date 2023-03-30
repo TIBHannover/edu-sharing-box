@@ -1,0 +1,44 @@
+---
+- name: Create the 3_datamigration-common.yml for database migration.
+  template:
+    src: 3_datamigration-common.yml.j2
+    dest: "{{ edu_docker_inst_dir }}/3_datamigration-common.yml"
+    mode: "600"
+  tags:
+    - migration-alfresco-sql
+
+- name: Launch edu-sharing in docker.
+  command:
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: "{{edu_sharing_deploy_command}}"
+  no_log: true
+
+- name: Get the path to the alfresco docker volume.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-data'")"
+  register: alfresco_volume_data
+  ignore_errors: true
+  tags:
+    - migration-alfresco-data
+
+- name: Copy backup to alfresco volume.
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "{{ backup_path }}/alfresco-backup.tar.gz"
+    dest: "{{alfresco_volume_data.stdout}}"
+    mode: "775"
+  when: alfresco_volume_data.stdout != ""
+  tags:
+    - migration-alfresco-data
+
+- name: Export HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED=true to avoid multiple migration
+  become: yes
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items:
+    - key: HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED
+      value: "true"

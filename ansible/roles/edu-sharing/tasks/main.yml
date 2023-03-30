@@ -1,30 +1,12 @@
 ---
-  - include: mariadb.yml
-    when: alfresco_db_type == 'mariadb'
-  - include: postgresql.yml
-    when: alfresco_db_type == 'postgresql'
-    tags:
-      - backup
-  - include: imagemagick.yml
-  - include: libreoffice.yml
-  - include: mirror-vocabs.yml
-    when: mirror_vocabularies | default([], true) | length>0
-  - include: alfresco.yml
-  - include: share.yml
-    when: alfresco_share_install is defined and alfresco_share_install
-  - include: alfviral.yml
-    when: install_antivirus is defined and install_antivirus
-    tags:
-      - antivirus
-  - include: edusharing.yml
-  - include: users.yml
-  - include: classification-keyword.yml
-    become: true
-    when: activate_classification_keywords is defined and activate_classification_keywords
-  - include: jobs.yml
-  - include: pixabay.yml
-    when: connect_content_pixabay
-  - include: youtube.yml
-    when: connect_content_youtube
-  - include: oersi.yml
-    when: connect_content_oersi
+- name: Run Edu-Sharing version 6 and below
+  include: ./edu-sharing-old/main.yml
+  when: edu_version is defined and  edu_version is version_compare('7.0.0','<')
+  tags: 
+    - edu-sharing-old
+
+- name: Run Edu-Sharing version 7 and above
+  include: ./edu-sharing-docker/main.yml
+  when: edu_version is defined and edu_version is version_compare('7.0.0','>=')
+  tags: 
+    - edu-sharing-docker

@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# {{ ansible_managed }}
+#
+#Name: backup-edu-sharing-docker.sh
+#Subscription: This Script backups edu-sharing docker volumes:
+# - edu-sharing_repository-database-volume-data
+# - edu-sharing_repository-service-volume-data
+
+logFile=$(date +"{{ backup_path }}/backup-%Y-%m-%d.log")
+
+# Where to store the Backup files?
+BACKUPDIR="{{ backup_path }}"
+
+# How many Days should a backup be available? 
+# not implemented yet
+#DAYS=2
+
+# Timestamp definition for the backupfiles (example: $(date +"%Y%m%d%H%M") = 20200124-2034)
+TIMESTAMP=$(date +"%Y%m%d%H%M")
+
+ Which Volumes you want to backup?
+# Volumenames separated by space 
+#VOLUME="project1_data_container1 project2_data_container1"
+# you can use "$(docker volume ls  -q)" for all volumes
+#VOLUME=$(docker volume ls -q)
+# you can filter all Volumes with grep (include only) or grep -v (exclude) or a combination
+# to do a filter for 2 or more arguments separate them with "\|"
+#VOLUME=$(docker volume ls -q |grep '_repository-database-volume-data\|_repository-service-volume-data')
+VOLUME=$(docker volume ls -q |grep '_repository-database-volume-data\|_repository-service-volume-data')
+
+
+# if you want to use memory limitation. Must be supported by the kernel.
+#MEMORYLIMIT="-m 35m"
+
+### Do the stuff
+echo -e "Start $TIMESTAMP Backup for Volumes:\n"
+if [ ! -d $BACKUPDIR ]; then
+        mkdir -p $BACKUPDIR
+fi
+if [ ! -d $logFile ]; then
+        touch $logFile
+fi
+
+for i in $VOLUME; do 
+        echo -e " Backup from Volume:\n  * $i";
+        date +"*** %Y-%m-%d %H:%M:%S Start backup for Volume '$i'" | tee -a "$logFile"
+        docker run --rm \
+        -v $BACKUPDIR:/backup \
+        -v $i:/data:ro \
+        -e TIMESTAMP=$TIMESTAMP \
+        -e i=$i ${MEMORYLIMIT} \
+        --name volumebackup \
+        alpine sh -c "cd /data && /bin/tar -czf /backup/$i-$TIMESTAMP.tar.gz ."
+        date +"*** %Y-%m-%d %H:%M:%S Backup for Volume '$i' completed " | tee -a "$logFile"
+        #debian:stretch-slim bash -c "cd /data && /bin/tar -czf /backup/$i-$TIMESTAMP.tar.gz ."
+        # dont delete last old backups!
+        #OLD_BACKUPS=$(ls -1 $BACKUPDIR/$i*.tar.gz |wc -l)
+        #if [ $OLD_BACKUPS -gt $DAYS ]; then
+        #        find $BACKUPDIR -name "$i*.tar.gz" -daystart -mtime +$DAYS -delete
+        #fi
+        
+done
+echo -e "\n$TIMESTAMP Backup for Volumes completed\n"

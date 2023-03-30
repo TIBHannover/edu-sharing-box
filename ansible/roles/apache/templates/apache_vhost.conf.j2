@@ -5,6 +5,7 @@
 {% if apache_conf_usecanonicalname is defined and apache_conf_usecanonicalname is not none and apache_conf_usecanonicalname != "" %}
         UseCanonicalName  {{ apache_conf_usecanonicalname }}
 {% endif %}
+{% if edu_version is defined and edu_version is version_compare('7.0.0','<') %}
 {% if esrender_vhost is defined and esrender_vhost %}
         DocumentRoot {{esrender_document_root}}
         <Directory {{esrender_base_dir}}/>
@@ -32,7 +33,7 @@
           Require all granted
         </Directory>
 {% endif %}
-
+{% endif %}
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

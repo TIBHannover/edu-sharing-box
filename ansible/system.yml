@@ -7,7 +7,7 @@
     - root-task
 
 - hosts: all
-  roles: 
+  roles:
     - init-facts
 
 - hosts: renderingservice, edusharing
@@ -21,10 +21,15 @@
 - hosts: edusharing
   become: yes
   roles:
+    - role: geerlingguy.docker
+      when: edu_version is defined and edu_version is version('7.0.0','>=')
+      vars:
+        docker_users:
+          - "{{ work_user }}"
     - role: postgresql
-      when: alfresco_db_type == 'postgresql'
+      when: alfresco_db_type == 'postgresql' and  edu_version is version('7.0.0','<')
     - role: mariadb
-      when: alfresco_db_type == 'mariadb'
+      when: alfresco_db_type == 'mariadb' and  edu_version is version('7.0.0','<')
   tags:
     - root-task
 
@@ -32,11 +37,13 @@
   roles:
     - java
     - role: tomcat
-      tags: [ tomcat ]
+      when: edu_version is defined and edu_version is version('7.0.0','<')
+      tags: [tomcat]
 
 - hosts: alfrescosolr4
   roles:
-    - alfresco-solr4
+    - role: alfresco-solr4
+      when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: edusharing
   roles:
@@ -57,10 +64,11 @@
   become: yes
   roles:
     - role: postgresql
-      when: esrender_db_type == 'postgresql'
+      when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
     - role: mariadb
-      when: esrender_db_type == 'mariadb'
-    - renderingservice-installation
+      when: esrender_db_type == 'mariadb' and edu_version is version('7.0.0','<')
+    - role: renderingservice-installation
+      when: edu_version is defined and edu_version is version('7.0.0','<')
     - role: splash
       when: install_splash is defined and install_splash
   tags:
@@ -75,8 +83,10 @@
 
 - hosts: renderingservice
   roles:
-    - renderingservice-init
-    - renderingservice-registration
+    - role: renderingservice-init
+      when: edu_version is defined and edu_version is version('7.0.0','<')
+    - role: renderingservice-registration
+      when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: onlyoffice
   become: yes

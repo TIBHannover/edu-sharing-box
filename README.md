@@ -1,5 +1,10 @@
 # edu-sharing-box
 
+```diff
+-  Warning!! Do not use Edu-sharing version 7 for production, we are still working on it
+```
+
+
 Dieses Projekt bietet die Möglichkeit, ein edu-sharing mit minimalem Aufwand in einer virtuellen Maschine aufzusetzen. Voraussetzung ist die Installation von
 [Git](https://git-scm.com/downloads),  [Vagrant](https://www.vagrantup.com/downloads.html) und [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 
@@ -17,6 +22,10 @@ Wenn die Installation durchgelaufen ist (einige Minuten, abhängig von der Downl
 
 <http://192.168.98.101/edu-sharing>
 
+```diff
++ Temporally!! only for edu-sharing 7 we will use 
++ <http://192.168.98.101:8200/edu-sharing>
+```
 Die Anmeldung am edu-sharing erfolgt in diesem Beispiel noch vereinfacht mit _admin_/_admin_
 
 Die Anmeldung an der VM via SSH erfolgt in diesem Beispiel noch vereinfacht und ohne Passwort mit dem Benutzer "vagrant". Der Benutzer hat das sudo-Recht.
