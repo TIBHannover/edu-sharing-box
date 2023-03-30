@@ -84,6 +84,7 @@
 
 - include: edu-sharing-config-file.yml
 - include: client-configuration.yml
+- include: edu-sharing-assets.yml
 
 - name: Launch edu-sharing in docker.
   command:
