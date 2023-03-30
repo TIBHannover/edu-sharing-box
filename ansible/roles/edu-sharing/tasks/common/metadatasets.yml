@@ -3,25 +3,16 @@
   copy:
     src: "{{item}}"
     dest: "{{metadatasets_directory_path}}/xml"
-    mode: "666"
-    owner: "{{work_user}}"
-    group: "{{work_user}}"
   with_items: "{{edu_mds_override_paths | default([], true) }}"
 
 - name: Copy valuespaces.
   copy:
     src: "{{item}}"
     dest: "{{metadatasets_directory_path}}/xml/valuespaces/"
-    mode: "666"
-    owner: "{{work_user}}"
-    group: "{{work_user}}"
   with_items: "{{edu_valuespaces_paths | default([], true) }}"
 
 - name: Copy i18n.
   copy:
     src: "{{item}}"
     dest: "{{metadatasets_directory_path}}/i18n/"
-    mode: "666"
-    owner: "{{work_user}}"
-    group: "{{work_user}}"
   with_items: "{{edu_valuespaces_i18n_paths | default([], true) }}"
