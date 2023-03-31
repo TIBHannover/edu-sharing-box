@@ -141,8 +141,11 @@
   shell: '{{ tomcat_stop_command }}'
   tags: edu-sharing-config
 
-- include: images.yml
-  tags: edu-sharing-config
+- include: ./common/images.yml 
+    edu_sharing_images_path="{{edu_home}}/war/edu_sharing"
+  tags: 
+    - edu-sharing-config
+    - images
 
 - name: Ensure jq is present
   become: true
