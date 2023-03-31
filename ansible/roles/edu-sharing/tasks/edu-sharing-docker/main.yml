@@ -48,6 +48,11 @@
     dest: "{{edu_docker_inst_dir}}"
     creates: "{{edu_home}}"
 
+- name: Copy override files.
+  template:
+    src: '4_repository-service-volume-override-common.yml'
+    dest: '{{edu_docker_inst_dir}}/4_repository-service-volume-override-common.yml'
+
 - name: Stop all docker images and containers.
   shell: "{{edu_sharing_undeploy_command}}"
   args:
@@ -70,6 +75,16 @@
 - name: Start migration.
   include: migrate-edu-sharing.yml
   when: has_been_migrated.stdout and not has_been_migrated.stdout|bool
+
+- name: Launch edu-sharing in docker.
+  command:
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: "{{edu_sharing_deploy_command}}"
+  no_log: true
+
+- include: edu-sharing-config-file.yml
+- include: edu-sharing-assets.yml
+- include: client-configuration.yml
 
 - name: Launch edu-sharing in docker.
   command:

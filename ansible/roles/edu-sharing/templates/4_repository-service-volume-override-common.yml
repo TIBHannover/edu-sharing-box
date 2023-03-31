@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  repository-service:
+    volumes:
+      - "repository-service-volume-config-node:/opt/bitnami/tomcat/shared/classes/config"
+      - "repository-service-volume-config-edu-sharing:/opt/bitnami/tomcat/webapps/edu-sharing"
+
+volumes:
+  repository-service-volume-config-edu-sharing:

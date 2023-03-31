@@ -1,0 +1,18 @@
+---
+- name: Copy mds_override.xml.
+  copy:
+    src: "{{item}}"
+    dest: "{{metadatasets_directory_path}}/xml"
+  with_items: "{{edu_mds_override_paths | default([], true) }}"
+
+- name: Copy valuespaces.
+  copy:
+    src: "{{item}}"
+    dest: "{{metadatasets_directory_path}}/xml/valuespaces/"
+  with_items: "{{edu_valuespaces_paths | default([], true) }}"
+
+- name: Copy i18n.
+  copy:
+    src: "{{item}}"
+    dest: "{{metadatasets_directory_path}}/i18n/"
+  with_items: "{{edu_valuespaces_i18n_paths | default([], true) }}"

@@ -1,13 +1,14 @@
+---
 - name: register LMS - add app-XXX.properties.xml
   template:
     src: lms.properties.xml.j2
-    dest: '{{tomcat_home}}/shared/classes/app-{{ item.appid }}.properties.xml'
+    dest: "{{lms_path}}/app-{{ item.appid }}.properties.xml"
   loop: "{{ edu_connected_lms | default([], true) }}"
 
 - name: register LMS - edit applicationfiles in ccapp-registry.properties.xml
   lineinfile:
     backrefs: yes
-    path: '{{ tomcat_home }}/shared/classes/ccapp-registry.properties.xml'
+    path: "{{lms_path}}/ccapp-registry.properties.xml"
     line: '<entry key="applicationfiles">\g<start>\g<end>,app-{{ item.appid }}.properties.xml</entry>'
     regexp: '^\s*<entry key="applicationfiles">(?P<start>(?:(?!,app-{{ item.appid }}.properties.xml).)*)(,app-{{ item.appid }}.properties.xml)?(?P<end>.*?)</entry>'
   loop: "{{ edu_connected_lms | default([], true) }}"
