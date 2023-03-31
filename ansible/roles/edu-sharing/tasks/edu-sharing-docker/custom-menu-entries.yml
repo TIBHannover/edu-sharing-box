@@ -1,0 +1,17 @@
+# -------- Menu entries (BEGIN) --------#
+- name: Remove all menuEntries from client config
+  xml:
+    path: "{{ custom_menu_entries_path}}/defaults/client.config.xml"
+    xpath: "/config/values/menuEntries"
+    state: absent
+    pretty_print: yes
+
+- include_tasks: ./common/custom_menu_entry.yml
+  vars:
+    custom_menu_entry_client_config_file: "{{ custom_menu_entries_path}}/defaults/client.config.xml"
+    custom_menu_entry_assets_path: "{{edu_sharing_assets_path.stdout}}/assets"
+  with_items: "{{ edu_custom_menu_entries | default([], true) }}"
+  when: (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
+  loop_control:
+    loop_var: custom_menu_entry
+# -------- Menu entries (END)-------- #
