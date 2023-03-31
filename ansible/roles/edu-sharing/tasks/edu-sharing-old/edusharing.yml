@@ -111,19 +111,10 @@
   tags: edu-sharing-config
 
 # -------- Menu entries (BEGIN) --------#
-- name: Remove all menuEntries from client config 
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: "/config/values/menuEntries"
-    state: absent
-    pretty_print: yes
-  tags: edu-sharing-config
-
-- include_tasks: custom_menu_entries.yml
-  with_items: '{{ edu_custom_menu_entries | default([], true) }}'
-  loop_control:
-    loop_var: custom_menu_entry
-  tags: edu-sharing-config
+- include: custom_menu_entries.yml
+  tags:
+    - edu-sharing-config
+    - custom-menu-entries
 
 # -------- Menu entries (END)-------- #
 
