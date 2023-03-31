@@ -236,12 +236,8 @@
 - include: plugins.yml
   tags: edu-sharing-config
 
-- name: create edu-sharing.conf
-  template:
-    src: edu-sharing.conf.j2
-    dest: '{{tomcat_home}}/shared/classes/config/edu-sharing.conf'
-  when: edu_config_file == 'edu-sharing.conf'
-  tags: edu-sharing-config
+- include: ./common/edu-sharing-config-file.yml
+    edu_sharing_config_file_path='{{tomcat_home}}/shared/classes/config/edu-sharing.conf'
 
 - name: remove optional lines in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
