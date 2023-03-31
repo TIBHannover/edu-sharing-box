@@ -42,73 +42,11 @@
     dest: "{{edu_inst_dir}}"
     creates: "{{edu_home}}"
 
-- name: clear optional properties in client config
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '{{ item }}'
-    state: absent
-    pretty_print: yes
-  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("cleanup", "undefined") | map(attribute="cleanup") | list }}'
-  tags: edu-sharing-config
-
-- name: set standard entries in client config
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '{{ item.xpath }}'
-    value: '{{ item.value }}'
-    pretty_print: yes
-  loop: '{{ edu_client_config_xml_standard_entries | rejectattr("value", "undefined") | list }}'
-  tags: edu-sharing-config
-
-# non-standard entries in client config
-- name: set banner components
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/banner'
-    add_children: '<components>{{ item }}</components>'
-    input_type: xml
-    pretty_print: yes
-  with_items: '{{edu_banner_components}}'
-  tags: edu-sharing-config
-
-- name: clear HelpMenuOptions
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: "/config/values/helpMenuOptions[key='{{item[0]}}']"
-    state: absent
-    pretty_print: yes
-  loop: '{{ edu_help_menu_options | default([], true) }}'
-  tags: edu-sharing-config
-
-- name: edit HelpMenuOptions
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: "/config/values"
-    add_children: '<helpMenuOptions><key>{{item[0]}}</key><icon>{{item[1]}}</icon><url>{{item[2]}}</url></helpMenuOptions>'
-    input_type: xml
-    pretty_print: yes
-  loop: '{{ edu_help_menu_options | default([], true) }}'
-  tags: edu-sharing-config
-
-- name: set allowedLicenses
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values'
-    add_children: '<allowedLicenses>{{ item }}</allowedLicenses>'
-    input_type: xml
-    pretty_print: yes
-  with_items: '{{edu_allowed_licenses}}'
-  when: (edu_allowed_licenses != "") and (edu_allowed_licenses is not none)
-  tags: edu-sharing-config
-
-# change the view type in workspace
-- name: set workspace viewType 'list view' mode
-  xml:
-    path: '{{ edu_client_config_xml_path }}'
-    xpath: '/config/values/workspaceViewType'
-    value: '{{ "1" if (edu_workspace_viewType | default("list")) == "tile" else "0" }}'
-    pretty_print: yes
-  tags: edu-sharing-config
+- include: ./common/client-configuration.yml
+    client_configuration_path='{{edu_client_config_xml_path}}'
+  tags:
+    - edu-sharing-config
+    - client-configuration
 
 # -------- Menu entries (BEGIN) --------#
 - include: custom_menu_entries.yml
