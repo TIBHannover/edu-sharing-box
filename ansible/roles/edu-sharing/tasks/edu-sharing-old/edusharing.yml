@@ -311,8 +311,11 @@
 - include: model.yml
   tags: edu-sharing-config
 
-- include: lms.yml
-  tags: edu-sharing-config
+- include: ./common/lms.yml 
+    lms_path='{{ tomcat_home }}/shared/classes'
+  tags: 
+    - edu-sharing-config
+    - lms
 
 - name: Copy mail template
   copy:
