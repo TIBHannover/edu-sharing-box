@@ -22,7 +22,8 @@
     become: true
     when: activate_classification_keywords is defined and activate_classification_keywords
   - include: jobs.yml
-  - include: pixabay.yml
+  - include: ./common/pixabay.yml 
+        pixabay_path='{{ tomcat_home }}/shared/classes'
     when: connect_content_pixabay
   - include: youtube.yml
     when: connect_content_youtube
