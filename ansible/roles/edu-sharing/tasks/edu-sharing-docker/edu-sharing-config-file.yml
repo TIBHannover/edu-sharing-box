@@ -6,7 +6,6 @@
   ignore_errors: true
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
 
 - include: ./common/edu-sharing-config-file.yml
     edu_sharing_config_file_path='{{repository_volume_config_cluster.stdout}}/edu-sharing.override.conf'
@@ -14,7 +13,6 @@
   when: (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
 
 - include: ./common/youtube.yml
     youtube_path='{{repository_volume_config_cluster.stdout}}/applications'
@@ -23,7 +21,6 @@
     (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
     - youtube
 
 - include: ./common/pixabay.yml
@@ -33,7 +30,6 @@
     (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
     - pixabay
 
 - include: ./common/lms.yml
@@ -43,5 +39,4 @@
     (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
     - lms

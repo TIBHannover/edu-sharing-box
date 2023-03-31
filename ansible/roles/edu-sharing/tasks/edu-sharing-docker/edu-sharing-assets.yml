@@ -6,7 +6,6 @@
   ignore_errors: true
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
 
 - include: ./common/images.yml
     edu_sharing_images_path="{{edu_sharing_assets_path.stdout}}"
@@ -14,4 +13,4 @@
   when: (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
+    - images

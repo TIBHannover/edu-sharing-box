@@ -4,7 +4,6 @@
   register: edu_sharing_client_xml_path
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
 
 
 - include: ./common/client-configuration.yml
@@ -13,7 +12,7 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
+    - client-configuration
 
 - include: ./common/metadatasets.yml
     metadatasets_directory_path='{{edu_sharing_client_xml_path.stdout}}/defaults/metadatasets'
@@ -21,7 +20,7 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
+    - metadatasets
 
 - include: custom-menu-entries.yml
     custom_menu_entries_path='{{edu_sharing_client_xml_path.stdout}}'
@@ -29,7 +28,6 @@
   when: ( edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != "")        
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
     - custom-menu-entries
 
 - include: ./common/hide_main_menu.yml
@@ -38,5 +36,4 @@
   when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
   tags:
     - edu-sharing-config
-    - edu-sharing-docker-config
     - hide-main-menu
