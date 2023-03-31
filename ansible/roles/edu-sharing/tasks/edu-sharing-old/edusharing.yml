@@ -302,8 +302,11 @@
     - shibboleth
     - edu-sharing-config
 
-- include: metadatasets.yml
-  tags: edu-sharing-config
+- include: ./common/metadatasets.yml 
+      metadatasets_directory_path='{{ tomcat_home }}/shared/classes/org/edu_sharing/metadataset/v2/'
+  tags: 
+    - edu-sharing-config
+    - metadatasets
 
 - include: model.yml
   tags: edu-sharing-config
