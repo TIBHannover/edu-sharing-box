@@ -119,7 +119,11 @@
 # -------- Menu entries (END)-------- #
 
 # hide main menu entries
-- include: hide_main_menu.yml
+- include: ./common/hide_main_menu.yml 
+    hide_main_menu_config_xml_path='{{edu_client_config_xml_path}}'
+  tags:
+    - edu-sharing-config
+    - hide-main-menu
 
 - include: shibboleth_before.yml
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
