@@ -30,11 +30,10 @@
   tags:
     - migration-alfresco-data
 
-- name: Copy backup to alfresco volume.
+- name: Copy alfresco data  to alfresco volume.
   become: yes
-  unarchive:
-    remote_src: yes
-    src: "{{ backup_path }}/alfresco-backup.tar.gz"
+  copy:
+    src: "{{ alf_home}}/alf_data/"
     dest: "{{alfresco_volume_data.stdout}}"
     mode: "{{alfresco_volume_data_stats.stat.mode}}"
     owner: "{{alfresco_volume_data_stats.stat.uid}}"
@@ -54,3 +53,8 @@
   with_items:
     - key: HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED
       value: "true"
+
+- name: Ensure tomcat is started.
+  shell: "{{tomcat_start_command}}"
+  tags:
+    - migration-alfresco-data
