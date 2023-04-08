@@ -21,14 +21,26 @@
   tags:
     - migration-alfresco-data
 
+- name: Get stats of the alfresco docker volume
+  become: yes
+  stat:
+    path: "{{alfresco_volume_data.stdout}}"
+  when: alfresco_volume_data.stdout != ""
+  register: alfresco_volume_data_stats
+  tags:
+    - migration-alfresco-data
+
 - name: Copy backup to alfresco volume.
   become: yes
   unarchive:
     remote_src: yes
     src: "{{ backup_path }}/alfresco-backup.tar.gz"
     dest: "{{alfresco_volume_data.stdout}}"
-    mode: "775"
-  when: alfresco_volume_data.stdout != ""
+    mode: "{{alfresco_volume_data_stats.stat.mode}}"
+    owner: "{{alfresco_volume_data_stats.stat.uid}}"
+    group: "{{alfresco_volume_data_stats.stat.gid}}"
+  when: (alfresco_volume_data.stdout is defined and alfresco_volume_data.stdout != "") and 
+        (alfresco_volume_data_stats.stat.isdir is defined and alfresco_volume_data_stats.stat.isdir)
   tags:
     - migration-alfresco-data
 
