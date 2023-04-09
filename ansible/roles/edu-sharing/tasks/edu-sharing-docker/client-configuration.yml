@@ -37,3 +37,12 @@
   tags:
     - edu-sharing-config
     - hide-main-menu
+
+
+- include: ./common/custom_option.yml
+    custom_option_config_xml_path='{{edu_sharing_client_xml_path.stdout}}/defaults/client.config.xml'
+  become: yes
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags:
+    - edu-sharing-config
+    - custom-option

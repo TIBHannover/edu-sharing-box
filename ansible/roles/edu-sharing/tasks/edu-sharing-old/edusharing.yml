@@ -98,7 +98,10 @@
   loop_control:
     loop_var: custom_license
 #  add custom options task
-- include_tasks: custom_option.yml
+- include: ./common/custom_option.yml
+    custom_option_config_xml_path='{{edu_client_config_xml_path}}'
+  tags:
+    - custom-option
 - name: edit i18n
   lineinfile:
     backrefs: yes
