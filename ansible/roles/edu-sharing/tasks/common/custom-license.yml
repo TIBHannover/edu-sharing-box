@@ -1,0 +1,78 @@
+---
+
+- name: Add custom license
+  block:
+      #  first let's clean this license in client.config.xml
+    - name: clear the license, before we add it.
+      xml:
+        path: '{{ custom_license_client_config_xml_path }}'
+        xpath: "/config/values/customLicenses[id='{{custom_license.name|upper }}']"
+        state: absent
+        pretty_print: yes
+      when: custom_license is not none
+      tags: edu-sharing-config
+    
+    #  then we will add again it in client.config.xml
+    - name: add customLicenses in client.config.xml
+      xml:
+        path: '{{ custom_license_client_config_xml_path }}'
+        xpath: '/config/values'
+        add_children: > 
+            <customLicenses>
+              <id>{{custom_license.name|upper }}</id>
+              <position>{{custom_license.position}}</position>
+              <url>{{custom_license.url}}</url>
+            </customLicenses>
+        input_type: xml
+        pretty_print: yes
+      when: custom_license is not none
+      tags: edu-sharing-config        
+
+    # let's add/update the Key,value for license NAME in ../common/[en/de].json files 
+    - name: set License NAME to ../common/[en-de].json
+      # become: yes
+      shell: | 
+        jq '.LICENSE.NAMES.{{custom_license.name|upper }} ="{{custom_license.name}}"' \
+        {{ custom_license_edu_sharing_assets }}/assets/i18n/common/{{item}} >tmp.json && mv tmp.json {{ custom_license_edu_sharing_assets }}/assets/i18n/common/{{item}}
+      with_items:
+        - de.json
+        - en.json
+      when: custom_license is not none
+      tags: edu-sharing-config
+
+      # let's add/update the Key,value for license DESCRIPTION in ../common/[en/de].json files 
+    - name: set License DESCRIPTION to ../common/[en-de].json
+      # become: yes
+      shell: | 
+        jq '.LICENSE.DESCRIPTION.{{custom_license.name|upper }} ="{{item[1]}}"' \ 
+        {{ custom_license_edu_sharing_assets }}/assets/i18n/common/{{item[0]}}.json >tmp.json && mv tmp.json {{ custom_license_edu_sharing_assets }}/assets/i18n/common/{{item[0]}}.json
+      loop: '{{ custom_license.description | default([], true) }}'
+      tags: edu-sharing-config        
+
+    # let's add/update the Key,value for license GROUPS in ../common/[en/de].json files 
+    - name: set License GROUP name to ../common/[en-de].json
+      # become: yes
+      shell: | 
+        jq '.LICENSE.GROUPS.{{custom_license.name|upper }} ="{{item[1]}}"' \
+        {{ custom_license_edu_sharing_assets}}/assets/i18n/common/{{item[0]}}.json >tmp.json && mv tmp.json {{ custom_license_edu_sharing_assets }}/assets/i18n/common/{{item[0]}}.json
+      loop: '{{ custom_license.groups | default([], true) }}'
+      tags: edu-sharing-config
+
+    # add/update logo, for specific license
+    - name: set logo for custom license
+      # become: yes
+      copy:
+        src: '{{custom_license.image}}'
+        dest: '{{custom_license_edu_sharing_assets}}/ccimages/licenses/{{custom_license.name| lower }}.svg'
+      when: custom_license is not none
+  # since custom license is not a mandatory,in order to make edu-sharing working, we don't want to stop the ansible,
+  # we want to let ansible continue, and just remove the current custom license
+  rescue:
+  - name: It caught an error, we will rollback last insert, to prevent bug in edu-sharing
+    xml:
+      path: '{{ custom_license_client_config_xml_path }}'
+      xpath: "/config/values/customLicenses[id='{{custom_license.name|upper }}']"
+      state: absent
+      pretty_print: yes
+    when: custom_license is not none
+    tags: edu-sharing-config
