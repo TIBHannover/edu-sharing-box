@@ -93,10 +93,15 @@
   - packages
   - root-task
 
-- include_tasks: custom-license.yml
+- include_tasks: ./common/custom-license.yml
+  vars:
+    custom_license_client_config_xml_path: "{{edu_client_config_xml_path}}"
+    custom_license_edu_sharing_assets: "{{ edu_home }}/war/edu_sharing"
   with_items: '{{ edu_custom_licenses | default([], true) }}'
   loop_control:
     loop_var: custom_license
+  tags:
+    - custom-license
 #  add custom options task
 - include: ./common/custom_option.yml
     custom_option_config_xml_path='{{edu_client_config_xml_path}}'
