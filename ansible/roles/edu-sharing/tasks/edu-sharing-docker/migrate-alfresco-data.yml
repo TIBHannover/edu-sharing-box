@@ -1,4 +1,16 @@
 ---
+- name: Ensures backup_path dir exists
+  file: path='{{ backup_path }}' state=directory
+  tags:
+    - backup-alfresco-data
+
+- name: Backup alfresco database
+  no_log: true
+  shell: |
+    PGPASSWORD="{{alfresco_db.password}}" pg_dump -h localhost -U {{alfresco_db.user}}  {{alfresco_db.name}}  --serializable-deferrable | gzip > {{backup_path}}/{{alfresco_db.name}}-dump.sql.gz
+  tags:
+    - backup-alfresco-data
+
 - name: Create the 3_datamigration-common.yml for database migration.
   template:
     src: 3_datamigration-common.yml.j2
@@ -53,8 +65,3 @@
   with_items:
     - key: HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED
       value: "true"
-
-- name: Ensure tomcat is started.
-  shell: "{{tomcat_start_command}}"
-  tags:
-    - migration-alfresco-data
