@@ -2,8 +2,6 @@
 
 - name: Ensure tomcat is stopped.
   shell: "{{tomcat_stop_command}}"
-  tags:
-    - backup-alfresco-data
 
 - set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
 
