@@ -28,12 +28,6 @@
     (exist_alfresco_database.is_available is defined and exist_alfresco_database.is_available|bool)
   tags: migrate-edu-sharing
 
-- include: backup-alfresco-data.yml
-  when:
-    (alfresco_alf_data_exist is defined and alfresco_alf_data_exist.matched > 0) and
-    (exist_alfresco_database.is_available is defined and exist_alfresco_database.is_available|bool)
-  tags: migrate-edu-sharing
-
 - include: migrate-alfresco-data.yml
   when:
     (alfresco_alf_data_exist is defined and alfresco_alf_data_exist.matched > 0) and
