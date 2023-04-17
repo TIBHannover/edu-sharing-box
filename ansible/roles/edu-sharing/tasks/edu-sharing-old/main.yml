@@ -1,4 +1,13 @@
 ---
+  - name: Ensure gzip is present
+    package:
+      name: ["gzip"]
+    become: yes
+    tags:
+      - packages
+      - root-task
+
+
   - include: mariadb.yml
     when: alfresco_db_type == 'mariadb'
   - include: postgresql.yml
@@ -18,9 +27,11 @@
       - antivirus
   - include: edusharing.yml
   - include: users.yml
-  - include: classification-keyword.yml
+  - include: ./common/classification-keyword.yml
     become: true
     when: activate_classification_keywords is defined and activate_classification_keywords
+    tags:
+      - classification-keyword
   - include: jobs.yml
   - include: ./common/pixabay.yml 
         pixabay_path='{{ tomcat_home }}/shared/classes'
