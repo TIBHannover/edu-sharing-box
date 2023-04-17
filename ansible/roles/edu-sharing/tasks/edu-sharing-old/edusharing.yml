@@ -107,15 +107,12 @@
     custom_option_config_xml_path='{{edu_client_config_xml_path}}'
   tags:
     - custom-option
-- name: edit i18n
-  lineinfile:
-    backrefs: yes
-    path: '{{ edu_home }}/war//edu_sharing/assets/i18n/{{item[0]}}'
-    line: '\g<start>{{item[2]}}\g<end>'
-    regexp: '(?P<start>^\s*"{{item[1]}}"\s*:\s*").*(?P<end>".*)'
-  loop: '{{ edu_i18n_adjustments | default([], true) }}'
-  tags: edu-sharing-config
-  
+- include: ./common/editI18n.yml
+    i18n_path='{{ edu_home }}/war//edu_sharing/assets/i18n'
+  tags:
+    - edu-sharing-config
+    - i18n
+
 - name: edit enable_statistics_api in edu-sharing.properties for versions before 5.1
   lineinfile:
     path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
