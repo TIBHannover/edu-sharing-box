@@ -14,3 +14,11 @@
   tags:
     - edu-sharing-config
     - images
+
+- include: ./common/editI18n.yml
+    i18n_path="{{edu_sharing_assets_path.stdout}}/assets/i18n"
+  become: yes
+  when: (edu_sharing_assets_path.stdout is defined) and (edu_sharing_assets_path.stdout != "")
+  tags:
+    - edu-sharing-config
+    - i18n
