@@ -7,7 +7,7 @@
       - backup
   - include: imagemagick.yml
   - include: libreoffice.yml
-  - include: mirror-vocabs.yml
+  - include: ./common/mirror-vocabs.yml
     when: mirror_vocabularies | default([], true) | length>0
   - include: alfresco.yml
   - include: share.yml
