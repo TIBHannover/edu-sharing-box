@@ -39,6 +39,7 @@
     name:
       - unzip
       - jq
+      - gzip
   become: yes
   tags:
     - packages
@@ -90,6 +91,16 @@
 - include: client-configuration.yml
 - include: ./common/mirror-vocabs.yml
   when: mirror_vocabularies | default([], true) | length>0
+  tags:
+    - edu-sharing-config
+    - mirror-vocabularies
+    
+- include: ./common/classification-keyword.yml
+  become: true
+  when: activate_classification_keywords is defined and activate_classification_keywords
+  tags:
+    - edu-sharing-config
+    - classification-keyword
 
 - name: Launch edu-sharing in docker.
   command:
