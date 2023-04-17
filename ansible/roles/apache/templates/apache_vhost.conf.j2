@@ -24,7 +24,7 @@
         ProxyPass /share        ajp://localhost:{{tomcat_ajp_port}}/share
         ProxyPass /edu-sharing  ajp://localhost:{{tomcat_ajp_port}}/edu-sharing
 {% endif %}
-
+{% endif %}
 {% if activate_classification_keywords is defined and activate_classification_keywords %}
         DocumentRoot /var/www
         <Directory /var/www/{{edu_classification_keyword_path | dirname }} >
@@ -32,7 +32,6 @@
           AllowOverride All
           Require all granted
         </Directory>
-{% endif %}
 {% endif %}
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
