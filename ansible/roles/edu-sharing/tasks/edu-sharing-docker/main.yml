@@ -107,3 +107,9 @@
     chdir: "{{ edu_docker_inst_dir }}"
     cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
+
+- include: ./common/jobs.yml
+    jobs_edu_sharing_url="{{edu_sharing_url}}"
+  tags:
+    - edu-sharing-config
+    - jobs
