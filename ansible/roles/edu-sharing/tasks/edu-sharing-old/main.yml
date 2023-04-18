@@ -32,7 +32,10 @@
     when: activate_classification_keywords is defined and activate_classification_keywords
     tags:
       - classification-keyword
-  - include: jobs.yml
+  - include: ./common/jobs.yml
+      jobs_edu_sharing_url="{{edu_sharing_url}}"
+    tags:
+      - jobs
   - include: ./common/pixabay.yml 
         pixabay_path='{{ tomcat_home }}/shared/classes'
     when: connect_content_pixabay
