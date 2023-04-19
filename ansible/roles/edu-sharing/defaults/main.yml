@@ -65,11 +65,9 @@ edu_sharing_environment_variable:
   - key: COMMON_BIND_HOST
     value: '127.0.0.1'
   - key: REPOSITORY_SERVICE_PORT
-    value: '80'
+    value: '{{edu_sharing_port | default("80",true)}}'
   - key: SERVICES_RENDERING_SERVICE_PORT
-    value: '80'
-  - key: REPOSITORY_SERVICE_PORT_HTTP
-    value: '{{edu_sharing_port | default("8200",true)}}'
+    value: '{{edu_sharing_port | default("80",true)}}'
   - key: REPOSITORY_SERVICE_GUEST_USER
     value: 'esguest'
   - key: REPOSITORY_SERVICE_GUEST_PASS

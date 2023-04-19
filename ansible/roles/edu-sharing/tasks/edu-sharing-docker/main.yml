@@ -74,7 +74,8 @@
     regexp: "^# {{ item.key }}="
     line: "{{ item.key }}={{ item.value }}"
   no_log: true
-  with_items: "{{ edu_sharing_environment_variable }}"
+  when: item.value is defined and item.value != ""
+  loop: "{{ edu_sharing_environment_variable | default([], true) }}"
 
 - name: Start migration.
   include: migrate-edu-sharing.yml
