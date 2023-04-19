@@ -260,13 +260,11 @@
     - edu-sharing-config
     - lms
 
-- name: Copy mail template
-  copy:
-    src: '{{item}}'
-    dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/repository/server/tools/mailtemplates/'
-  when: (edu_sharing_mail_templates_override is defined) and (edu_sharing_mail_templates_override != "") and (edu_sharing_mail_templates_override is not none)
-  with_items: '{{edu_sharing_mail_templates_override}}'
-  tags: edu-sharing-config
+- include: ./common/mail-templates.yml
+    mail_templates_path="{{ tomcat_home }}/shared/classes/org/edu_sharing/repository/server/tools/mailtemplates/"
+  tags: 
+    - edu-sharing-config
+    - mail-templates
 
 - name: start alfresco
   shell: '{{tomcat_start_command}}'

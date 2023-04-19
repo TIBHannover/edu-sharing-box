@@ -88,3 +88,17 @@ edu_sharing_environment_variable:
     value: '{{edu_sharing_host}}'
   - key: SERVICES_RENDERING_SERVICE_HOST
     value: '{{edu_sharing_host}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PORT
+    value: '{{edu_mail_smtp_port if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_FROM
+    value: '{{edu_mail_smtp_from if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_REPORT_RECEIVER
+    value: '{{edu_mail_report_receiver if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_USERNAME
+    value: '{{edu_mail_smtp_username if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PASSWORD
+    value: '{{edu_mail_smtp_passwd if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_AUTHTYPE
+    value: '{{edu_mail_authtype if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_HOST
+    value: '{{edu_mail_smtp_server | default("",true)}}'
