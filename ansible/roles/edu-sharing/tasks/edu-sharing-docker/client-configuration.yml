@@ -63,3 +63,11 @@
   tags:
     - edu-sharing-config
     - custom-license
+
+- include: ./common/mail-templates.yml
+    mail_templates_path="{{edu_sharing_client_xml_path.stdout}}/defaults/mailtemplates"
+  become: yes
+  when: edu_sharing_client_xml_path.stdout is defined and edu_sharing_client_xml_path.stdout != ""
+  tags:
+    - edu-sharing-config
+    - mail-templates
