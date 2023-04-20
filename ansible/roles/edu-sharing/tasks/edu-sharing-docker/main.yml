@@ -39,6 +39,7 @@
     name:
       - unzip
       - jq
+      - gzip
   become: yes
   tags:
     - packages
@@ -73,7 +74,8 @@
     regexp: "^# {{ item.key }}="
     line: "{{ item.key }}={{ item.value }}"
   no_log: true
-  with_items: "{{ edu_sharing_environment_variable }}"
+  when: item.value is defined and item.value != ""
+  loop: "{{ edu_sharing_environment_variable | default([], true) }}"
 
 - name: Start migration.
   include: migrate-edu-sharing.yml
@@ -88,9 +90,27 @@
 - include: edu-sharing-config-file.yml
 - include: edu-sharing-assets.yml
 - include: client-configuration.yml
+- include: ./common/mirror-vocabs.yml
+  when: mirror_vocabularies | default([], true) | length>0
+  tags:
+    - edu-sharing-config
+    - mirror-vocabularies
+    
+- include: ./common/classification-keyword.yml
+  become: true
+  when: activate_classification_keywords is defined and activate_classification_keywords
+  tags:
+    - edu-sharing-config
+    - classification-keyword
 
 - name: Launch edu-sharing in docker.
   command:
     chdir: "{{ edu_docker_inst_dir }}"
     cmd: "{{edu_sharing_deploy_command}}"
   no_log: true
+
+- include: ./common/jobs.yml
+    jobs_edu_sharing_url="{{edu_sharing_url}}"
+  tags:
+    - edu-sharing-config
+    - jobs

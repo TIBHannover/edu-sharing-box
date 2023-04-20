@@ -93,21 +93,26 @@
   - packages
   - root-task
 
-- include_tasks: custom-license.yml
+- include_tasks: ./common/custom-license.yml
+  vars:
+    custom_license_client_config_xml_path: "{{edu_client_config_xml_path}}"
+    custom_license_edu_sharing_assets: "{{ edu_home }}/war/edu_sharing"
   with_items: '{{ edu_custom_licenses | default([], true) }}'
   loop_control:
     loop_var: custom_license
+  tags:
+    - custom-license
 #  add custom options task
-- include_tasks: custom_option.yml
-- name: edit i18n
-  lineinfile:
-    backrefs: yes
-    path: '{{ edu_home }}/war//edu_sharing/assets/i18n/{{item[0]}}'
-    line: '\g<start>{{item[2]}}\g<end>'
-    regexp: '(?P<start>^\s*"{{item[1]}}"\s*:\s*").*(?P<end>".*)'
-  loop: '{{ edu_i18n_adjustments | default([], true) }}'
-  tags: edu-sharing-config
-  
+- include: ./common/custom_option.yml
+    custom_option_config_xml_path='{{edu_client_config_xml_path}}'
+  tags:
+    - custom-option
+- include: ./common/editI18n.yml
+    i18n_path='{{ edu_home }}/war//edu_sharing/assets/i18n'
+  tags:
+    - edu-sharing-config
+    - i18n
+
 - name: edit enable_statistics_api in edu-sharing.properties for versions before 5.1
   lineinfile:
     path: '{{ edu_home }}/war/WEB-INF/classes/edu-sharing.properties'
@@ -255,13 +260,11 @@
     - edu-sharing-config
     - lms
 
-- name: Copy mail template
-  copy:
-    src: '{{item}}'
-    dest: '{{ tomcat_home }}/shared/classes/org/edu_sharing/repository/server/tools/mailtemplates/'
-  when: (edu_sharing_mail_templates_override is defined) and (edu_sharing_mail_templates_override != "") and (edu_sharing_mail_templates_override is not none)
-  with_items: '{{edu_sharing_mail_templates_override}}'
-  tags: edu-sharing-config
+- include: ./common/mail-templates.yml
+    mail_templates_path="{{ tomcat_home }}/shared/classes/org/edu_sharing/repository/server/tools/mailtemplates/"
+  tags: 
+    - edu-sharing-config
+    - mail-templates
 
 - name: start alfresco
   shell: '{{tomcat_start_command}}'

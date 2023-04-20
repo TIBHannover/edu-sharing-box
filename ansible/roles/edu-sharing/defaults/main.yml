@@ -63,21 +63,19 @@ edu_sharing_environment_variable:
   - key: REPOSITORY_DATABASE_PASS
     value: '{{alfresco_db.password}}'
   - key: COMMON_BIND_HOST
-    value: '0.0.0.0'
+    value: '127.0.0.1'
   - key: REPOSITORY_SERVICE_PORT
-    value: '{{edu_sharing_port | default("8200",true)}}'
-  # - key: REPOSITORY_SERVICE_PORT_AJP
-  #   value: '{{edu_sharing_port | default("8102",true)}}'
-  - key: REPOSITORY_SERVICE_PORT_HTTP
-    value: '{{edu_sharing_port | default("8200",true)}}'
+    value: '{{edu_sharing_port | default("80",true)}}'
+  - key: SERVICES_RENDERING_SERVICE_PORT
+    value: '{{edu_sharing_port | default("80",true)}}'
   - key: REPOSITORY_SERVICE_GUEST_USER
     value: 'esguest'
   - key: REPOSITORY_SERVICE_GUEST_PASS
     value: 'esguest'
   - key: REPOSITORY_SERVICE_ADMIN_PASS
     value: '{{alf_password}}'
-  # - key: SERVICES_RENDERING_SERVICE_HOST
-  #   value: '{{edu_sharing_host}}'
+  - key: SERVICES_RENDERING_SERVICE_HOST
+    value: '{{edu_sharing_host}}'
   - key: SERVICES_RENDERING_DATABASE_NAME
     value: '{{esrender_db.name}}'
   - key: SERVICES_RENDERING_DATABASE_USER
@@ -88,3 +86,17 @@ edu_sharing_environment_variable:
     value: '{{edu_sharing_host}}'
   - key: SERVICES_RENDERING_SERVICE_HOST
     value: '{{edu_sharing_host}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PORT
+    value: '{{edu_mail_smtp_port if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_FROM
+    value: '{{edu_mail_smtp_from if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_REPORT_RECEIVER
+    value: '{{edu_mail_report_receiver if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_USERNAME
+    value: '{{edu_mail_smtp_username if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PASSWORD
+    value: '{{edu_mail_smtp_passwd if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_AUTHTYPE
+    value: '{{edu_mail_authtype if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_HOST
+    value: '{{edu_mail_smtp_server | default("",true)}}'

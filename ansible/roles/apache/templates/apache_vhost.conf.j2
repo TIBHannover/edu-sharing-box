@@ -24,7 +24,29 @@
         ProxyPass /share        ajp://localhost:{{tomcat_ajp_port}}/share
         ProxyPass /edu-sharing  ajp://localhost:{{tomcat_ajp_port}}/edu-sharing
 {% endif %}
+{% elif edu_version is defined and edu_version is version_compare('7.0.0','>=') %}
+       ProxyIOBufferSize 65536
+       <Location /edu-sharing>
+                ProxyPass ajp://localhost:8102/edu-sharing
+                ProxyPassReverse ajp://localhost:8102/edu-sharing
+        </Location>
+        <Location /share>
+                ProxyPass ajp://localhost:8102/share
+                ProxyPassReverse ajp://localhost:8102/share
+        </Location>
+         #ProxyPreserveHost On
+        <Location /esrender>
+              ProxyPass http://localhost:9100/esrender
+              ProxyPassReverse http://localhost:9100/esrender
+       </Location>
+{% endif %}
 
+        DocumentRoot /var/www
+        <Directory /var/www >
+          Options Indexes FollowSymLinks MultiViews
+          AllowOverride All
+          Require all granted
+        </Directory>
 {% if activate_classification_keywords is defined and activate_classification_keywords %}
         DocumentRoot /var/www
         <Directory /var/www/{{edu_classification_keyword_path | dirname }} >
@@ -32,7 +54,6 @@
           AllowOverride All
           Require all granted
         </Directory>
-{% endif %}
 {% endif %}
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
