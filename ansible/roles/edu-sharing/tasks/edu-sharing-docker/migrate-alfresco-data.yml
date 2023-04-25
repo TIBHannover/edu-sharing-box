@@ -19,6 +19,19 @@
   tags:
     - migration-alfresco-sql
 
+- name: Add the migration for database migration.
+  blockinfile:
+    path: "{{ edu_docker_inst_dir }}/docker-compose.override.yml"
+    block: |2
+        repository-database:
+           volumes:
+             - "{{ backup_path }}/{{ alfresco_db.name }}-dump.sql.gz:/docker-entrypoint-initdb.d/psqldump.sql.gz"
+    insertafter: '^\s*services:$'
+    marker: ""
+  when: edu_version is defined and  edu_version is version_compare('8.0.0','>=')
+  tags:
+    - migration-alfresco-sql
+
 - name: Launch edu-sharing in docker.
   command:
     chdir: "{{ edu_docker_inst_dir }}"
