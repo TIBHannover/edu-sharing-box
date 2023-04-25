@@ -19,6 +19,10 @@
   shell: "echo ${HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED:-false}"
   register: has_been_migrated
 
+- name: Get edu-sharing version in server.
+  shell: "echo ${EDU_SHARING_VERSION:-}"
+  register: edu_sharing_version
+
 - name: Ensures inst-dir exists.
   file: path='{{edu_docker_inst_dir}}' state=directory
 
@@ -55,6 +59,11 @@
     src: "{{edu_docker_inst_dir}}/edu-sharing.zip"
     dest: "{{edu_docker_inst_dir}}"
     creates: "{{edu_home}}"
+
+- include: clean-edu-sharing-volumes.yml
+  when: edu_sharing_version.stdout is defined and 
+        edu_sharing_version.stdout != edu_version
+
 
 - name: Copy override files.
   template:
