@@ -1,0 +1,51 @@
+---
+
+
+- name: Get a list of all containers.
+  shell: >
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'edu[-_]sharing' || true"
+  register: containers_list
+  changed_when: containers_list.stdout != ""
+  become: yes
+
+- debug:
+   var: containers_list
+
+- name: Stop all edu-sharing containers.
+  shell: >
+    sg docker -c "docker stop {{ item }}"
+  with_items: "{{ containers_list.stdout_lines | default([], true) }}"
+
+- name: Remove all edu-sharing containers.
+  shell: >
+    sg docker -c "docker rm {{ item }}"
+  with_items: "{{ containers_list.stdout_lines | default([], true) }}"
+
+
+- name: Get a list of all volumes.
+  shell: >
+    sg docker -c "docker volume ls --quiet || true"
+  register: volumes_list
+  changed_when: volumes_list.stdout != ""
+
+
+
+- name: Remove all volumes except 'repository-database-volume-data' and 'repository-service-volume-data'.
+  shell: >
+    sg docker -c "docker volume rm {{ item }}"
+  with_items: "{{ volumes_list.stdout_lines | default([], true) }}"
+  when: 
+    - not "{{ edu_sharing_docker_project_name }}_repository-database-volume-data" in item
+    - not "{{ edu_sharing_docker_project_name }}_repository-service-volume-data" in item
+
+
+- name: Export EDU_SHARING_VERSION to avoid multiple cleaning docker containers and volumes.
+  become: yes
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items:
+    - key: EDU_SHARING_VERSION
+      value: "{{edu_version}}"

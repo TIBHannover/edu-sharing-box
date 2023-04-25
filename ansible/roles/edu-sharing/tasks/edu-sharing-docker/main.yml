@@ -3,6 +3,10 @@
 - name: Ensure tomcat is stopped.
   shell: "{{tomcat_stop_command}}"
 
+- name: Stop all edu-sharing containers.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'edu[-_]sharing' | xargs -r docker stop "
+
 - set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
 
 - name: Load version variables.
@@ -14,6 +18,10 @@
 - name: Check if Migration has been installed before
   shell: "echo ${HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED:-false}"
   register: has_been_migrated
+
+- name: Get edu-sharing version in server.
+  shell: "echo ${EDU_SHARING_VERSION:-}"
+  register: edu_sharing_version
 
 - name: Ensures inst-dir exists.
   file: path='{{edu_docker_inst_dir}}' state=directory
@@ -52,10 +60,22 @@
     dest: "{{edu_docker_inst_dir}}"
     creates: "{{edu_home}}"
 
+- include: clean-edu-sharing-volumes.yml
+  when: edu_sharing_version.stdout is defined and 
+        edu_sharing_version.stdout != edu_version
+
+
 - name: Copy override files.
   template:
-    src: '4_repository-service-volume-override-common.yml'
-    dest: '{{edu_docker_inst_dir}}/4_repository-service-volume-override-common.yml'
+    src: '3_repository-service-volume-override.yml'
+    dest: '{{edu_docker_inst_dir}}/3_repository-service-volume-override.yml'
+  when: edu_version is defined and  edu_version is version_compare('8.0.0','<')
+
+- name: Copy override files.
+  template:
+    src: 'docker-compose.override.yml'
+    dest: '{{edu_docker_inst_dir}}/docker-compose.override.yml'
+  when: edu_version is defined and  edu_version is version_compare('8.0.0','>=')
 
 - name: Stop all docker images and containers.
   shell: "{{edu_sharing_undeploy_command}}"
@@ -114,3 +134,9 @@
   tags:
     - edu-sharing-config
     - jobs
+
+- name: Clean unused edu-sharing images, containers, networks and cashes.
+  command: | 
+    sg docker "docker system prune --all --force --filter "label=edu-sharing" --filter "label=edu_sharing""
+  tags:
+    - edu-sharing-config
