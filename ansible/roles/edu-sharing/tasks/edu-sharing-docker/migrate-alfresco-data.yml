@@ -68,6 +68,7 @@
     mode: "{{alfresco_volume_data_stats.stat.mode}}"
     owner: "{{alfresco_volume_data_stats.stat.uid}}"
     group: "{{alfresco_volume_data_stats.stat.gid}}"
+    remote_src: yes
   when: (alfresco_volume_data.stdout is defined and alfresco_volume_data.stdout != "") and 
         (alfresco_volume_data_stats.stat.isdir is defined and alfresco_volume_data_stats.stat.isdir)
   tags:
