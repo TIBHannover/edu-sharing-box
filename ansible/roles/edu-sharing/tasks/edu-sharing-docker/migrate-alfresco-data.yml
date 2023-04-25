@@ -11,15 +11,20 @@
   tags:
     - backup-alfresco-data
 
-- name: Create the 3_datamigration-common.yml for database migration.
-  template:
-    src: 3_datamigration-common.yml.j2
-    dest: "{{ edu_docker_inst_dir }}/3_datamigration-common.yml"
-    mode: "600"
+- name: Add migration for database version = 7
+  blockinfile:
+    path: "{{ edu_docker_inst_dir }}/3_repository-service-volume-override.yml"
+    block: |2
+        repository-database:
+           volumes:
+             - "{{ backup_path }}/{{ alfresco_db.name }}-dump.sql.gz:/docker-entrypoint-initdb.d/psqldump.sql.gz"
+    insertafter: '^\s*services:$'
+    marker: ""
+  when: edu_version is defined and  edu_version is version_compare('8.0.0','<')
   tags:
     - migration-alfresco-sql
 
-- name: Add the migration for database migration.
+- name: Add migration for database version >=8
   blockinfile:
     path: "{{ edu_docker_inst_dir }}/docker-compose.override.yml"
     block: |2
