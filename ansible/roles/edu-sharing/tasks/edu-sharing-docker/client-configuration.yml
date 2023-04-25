@@ -1,6 +1,7 @@
 ---
 - name: Get the path to the edu-sharing config docker volume.
-  shell: 'sg docker -c "docker volume inspect --format ''{{ ''{{'' }}.Mountpoint{{ ''}}'' }}''  $(docker volume ls -q |grep ''_repository-service-volume-config-node'')" '
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-config-node'")"
   register: edu_sharing_client_xml_path
   tags:
     - edu-sharing-config
