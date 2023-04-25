@@ -55,7 +55,12 @@ oersi_scheme: "https"
 oersi_pathprefix: "/resources/api-internal/search"
 oersi_index: "oer_data"
 
+
+edu_sharing_docker_project_name: "edu_sharing_docker_version"
+
 edu_sharing_environment_variable:
+  - key: COMPOSE_PROJECT_NAME
+    value: '{{edu_sharing_docker_project_name}}'
   - key: REPOSITORY_DATABASE_NAME
     value: '{{alfresco_db.name}}'
   - key: REPOSITORY_DATABASE_USER
