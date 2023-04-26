@@ -40,3 +40,12 @@
   tags:
     - edu-sharing-config
     - lms
+
+- include: ./common/shibboleth_after.yml
+    shibboleth_after_path='{{repository_volume_config_cluster.stdout}}/applications'
+  become: yes
+  when: (edu_configure_shibboleth is defined and edu_configure_shibboleth) and
+        (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
+  tags:
+    - edu-sharing-config
+    - shibboleth

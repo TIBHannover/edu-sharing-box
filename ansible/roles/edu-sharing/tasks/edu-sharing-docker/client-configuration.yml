@@ -72,3 +72,12 @@
   tags:
     - edu-sharing-config
     - mail-templates
+
+- include: ./common/shibboleth_before.yml
+    shibboleth_before_path='{{edu_sharing_client_xml_path.stdout}}/defaults'
+  become: yes
+  when: (edu_configure_shibboleth is defined and edu_configure_shibboleth) and
+        (edu_sharing_client_xml_path.stdout is defined) and (edu_sharing_client_xml_path.stdout != "")
+  tags:
+    - edu-sharing-config
+    - shibboleth
