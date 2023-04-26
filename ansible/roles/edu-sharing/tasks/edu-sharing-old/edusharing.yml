@@ -63,8 +63,26 @@
     - edu-sharing-config
     - hide-main-menu
 
-- include: shibboleth_before.yml
+- include: ./common/shibboleth_before.yml 
+    shibboleth_before_path='{{edu_client_config_xml_path}}'
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
+  tags:
+    - shibboleth
+    - edu-sharing-config
+
+
+- name: Copy edu-sharing-sso-context.xml
+  copy:
+    src: '{{ edu_sso_context_path }}'
+    dest: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/spring/edu-sharing-sso-context.xml'
+  tags:
+    - shibboleth
+    - edu-sharing-config
+
+- name: Update edu-sharing-sso-context.xml in spring-configuration
+  command:
+    chdir: '{{ edu_home }}/war/WEB-INF/classes'
+    cmd: '{{ java_home }}/bin/jar uf {{ edu_home }}/lib/edu-sharing_spring.jar org/edu_sharing/spring/edu-sharing-sso-context.xml'
   tags:
     - shibboleth
     - edu-sharing-config
@@ -239,7 +257,8 @@
     - ["mail.smtp.from", '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}']
   tags: edu-sharing-config
 
-- include: shibboleth_after.yml
+- include: ./common/shibboleth_after.yml
+    shibboleth_after_path='{{ tomcat_home }}/shared/classes'
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
   tags:
     - shibboleth
