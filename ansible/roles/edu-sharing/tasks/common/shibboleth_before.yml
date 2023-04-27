@@ -1,7 +1,7 @@
 
 - name: set shibboleth client.config configuration
   xml:
-    path: '{{ edu_client_config_xml_path }}'
+    path: '{{ shibboleth_before_path }}/client.config.xml'
     xpath: '{{ item.xpath }}'
     value: '{{ item.value }}'
     pretty_print: yes
@@ -18,13 +18,3 @@
       value: '{{ shibboleth_sp_handler_url }}/Logout?return={{ edu_sharing_url }}/components/login'
     - xpath: /config/values/logout/destroySession
       value: 'true'
-
-- name: Copy edu-sharing-sso-context.xml
-  copy:
-    src: '{{ edu_sso_context_path }}'
-    dest: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/spring/edu-sharing-sso-context.xml'
-
-- name: Update edu-sharing-sso-context.xml in spring-configuration
-  command:
-    chdir: '{{ edu_home }}/war/WEB-INF/classes'
-    cmd: '{{ java_home }}/bin/jar uf {{ edu_home }}/lib/edu-sharing_spring.jar org/edu_sharing/spring/edu-sharing-sso-context.xml'

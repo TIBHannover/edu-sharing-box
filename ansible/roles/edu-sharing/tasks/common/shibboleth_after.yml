@@ -1,7 +1,7 @@
 
 - name: set shibboleth settings in tomcat/shared/classes/homeApplication.properties.xml
   lineinfile:
-    path: '{{ tomcat_home }}/shared/classes/homeApplication.properties.xml'
+    path: '{{ shibboleth_after_path }}/homeApplication.properties.xml'
     line: '<entry key="{{item[0]}}">{{item[1]}}</entry>'
     regexp: '<entry key="{{item[0]}}">'
     insertbefore: '</properties>'

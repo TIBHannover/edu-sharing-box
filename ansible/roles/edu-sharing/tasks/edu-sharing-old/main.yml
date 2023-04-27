@@ -1,7 +1,7 @@
 ---
-  - name: Ensure gzip is present
+  - name: Ensure gzip and jq is present
     package:
-      name: ["gzip"]
+      name: ["gzip","jq"]
     become: yes
     tags:
       - packages
