@@ -103,14 +103,6 @@
     - edu-sharing-config
     - images
 
-- name: Ensure jq is present
-  become: true
-  package:
-    name: ["jq"]
-  tags:
-  - packages
-  - root-task
-
 - include_tasks: ./common/custom-license.yml
   vars:
     custom_license_client_config_xml_path: "{{edu_client_config_xml_path}}"
