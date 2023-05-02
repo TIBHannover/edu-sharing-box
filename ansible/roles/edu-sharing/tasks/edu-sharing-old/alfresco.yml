@@ -18,14 +18,6 @@
     url: '{{alf_sources_url}}'
     dest: "{{alf_inst_dir}}/{{alf_name}}.zip"
 
-- name: Ensure unzip is present
-  package:
-    name: ["unzip"]
-  become: yes
-  tags:
-  - packages
-  - root-task
-
 - name: extract alfresco sources
   unarchive:
     remote_src: yes
