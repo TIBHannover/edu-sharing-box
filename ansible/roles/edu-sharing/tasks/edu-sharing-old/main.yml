@@ -1,13 +1,4 @@
 ---
-  - name: Ensure gzip and jq is present
-    package:
-      name: ["gzip","jq"]
-    become: yes
-    tags:
-      - packages
-      - root-task
-
-
   - include: mariadb.yml
     when: alfresco_db_type == 'mariadb'
   - include: postgresql.yml
