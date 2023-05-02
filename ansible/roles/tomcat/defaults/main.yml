@@ -32,7 +32,7 @@ tomcat_connectors:
 tomcat_bin: "{{ tomcat_inst_dir }}/bin"
 tomcat_home: "{{ tomcat_inst_dir }}/tomcat"
 tomcat_log_dir: "{{ tomcat_inst_dir }}/log/tomcat" # if set, link tomcat-logs directory to this directory
-tomcat_stop_command: "{{ tomcat_bin }}/tomcat.sh stop"
+tomcat_stop_command: "{{ tomcat_bin }}/tomcat.sh stop 2> /dev/null || true"
 
 tomcat_cleanup_logfiles: true # cleanup logfiles of tomcat true|false - 'tomcat_home' has to be defined for this
 tomcat_cleanup_cron_hour: '1'

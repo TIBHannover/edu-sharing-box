@@ -17,7 +17,7 @@ tomcat_inst_dir: "{{base_dir}}"
 tomcat_bin: "{{tomcat_inst_dir}}/bin"
 tomcat_home: "{{tomcat_inst_dir}}/tomcat"
 tomcat_start_command: "nohup {{tomcat_bin}}/tomcat.sh start </dev/null >/dev/null 2>&1 &"
-tomcat_stop_command: "{{tomcat_bin}}/tomcat.sh stop"
+tomcat_stop_command: "{{tomcat_bin}}/tomcat.sh stop 2> /dev/null || true"
 tomcat_log_dir: "{{ tomcat_inst_dir }}/log/tomcat" # if set, link tomcat-logs directory to this directory
 
 tomcat_connectors:
