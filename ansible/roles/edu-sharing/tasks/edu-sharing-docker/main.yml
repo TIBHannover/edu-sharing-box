@@ -42,17 +42,6 @@
     dest: "{{edu_docker_inst_dir}}/edu-sharing.zip"
   when: edu_sharing_archive_retrieve_method == "download"
 
-- name: Ensure 'unzip' and 'jq' is present.
-  package:
-    name:
-      - unzip
-      - jq
-      - gzip
-  become: yes
-  tags:
-    - packages
-    - root-task
-
 - name: Extract edu-sharing sources.
   unarchive:
     remote_src: yes

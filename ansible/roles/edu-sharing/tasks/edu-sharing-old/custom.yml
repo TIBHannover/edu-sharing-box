@@ -3,14 +3,6 @@
     src: "{{ edu_sharing_custom_archive_path }}"
     dest: "{{edu_inst_dir}}/edu-sharing-custom.zip"
 
-- name: Ensure unzip is present
-  package:
-    name: ["unzip"]
-  become: yes
-  tags:
-  - packages
-  - root-task
-
 - name: extract edu-sharing custom sources into edu-home
   unarchive:
     remote_src: yes
