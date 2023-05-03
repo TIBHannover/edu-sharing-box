@@ -57,24 +57,9 @@
 
 - include: ./common/shibboleth_before.yml 
     shibboleth_before_path='{{edu_client_config_xml_path}}'
+    edu_sharing_webapp_webinf_classes_path='{{ edu_home }}/war/WEB-INF/classes'
+    edu_sharing_webapp_lib_path='{{ edu_home }}/lib'
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth
-  tags:
-    - shibboleth
-    - edu-sharing-config
-
-
-- name: Copy edu-sharing-sso-context.xml
-  copy:
-    src: '{{ edu_sso_context_path }}'
-    dest: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/spring/edu-sharing-sso-context.xml'
-  tags:
-    - shibboleth
-    - edu-sharing-config
-
-- name: Update edu-sharing-sso-context.xml in spring-configuration
-  command:
-    chdir: '{{ edu_home }}/war/WEB-INF/classes'
-    cmd: '{{ java_home }}/bin/jar uf {{ edu_home }}/lib/edu-sharing_spring.jar org/edu_sharing/spring/edu-sharing-sso-context.xml'
   tags:
     - shibboleth
     - edu-sharing-config
