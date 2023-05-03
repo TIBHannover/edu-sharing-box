@@ -82,7 +82,7 @@
     - edu-sharing-config
 
 - include: ./common/shibboleth_before.yml
-    shibboleth_before_path='{{edu_sharing_client_xml_path.stdout}}/defaults'
+    shibboleth_before_client_config_path='{{edu_sharing_client_xml_path.stdout}}/defaults/client.config.xml'
     edu_sharing_webapp_webinf_classes_path='{{ edu_sharing_repository_service_config_path_result.stdout }}/WEB-INF/classes'
     edu_sharing_webapp_lib_path='{{ edu_sharing_repository_service_config_path_result.stdout }}/WEB-INF/lib'
   become: yes

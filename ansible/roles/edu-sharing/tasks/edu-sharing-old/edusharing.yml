@@ -56,7 +56,7 @@
     - hide-main-menu
 
 - include: ./common/shibboleth_before.yml 
-    shibboleth_before_path='{{edu_client_config_xml_path}}'
+    shibboleth_before_client_config_path='{{edu_client_config_xml_path}}'
     edu_sharing_webapp_webinf_classes_path='{{ edu_home }}/war/WEB-INF/classes'
     edu_sharing_webapp_lib_path='{{ edu_home }}/lib'
   when: edu_configure_shibboleth is defined and edu_configure_shibboleth

@@ -1,7 +1,7 @@
 
 - name: set shibboleth client.config configuration
   xml:
-    path: '{{ shibboleth_before_path }}/client.config.xml'
+    path: '{{ shibboleth_before_client_config_path }}'
     xpath: '{{ item.xpath }}'
     value: '{{ item.value }}'
     pretty_print: yes
