@@ -88,7 +88,7 @@
             logoLocation="{{ shibboleth_sp_error_templates_logo_location }}"
             styleSheet="{{ shibboleth_sp_base_path }}/shibboleth-sp/shib-error.css"/>
             
-        <Notify Channel="back" Location="http://localhost:{{tomcat_port}}/edu-sharing/services/LogoutNotification"/>
+        <Notify Channel="back" Location="{{ edu_sharing_url }}/services/LogoutNotification"/>
 
         <!-- Metadaten der Test-Föderation aktivieren -->
         <!-- den Pfad zum Zertifikat zur Signaturüberprüfung den lokalen Gegebenheiten anpassen! -->
