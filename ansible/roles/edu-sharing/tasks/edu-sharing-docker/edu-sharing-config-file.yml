@@ -1,7 +1,7 @@
 ---
 - name: Get the path to the edu-sharing cluster docker volume.
   shell: |
-    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(docker volume ls -q |grep '_repository-service-volume-config-cluster')"
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-config-cluster'")"
   register: repository_volume_config_cluster
   ignore_errors: true
   tags:
