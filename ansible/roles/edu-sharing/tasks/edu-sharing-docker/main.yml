@@ -66,6 +66,8 @@
     dest: '{{edu_docker_inst_dir}}/docker-compose.override.yml'
   when: edu_version is defined and  edu_version is version_compare('8.0.0','>=')
 
+- include_tasks: model.yml
+
 - name: Stop all docker images and containers.
   shell: "{{edu_sharing_undeploy_command}}"
   args:

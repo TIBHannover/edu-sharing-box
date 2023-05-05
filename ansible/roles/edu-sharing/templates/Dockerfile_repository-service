@@ -1,0 +1,4 @@
+FROM docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}
+
+USER worker
+COPY edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp /opt/alfresco/amps/alfresco/1/edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp
