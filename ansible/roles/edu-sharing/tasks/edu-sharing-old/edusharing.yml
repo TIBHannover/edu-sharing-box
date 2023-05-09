@@ -239,7 +239,9 @@
     - edu-sharing-config
     - metadatasets
 
-- include: model.yml
+- include_tasks: ./common/model.yml
+  vars:
+    alfresco_extension_path: "{{ tomcat_home }}/shared/classes/alfresco/extension"
   tags: edu-sharing-config
 
 - include: ./common/lms.yml 

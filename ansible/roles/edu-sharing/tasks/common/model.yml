@@ -2,7 +2,7 @@
 
 - name: adjustments of the edu-sharing alfresco extension models
   xml:
-    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/{{item.path}}'
+    path: '{{ alfresco_extension_path }}/{{item.path}}'
     xpath: '{{ item.xpath }}'
     value: '{{ item.value }}'
     namespaces:
@@ -13,7 +13,7 @@
 
 - name: Add custom property in alfresco extension models
   xml:
-    path: '{{ tomcat_home }}/shared/classes/alfresco/extension/{{item.path}}'
+    path: '{{ alfresco_extension_path }}/{{item.path}}'
     xpath: '{{ item.xpath }}'
     add_children: '{{ item.properties }}'
     input_type: xml
