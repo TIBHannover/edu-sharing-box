@@ -105,6 +105,8 @@ edu_sharing_environment_variable:
     value: '{{edu_mail_authtype if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
   - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_HOST
     value: '{{edu_mail_smtp_server | default("",true)}}'
+  - key: REPOSITORY_SERVICE_HOME_APPID
+    value: '{{edu_repo_id | default("local",true)}}'
   - key: REPOSITORY_SERVICE_AUTH_EXTERNAL
     value: '{{ "true" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
   - key: REPOSITORY_SERVICE_AUTH

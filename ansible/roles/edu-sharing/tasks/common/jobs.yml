@@ -29,6 +29,9 @@
     body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password={{ alf_password }}'
     return_content: yes
   register: accesstokenreply
+  until: accesstokenreply.status == 200
+  retries: 5
+  delay: 10
   no_log: true
   when: edu_jobs_all | default([], true) | length>0
 
