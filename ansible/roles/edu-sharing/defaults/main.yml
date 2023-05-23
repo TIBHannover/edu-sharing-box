@@ -106,10 +106,10 @@ edu_sharing_environment_variable:
   - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_HOST
     value: '{{edu_mail_smtp_server | default("",true)}}'
   - key: REPOSITORY_SERVICE_AUTH_EXTERNAL
-    value: '{{ "true" if (edu_configure_shibboleth) and (edu_configure_shibboleth is defined) else ""}}'
+    value: '{{ "true" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
   - key: REPOSITORY_SERVICE_AUTH
-    value: '{{ "shibboleth" if (edu_configure_shibboleth) and (edu_configure_shibboleth is defined) else ""}}'
+    value: '{{ "shibboleth" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
   - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGIN
-    value: '{{ "/edu-sharing/shibboleth" if (edu_configure_shibboleth) and (edu_configure_shibboleth is defined) else ""}}'
+    value: '{{ "/edu-sharing/shibboleth" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
   - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGOUT
-    value: '{{ shibboleth_sp_base_path +"/Shibboleth.sso/Logout?return=" +  edu_sharing_url + "/components/login" if (edu_configure_shibboleth) and (edu_configure_shibboleth is defined) else ""}}'
+    value: '{{ shibboleth_sp_base_path +"/Shibboleth.sso/Logout?return=" +  edu_sharing_url + "/components/login" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
