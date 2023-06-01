@@ -62,6 +62,8 @@ edu_mail_smtp_from: pleasechange@nodomain.com
 edu_splash_url: # "http://{{ esrender_host }}:8050/render.png" # URL of the splash-service for http previews
 edu_imprinturl:
 edu_privacyInformationUrl:
+edu_license_mandatory: "false"   # | "false"
+edu_author_mandatory: "false"   # | "false"
 edu_workspace_viewType:   # 'tile' | 'list'
 edu_upload_post_dialog: 'SimpleEdit'  # 'SimpleEdit' | 'Mds'
 # set to "true" to enable local registration of users
