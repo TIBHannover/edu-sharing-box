@@ -35,8 +35,7 @@
 - include: ./common/lms.yml
     lms_path='{{repository_volume_config_cluster.stdout}}/applications'
   become: yes
-  when: connect_content_pixabay and
-    (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
+  when: (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "")
   tags:
     - edu-sharing-config
     - lms
