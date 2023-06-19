@@ -13,6 +13,6 @@
 - name: Run run docker compose -d.
   shell:
     chdir: '{{edu_connector_install_dir}}/'
-    cmd: 'sg docker -c "docker compose up -d"'
+    cmd: "{{edu_connector_run_command}}"
 
 

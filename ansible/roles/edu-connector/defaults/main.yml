@@ -1,0 +1,9 @@
+
+# URL of the edu-connector 
+edu_connector_url:  '{{ edu_connector_protocol | default("http") }}://{{ edu_connector_proxy }}{{edu_connector_path | default("/edu-connector",true)}}'
+
+# docker composer name
+edu_connector_docker_project_name: "edu_connector_docker_version"
+
+# Command to run edu-connector in docker
+edu_connector_run_command: 'sg docker -c "docker compose up -d"'
