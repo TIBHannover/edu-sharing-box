@@ -3,3 +3,6 @@
 - include: install.yml
   tags: 
     - edu-connector-installation
+- include: register.yml
+  tags: 
+    - edu-connector-registration
