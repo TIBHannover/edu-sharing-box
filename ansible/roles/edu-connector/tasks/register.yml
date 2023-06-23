@@ -1,0 +1,66 @@
+---
+
+# For edu-connector we need to wait until for response before we continue with registration
+- name: Wait edu-connector to come up.
+  uri:
+    url: '{{ ( edu_connector_url + "/metadata") }}'
+    timeout: 60
+    status_code: 200
+  register: esresult
+  until: esresult.status == 200
+  retries: 30
+  delay: 10
+
+
+# For edu-sharing docker version we need to wait for responses up to 3 minutes
+- name: Wait edu-sharing to come up.
+  uri:
+    url: '{{ edu_sharing_url }}'
+    timeout: 60
+    status_code: 200
+  register: esresult
+  until: esresult.status == 200
+  retries: 30
+  delay: 10
+
+- name: Get access token.
+  uri:
+    url: '{{ edu_sharing_url }}/oauth2/token'
+    method: POST
+    body: 'grant_type=password&client_id=eduApp&client_secret=secret&username=admin&password={{ alf_password }}'
+    return_content: yes
+  register: accesstokenreply
+  until: accesstokenreply.status == 200
+  retries: 5
+  delay: 10
+  no_log: true
+
+- name: Set access token.
+  vars:
+    jsonVar: '{{accesstokenreply.content | from_json}}'
+  set_fact:
+    accesstoken: '{{jsonVar.access_token}}'
+  no_log: true
+
+- name: Remove existing edu-connector registration.
+  uri:
+    url: '{{edu_sharing_url}}/rest/admin/v1/applications/educonnector'
+    method: DELETE
+    body_format: json
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+      Accept: application/json
+    status_code: [200, 500] # 500 if not existing
+  no_log: true
+
+- name: Register edu-connector.
+  uri:
+    url: '{{edu_sharing_url}}/rest/admin/v1/applications?url={{ ( edu_connector_url + "/metadata") | urlencode}}'
+    method: PUT
+    body_format: json
+    status_code: 200  
+    headers:
+      Authorization: 'Bearer {{accesstoken}}'
+      Accept: application/json
+  no_log: true
+
