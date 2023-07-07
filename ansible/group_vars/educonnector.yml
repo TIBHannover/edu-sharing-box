@@ -1,0 +1,30 @@
+edu_connector_host: 192.168.98.101
+edu_connector_proxy: "{{edu_connector_host}}"
+edu_connector_port: 80
+edu_connector_protocol: http
+# Edu-connector Version (Docker)
+edu_connector_version: 8.0.0
+# installation directory
+edu_connector_install_dir: "{{base_dir}}/edu-connector_{{edu_connector_version|replace('.','_')}}"
+
+# database configuration
+edu_connector:
+  db_name: 'connector'
+  db_user: 'connector'
+  db_password: 'connector'
+
+
+# Enable modules for edu-sharing connector 
+# example:
+#     - id: 'TINYMCE'       # Required
+#       icon: 'edit'        # optional default will be edit
+#       showNew: true       # optional default will be true
+#       onlyDesktop: true   # optional default will be true
+#       hasViewMode: true   # optional default will be true
+#       filetypes:          # Required
+#         - {mimetype: "text/html",filetype: "html",createable: true,editable: true,editorType: "tinymce"}
+# TINYMCE is by default
+edu_connector_enable_modules:
+  - id: 'H5P'
+    filetypes:
+      - {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}

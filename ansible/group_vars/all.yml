@@ -15,7 +15,7 @@ onlyoffice_proxy: "{{onlyoffice_host}}"
 # enable/disable onlyoffice installation
 # enable: true
 enable_only_office: false
-
+enable_edu_connector: false
 mariadb_port: 3306
 postgresql_port: 5432
 # db_types: 'postgresql', 'mariadb' (no migration on change)

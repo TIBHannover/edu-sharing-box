@@ -101,6 +101,19 @@
   tags:
     - onlyoffice
 
+- hosts: educonnector
+  roles:
+    - role: geerlingguy.docker
+      become: yes
+      when: enable_edu_connector is defined and enable_edu_connector
+      vars:
+        docker_users:
+          - "{{ work_user | default('vagrant') }}"
+    - role: edu-connector
+      when: enable_edu_connector is defined and enable_edu_connector
+  tags:
+    - edu-connector
+
 - hosts: edusharing
   roles:
     - role: moodle-registration
