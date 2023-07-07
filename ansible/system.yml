@@ -89,16 +89,17 @@
       when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: onlyoffice
-  become: yes
   roles:
-    - role: postgresql
+    - role: geerlingguy.docker
+      become: yes 
       when: enable_only_office is defined and enable_only_office
-    - role: geerlingguy.rabbitmq
-      when: enable_only_office is defined and enable_only_office
-    - role: nginx
-      when: enable_only_office is defined and enable_only_office
+      vars:
+        docker_users:
+          - "{{ work_user }}"
     - role: onlyoffice
       when: enable_only_office is defined and enable_only_office
+  tags:
+    - onlyoffice
 
 - hosts: edusharing
   roles:
