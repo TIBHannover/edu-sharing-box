@@ -1,0 +1,15 @@
+---
+- name: Ensures inst-dir exists
+  file:
+    path: "{{onlyoffice_install_dir}}"
+    state: directory
+
+- name: Copy onlyoffice docker-compose file.
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{onlyoffice_install_dir}}/docker-compose.yml"
+
+- name: Run run docker compose -d.
+  shell:
+    chdir: '{{onlyoffice_install_dir}}/'
+    cmd: "{{onlyoffice_run_command}}"
