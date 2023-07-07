@@ -55,6 +55,24 @@
           Require all granted
         </Directory>
 {% endif %}
+{% if enable_only_office is defined and enable_only_office %}
+        Define VPATH {{onlyoffice_v_path | default('/onlyoffice',true)}}
+        Define DS_ADDRESS 127.0.0.1:{{onlyoffice_port | default('9600',true)}}
+
+        <Location ${VPATH}>
+                Require all granted
+                SetEnvIf Host "^(.*)$" THE_HOST=$1
+                RequestHeader setifempty X-Forwarded-Proto http
+                RequestHeader setifempty X-Forwarded-Host %{THE_HOST}e
+                RequestHeader edit X-Forwarded-Host (.*) $1${VPATH}
+                ProxyAddHeaders Off
+                #ProxyPassMatch (.*)(\/websocket)$ "ws://127.0.0.1:{{onlyoffice_port | default('9600',true)}}/$1$2"
+                ProxyPass "http://${DS_ADDRESS}/"
+                ProxyPassReverse "http://${DS_ADDRESS}/"
+        </Location>
+{% endif %}
+
+
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
