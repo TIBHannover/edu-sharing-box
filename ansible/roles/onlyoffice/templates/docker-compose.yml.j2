@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  onlyoffice-documentserver:
+    image: onlyoffice/documentserver:{{onlyoffice_version | default("latest",true)}}
+    container_name: onlyoffice-documentserver
+    depends_on:
+      - onlyoffice-postgresql
+      - onlyoffice-rabbitmq
+    environment:
+      - DB_TYPE=postgres
+      - DB_HOST=onlyoffice-postgresql
+      - DB_PORT={{ onlyoffice_database.db_port| default('5432',true)}}
+      - DB_NAME={{onlyoffice_database.db_name | default("onlyoffice",true)}}
+      - DB_USER={{onlyoffice_database.db_user | default("onlyoffice",true)}}
+      - DB_PWD={{onlyoffice_database.db_password | default("onlyoffice",true)}}
+      - AMQP_URI=amqp://{{onlyoffice_rabbitmq_user | default("onlyoffice",true)}}:{{onlyoffice_rabbitmq_pass | default("onlyoffice",true)}}@onlyoffice-rabbitmq
+      # Uncomment strings below to enable the JSON Web Token validation.
+      - JWT_ENABLED={{onlyoffice_jwt_enabled | default('true',true) | string|lower }}
+      - JWT_SECRET={{onlyoffice_jwt_secret | default('my_jwt_secret',true)}}
+      #- JWT_HEADER=Authorization
+      #- JWT_IN_BODY=true
+      - GENERATE_FONTS= {{onlyoffice_generate_fonts | default('true',true) | string|lower }}
+    ports:
+      - "127.0.0.1:{{onlyoffice_port | default('9600',true)}}:80"
+    stdin_open: true
+    restart: unless-stopped
+    stop_grace_period: 60s
+    volumes:
+      - "onlyoffice-data:/var/www/onlyoffice/Data"
+      - "onlyoffice-logs:/var/log/onlyoffice"
+      - "onlyoffice-cache-files:/var/lib/onlyoffice/documentserver/App_Data/cache/files"
+      - "onlyoffice-public-files:/var/www/onlyoffice/documentserver-example/public/files"
+      - "onlyoffice-fonts:/usr/share/fonts"
+
+  onlyoffice-rabbitmq:
+    container_name: onlyoffice-rabbitmq
+    image: rabbitmq:{{onlyoffice_rabbitmq_version | default("latest",true)}}
+    environment:
+      - RABBITMQ_DEFAULT_USER={{onlyoffice_rabbitmq_user | default("onlyoffice",true)}}
+      - RABBITMQ_DEFAULT_PASS={{onlyoffice_rabbitmq_pass | default("onlyoffice",true)}}
+      - RABBITMQ_DEFAULT_VHOST={{onlyoffice_rabbitmq_vpath | default("/",true)}}
+    restart: unless-stopped
+    volumes:
+        - "onlyoffice-rabbitmq-data:/var/lib/rabbitmq"
+    ports:
+      - "127.0.0.1:{{onlyoffice_rabbitmq_port | default("5672",true)}}:5672"
+      - "127.0.0.1:{{onlyoffice_rabbitmq_management_port | default("15672",true)}}:15672"
+
+  onlyoffice-postgresql:
+    container_name: onlyoffice-postgresql
+    image: postgres:{{onlyoffice_database_postgress_version | default("latest",true)}}
+    environment:
+      - POSTGRES_DB={{onlyoffice_database.db_name | default("onlyoffice",true)}}
+      - POSTGRES_USER={{onlyoffice_database.db_user | default("onlyoffice",true)}}
+      - POSTGRES_PASSWORD={{onlyoffice_database.db_password | default("onlyoffice",true)}}
+      - PGDATA= {{onlyoffice_database.db_data | default("/data/postgres",true)}}
+    restart: unless-stopped
+    expose:
+      - "127.0.0.1:{{ onlyoffice_database.db_port| default('5432',true)}}:5432"
+    volumes:
+      - "onlyoffice-postgres-db:{{onlyoffice_database.db_data | default('/data/postgres',true)}}"
+      
+volumes:
+  onlyoffice-data:
+  onlyoffice-logs:
+  onlyoffice-cache-files:
+  onlyoffice-public-files:
+  onlyoffice-fonts:
+  onlyoffice-rabbitmq-data:
+  onlyoffice-postgres-db:
