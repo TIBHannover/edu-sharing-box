@@ -1,7 +1,10 @@
 
+# since for now we support only postgres,we will leave as default variable
+onlyoffice_database_type: postgres
 onlyoffice_install_dir:  "{{base_dir}}/onlyoffice_{{onlyoffice_version | default('latest',true)|replace('.','_')}}"
-
-onlyoffice_port: 9600
-onlyoffice_v_path: "/onlyoffice"
-
 onlyoffice_run_command: 'sg docker -c "docker compose up -d"'
+
+# internal port
+onlyoffice_port: 9600
+# virtual path used by apache server
+onlyoffice_v_path: "/onlyoffice"

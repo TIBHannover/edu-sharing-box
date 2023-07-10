@@ -6,7 +6,6 @@ onlyoffice_jwt_enabled: true # true/false
 onlyoffice_jwt_secret: "my_jwt_secret" # secret jwt token
 
 # Database type for now supported only by postgres
-onlyoffice_database_type: postgres
 # database configuration
 onlyoffice_database:
   db_name: 'onlyoffice'
