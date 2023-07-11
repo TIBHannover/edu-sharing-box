@@ -10,7 +10,6 @@ services:
     environment:
       - DB_TYPE=postgres
       - DB_HOST=onlyoffice-postgresql
-      - DB_PORT={{ onlyoffice_database.db_port| default('5432',true)}}
       - DB_NAME={{onlyoffice_database.db_name | default("onlyoffice",true)}}
       - DB_USER={{onlyoffice_database.db_user | default("onlyoffice",true)}}
       - DB_PWD={{onlyoffice_database.db_password | default("onlyoffice",true)}}
