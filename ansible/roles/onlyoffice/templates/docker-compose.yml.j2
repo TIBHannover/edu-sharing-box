@@ -56,7 +56,7 @@ services:
       - PGDATA= {{onlyoffice_database.db_data | default("/data/postgres",true)}}
     restart: unless-stopped
     expose:
-      - "127.0.0.1:{{ onlyoffice_database.db_port| default('5432',true)}}:5432"
+      - "127.0.0.1:{{ onlyoffice_database.db_port| default('5433',true)}}:5432"
     volumes:
       - "onlyoffice-postgres-db:{{onlyoffice_database.db_data | default('/data/postgres',true)}}"
       
