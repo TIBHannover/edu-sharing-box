@@ -1,40 +1,22 @@
 # OnlyOffice variable
-#
-# INFORMATION !!!! 
-#
-# System requirements
-#   * CPU dual core 2 GHz or better
-#   * RAM 2 GB or more
-#   * HDD at least 40 GB of free space
-#   * Additional requirements at least 4 GB of swap
-#   * OS 64-bit Debian, Ubuntu or other compatible distribution with kernel version 3.13 or later
-#   * Additional requirements
-#     * PostgreSQL: version 9.1 or later  is recommended to use this database
-#     * NGINX: version 1.3.13 or later    OnlyOffice is build in nginx so it requires nginx
-#     * libstdc++6: version 4.8.4 or later
-#     * RabbitMQ
 
-# ./onlyoffice/defaults/main.yml contains all default values, you can overrides them here
+#onlyofficeor Version (Docker)
+onlyoffice_version: latest
+onlyoffice_jwt_enabled: true # true/false
+onlyoffice_jwt_secret: "my_jwt_secret" # secret jwt token
 
-# rabbitmq_daemon: rabbitmq-server
-# candidates for rabbitmq_version is 3.7.18 || or check by running:  apt-cache policy rabbitmq-server
-rabbitmq_version: "3.7.18" 
-rabbitmq_state: started
-rabbitmq_enabled: true
+# Database type for now supported only by postgres
+# database configuration
+onlyoffice_database:
+  db_name: 'onlyoffice'
+  db_user: 'onlyoffice'
+  db_password: 'onlyoffice'
 
 
-onlyoffice_db_name: "onlyoffice" 
-onlyoffice_db_user: "onlyoffice" 
-onlyoffice_db_password: "onlyoffice"
-onlyoffice_db_port: "{{postgresql_port}}"
-
+# Rabbit MQ Configuration
+onlyoffice_rabbitmq_version:  latest
+onlyoffice_rabbitmq_port:  5672
+onlyoffice_rabbitmq_management_port:  15672
 onlyoffice_rabbitmq_user: onlyoffice
 onlyoffice_rabbitmq_pass: onlyoffice
 onlyoffice_rabbitmq_vpath: /
-
-# start example service : recommended only for test default is false
-# onlyoffice_start_example_service: true
-
-# since we are using onlyoffice in same server with apache we need to change the port otherwise comment it.
-# default is 80
-onlyoffice_ds_port: 8081

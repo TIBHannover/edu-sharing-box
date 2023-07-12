@@ -1,33 +1,7 @@
 ---
 
-- name: Gather package_facts
-  package_facts:
-    manager: "auto"
-
-- name: create rabbitmq user configuration for onlyoffice 
-  include: rabbitmq.yml
-
-- name: create user and database for onlyoffice
-  include: postgres.yml
-
-
-- name: Update Onlyoffice document server configuration if is installed
-  include: update-onlyoffice.yml
-  static: no
-  when: "onlyoffice_package_name in ansible_facts.packages"
-
-- name: Install Onlyoffice document server 
-  include: install-onlyoffice.yml
-  static: no
-  when: "onlyoffice_package_name not in ansible_facts.packages"
-   
-- name: restart onlyoffice example
-  supervisorctl:
-    name: "{{ item }}"
-    state: restarted
-  with_items:
-  - 'ds:example' 
-  become: yes
-  when: onlyoffice_start_example_service is defined and onlyoffice_start_example_service
+- include: install.yml
+  tags: 
+    - onlyoffice-installation
 
 
