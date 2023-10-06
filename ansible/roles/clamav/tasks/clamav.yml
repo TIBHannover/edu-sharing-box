@@ -1,0 +1,15 @@
+- name: Ensures inst-dir exists
+  file:
+    path: "{{clamav_docker_install_dir}}"
+    state: directory
+
+
+- name: Copy edu-connector docker-compose file.
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{clamav_docker_install_dir}}/docker-compose.yml"
+
+- name: Run run docker compose -d.
+  shell:
+    chdir: '{{clamav_docker_install_dir}}/'
+    cmd: "{{clamav_docker_run_command}}"

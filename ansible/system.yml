@@ -132,3 +132,18 @@
       tags: shibboleth
   tags:
     - root-task
+
+- hosts: antivirus
+  roles:
+    - role: geerlingguy.docker
+      become: yes
+      when: install_antivirus is defined and install_antivirus
+      vars:
+        docker_users:
+          - "{{ work_user | default('vagrant') }}"
+    - role: clamav
+      when: install_antivirus is defined and install_antivirus
+  tags:
+    - antivirus
+    - clamav
+    - clamav-docker
