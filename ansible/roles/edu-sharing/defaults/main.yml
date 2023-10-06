@@ -121,3 +121,20 @@ edu_sharing_environment_variable:
     value: '{{ "/edu-sharing/shibboleth" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
   - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGOUT
     value: '{{ shibboleth_sp_base_path +"/Shibboleth.sso/Logout?return=" +  edu_sharing_url + "/components/login" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
+
+mail_configuration:
+  - key: mail.host
+    value: "{{ edu_mail_smtp_server | default('') }}"
+  - key: mail.port
+    value: '{{ edu_mail_smtp_port | default("25") }}'
+  - key: mail.username
+    value: '{{ edu_mail_smtp_username | default("") }}'
+  - key: mail.password
+    value: '{{ edu_mail_smtp_passwd | default("") }}'
+  - key: mail.encoding
+    value: '{{ edu_mail_smtp_encoding | default("UTF-8",true) }}'
+  - key: mail.from.default
+    value: '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}'
+  - key: mail.smtp.auth
+    value: '{{ edu_mail_smtp_auth | default("false") }}'
+  
