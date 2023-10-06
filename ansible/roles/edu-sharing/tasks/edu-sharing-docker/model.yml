@@ -40,6 +40,9 @@
       src: Dockerfile_repository-service
       dest: '{{ edu_docker_inst_dir }}/custom-repository-service'
 
+  - include_tasks: alfviral.yml
+    when: install_antivirus is defined and install_antivirus
+
   - name: build custom container repository-service
     shell:
       chdir: '{{ edu_docker_inst_dir }}/custom-repository-service'

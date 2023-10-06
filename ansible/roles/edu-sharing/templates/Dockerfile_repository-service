@@ -2,3 +2,8 @@ FROM docker.edu-sharing.com/projects/community/edu_sharing-projects-community-de
 
 USER worker
 COPY edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp /opt/alfresco/amps/alfresco/1/edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp
+
+{% if install_antivirus is defined and install_antivirus %}
+COPY alfviral/{{ antivirus_alfviral_amp_filename | basename }}  /opt/alfresco/amps/alfviral/{{ antivirus_alfviral_amp_filename | basename }}
+COPY reinstall.sh /opt/alfresco/bin/reinstall.sh
+{% endif %}
