@@ -137,4 +137,27 @@ mail_configuration:
     value: '{{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}'
   - key: mail.smtp.auth
     value: '{{ edu_mail_smtp_auth | default("false") }}'
-  
+
+alfviral_antivirus_configuration:
+  - key: alfviral.mode
+    value: "INSTREAM"
+  - key: alfviral.instream.timeout
+    value: "{{antivirus_alfviral_timeout | default(10000,true)}}"
+  - key: alfviral.instream.host
+    value: "{{clamav_proxy}}"
+  - key: alfviral.instream.port
+    value: "{{antivirus_alfviral_port | default(3310,true)}}"
+  - key: alfviral.on_update.delete
+    value: "{{ antivirus_alfviral_on_update_delete | default('true',true) }}"
+  - key: alfviral.notify.user
+    value: "{{ antivirus_alfviral_notify_user | default('true',true)}}"
+  - key: alfviral.notify.admin
+    value: "{{ antivirus_alfviral_notify_admin | default('true',true)}}"
+  - key: alfviral.notify.asynchronously
+    value: "{{ antivirus_alfviral_notify_asynchronously | default('false',true) }}"
+  - key: alfviral.notify.user.template
+    value: "{{ antivirus_alfviral_user_template | default('notify_user_en.html.ftl',true) }}"
+  - key: alfviral.notify.admin.template
+    value: "{{ antivirus_alfviral_admin_template | default('notify_admin_en.html.ftl',true) }}"
+  - key: alfviral.file.exceptions
+    value: ""
