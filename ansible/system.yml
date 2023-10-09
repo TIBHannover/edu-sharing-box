@@ -138,7 +138,7 @@
       vars:
         docker_users:
           - "{{ work_user | default('vagrant') }}"
-    - role: clamav
+    - role: antivirus
       when: install_antivirus is defined and install_antivirus
   tags:
     - antivirus
