@@ -1,23 +1,15 @@
+- name: Ensures inst-dir exists
+  file:
+    path: "{{clamav_docker_install_dir}}"
+    state: directory
 
-- name: Install clamav packages
-  apt:
-    name: ["clamav", "clamav-daemon"]
-    state: "present"
-  notify:
-    - restart clamav-daemon
 
-- name: start clamav-daemon
-  service: name=clamav-daemon state=started
+- name: Copy edu-connector docker-compose file.
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{clamav_docker_install_dir}}/docker-compose.yml"
 
-- name: Determine group of alfresco user
-  become: no
-  command: "id -g"
-  register: alfresco_group_id
-
-- name: Adding clamav user to alfresco group
-  user:
-    name: clamav
-    groups: '{{ alfresco_group_id.stdout }}'
-    append: yes
-  notify:
-    - restart clamav-daemon
+- name: Run run docker compose -d.
+  shell:
+    chdir: '{{clamav_docker_install_dir}}/'
+    cmd: "{{clamav_docker_run_command}}"

@@ -1,3 +1,0 @@
----
-- name: restart clamav-daemon
-  service: name=clamav-daemon state=restarted
