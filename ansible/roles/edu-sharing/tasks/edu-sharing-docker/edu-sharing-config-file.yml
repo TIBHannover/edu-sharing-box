@@ -49,6 +49,18 @@
     - edu-sharing-config
     - shibboleth
 
+- include: ./remove_alviral_and_mail_from_alfresco_properties.yml
+    alfresco_global_properties_path='{{repository_volume_config_cluster.stdout}}'
+  become: yes
+  when:
+    (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "") and
+    (install_antivirus is defined ) and ( not install_antivirus)
+  tags:
+    - alfviral
+    - antivirus
+    - alfviral-docker
+
+
 - include: ./common/add_alviral_to_alfresco_properties.yml
     alfresco_global_properties_path='{{repository_volume_config_cluster.stdout}}'
   become: yes
