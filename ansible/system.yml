@@ -124,9 +124,6 @@
 - hosts: edusharing
   become: yes
   roles:
-    - role: antivirus
-      when: install_antivirus is defined and install_antivirus
-      tags: antivirus
     - role: shibboleth
       when: install_shibboleth is defined and install_shibboleth
       tags: shibboleth
