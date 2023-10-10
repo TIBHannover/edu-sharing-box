@@ -55,21 +55,6 @@ img.exe=/usr/bin/convert
 #-------------
 #index.recovery.mode=AUTO
 
-#
-# Outbound Email Configuration
-#-------------
-mail.host={{ edu_mail_smtp_server | default("") }}
-mail.port={{ edu_mail_smtp_port | default("25") }}
-mail.username={{ edu_mail_smtp_username | default("") }}
-mail.password={{ edu_mail_smtp_passwd | default("") }}
-mail.encoding=UTF-8
-mail.from.default={{ edu_mail_smtp_from | default("pleasechange@nodomain.com") }}
-mail.smtp.auth=false
-
-#
-# Alfresco Email Service and Email Server
-#-------------
-
 # Enable/Disable the inbound email service.  The service could be used by processes other than
 # the Email Server (e.g. direct RMI access) so this flag is independent of the Email Service.
 #-------------
@@ -128,21 +113,3 @@ alfresco.rmi.services.host=0.0.0.0
 #
 #monitor.rmi.service.port=50508
 authentication.ticket.useSingleTicketPerUser=false
-{% if install_antivirus is defined and install_antivirus %}
-
-########################
-## Alfivral Properties #
-########################
-alfviral.mode=COMMAND
-alfviral.command.exec={{ antivirus_alfviral_command }}
-alfviral.file.exceptions=
-
-# Delete node on content update if the content-file is infected
-alfviral.on_update.delete=true
-
-alfviral.notify.user=true
-alfviral.notify.admin=true
-alfviral.notify.asynchronously={{ antivirus_alfviral_notify_asynchronously }}
-alfviral.notify.user.template=notify_user_en.html.ftl
-alfviral.notify.admin.template=notify_admin_en.html.ftl
-{% endif %}

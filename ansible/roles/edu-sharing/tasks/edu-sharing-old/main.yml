@@ -12,10 +12,23 @@
   - include: alfresco.yml
   - include: share.yml
     when: alfresco_share_install is defined and alfresco_share_install
-  - include: alfviral.yml
+  - include: ./common/alfviral.yml 
+        alf_amp_destination='{{ alf_home }}/amps/'
+        install_alfviral=true
     when: install_antivirus is defined and install_antivirus
     tags:
       - antivirus
+  - include: ./common/add_alviral_to_alfresco_properties.yml 
+        alfresco_global_properties_path='{{tomcat_home}}/shared/classes'
+    when:  install_antivirus is defined and  install_antivirus
+    tags:
+    - alfviral
+    - antivirus-old
+  - include: ./common/add_mail_config_to_alfresco_properties.yml
+      alfresco_global_properties_path='{{tomcat_home}}/shared/classes'
+    tags:
+      - mail
+      - mail-old-version
   - include: edusharing.yml
   - include: users.yml
   - include: ./common/classification-keyword.yml
