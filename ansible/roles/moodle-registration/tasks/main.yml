@@ -7,7 +7,7 @@
   become: yes
   vars:
     packages:
-      - python-lxml
+      - python3-lxml
   tags:
   - packages
   - root-task

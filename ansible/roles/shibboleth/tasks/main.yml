@@ -3,16 +3,18 @@
 
 # Fail for unsupported versions
 - fail: msg='unsupported OS version {{ ansible_distribution }} {{ ansible_distribution_release }}'
-  vars:
-    supported_versions:
-      - 'Debian stretch'
-      - 'Debian buster'
-  when: (ansible_distribution + ' ' + ansible_distribution_release) not in supported_versions
+  when: ansible_distribution != 'Debian'
+
+- debug:
+    var: ansible_distribution_version
   
 - include: debianstretch.yml
   when: ansible_distribution == 'Debian' and ansible_distribution_release == 'stretch'
 
 - include: debianbuster.yml
   when: ansible_distribution == 'Debian' and ansible_distribution_release == 'buster'
+
+- include: debian-from-bullseye.yml
+  when: ansible_distribution == 'Debian' and ansible_distribution_version is version('11', '>=')
 
 - include: shibbolethconfig.yml

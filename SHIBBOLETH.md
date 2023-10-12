@@ -22,8 +22,7 @@ Es ist möglich den Single-Sign-On (SSO) Zugang via DFN-AAI (Shibboleth) automat
 
 ## Unterstützte Systeme
 
-* Debian Stretch (9)
-* Debian Buster (10)
+* Debian
 
 Ansible-Skripte für weitere Systeme können unter [ansible/roles/shibboleth/tasks](ansible/roles/shibboleth/tasks) hinzugefügt werden. Eine gute Beschreibung der Installation liefert [SWITCHaai](https://www.switch.ch/aai/guides/sp/installation/). Beiträge sind sehr willkommen - einfach einen Pull Request erstellen.
 

@@ -5,7 +5,6 @@
         - unzip
         - jq
         - gzip
-        - python-lxml
         - python3-lxml
     become: yes
     tags:

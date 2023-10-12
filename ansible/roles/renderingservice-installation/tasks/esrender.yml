@@ -1,7 +1,7 @@
 ---
 - name: Ensure python-lxml packages are present
   apt:
-    name: ["python-lxml"]
+    name: ["python3-lxml"]
   become: yes
   tags:
   - packages

@@ -1,0 +1,26 @@
+
+- name: Remove switchaai shibboleth
+  apt:
+    name: shibboleth
+    state: absent
+
+- command:
+    cmd: apt-mark manual libapache2-mod-shib
+
+- name: Remove switchaai-apt-source
+  apt:
+    name: switchaai-apt-source
+    purge: true
+    state: absent
+
+- name: Remove switchaai files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/apt/trusted.gpg.d/SWITCHaai-swdistrib.gpg
+    - /etc/apt/sources.list.d/SWITCHaai-swdistrib.list
+
+- name: apt update
+  apt:
+    update_cache: true
