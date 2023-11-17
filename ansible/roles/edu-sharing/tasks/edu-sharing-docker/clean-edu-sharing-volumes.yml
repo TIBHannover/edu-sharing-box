@@ -24,7 +24,7 @@
 
 - name: Get a list of all volumes.
   shell: >
-    sg docker -c "docker volume ls --quiet || true"
+    sg docker -c "docker volume ls --quiet --quiet --filter name='^{{edu_sharing_docker_project_name}}' || true"
   register: volumes_list
   changed_when: volumes_list.stdout != ""
 
