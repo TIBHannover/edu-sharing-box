@@ -18,6 +18,9 @@ clamav_proxy: "{{clamav_host}}"
 edu_connector_host: 192.168.98.104
 edu_connector_proxy: "{{edu_connector_host}}"
 
+# enable/disable onlyoffice installation
+# enable: true
+enable_only_office: false
 enable_edu_connector: false
 mariadb_port: 3306
 postgresql_port: 5432
