@@ -1,5 +1,3 @@
-edu_connector_host: 192.168.98.101
-edu_connector_proxy: "{{edu_connector_host}}"
 edu_connector_port: 80
 edu_connector_protocol: http
 # Edu-connector Version (Docker)
