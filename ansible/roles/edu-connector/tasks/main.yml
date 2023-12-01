@@ -24,3 +24,15 @@
 - include: register.yml
   tags: 
     - edu-connector-registration
+
+
+- name: Stop all edu-connector init since the registration is completed.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'service-init_{{edu_connector_docker_project_name}}' | xargs -r docker stop "
+
+
+- name: Clean unused edu-connector images, containers, networks and cashes.
+  command: | 
+    sg docker "docker system prune --all --force --filter "label=edu-connector" --filter "label=edu_connector""
+  tags:
+    - edu-connector-config
