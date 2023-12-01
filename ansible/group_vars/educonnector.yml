@@ -3,7 +3,7 @@ edu_connector_proxy: "{{edu_connector_host}}"
 edu_connector_port: 80
 edu_connector_protocol: http
 # Edu-connector Version (Docker)
-edu_connector_version: 8.0.0
+edu_connector_version: 8.1.0
 # installation directory
 edu_connector_install_dir: "{{base_dir}}/edu-connector_{{edu_connector_version|replace('.','_')}}"
 
