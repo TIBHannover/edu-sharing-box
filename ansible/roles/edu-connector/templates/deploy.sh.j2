@@ -1,0 +1,136 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+export COMPOSE_PROJECT_NAME="{{edu_connector_docker_project_name}}"
+
+export COMPOSE_EXEC="docker compose"
+
+export CLI_CMD="$0"
+export CLI_OPT1="$1"
+shift || true
+
+pushd "{{edu_connector_install_dir}}">/dev/null || exit
+
+if [[ -f ".env" ]] ; then
+	source .env
+fi
+
+info() {
+	echo ""
+	echo "  edu-connector:"
+	echo ""
+	echo " edu-connector is running in ${SERVICES_EDU_CONNECTOR_PROT_EXTERNAL:-http}://${SERVICES_EDU_CONNECTOR_HOST_EXTERNAL:-127.0.0.1}:${SERVICES_EDU_CONNECTOR_PORT_EXTERNAL:-8100}${SERVICES_EDU_CONNECTOR_PATH_EXTERNAL:-}/"
+	echo ""
+	echo ""
+}
+
+compose() {
+
+	COMPOSE_DIRECTORY="$1"
+	COMPOSE_LIST=
+
+	shift && {
+
+    shift && {
+
+      while true; do
+        flag="$1"
+        shift || break
+
+        COMPOSE_FILE_TYPE=""
+        case "$flag" in
+        -common) COMPOSE_FILE_TYPE="common" ;;
+        -remote) COMPOSE_FILE_TYPE="remote" ;;
+        -productive)
+          COMPOSE_FILE_TYPE="productive"
+          if [[ ! $PRODUCTIVE_ENABLED -eq "true" ]] ; then continue ; fi
+          ;;
+        esac
+
+        while IFS='' read -r COMPOSE_FILE; do
+          COMPOSE_LIST="$COMPOSE_LIST -f ${COMPOSE_FILE}"
+        done < <(find "${COMPOSE_DIRECTORY}" -type f -name "*_*-${COMPOSE_FILE_TYPE}.yml" | sort -g)
+      done
+
+
+      for COMPOSE_FILE in $ADDITIONAL_COMPOSE_FILES; do
+        COMPOSE_LIST="$COMPOSE_LIST -f ${COMPOSE_FILE}"
+      done
+    }
+	}
+
+	echo $COMPOSE_LIST
+}
+
+rstart() {
+	COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -remote -productive)"
+
+	echo "Use compose set: $COMPOSE_LIST"
+
+	$COMPOSE_EXEC \
+		$COMPOSE_LIST \
+		pull || exit
+
+	$COMPOSE_EXEC \
+		$COMPOSE_LIST \
+		up -d $@ || exit
+}
+
+stop() {
+	COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -productive)"
+
+	echo "Use compose set: $COMPOSE_LIST"
+
+	$COMPOSE_EXEC \
+		$COMPOSE_LIST \
+		stop $@ || exit
+}
+
+remove() {
+	read -p "Are you sure you want to continue? [y/N] " answer
+	case ${answer:0:1} in
+	y | Y)
+		COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -productive)"
+
+		echo "Use compose set: $COMPOSE_LIST"
+
+		$COMPOSE_EXEC \
+			$COMPOSE_LIST \
+			down || exit
+		;;
+	*)
+		echo Canceled.
+		;;
+	esac
+}
+
+case "${CLI_OPT1}" in
+start)
+	rstart $@ && info
+	;;
+stop)
+	stop $@
+	;;
+remove)
+	remove
+	;;
+restart)
+	stop $@ && rstart $@ && info
+	;;
+*)
+	echo ""
+	echo "Usage: ${CLI_CMD} [option]"
+	echo ""
+	echo "options:"
+	echo ""
+	echo "  - start        start edu-connector"
+	echo "  - restart      stops and starts edu-connector"
+	echo ""
+	echo "  - stop         stop edu-connector"
+	echo "  - remove               remove edu-connector"
+	echo ""
+	;;
+esac
+
+popd >/dev/null || exit
