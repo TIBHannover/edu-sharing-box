@@ -10,7 +10,7 @@
   roles:
     - init-facts
 
-- hosts: renderingservice, edusharing
+- hosts: renderingservice, edusharing,educonnector
   become: yes
   roles:
     - apache

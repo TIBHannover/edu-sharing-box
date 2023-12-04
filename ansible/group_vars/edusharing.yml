@@ -257,3 +257,27 @@ edu_custom_menu_entries: # list of custom menu entries
     #   position: 2
     #   openInNew: true
     #   url: "https://www.example.de/"
+
+# Enable modules for edu-sharing connector 
+# example:
+#     - id: 'TINYMCE'       # Required
+#       icon: 'edit'        # optional default will be edit
+#       showNew: true       # optional default will be true
+#       onlyDesktop: true   # optional default will be true
+#       hasViewMode: true   # optional default will be true
+#       filetypes:          # Required
+#         - {mimetype: "text/html",filetype: "html",createable: true,editable: true,editorType: "tinymce"}
+# TINYMCE is by default
+edu_connector_enable_modules:
+  - id: 'H5P'
+    filetypes:
+      - {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
+  - id: 'ONLY_OFFICE'
+    icon: 'edit'
+    showNew: true
+    onlyDesktop: true
+    hasViewMode: true
+    filetypes:
+      - {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true}
+      - {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true}
+      - {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true}

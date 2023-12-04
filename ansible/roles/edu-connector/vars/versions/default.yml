@@ -1,0 +1,10 @@
+---
+edu_connector_version_archive_url: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-services-connector-deploy-docker-compose/8.0.0/edu_sharing-community-services-connector-deploy-docker-compose-8.0.0.jar
+
+# In newer versions Edu-sharing will change the deploy command so we need to update it here
+# deploy docker images to server
+edu_connector_deploy_command: 'sg docker -c "./deploy.sh start"'
+# remove docker images from server
+edu_connector_undeploy_command: sg docker -c "./deploy.sh stop"
+edu_connector_purge_all_command: |
+     yes | sg docker -c "./deploy.sh remove"

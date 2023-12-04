@@ -5,14 +5,32 @@
     state: directory
 
 
-- name: Copy edu-connector docker-compose file.
-  template:
-    src: docker-compose.yml.j2
-    dest: "{{edu_connector_install_dir}}/docker-compose.yml"
+- name: Download edu-connector sources.
+  get_url:
+    url: "{{edu_connector_version_archive_url}}"
+    dest: "{{edu_connector_install_dir}}/edu-connector.jar"
 
-- name: Run run docker compose -d.
+- name: Extract edu-connector sources.
+  unarchive:
+    remote_src: yes
+    src: "{{edu_connector_install_dir}}/edu-connector.jar"
+    dest: "{{edu_connector_install_dir}}"
+    creates: "{{edu_connector_install_dir}}/edu-connector"
+
+- name: Copy .env file file.
+  template:
+    src: .env.j2
+    dest: "{{edu_connector_install_dir}}/.env"
+
+- name: Copy deploy shell script file.
+  template:
+    src: deploy.sh.j2
+    dest: "{{edu_connector_install_dir}}/deploy.sh"
+    mode: '744'
+
+- name: Run edu-connector.
   shell:
     chdir: '{{edu_connector_install_dir}}/'
-    cmd: "{{edu_connector_run_command}}"
+    cmd: "{{edu_connector_deploy_command}}"
 
 

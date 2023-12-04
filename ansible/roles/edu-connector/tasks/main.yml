@@ -1,8 +1,38 @@
 ---
 
+- name: Ensure unzip is present
+  package:
+    name: ["unzip"]
+  become: yes
+  tags:
+  - packages
+  - root-task
+
+- name: Load version variables.
+  with_first_found:
+    - "../vars/versions/{{ edu_connector_version }}.yml"
+    - "../vars/versions/default.yml"
+  include_vars: "{{ item }}"
+
+- name: Stop all edu-connector running containers.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E '{{edu_connector_docker_project_name}}' | xargs -r docker stop "
+
 - include: install.yml
   tags: 
     - edu-connector-installation
 - include: register.yml
   tags: 
     - edu-connector-registration
+
+
+- name: Stop all edu-connector init since the registration is completed.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'service-init_{{edu_connector_docker_project_name}}' | xargs -r docker stop "
+
+
+- name: Clean unused edu-connector images, containers, networks and cashes.
+  command: | 
+    sg docker "docker system prune --all --force --filter "label=edu-connector" --filter "label=edu_connector""
+  tags:
+    - edu-connector-config
