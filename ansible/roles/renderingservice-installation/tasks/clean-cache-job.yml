@@ -12,7 +12,7 @@
 - name: create a cron job, to clean old cache
   cron:
     name: "delete old cache"
-    hour: 5   # every day at 5:00 am
+    hour: "{{ clean_cache_schedule_hour | default('*/1',true) }}"   # every hour
     minute: 0
     day: "{{ clean_cache_schedule_day | default('*',true) }}"
     job: "php {{ esrender_base_dir }}/func/classes.new/Helper/cacheCleaner.php"
