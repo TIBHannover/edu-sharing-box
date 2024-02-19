@@ -161,3 +161,10 @@ alfviral_antivirus_configuration:
     value: "{{ antivirus_alfviral_admin_template | default('notify_admin_en.html.ftl',true) }}"
   - key: alfviral.file.exceptions
     value: ""
+
+es_update_oersi_amp_filename: "es-update-oersi-{{es_update_oersi_version}}.amp"
+es_update_oersi_configuration:
+  - key: oersi.url
+    value: "{{es_update_oersi_url | default('',true)}}"
+  - key: edu_sharing.baseUrl
+    value: "{{edu_sharing_url | default('',true)}}"
