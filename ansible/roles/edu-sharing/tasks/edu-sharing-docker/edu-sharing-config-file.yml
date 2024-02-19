@@ -87,7 +87,7 @@
   become: yes
   when:
     (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "") and
-    (install_antivirus is defined ) and ( install_antivirus)
+    (activate_es_update_oersi is defined ) and ( activate_es_update_oersi)
   tags:
     - es-update-oersi
     - oersi
