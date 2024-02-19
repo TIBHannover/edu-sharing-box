@@ -81,3 +81,14 @@
   tags:
     - mail
     - mail-docker-version
+
+- include: ./common/add_es_update_oersi_to_alfresco_properties.yml
+    alfresco_global_properties_path='{{repository_volume_config_cluster.stdout}}'
+  become: yes
+  when:
+    (repository_volume_config_cluster.stdout is defined) and (repository_volume_config_cluster.stdout != "") and
+    (install_antivirus is defined ) and ( install_antivirus)
+  tags:
+    - es-update-oersi
+    - oersi
+    - es-update-oersi-docker

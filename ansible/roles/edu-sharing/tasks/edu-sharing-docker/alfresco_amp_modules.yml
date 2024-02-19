@@ -1,0 +1,30 @@
+- name: Ensures custom-dir exists
+  file: path='{{ edu_docker_inst_dir }}/custom-repository-service' state=directory
+
+- name: get temporary current original container repository-service
+  shell: |
+    sg docker -c "docker create --name temp-repository-service docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}"
+
+- name: copy files and remove temp container
+  block:
+    - name: get reinstall.sh file from temporary container
+      shell:
+        chdir: "{{ edu_docker_inst_dir }}/custom-repository-service"
+        cmd: |
+          sg docker -c "docker cp temp-repository-service:/opt/alfresco/bin/reinstall.sh ."
+  always:
+    - name: remove temporary container repository-service
+      shell: |
+        sg docker -c "docker rm temp-repository-service"
+
+- import_tasks: alfviral.yml
+  when: install_antivirus is defined and install_antivirus
+  tags:  
+    - alfviral
+    - antivirus
+
+- import_tasks: es_update_oersi.yml
+  when: activate_es_update_oersi is defined and activate_es_update_oersi
+  tags:  
+    - oersi
+    - es-update-oersi
