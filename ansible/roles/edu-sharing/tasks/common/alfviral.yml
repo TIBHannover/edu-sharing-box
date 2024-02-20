@@ -8,4 +8,4 @@
   command:
     chdir: '{{ alf_home }}/bin'
     cmd: 'java -jar alfresco-mmt.jar install ../amps/{{ antivirus_alfviral_amp_filename | basename }} {{tomcat_home}}/webapps/alfresco.war -verbose -nobackup'
-  when: install_alfviral | default(false) | bool
+  when: old_install_alfviral | default(false) | bool
