@@ -1,0 +1,11 @@
+- name: Copy es-update-oersi AMP.
+  copy:
+    src: '{{ es_update_oersi_amp_filename }}'
+    dest: "{{ es_amp_destination }}"
+  when: es_amp_destination is defined
+
+- name: Install es-update-oersi.
+  command:
+    chdir: '{{ alf_home }}/bin'
+    cmd: 'java -jar alfresco-mmt.jar install ../amps/{{ es_update_oersi_amp_filename | basename }} {{tomcat_home}}/webapps/alfresco.war -verbose -nobackup'
+  when: activate_es_update_oersi | default(false) | bool
