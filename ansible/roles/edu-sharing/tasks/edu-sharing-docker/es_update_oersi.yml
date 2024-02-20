@@ -1,5 +1,5 @@
 ---
-# Include the alfviral amp file
+# Include the es-update-oersi amp file
 - include: ./common/es_update_oersi.yml
     es_amp_destination='{{ edu_docker_inst_dir }}/custom-repository-service/esupdate/'
 
