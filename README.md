@@ -1,9 +1,9 @@
 # edu-sharing-box
 
-<div style="color: #cc0000; padding: 10px; border-radius: 5px;">
-  <strong>Attention:</strong> This branch is no longer actively maintained.
-  Please switch to the master branch for the latest updates and fixes.
-</div>
+> **<strong>Attention:</strong>**
+> 
+> This branch is no longer actively maintained.
+> Please switch to the master branch for the latest updates and fixes.
 
 Dieses Projekt bietet die Möglichkeit, ein edu-sharing mit minimalem Aufwand in einer virtuellen Maschine aufzusetzen. Voraussetzung ist die Installation von
 [Git](https://git-scm.com/downloads),  [Vagrant](https://www.vagrantup.com/downloads.html) und [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
