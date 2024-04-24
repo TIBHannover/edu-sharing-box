@@ -11,11 +11,13 @@
       - packages
       - root-task
 
-  - name: Run Edu-Sharing version 6 and below
-    include: ./edu-sharing-old/main.yml
+  - name: Check edu-sharing version.
+    fail:
+      msg: "Your edu-sharing version is {{ edu_version }}. Please ensure it is 7.0.0 or higher"
     when: edu_version is defined and  edu_version is version_compare('7.0.0','<')
     tags:
-      - edu-sharing-old
+      - edu-sharing
+      - check-edu-sharing-version
 
   - name: Run Edu-Sharing version 7 and above
     include: ./edu-sharing-docker/main.yml
