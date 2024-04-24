@@ -1,8 +1,0 @@
----
-  - name: Ensure imagemagick packages are present
-    apt:
-      name: ["imagemagick"]
-    become: yes
-    tags:
-    - packages
-    - root-task
