@@ -33,17 +33,12 @@
   tags:
     - root-task
 
-- hosts: alfrescosolr4, edusharing
+- hosts: edusharing
   roles:
     - java
     - role: tomcat
       when: edu_version is defined and edu_version is version('7.0.0','<')
       tags: [tomcat]
-
-- hosts: alfrescosolr4
-  roles:
-    - role: alfresco-solr4
-      when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: edusharing
   roles:
