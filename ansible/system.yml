@@ -48,8 +48,6 @@
 - hosts: edusharing
   roles:
     - edu-sharing
-    - role: backup
-      tags: backup
 
 - hosts: renderingservice, opencast
   become: yes
