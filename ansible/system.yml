@@ -28,8 +28,6 @@
           - "{{ work_user }}"
     - role: postgresql
       when: alfresco_db_type == 'postgresql' and  edu_version is version('7.0.0','<')
-    - role: mariadb
-      when: alfresco_db_type == 'mariadb' and  edu_version is version('7.0.0','<')
   tags:
     - root-task
 
@@ -58,8 +56,6 @@
   roles:
     - role: postgresql
       when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
-    - role: mariadb
-      when: esrender_db_type == 'mariadb' and edu_version is version('7.0.0','<')
     - role: renderingservice-installation
       when: edu_version is defined and edu_version is version('7.0.0','<')
     - role: splash
