@@ -26,8 +26,6 @@
       vars:
         docker_users:
           - "{{ work_user }}"
-    - role: postgresql
-      when: alfresco_db_type == 'postgresql' and  edu_version is version('7.0.0','<')
   tags:
     - root-task
 
@@ -54,8 +52,6 @@
 - hosts: renderingservice
   become: yes
   roles:
-    - role: postgresql
-      when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
     - role: renderingservice-installation
       when: edu_version is defined and edu_version is version('7.0.0','<')
     - role: splash
