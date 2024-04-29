@@ -30,7 +30,6 @@ Vagrant.configure("2") do |config|
       "educonnector" => ["edu-sharing-vm"],
       "antivirus" => ["edu-sharing-vm"],
       "opencast" => ["edu-sharing-vm"],
-      "tomcat:children" => ["edusharing"],
       "alfresco:children" => ["edusharing"],
       "all:vars" => {
         "timezone" => "Europe/Berlin"
