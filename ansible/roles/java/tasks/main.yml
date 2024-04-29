@@ -18,6 +18,11 @@
       path: "{{ java_base_path }}/zulu{{ java_version }}/bin/java"
     register: java_bin_stat
 
+  - name: java_home directory variable
+    set_fact:
+      java_home: "{{ java_base_path }}/zulu{{ java_version }}"
+    when: java_bin_stat.stat.exists
+
 
   - name: Register JAVA_HOME env variable
     lineinfile: dest=/etc/profile regexp="^(export JAVA_HOME=)" state=present line="export JAVA_HOME={{ java_base_path }}/zulu{{ java_version }}"
