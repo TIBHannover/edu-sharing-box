@@ -28,7 +28,6 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "edusharing" => ["edu-sharing-vm"],
       "educonnector" => ["edu-sharing-vm"],
-      "onlyoffice" => ["edu-sharing-vm"],
       "antivirus" => ["edu-sharing-vm"],
       "opencast" => ["edu-sharing-vm"],
       "renderingservice" => ["edu-sharing-vm"],

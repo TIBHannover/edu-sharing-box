@@ -64,19 +64,6 @@
   tags:
     - opencast
 
-- hosts: onlyoffice
-  roles:
-    - role: geerlingguy.docker
-      become: yes 
-      when: enable_only_office is defined and enable_only_office
-      vars:
-        docker_users:
-          - "{{ work_user }}"
-    - role: onlyoffice
-      when: enable_only_office is defined and enable_only_office
-  tags:
-    - onlyoffice
-
 - hosts: educonnector
   roles:
     - role: geerlingguy.docker
