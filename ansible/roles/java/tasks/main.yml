@@ -1,30 +1,24 @@
 ---
-  - name: download and extract java
-    unarchive:
-      remote_src: yes
-      src: '{{java_archive_url}}'
-      dest: "{{java_inst_dir}}"
-      creates: "{{java_inst_dir}}/{{java_name}}"
+  - include: Debian.yml
+    when: ansible_distribution == 'Debian'
 
-  - name: create symlink
-    file:
-      path: '{{java_home}}'
-      src: '{{java_name}}'
-      state: link
+  - name: Find path for new JAVA binary
+    shell: update-alternatives --query java | grep Alternative | grep zulu{{java_version}} | cut -f 2 -d " "
+    register: java_bin_path
+    changed_when: false
 
-  - name: Set JAVA_HOME if configured.
-    template:
-      src: java_home.sh.j2
-      dest: /etc/profile.d/java_home.sh
-      mode: 0644
-    when: java_home is defined and java_home
-    become: yes
-    tags:
-    - root-task
+  - name: Update Java alternative
+    alternatives:
+      name: java
+      path: "{{java_bin_path.stdout}}"
+    when: java_register_alternative is defined and java_register_alternative
 
-  - name: Remove libservlet3.1-java, since it has security issues and is unused
-    become: yes
-    apt:
-      name: ['libservlet3.1-java']
-      state: absent
-    when: security_cleanup_remove_package_libservlet
+  - name: Check if Java installation directory exists
+    stat:
+      path: "{{ java_base_path }}/zulu{{ java_version }}/bin/java"
+    register: java_bin_stat
+
+
+  - name: Register JAVA_HOME env variable
+    lineinfile: dest=/etc/profile regexp="^(export JAVA_HOME=)" state=present line="export JAVA_HOME={{ java_base_path }}/zulu{{ java_version }}"
+    when: (java_register_env is defined and java_register_env) and java_bin_stat.stat.exists

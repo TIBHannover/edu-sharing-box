@@ -30,8 +30,10 @@
     - root-task
 
 - hosts: edusharing
+  become: yes
   roles:
-    - java
+    - role: java
+      tags: [java]
     - role: tomcat
       when: edu_version is defined and edu_version is version('7.0.0','<')
       tags: [tomcat]
