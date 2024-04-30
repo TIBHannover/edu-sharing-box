@@ -14,7 +14,7 @@ clamav_proxy: "{{clamav_host}}"
 
 edu_connector_host: 192.168.98.104
 edu_connector_proxy: "{{edu_connector_host}}"
-install_splash: true
+install_splash: false
 enable_edu_connector: false
 # db_types: 'postgresql', 'mariadb' (no migration on change)
 esrender_db_type: mariadb
