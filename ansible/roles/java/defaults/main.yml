@@ -1,5 +1,0 @@
----
-java_version: "11"
-java_base_path: "/usr/lib/jvm"
-java_register_alternative: true
-java_register_env: true

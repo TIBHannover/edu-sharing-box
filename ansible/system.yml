@@ -32,7 +32,8 @@
 - hosts: edusharing
   become: yes
   roles:
-    - role: java
+    - role: geerlingguy.java
+      when: "ansible_os_family == 'Debian'"
       tags: [java]
 
 - hosts: edusharing
