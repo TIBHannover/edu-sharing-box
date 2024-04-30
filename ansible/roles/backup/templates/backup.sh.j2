@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# {{ ansible_managed }}
+#
+# Backup edu-sharing data-dir and database
+#
+
+dstPath="{{ backup_path }}"
+logFile=$(date +"${dstPath}/backup-%Y-%m-%d.log")
+
+{% if alfresco_db_type == 'postgresql' %}
+# postgres-Backup
+# ---------------------------------------
+postgresPGPass="{{ base_dir }}/.pgpass"
+postgresOutfile="${dstPath}/db-dump.sql.gz"
+postgresLogfile="${dstPath}/db-dump.log"
+postgresBackupExit=-1
+postgresCompressOpt="-6cv"
+postgresDumpCmd=`which pg_dumpall`
+postgresDumpUser="{{ backup_db_user }}"
+postgresDumpOpt="--verbose --clean --if-exists --username=${postgresDumpUser} --no-password --host=localhost"
+test -x "/usr/bin/pigz" && postgresCompressCmd="/usr/bin/pigz" || postgresCompressCmd="/bin/gzip"
+date +"*** %Y-%m-%d %H:%M:%S start Postgres-Dump: $postgresOutfile" | tee -a "$logFile"
+if test -n "$postgresDumpCmd" -a -x "$postgresDumpCmd" ; then
+    if test -r "$postgresPGPass" ; then
+        if test -w "$dstPath/." ; then
+            if touch "$postgresOutfile" ; then
+                if touch "$postgresLogfile" ; then
+                    echo "EXEC: $postgresDumpCmd $postgresDumpOpt | $postgresCompressCmd $postgresCompressOpt" > "$postgresLogfile"
+                    (   $postgresDumpCmd $postgresDumpOpt | $postgresCompressCmd $postgresCompressOpt > "$postgresOutfile"
+                        echo "${PIPESTATUS[0]} ${PIPESTATUS[1]}"
+                    ) &> "$postgresLogfile"
+                    # alle leerzeichen + spaces löschen, wenn alles ok ist, dann ist der String am Ende leer, anderenfalls steht da was drin
+                    postgresBackupExit=`tail -1 "$postgresLogfile"`
+                    postgresBackupExit="${postgresBackupExit//0/ }"
+                    postgresBackupExit="${postgresBackupExit// /}"
+                    test -z "$postgresBackupExit" && postgresBackupExit=0 || postgresBackupExit=-1
+                else
+                    echo >&2 "ERROR: could not write to postgresLogfile: $postgresLogfile"
+                fi
+            else
+                echo >&2 "ERROR: could not write to postgresOutfile: $postgresOutfile"
+            fi
+        else
+            echo >&2 "ERROR: could not write to postgresBackupDir: $dstPath"
+        fi
+    else
+        echo >&2 "WARNING: could not read config - no postgres backup created: $postgresPGPass"
+        postgresBackupExit=1
+    fi
+else
+    echo >&2 "WARNING: could not find/execute pg_dumpall: $postgresDumpCmd"
+    postgresBackupExit=1
+fi >> "$logFile"
+date +"*** %Y-%m-%d %H:%M:%S  stop Postgres-Dump: exit=$postgresBackupExit / log=$postgresLogfile" | tee -a "$logFile"
+
+{% elif alfresco_db_type == 'mariadb' %}
+# MariaDB-Backup NOT SUPPORTED ATM
+# ---------------------------------------
+echo "MariaDB-Backup NOT SUPPORTED ATM"
+
+{% endif %}
+
+# alfresco-Backup
+# ---------------------------------------
+alfrescoBackupExit=-1
+alfrescoBackupFile={{ alf_home | basename }}/alf_data
+date +"*** %Y-%m-%d %H:%M:%S start alfresco-Backup: $alfrescoBackupFile" | tee -a "$logFile"
+if test -r "{{ alf_inst_dir }}/$alfrescoBackupFile" ; then
+  tar -czf ${dstPath}/alfresco.tar.gz --directory {{ alf_inst_dir }} ${alfrescoBackupFile}
+  alfrescoBackupExit=$?
+else
+  echo >&2 "WARNING: could not read backup-dir: {{ alf_inst_dir }}/$alfrescoBackupFile"
+  postgresBackupExit=1
+fi
+date +"*** %Y-%m-%d %H:%M:%S  stop alfresco-Backup: exit=$alfrescoBackupExit" | tee -a "$logFile"
