@@ -1,4 +1,16 @@
 ---
+
+  - name: Ensure the java_home variable is set.
+    include_role:
+      name: java
+      tasks_from: get_java_home
+      apply:
+        tags:
+          - edu-sharing
+    when:  java_home is not defined
+    tags:
+      - edu-sharing
+
   - name: Ensure gzip and jq python-lxml are present.
     package:
       name:
