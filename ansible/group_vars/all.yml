@@ -25,11 +25,6 @@ esrender_db:
   
 postgres_tmp_root_password: xxx
 
-tomcat_port: 8080
-tomcat_shutdown_port: 8005
-tomcat_ssl_port: 8443
-tomcat_ajp_port: 8009
-
 base_dir: "{{ansible_env.HOME}}"
 
 esrender_document_root: '/var/www'
@@ -51,3 +46,9 @@ backup_bin: '{{ script_dir }}'
 apache_conf_servername: # use as apache2 ServerName Directive, if set - see http://httpd.apache.org/docs/2.2/en/mod/core.html#servername
 apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if set. Example: On - see http://httpd.apache.org/docs/2.2/en/mod/core.html#usecanonicalname
 
+# Used in edu-sharing migration, We will optimize it in the next pull request
+tomcat_inst_dir: "{{base_dir}}"
+tomcat_bin: "{{tomcat_inst_dir}}/bin"
+tomcat_home: "{{tomcat_inst_dir}}/tomcat"
+tomcat_start_command: "nohup {{tomcat_bin}}/tomcat.sh start </dev/null >/dev/null 2>&1 &"
+tomcat_stop_command: "{{tomcat_bin}}/tomcat.sh stop 2> /dev/null || true"
