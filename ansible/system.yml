@@ -79,13 +79,6 @@
     - edu-connector
 
 - hosts: edusharing
-  roles:
-    - role: moodle-registration
-      when: register_moodle
-  tags:
-    - moodle-registration
-    
-- hosts: edusharing
   become: yes
   roles:
     - role: shibboleth
