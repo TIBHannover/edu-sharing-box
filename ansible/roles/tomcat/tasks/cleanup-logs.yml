@@ -1,0 +1,28 @@
+
+- name: Install package bzip2 for file compression
+  become: yes
+  package:
+    name: bzip2
+    state: present
+  when: tomcat_cleanup_logfiles
+  tags:
+    - root-task
+
+- name: create tomcat logfile cleanup script
+  template:
+    src: cleanup-logs.sh.j2
+    dest: '{{ tomcat_bin }}/cleanup-tomcat-logs.sh'
+    mode: '744'
+  vars:
+    maintenance_logrotate_items: '{{ tomcat_cleanup_logrotate_items }}'
+    maintenance_logcompress_items: '{{ tomcat_cleanup_logcompress_items }}'
+    maintenance_logdelete_items: '{{ tomcat_cleanup_logdelete_items }}'
+  when: tomcat_cleanup_logfiles
+
+- name: Configure cron schedule - cleanup tomcat logs
+  cron:
+    name: "cleanup tomcat logs"
+    hour: '{{ tomcat_cleanup_cron_hour }}'
+    minute: '{{ tomcat_cleanup_cron_minute }}'
+    job: '{{ tomcat_bin }}/cleanup-tomcat-logs.sh >> {{ tomcat_home }}/logs/cleanup-tomcat-logs.`date +\%Y-\%m-\%d`.log 2>&1'
+    state: "{{ 'present' if tomcat_cleanup_logfiles else 'absent' }}"

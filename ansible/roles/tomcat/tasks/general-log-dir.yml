@@ -1,0 +1,28 @@
+# if set, use a general directory for log-files that does not change when the tomcat version is updated
+
+- name: create logs directory
+  file: path='{{ tomcat_log_dir }}' state=directory
+  when: (tomcat_log_dir is defined) and (tomcat_log_dir != "") and (tomcat_log_dir is not none)
+
+- name: Get tomcat/logs stats
+  stat:
+    path: '{{ tomcat_home }}/logs'
+  register: tomcat_logs_stat_result
+
+- name: Find tomcat/logs files
+  find: path='{{ tomcat_home }}/logs'
+  register: tomcat_logs_files_result
+  when: (tomcat_logs_stat_result.stat.isdir)
+
+- fail: msg='directory not empty {{ tomcat_home }}/logs'
+  when: (tomcat_logs_stat_result.stat.isdir) and (tomcat_logs_files_result.matched > 0)
+
+- name: remove logs directory
+  file: path='{{ tomcat_home }}/logs' state=absent
+  when: tomcat_logs_stat_result.stat.isdir
+
+- name: create symlink for logs directory
+  file:
+    path: '{{ tomcat_home }}/logs'
+    src: '{{ tomcat_log_dir }}'
+    state: link
