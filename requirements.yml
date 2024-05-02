@@ -3,5 +3,3 @@
   version: 1.0.0
 - src: geerlingguy.docker
   version: 6.1.0
-- src: geerlingguy.java
-  version: 2.5.0
