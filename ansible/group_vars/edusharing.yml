@@ -24,10 +24,6 @@ youtube_apikey: CHANGE_ME
 
 connect_content_oersi: true  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
-register_moodle: false
-moodle_host: 192.168.98.105
-moodle_url: "http://{{moodle_host}}"
-
 # method how to retrieve the edu-sharing archive that should be installed
 #  'download' - use the archive from 'edu_sharing_archive_url'
 #  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'

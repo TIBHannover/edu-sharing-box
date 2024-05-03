@@ -1,0 +1,12 @@
+- name: Get java_home
+  shell:
+    cmd: "update-alternatives --query java | grep Alternative | grep openjdk | grep -m 1 -e 'java-\\(1\\.\\)\\{0,1\\}' | cut -f 2 -d ' '"
+    warn: false  # Suppress warning messages
+  register: java_bin_path
+  changed_when: false
+  when: java_home is not defined
+
+- name: Set java_home
+  set_fact:
+    java_home: "{{ java_bin_path.stdout | regex_replace('(/jre)?/bin/java', '') }}"
+  when: java_home is not defined and java_bin_path.stdout | default('') != ''

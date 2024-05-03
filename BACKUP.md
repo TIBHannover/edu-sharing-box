@@ -2,40 +2,15 @@
 
 Backup Ansible-Variablen im Inventory-File setzen (siehe [ansible/group_vars/all.yml](ansible/group_vars/all.yml))
 
-* **backup_process_state**: `present` - um das Backup zu aktivieren
-* **backup_db_user**: \<DB-USER-BACKUP\> - username des DB-users, der das Backup durchführen soll (wird angelegt) 
-* **backup_db_password**: \<DB-USER-PASSWORD\>
-* **backup_schedule_hour**: \<HOUR\> - Stunde zu der das Backup erstellt wird (via Crontab)
-* **backup_path**: '\<BACKUP-PATH\>' - Verzeichnis in dem das fertige Backup gespeichert wird
+* **backup_process_state**: `present` - Activate/Deactivate backup script
+* **backup_schedule_hour**: \<HOUR\> - hours the backup script will run
+* **backup_path**: '\<BACKUP-PATH\>' - path where the backup will be saved
 
-Vom Backup berücksichtigt wird
-* Alfresco Datenbank (PSQL)
-* Alfresco Datenverzeichnis
+### Installation
 
-**Bemerkung**: Die Sicherung einer MariaDB/MySQL Alfresco Datenbank wird derzeit nicht unterstützt!
+In order to start an automatic backup activate the script `backup_process_state: present`
 
-# Backup-Daten wiederherstellen
-Die folgenden Schritte durchführen
+and the ansible will do the job.
 
-```
-# Stop Tomcat
-~/bin/tomcat.sh stop
-```
+> INFO !! the backup process will go through an optimization process and use the script provided by edu-sharing ite self
 
-```
-# Aktuelle Daten löschen
-rm -rf ~/alfresco-community-distribution-201707/alf_data
-sudo -u postgres psql -c 'DROP DATABASE <alfresco-db>;'
-```
-
-```
-# Daten wiederherstellen
-unpigz -cv ~/backup/db-dump.sql.gz > ~/backup/db-dump.sql
-sudo -u postgres psql -f ~/backup/db-dump.sql
-tar xzf ~/backup/alfresco.tar.gz --directory ~/
-```
-
-```
-# Start Tomcat
-~/bin/tomcat.sh start
-```

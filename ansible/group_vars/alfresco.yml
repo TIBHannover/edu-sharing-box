@@ -1,9 +1,7 @@
 ---
-mysql_jconnector_url: https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.47/mysql-connector-java-5.1.47.jar
-postgresql_jconnector_url: https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.8/postgresql-42.2.8.jar
 
-alf_sources_url: 'https://download.alfresco.com/release/community/201707-build-00028/{{alf_name}}.zip'
-
+# This part here is used only for migration, and in next optimization we will 
+# find a better way to implement them but for now we will keep here since we are in cleaning process now
 alf_name: alfresco-community-distribution-201707
 alf_inst_dir: "{{base_dir}}"
 alf_home: "{{alf_inst_dir}}/{{alf_name}}"
@@ -14,8 +12,3 @@ alfresco_db:
   name: alfresco
   user: alfresco
   password: alfresco
-
-# Install alfresco share true|false
-alfresco_share_install: false
-
-tomcat_shared_dir: "{{ alf_inst_dir }}/conf/shared"
