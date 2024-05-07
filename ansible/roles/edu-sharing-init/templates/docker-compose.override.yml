@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  repository-service:
+    image: docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}-{{ edu_repo_caption }}-custom
+    environment:
+      - TZ={{edu_sharing_docker_timezone}}
+    volumes:
+      - repository-service-volume-config-node:/opt/bitnami/tomcat/shared/classes/config
+      - "repository-service-volume-config-edu-sharing:/opt/bitnami/tomcat/webapps/edu-sharing"
+    
+volumes:
+  repository-service-volume-config-edu-sharing:
