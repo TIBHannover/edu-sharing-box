@@ -1,0 +1,14 @@
+---
+- set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
+
+- name: Check if Migration has been installed before
+  shell: "echo ${HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED:-false}"
+  register: has_been_migrated
+  tags: 
+    - edu-sharing-migration
+
+- name: Start migration.
+  include_tasks: migrate-edu-sharing.yml
+  when: has_been_migrated.stdout and not has_been_migrated.stdout|bool
+  tags: 
+    - edu-sharing-migration
