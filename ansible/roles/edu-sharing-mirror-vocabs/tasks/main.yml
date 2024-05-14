@@ -1,0 +1,7 @@
+---
+- set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
+
+- include_tasks: mirror-vocabs.yml
+  when: mirror_vocabularies | default([], true) | length>0
+  tags: 
+    - mirror-vocabularies
