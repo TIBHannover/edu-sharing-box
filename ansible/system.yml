@@ -37,9 +37,9 @@
 
 - hosts: edusharing
   roles:
-    - edu-sharing
-    - role: backup
-      tags: backup
+    - role: edu-sharing-customization
+      tags: 
+        - edu-sharing-customization
 
 - hosts: opencast
   become: yes
