@@ -37,6 +37,9 @@
 
 - hosts: edusharing
   roles:
+    - role: edu-sharing-search-elastic.
+      tags: 
+        - edu-sharing-search-elastic
     - role: edu-sharing-classification-keywords
       tags: 
         - edu-sharing-classification-keywords

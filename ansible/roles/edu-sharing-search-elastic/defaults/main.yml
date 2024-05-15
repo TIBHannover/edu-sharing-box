@@ -1,0 +1,14 @@
+---
+rendering_environment_variable:
+  - key: REPOSITORY_SEARCH_ELASTIC_INDEX_JAVA_XMS
+    value: '{{repository_search_elastic_index_java_xms | default("1g",true)}}'
+  - key: REPOSITORY_SEARCH_ELASTIC_INDEX_JAVA_XMX
+    value: '{{repository_search_elastic_index_java_xmx | default("1g",true)}}'
+  - key: REPOSITORY_SEARCH_ELASTIC_INDEX_REPLICAS
+    value: '{{repository_search_elastic_index_replicas | default("1",true)}}'
+  - key: REPOSITORY_SEARCH_ELASTIC_INDEX_SHARDS
+    value: '{{repository_search_elastic_index_shards | default("1",true)}}'
+  - key: REPOSITORY_SEARCH_ELASTIC_TRACKER_JAVA_XMS
+    value: '{{repository_search_elastic_tracker_java_xms | default("1g",true)}}'
+  - key:  REPOSITORY_SEARCH_ELASTIC_TRACKER_JAVA_XMX
+    value: '{{repository_search_elastic_tracker_java_xmx| default("1g",true)}}'
