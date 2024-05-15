@@ -1,20 +1,13 @@
 ---
 es_proxy_vhost: true
 
-tomcat_users:
-  - username: "CN=Alfresco Repository Client, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
-    password: "null"
-    roles: "repoclient"
-  - username: "CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
-    password: "null"
-    roles: "repository"
 
-use_esguest_user: true
-# map of permssions that should be adjusted for the esguest user
-# key: Key of the permission (see list of available permissions: curl -X GET --header 'Accept: application/json' 'http://<YOURHOST>/edu-sharing/rest/admin/v1/toolpermissions/esguest')
-# value: ALLOWED | DENIED | UNDEFINED (see https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/org/edu_sharing/service/admin/model/ToolPermission.java)
-esguest_permissions:
-  "TOOLPERMISSION_GLOBAL_AUTHORITY_SEARCH": "DENIED"
+edu_sharing_docker_project_name: "edu_sharing_docker_version"
+
+alfresco_db:
+  name: alfresco
+  user: alfresco
+  password: alfresco
 
 connect_content_pixabay: false
 pixabay_apikey: CHANGE_ME
@@ -24,23 +17,11 @@ youtube_apikey: CHANGE_ME
 
 connect_content_oersi: true  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
-# method how to retrieve the edu-sharing archive that should be installed
-#  'download' - use the archive from 'edu_sharing_archive_url'
-#  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
-edu_sharing_archive_retrieve_method: download
-edu_sharing_local_archive_path:
-
-# possibility to add an archive with custom modifications to edu-home
-edu_sharing_custom_installation: false
-edu_sharing_custom_archive_path:
-
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
 
 edu_repo_caption: local-repo-vmtest
 edu_repo_id: local
-
-edu_log4j_properties_path:  # path of custom log4j.properties. if undefined, use the default - see https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/log4j.properties
 
 # the receiver address where to send mails
 edu_mail_report_receiver:
@@ -83,7 +64,6 @@ edu_logo_path:
 # example: ['local/path/example.svg', 'example.svg']
 edu_custom_images:
 edu_mds_override_paths:
-  - mds_oersi_override.xml
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
 # List of email template you want to override.
@@ -97,9 +77,7 @@ edu_help_menu_options:
 edu_allowed_licenses:
 
 edu_sharing_port:
-edu_sharing_clientport:
 edu_sharing_protocol: http
-edu_sharing_clientprotocol:
 
 edu_enable_statistics_api: "false"
 
@@ -187,12 +165,8 @@ edu_custom_licenses:
 activate_classification_keywords: false
 # activate the classification-keyword update (true/false)
 activate_classification_keywords_update: false
-# Override the default local file 
-classification_keywords_force_download: false
 # define the classification-keyword interval in days = 1 means every day
 classification_keywords_update_interval: 15
-# Classification-Keywords-URL (for download)
-classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
 # classification keyword default file 
 edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
 
@@ -280,7 +254,3 @@ edu_connector_enable_modules:
 
 # activate/deactivate es-update-oersi, a alfresco plugin used to update metadata in oersi
 activate_es_update_oersi: false
-# version of the amp file
-es_update_oersi_version: 1.0.0
-# oersi update endpoint 
-es_update_oersi_url: 'https://oersi.org/resources/api-internal/import-scripts/python/update-record'

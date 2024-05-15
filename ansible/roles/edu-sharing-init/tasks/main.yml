@@ -1,0 +1,142 @@
+---
+
+  - name: Ensure tomcat is stopped.
+    shell: "{{tomcat_stop_command}}"
+    tags: 
+      - edu-sharing-init
+
+  - name: Ensure the java_home variable is set.
+    include_role:
+      name: java
+      tasks_from: get_java_home
+      apply:
+        tags:
+          - edu-sharing-init
+    when:  java_home is not defined
+    tags: 
+      - edu-sharing-init
+
+  - name: Ensure unzip is present.
+    package:
+      name:
+        - unzip
+    become: true
+    tags: 
+      - edu-sharing-init
+
+  - name: Check edu-sharing version.
+    fail:
+      msg: "Your edu-sharing version is {{ edu_version }}. Please ensure it is 7.0.0 or higher"
+    when: edu_version is defined and  edu_version is version_compare('7.0.0','<')
+    tags: 
+      - edu-sharing-init
+
+
+  - name: Stop all edu-sharing containers.
+    shell: |
+      sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'edu[-_]sharing' | xargs -r docker stop "
+    tags: 
+      - edu-sharing-init
+
+  - set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
+    tags: 
+      - edu-sharing-init
+
+  - name: Load version variables.
+    with_first_found:
+      - "../vars/versions/{{ edu_version }}.yml"
+      - "../vars/versions/default.yml"
+    include_vars: "{{ item }}"
+    tags: 
+      - edu-sharing-init
+
+  - name: Get edu-sharing version in server.
+    shell: "echo ${EDU_SHARING_VERSION:-}"
+    register: edu_sharing_version
+    tags: 
+      - edu-sharing-init
+
+  - name: Ensures inst-dir exists.
+    file: path='{{edu_docker_inst_dir}}' state=directory
+    tags: 
+      - edu-sharing-init
+
+  - name: Download edu-sharing sources.
+    get_url:
+      url: "{{edu_sharing_archive_url}}"
+      dest: "{{edu_docker_inst_dir}}/edu-sharing.zip"
+    tags: 
+      - edu-sharing-init
+
+  - name: Extract edu-sharing sources.
+    unarchive:
+      remote_src: yes
+      src: "{{edu_docker_inst_dir}}/edu-sharing.zip"
+      dest: "{{edu_docker_inst_dir}}"
+      creates: "{{edu_home}}"
+    tags: 
+      - edu-sharing-init
+
+  - include_tasks: clean-edu-sharing-volumes.yml
+    when: edu_sharing_version.stdout is defined and 
+          edu_sharing_version.stdout != edu_version
+    tags: 
+      - edu-sharing-init
+
+
+  - name: Copy override files.
+    template:
+      src: '3_repository-service-volume-override-common.yml'
+      dest: '{{edu_docker_inst_dir}}/3_repository-service-volume-override-common.yml'
+    when: edu_version is defined and  edu_version is version_compare('8.0.0','<')
+    tags: 
+      - edu-sharing-init
+
+  - name: Copy override files.
+    template:
+      src: 'docker-compose.override.yml'
+      dest: '{{edu_docker_inst_dir}}/docker-compose.override.yml'
+    when: edu_version is defined and  edu_version is version_compare('8.0.0','>=')
+    tags: 
+      - edu-sharing-init
+
+  - include_tasks: model.yml
+    tags: 
+      - edu-sharing-init
+
+  - name: Stop all docker images and containers.
+    shell: "{{edu_sharing_undeploy_command}}"
+    args:
+      chdir: "{{edu_docker_inst_dir}}/"
+    tags: 
+      - edu-sharing-init
+
+  - include_tasks: config-env.yml
+    tags: 
+      - edu-sharing-init
+
+  - name: Launch edu-sharing in docker.
+    command:
+      chdir: "{{ edu_docker_inst_dir }}"
+      cmd: "{{edu_sharing_deploy_command}}"
+    no_log: true
+    tags: 
+      - edu-sharing-init
+
+  - include_tasks: configure_alfresco_properties.yml
+    tags: 
+      - edu-sharing-init
+
+  - name: Restart edu-sharing.
+    command:
+      chdir: "{{ edu_docker_inst_dir }}"
+      cmd: "{{edu_sharing_restart_command}}"
+    no_log: true
+    tags: 
+      - edu-sharing-init
+
+  - name: Clean unused edu-sharing images, containers, networks and cashes.
+    command: | 
+      sg docker "docker system prune --all --force --filter "label=edu-sharing" --filter "label=edu_sharing""
+    tags: 
+      - edu-sharing-init
