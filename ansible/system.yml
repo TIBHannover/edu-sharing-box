@@ -37,6 +37,9 @@
 
 - hosts: edusharing
   roles:
+    - role: edu-sharing-migration
+      tags: 
+        - edu-sharing-migration
     - role: edu-sharing-rendering-service
       tags: 
         - edu-sharing-rendering-service
