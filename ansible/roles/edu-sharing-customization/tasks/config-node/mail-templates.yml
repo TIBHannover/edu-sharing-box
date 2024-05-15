@@ -1,0 +1,8 @@
+---
+
+- name: Copy mail template.
+  copy:
+    src: '{{item}}'
+    dest: '{{repository_volume_config_node_path.stdout}}/defaults/mailtemplates'
+  when: (edu_sharing_mail_templates_override is defined) and (edu_sharing_mail_templates_override != "") and (edu_sharing_mail_templates_override is not none)
+  with_items: '{{edu_sharing_mail_templates_override}}'

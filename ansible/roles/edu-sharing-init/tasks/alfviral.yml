@@ -1,0 +1,16 @@
+---
+# Include the alfviral amp file
+- name: Copy alfviral AMP
+  copy:
+    src: '{{ antivirus_alfviral_amp_filename }}'
+    dest: "{{ edu_docker_inst_dir }}/custom-repository-service/alfviral/"
+
+- name: modify reinstall.sh script to accept alfviral amp
+  blockinfile:
+    path: "{{ edu_docker_inst_dir }}/custom-repository-service/reinstall.sh"
+    insertbefore: "^libcheck.sh$"
+    marker: "# Add alfviral amp file"
+    block: |
+        if [[ -d amps/alfviral ]] ; then
+          java -jar bin/alfresco-mmt.jar install amps/alfviral tomcat/webapps/alfresco -directory -nobackup -force
+        fi
