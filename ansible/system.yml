@@ -37,6 +37,9 @@
 
 - hosts: edusharing
   roles:
+    - role: edu-sharing-classification-keywords
+      tags: 
+        - edu-sharing-classification-keywords
     - role: edu-sharing-mirror-vocabs
       tags: 
         - edu-sharing-mirror-vocabs
