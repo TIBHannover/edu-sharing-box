@@ -1,0 +1,8 @@
+---
+# db_types: 'postgresql', 'mariadb' (edu-sharing 4.2 supports only 'postgresql', no migration on change)
+alfresco_db_type: postgresql
+
+# This part here is used only for migration, and in next optimization we will
+alf_name: alfresco-community-distribution-201707
+alf_inst_dir: "{{base_dir}}"
+alf_home: "{{alf_inst_dir}}/{{alf_name}}"

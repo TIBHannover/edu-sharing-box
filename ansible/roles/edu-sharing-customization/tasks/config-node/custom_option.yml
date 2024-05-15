@@ -1,0 +1,29 @@
+---
+- name: Add custom option.
+  block:
+   # first remove all custom options
+    - name: Clear the custom options, before we add it.
+      xml:
+        path: '{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml'
+        xpath: "/config/values/customOptions"
+        state: absent
+        pretty_print: yes
+
+    # then we will add again it in client.config.xml
+    - name: Adding custom option to client.config.xml.
+      xml:
+        path: '{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml'
+        xpath: /config/values
+        add_children: "{{ edu_custom_options | default([], true) }}"
+        input_type: "xml"
+        pretty_print: yes
+      when: edu_custom_options | default([], true) | length>0
+
+  rescue:
+    - name: Clear the custom options, if something goes wrong.
+      xml:
+        path: '{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml'
+        xpath: "/config/values/customOptions"
+        state: absent
+        pretty_print: yes
+      when: edu_custom_options | default([], true) | length>0
