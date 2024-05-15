@@ -37,6 +37,9 @@
 
 - hosts: edusharing
   roles:
+    - role: edu-sharing-mirror-vocabs
+      tags: 
+        - edu-sharing-mirror-vocabs
     - role: edu-sharing-migration
       tags: 
         - edu-sharing-migration
