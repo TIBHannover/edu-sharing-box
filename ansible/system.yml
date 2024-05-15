@@ -40,6 +40,12 @@
     - role: edu-sharing-rendering-service
       tags: 
         - edu-sharing-rendering-service
+    - role: edu-sharing-customization
+      tags: 
+        - edu-sharing-customization
+    - role: edu-sharing-init
+      tags: 
+        - edu-sharing-init
 
 - hosts: opencast
   become: yes
