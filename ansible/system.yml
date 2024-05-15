@@ -37,7 +37,6 @@
 
 - hosts: edusharing
   roles:
-    - edu-sharing
     - role: backup
       tags: backup
 
