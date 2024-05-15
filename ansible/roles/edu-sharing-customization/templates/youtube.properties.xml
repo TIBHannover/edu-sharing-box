@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>youtube as remote repo for search</comment>
+<entry key="searchable">true</entry>
+<entry key="auth_by_app_sendmail">false</entry>
+<entry key="appcaption">youtube</entry>
+<entry key="appid">youtube</entry>
+<!--
+no authenticationwebservice, else redirect servlet does the wrong thing
+<entry key="authenticationwebservice">http://127.0.0.1:8080/edu-sharing/services/authentication</entry>
+-->
+<!-- also an option but sends encrypted alfresco username at the moment:
+<entry key="contenturl">http://www.youtube.com/watch</entry>
+<entry key="nodeid_key">v</entry>
+-->
+<entry key="devmode">false</entry>
+<entry key="is_home_node">false</entry>
+<entry key="metadatasets">/org/edu_sharing/metadataset/metadatasets_default.xml</entry>
+<entry key="password">xyz</entry>
+<entry key="domain">{{edu_sharing_domain}}</entry>
+<entry key="port">80</entry>
+<entry key="repositorytype">YOUTUBE</entry>
+<entry key="searchclass">org.edu_sharing.repository.server.MCAlfrescoAPIClient</entry>
+<!--entry key="authenticationtoolclass">org.edu_sharing.repository.server.AuthenticationToolYouTube</entry-->
+<entry key="authenticationtoolclass">org.edu_sharing.repository.server.AuthenticationToolAPI</entry>
+<entry key="searchService">org.edu_sharing.service.search.SearchServiceYouTubeImpl</entry>
+<entry key="permissionService">org.edu_sharing.service.permission.PermissionServiceCCPublish</entry>
+<entry key="nodeService">org.edu_sharing.service.nodeservice.NodeServiceYouTube</entry>
+<entry key="trustedclient">false</entry>
+<entry key="type">REPOSITORY</entry>
+<entry key="username">admin</entry>
+<entry key="metadatasets">/org/edu_sharing/metadataset/metadatasets_youtube.xml</entry>
+<entry key="metadatasetsV2">mds_youtube</entry>
+<entry key="logo">/edu-sharing/images/logos/youtube.png</entry>
+<entry key="apikey">{{youtube_apikey}}</entry>
+</properties>

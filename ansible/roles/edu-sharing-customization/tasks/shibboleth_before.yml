@@ -1,0 +1,39 @@
+
+- name: set shibboleth client.config configuration
+  xml:
+    path: '{{ shibboleth_before_client_config_path }}'
+    xpath: '{{ item.xpath }}'
+    value: '{{ item.value }}'
+    pretty_print: yes
+  loop:
+    - xpath: /config/values/loginUrl
+      value: '{{ edu_login_shib_url }}'
+    - xpath: /config/values/loginAllowLocal
+      value: '{{ edu_login_allow_local }}'
+    - xpath: /config/values/loginProvidersUrl
+      value: '{{ edu_login_providers_url | default("") }}'
+    - xpath: /config/values/loginProviderTargetUrl
+      value: '{{ edu_login_provider_target_url | default("") }}'
+    - xpath: /config/values/logout/url
+      value: '{{ shibboleth_sp_handler_url }}/Logout?return={{ edu_sharing_url }}/components/login'
+    - xpath: /config/values/logout/destroySession
+      value: 'true'
+
+- name: Ensures sso-context-dir exists
+  file: path='{{ edu_sharing_webapp_webinf_classes_path }}/org/edu_sharing/spring' state=directory
+
+- name: Copy edu-sharing-sso-context.xml
+  copy:
+    src: '{{ edu_sso_context_path }}'
+    dest: '{{ edu_sharing_webapp_webinf_classes_path }}/org/edu_sharing/spring/edu-sharing-sso-context.xml'
+
+- name: Check if edu-sharing_spring.jar exists
+  stat:
+    path: "{{ edu_sharing_webapp_lib_path }}/edu-sharing_spring.jar"
+  register: edu_sharing_spring_jar_stat_result
+
+- name: Update edu-sharing-sso-context.xml in spring-configuration
+  command:
+    chdir: '{{ edu_sharing_webapp_webinf_classes_path }}'
+    cmd: '{{ java_home }}/bin/jar uf {{ edu_sharing_webapp_lib_path }}/edu-sharing_spring.jar org/edu_sharing/spring/edu-sharing-sso-context.xml'
+  when: edu_sharing_spring_jar_stat_result.stat.exists
