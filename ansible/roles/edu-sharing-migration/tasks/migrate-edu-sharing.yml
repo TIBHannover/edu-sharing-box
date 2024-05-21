@@ -18,23 +18,13 @@
   when: alfresco_db_type == 'postgresql'
 
 - name: Purge all docker images and containers.
-  shell: |
-     yes | sg docker -c "./utils.sh purge"
+  shell: "{{edu_sharing_purge_all_command | replace('{service}', '') }}"
   args:
     chdir: "{{edu_docker_inst_dir}}/"
   when:
     (alfresco_alf_data_exist is defined and alfresco_alf_data_exist.matched > 0) and
-    (exist_alfresco_database.is_available is defined and exist_alfresco_database.is_available|bool) and
-    (edu_version is defined and  edu_version is version_compare('8.0.0','>='))
+    (exist_alfresco_database.is_available is defined and exist_alfresco_database.is_available|bool)
 
-- name: Purge all docker images and containers.
-  shell: {{edu_sharing_purge_all_command}}
-  args:
-    chdir: "{{edu_docker_inst_dir}}/"
-  when:
-    (alfresco_alf_data_exist is defined and alfresco_alf_data_exist.matched > 0) and
-    (exist_alfresco_database.is_available is defined and exist_alfresco_database.is_available|bool) and
-    (edu_version is defined and  edu_version is version_compare('8.0.0','<'))
 
 - include_tasks: migrate-alfresco-data.yml
   when:
