@@ -1,3 +1,35 @@
+# Ansible Role: edu-sharing-customization
+
+The edu-sharing-customization role is a role used to customize the edu-sharing.
+
+## Implementation
+
+__edu-sharing-customization__ role is included in to the playbook see: [system.yml](../../../system.yml).
+
+
+```yaml
+- hosts: edusharing
+  roles:
+    - role: edu-sharing-customization
+      tags: 
+        - edu-sharing-customization
+
+```
+
+
+or we just want to run only the `edu-sharing-customization` then we run:
+
+```sh
+ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-customization"
+```
+This will skip other roles and run only the vocabularies role
+
+## Role Variables
+
+__edu-sharing-customization__ role allows you to customize certain variables according to your requirements. Here are the default variables:
+
+
+```yaml
 ---
 
 # (internal) cleanup / set values in client.config.xml
@@ -76,3 +108,33 @@ edu_sharing_customization_environment_variable:
     value: '{{ "/edu-sharing/shibboleth" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
   - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGOUT
     value: '{{ shibboleth_sp_base_path +"/Shibboleth.sso/Logout?return=" +  edu_sharing_url + "/components/login" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
+
+
+```
+
+## Tasks
+
+The `tasks/` directory contains all the ansible tasks.
+
+1. `main`: The main task or entry task for ansible.
+2. `config-cluster`: This directory contains all the task used to override/customize the `repository-service-volume-config-cluster`.
+3. `config-edu-sharing`: This directory contains all the task used to override/customize the `repository-service-volume-config-edu-sharing`.
+4. `config-node`: This directory contains all the task used to override/customize the `repository-service-volume-config-node`.
+5. `adjust_env_variables.yml`: This task is used to override the .env variables in the `.env` file.
+6. `jobs.yml`: This task will execute edu-sharing jobs.
+
+
+[edusharing.yml](../../../group_vars/edusharing.yml) contains other other variables that are nt default and need to be adjusted
+
+## Templates
+
+ The `templates/` directory contains some files we will used to customize edu-sharing.
+
+ It contains: 
+
+ 1. `edu-sharing.conf.j2` Used to override the edu-sharing configuration .
+ 2. `lms.properties.xml.j2` Used to add and configure `lms` into the edu-sharing.
+ 3. `oersi.properties.xml` Used to add and configure the oersi search index into the edu-sharing
+ 4. `pixabay.properties.xml` Used to add and configure the pixabay platform into the edu-sharing
+ 5. `youtube.properties.xml` Used to add and configure the youtube platform into the edu-sharing
+
