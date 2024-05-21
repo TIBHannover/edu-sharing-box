@@ -1,0 +1,6 @@
+---
+- name: Load version variables.
+  with_first_found:
+    - "../vars/versions/{{ edu_version }}.yml"
+    - "../vars/versions/default.yml"
+  include_vars: "{{ item }}"
