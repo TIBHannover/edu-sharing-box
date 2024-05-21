@@ -1,0 +1,58 @@
+---
+- name: Restore data from backup
+  become: true
+  command: >
+    {{ edu_sharing_restore_command | replace('{options}', backup_folder) }}
+  args:
+    chdir: "{{ edu_docker_inst_dir }}"
+  no_log: true
+
+- debug:
+    var: backup_folder
+
+- name: Check if solr4 directory or solr4.tar file exists
+  # become: true
+  shell: |
+    if [[ -f "{{ backup_folder }}/solr4.tar" ]] || [[ -d "{{ backup_folder }}/solr" ]]  ; then
+      echo true
+    else
+      echo false
+    fi
+  args:
+    executable: /bin/bash
+  register: solr4_check_result
+
+- name: Check if elastic_*.gz directory or elastics_.json file exists
+  shell: |
+    if [[ -f "{{ backup_folder }}/elastic_workspace.gz" || -f "{{ backup_folder }}/elastic_transactions.gz" || -f "{{ backup_folder }}/elastic_workspace.json" || -f "{{ backup_folder }}/elastic_transactions.json" ]]; then
+      echo true
+    else
+      echo false
+    fi
+  args:
+    executable: /bin/bash
+  register: elastics_check_result
+
+- name: Reset solr4
+  shell: 
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: |
+      docker run \
+        --rm \
+        --volumes-from "$(docker compose ps repository-search-solr4 -q -a)" \
+        bitnami/minideb:bullseye \
+        bash -c '
+          rm -rf /opt/alfresco/alf_data/solr4/index || true
+          rm -rf /opt/alfresco/alf_data/solr4/content || true
+          rm -rf /opt/alfresco/alf_data/solr4/model || true
+        '
+  when: (solr4_check_result.stdout | default('false') | bool) == false
+
+
+- name: Reset elastic
+  shell: |
+    docker compose exec -T repository-search-elastic-index bash -c 'rm -rf /usr/share/elasticsearch/data/nodes || true' || true
+  when: (elastics_check_result.stdout | default('false') | bool) == false
+
+
+
