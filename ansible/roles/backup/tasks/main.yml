@@ -1,4 +1,0 @@
----
-- name: backup edu-sharing docker  version
-  include_tasks: backup-edusharing-docker.yml
-  when: edu_version is defined and edu_version is version_compare('7.0.0','>=')

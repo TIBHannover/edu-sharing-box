@@ -58,6 +58,9 @@
     - role: edu-sharing-init
       tags: 
         - edu-sharing-init
+    - role: edu-sharing-backup
+      tags:
+        - edu-sharing-backup
 
 - hosts: opencast
   become: yes
