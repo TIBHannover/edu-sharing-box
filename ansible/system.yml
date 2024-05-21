@@ -58,6 +58,9 @@
     - role: edu-sharing-init
       tags: 
         - edu-sharing-init
+    - role: edu-sharing-backup
+      tags:
+        - edu-sharing-backup
     - role: edu-sharing-restore
       when: edu_sharing_restore_from_backup is defined and edu_sharing_restore_from_backup
       tags:
