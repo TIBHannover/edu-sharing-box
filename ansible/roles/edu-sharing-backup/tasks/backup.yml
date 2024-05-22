@@ -1,5 +1,4 @@
 ---
-
  - name: Configure backup-script
    template:
      src: edu-sharing-backup.sh.j2
@@ -7,7 +6,6 @@
      mode: "a+x"
 
  - name: Backup edu-sharing instantly
-   become: true
    shell: "test -x {{ backup_bin }}/edu-sharing-backup.sh && {{ backup_bin }}/edu-sharing-backup.sh"
    no_log: true
    when: run_backup_script_instantly is defined and run_backup_script_instantly
