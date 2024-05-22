@@ -16,20 +16,12 @@ edu_connector_host: 192.168.98.104
 edu_connector_proxy: "{{edu_connector_host}}"
 install_splash: false
 enable_edu_connector: false
-# db_types: 'postgresql', 'mariadb' (no migration on change)
-esrender_db_type: mariadb
 esrender_db:
   name: esrender
   user: esrender
   password: esrender
   
-postgres_tmp_root_password: xxx
-
 base_dir: "{{ansible_env.HOME}}"
-
-esrender_document_root: '/var/www'
-esrender_base_dir: '{{esrender_document_root}}/esrender'
-esrender_cache_dir: '/var/cache/esrender'
 
 alf_password: admin
 
@@ -37,14 +29,12 @@ script_dir: '{{ base_dir }}/bin'
 
 # enable / disable the edu-sharing backup process: present|absent
 backup_process_state: absent
-backup_db_user: oerbackup
-backup_db_password: changeme
-backup_schedule_hour: 2
-backup_path: '{{ base_dir }}/backup'
-backup_bin: '{{ script_dir }}'
 
 # enable / disable the edu-sharing restore process: true|false
 edu_sharing_restore_from_backup: false
+
+# activate/deactivate es-update-oersi, a alfresco plugin used to update metadata in oersi
+activate_es_update_oersi: false
 
 apache_conf_servername: # use as apache2 ServerName Directive, if set - see http://httpd.apache.org/docs/2.2/en/mod/core.html#servername
 apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if set. Example: On - see http://httpd.apache.org/docs/2.2/en/mod/core.html#usecanonicalname

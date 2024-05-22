@@ -251,6 +251,3 @@ edu_connector_enable_modules:
       - {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true}
       - {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true}
       - {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true}
-
-# activate/deactivate es-update-oersi, a alfresco plugin used to update metadata in oersi
-activate_es_update_oersi: false
