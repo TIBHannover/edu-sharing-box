@@ -29,7 +29,6 @@ __edu-sharing-customization__ role allows you to customize certain variables acc
 
 
 ```yaml
-
 ---
 
 # (internal) cleanup / set values in client.config.xml
@@ -79,9 +78,6 @@ edu_oauth_trusted_clients:
   - client: "eduApp"
     password: "secret"
 
-mirror_vocabs_hour: "4"
-
-
 edu_sharing_customization_environment_variable:
   - key: REPOSITORY_SERVICE_PORT
     value: '{{edu_sharing_port | default("80",true)}}'
@@ -124,7 +120,7 @@ The `tasks/` directory contains all the ansible tasks.
 4. `config-node`: This directory contains all the customization we do in `repository-service-volume-config-node` volume.
 6. `adjust_env_variables.yml`: This task is used to override the `.env` file.
 7. `jobs.yml`: This task execute jobs.
-8. `shiboleth_before.yml`: This task make some customizationw we need before the shibloth activation.
+8. `shiboleth_before.yml`: This task make some customizationw we need before the shiboleth activation.
 
 
 ## Templates

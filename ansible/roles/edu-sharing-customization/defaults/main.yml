@@ -47,9 +47,6 @@ edu_oauth_trusted_clients:
   - client: "eduApp"
     password: "secret"
 
-mirror_vocabs_hour: "4"
-
-
 edu_sharing_customization_environment_variable:
   - key: REPOSITORY_SERVICE_PORT
     value: '{{edu_sharing_port | default("80",true)}}'
