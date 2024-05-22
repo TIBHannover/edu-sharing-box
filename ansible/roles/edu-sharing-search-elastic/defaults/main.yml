@@ -1,5 +1,5 @@
 ---
-rendering_environment_variable:
+search_elastics_environment_variable:
   - key: REPOSITORY_SEARCH_ELASTIC_INDEX_JAVA_XMS
     value: '{{repository_search_elastic_index_java_xms | default("1g",true)}}'
   - key: REPOSITORY_SEARCH_ELASTIC_INDEX_JAVA_XMX

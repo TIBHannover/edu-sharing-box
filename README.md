@@ -39,3 +39,19 @@ vagrant ssh
 ## DFN-AAI / Shibboleth Integration
 
 Siehe [SHIBBOLETH.md](SHIBBOLETH.md)
+
+## Documentation
+
+Each role in the edu-sharing playbook comes with its own detailed documentation, covering various aspects such as updates, included components, and more. Below are the links to the documentation for each role:
+ 
+- [edu-sharing-init](ansible/roles/edu-sharing-init/documentation/README.md): This role initializes the edu-sharing.
+- [edu-sharing-migration](ansible/roles/edu-sharing-migration/documentation/README.md):  This role handles migration tasks for edu-sharing.
+- [edu-sharing-customization](ansible/roles/edu-sharing-customization/documentation/README.md): This role allows customization of the edu-sharing platform.
+- [edu-sharing-rendering-service](ansible/roles/edu-sharing-rendering-service/documentation/README.md): This role manages the rendering service for edu-sharing.
+- [edu-sharing-search-elastic](ansible/roles/edu-sharing-search-elastic/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
+- [edu-sharing-classification-keywords](ansible/roles/edu-sharing-classification-keywords/documentation/README.md): This role handles keyword classification tasks.
+- [edu-sharing-mirror-vocabs](ansible/roles/edu-sharing-mirror-vocabs/documentation/README.md): This role manages the mirroring of vocabularies.
+- [edu-sharing-backup](ansible/roles/edu-sharing-backup/documentation/README.md): This role is responsible for backing up edu-sharing data.
+- [edu-sharing-restore](ansible/roles/edu-sharing-restore/documentation/README.md): This role handles the restoration of edu-sharing data.
+
+These documentation files provide detailed instructions and guidelines for using each role effectively.

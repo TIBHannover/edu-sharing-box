@@ -5,6 +5,7 @@ The `edu-sharing-restore` role is used restore data from backups edu-sharing, it
 ## Implementation
 
 The `edu-sharing-restore` role is included in the playbook [system.yml](../../../system.yml).
+In order to activate the restore script you need to make true the `edu_sharing_restore_from_backup` in `all.yml` variables.
 
 ```yaml
 - hosts: edusharing
@@ -15,14 +16,13 @@ The `edu-sharing-restore` role is included in the playbook [system.yml](../../..
 
 ```
 
-
-
 or we just want to run only the `edu-sharing-restore` then we run:
 
 ```sh
 ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-restore"
 ```
-This will skip other roles and run only the vocabularies role
+This will skip other roles and run only the edu-sharing-restore role
+
 
 ## Role Variables
 

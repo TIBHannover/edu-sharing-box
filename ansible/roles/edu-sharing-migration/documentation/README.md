@@ -17,6 +17,13 @@ The `edu-sharing-migration` role is included in the playbook [system.yml](../../
 
 ```
 
+or we just want to run only the `edu-sharing-migration` then we run:
+
+```sh
+ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-migration"
+```
+This will skip other roles and run only the edu-sharing-migration role
+
 
 
 ## Role Variables

@@ -10,6 +10,10 @@
   roles:
     - init-facts
 
+- hosts: all
+  roles:
+    - init-script-dir
+
 - hosts: edusharing,educonnector
   become: yes
   roles:
@@ -37,27 +41,30 @@
 
 - hosts: edusharing
   roles:
-    - role: edu-sharing-search-elastic.
+    - role: edu-sharing-init
+      tags: 
+        - edu-sharing-init
+    - role: edu-sharing-migration
+      tags: 
+        - edu-sharing-migration
+    - role: edu-sharing-customization
+      tags: 
+        - edu-sharing-customization
+    - role: edu-sharing-rendering-service
+      tags: 
+        - edu-sharing-rendering-service
+    - role: edu-sharing-search-elastic
       tags: 
         - edu-sharing-search-elastic
+
+- hosts: edusharing
+  roles:
     - role: edu-sharing-classification-keywords
       tags: 
         - edu-sharing-classification-keywords
     - role: edu-sharing-mirror-vocabs
       tags: 
         - edu-sharing-mirror-vocabs
-    - role: edu-sharing-migration
-      tags: 
-        - edu-sharing-migration
-    - role: edu-sharing-rendering-service
-      tags: 
-        - edu-sharing-rendering-service
-    - role: edu-sharing-customization
-      tags: 
-        - edu-sharing-customization
-    - role: edu-sharing-init
-      tags: 
-        - edu-sharing-init
     - role: edu-sharing-backup
       tags:
         - edu-sharing-backup

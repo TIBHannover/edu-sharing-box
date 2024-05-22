@@ -19,4 +19,4 @@
       line: "{{ item.key }}={{ item.value }}"
     no_log: true
     when: item.value is defined and item.value != ""
-    loop: "{{ rendering_environment_variable | default([], true) }}"
+    loop: "{{ search_elastics_environment_variable | default([], true) }}"

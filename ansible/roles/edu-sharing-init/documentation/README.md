@@ -16,6 +16,12 @@ __edu-sharing-init__ role is included in to the playbook see: [system.yml](../..
 
 ```
 
+or we just want to run only the `edu-sharing-init` then we run:
+
+```sh
+ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-init"
+```
+This will skip other roles and run only the edu-sharing-init role
 
 ## Role Variables
 
@@ -164,17 +170,25 @@ The `tasks/` directory contains all the ansible tasks.
 
  ```yaml
 
-    #  URL of the edu-sharing release version
-    edu_sharing_archive_url: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-projects-community-deploy-docker-compose/8.1.0/edu_sharing-projects-community-deploy-docker-compose-8.1.0-bin.zip
+  edu_sharing_archive_url: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-projects-community-deploy-docker-compose/8.1.0/edu_sharing-projects-community-deploy-docker-compose-8.1.0-bin.zip
 
-    
-    # Commands if the have been changed
-    edu_sharing_deploy_command: 'sg docker -c "./utils.sh start"'
-    edu_sharing_restart_command: 'sg docker -c "./utils.sh restart"'
-    # remove docker images from server
-    edu_sharing_undeploy_command: sg docker -c "./utils.sh stop"
-    edu_sharing_purge_all_command: |
-        yes | sg docker -c "./utils.sh remove"
+  # In newer versions Edu-sharing may change the deploy commands, if so we can change them here
+  # {service} is an variable tha ansible will replace, based on what service we want to execute the action
+  edu_sharing_deploy_command: 'sg docker -c "./utils.sh start {service}"'
+  edu_sharing_restart_command: 'sg docker -c "./utils.sh restart {service}"'
+  # remove docker images from server
+  edu_sharing_undeploy_command: 'sg docker -c "./utils.sh stop {service}"'
+  edu_sharing_remove_containers_command: |
+      yes | sg docker -c "./utils.sh remove {service}"
+
+  # this will remove images,containers and volumes, so be carefully when we use it.
+  edu_sharing_purge_all_command: |
+      yes | sg docker -c "./utils.sh purge {service}"
+
+  # Edu-sharing backup command
+  edu_sharing_backup_command: 'sg docker -c "./utils.sh backup {options}"'
+  # Edu-sharing restore command
+  edu_sharing_restore_command: 'sg docker -c "./utils.sh restore {options}"'
 
  ```
 
