@@ -15,14 +15,12 @@ The `edu-sharing-rendering-service` role is included in the playbook [system.yml
 
 ```
 
-
-
-if we just want to run only the `edu-sharing-rendering-service` then we run:
+or we just want to run only the `edu-sharing-rendering-service` then we run:
 
 ```sh
 ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-rendering-service"
 ```
-This will skip other roles and run only the vocabularies role
+This will skip other roles and run only the edu-sharing-rendering-service role
 
 ## Role Variables
 

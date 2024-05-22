@@ -15,14 +15,12 @@ The `edu-sharing-search-elastic` role is included in the playbook [system.yml](.
 
 ```
 
-
-
-if we just want to run only the `edu-sharing-search-elastic` then we run:
+or we just want to run only the `edu-sharing-search-elastic` then we run:
 
 ```sh
 ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-search-elastic"
 ```
-This will skip other roles and run only the vocabularies role
+This will skip other roles and run only the edu-sharing-search-elastic role
 
 ## Role Variables
 
@@ -32,7 +30,7 @@ Here are the default variables:
 
 
 ```yaml
-rendering_environment_variable:
+search_elastics_environment_variable:
   - key: REPOSITORY_SEARCH_ELASTIC_INDEX_JAVA_XMS
     value: '{{repository_search_elastic_index_java_xms | default("1g",true)}}'
   - key: REPOSITORY_SEARCH_ELASTIC_INDEX_JAVA_XMX
