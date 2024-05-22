@@ -1,5 +1,23 @@
 ---
+
+- name: Ensure psycopg2 is present.
+  package:
+    name:
+      - python3-psycopg2
+  become: true
+  tags: 
+    - edu-sharing-migration
+
 - set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: load_version_variables
+    apply:
+      tags:
+        - edu-sharing-migration
+  tags:
+    - edu-sharing-migration
 
 - name: Check if Migration has been installed before
   shell: "echo ${HAS_EDU_SHARING_DOCKER_MIGRATION_PROCESSED:-false}"
