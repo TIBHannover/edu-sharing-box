@@ -19,7 +19,11 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible_local" do |ansible|
     ansible.install = true
     ansible.install_mode = "pip"
-    ansible.pip_install_cmd = "sudo apt-get install -y python3-distutils && curl -s https://bootstrap.pypa.io/get-pip.py | sudo python3"
+    ansible.pip_install_cmd = <<-SHELL
+      sudo rm /usr/lib/python3.*/EXTERNALLY-MANAGED
+      sudo apt-get install -y python3-distutils
+      curl -s https://bootstrap.pypa.io/get-pip.py | sudo python3
+    SHELL
     ansible.version = "2.9.27"
     ansible.compatibility_mode = "2.0"
     #ansible.verbose = "vvv"
