@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+	<bean id="ssoAuthorityMapper" class="org.edu_sharing.service.authentication.SSOAuthorityMapper" init-method="init">
+		<property name="mappingConfig">
+			<ref bean="ssoMapping" />
+		</property>
+		<property name="createUser" value="true" />
+		<property name="updateUser" value="true" />
+		<property name="createGroups" value="true" />
+		<property name="hashGroupNames" value="false" />
+		<property name="updateMemberships" value="true" />
+		<property name="debug" value="true" />
+		<property name="organisationParam" value="organization" />
+		<property name="globalGroupsParam" value="globalgroups" />
+
+	</bean>
+
+	<bean id="ssoMapping" class="org.edu_sharing.service.authentication.sso.config.MappingRoot">
+		<property name="personMapping">
+			<ref bean="personDataMapping" />
+		</property>
+		<property name="personMappingCondition">
+			<ref bean="conditionAffiliationFaculty" />
+		</property>
+		<property name="groupMapping">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="personDataMapping" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+        <entry key="eduPersonUniqueId" value="{http://www.alfresco.org/model/content/1.0}userName"/>
+        <entry key="sn" value="{http://www.alfresco.org/model/content/1.0}lastName" />
+        <entry key="givenName" value="{http://www.alfresco.org/model/content/1.0}firstName" />
+        <entry key="mail" value="{http://www.alfresco.org/model/content/1.0}email" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+  <bean id="additionalAttributes" class="java.util.ArrayList">
+    <constructor-arg>
+      <list>
+        <value>affiliation</value>
+        <value>eduPersonUniqueId</value>
+        <value>entitlement</value>
+        <value>eppn</value>
+        <value>o</value>
+        <value>persistent-id</value>
+        <value>schacHomeOrganization</value>
+        <value>sn</value>
+				<value>simpleAffiliation</value>
+				<value>simpleScope</value>
+				<value>organization</value>
+        <value>Meta-displayName</value>	
+        <value>Shib-Identity-Provider</value>	 		
+      </list>
+    </constructor-arg>
+  </bean>
+  
+	<bean id="conditionAffiliationFaculty" class="org.edu_sharing.service.authentication.sso.config.ConditionRegEx">
+		<property name="regex" value="(^|.+;)(employee|faculty|staff)(@[a-zA-Z0-9.-]+)?(;.+)?" />
+		<property name="attribute" value="affiliation" />
+	</bean>
+
+</beans>
