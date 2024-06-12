@@ -19,14 +19,4 @@
     line: "{{ item.key }}={{ item.value }}"
   no_log: true
   when: item.value is defined and item.value != ""
-  loop: "{{ rendering_environment_variable | default([], true) }}"
-
-- name: Adjust values in .env file.
-  lineinfile:
-    path: "{{ edu_docker_inst_dir }}/.env"
-    state: present
-    regexp: "^# {{ item.key }}="
-    line: "{{ item.key }}={{ item.value }}"
-  no_log: true
-  when: item.value is defined and item.value != ""
   loop: "{{ edu_sharing_customization_environment_variable | default([], true) }}"

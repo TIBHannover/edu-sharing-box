@@ -56,6 +56,9 @@
     - role: edu-sharing-search-elastic
       tags: 
         - edu-sharing-search-elastic
+    - role: edu-sharing-search-solr
+      tags: 
+        - edu-sharing-search-solr
 
 - hosts: edusharing
   roles:

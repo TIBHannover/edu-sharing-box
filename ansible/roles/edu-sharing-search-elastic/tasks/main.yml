@@ -11,11 +11,20 @@
     - edu-sharing-search-elastic
 
 - include_tasks: config-env.yml
-  when: rendering_environment_variable | default([], true) | length>0
+  when: search_elastics_environment_variable | default([], true) | length>0
   tags: 
     - edu-sharing-search-elastic
 
-- name: restart rendering-service in docker.
+- name: (Optional) Reset repository-search-elastic-index
+  shell: |
+    docker compose exec -T repository-search-elastic-index bash -c 'rm -rf /usr/share/elasticsearch/data/nodes || true' || true
+  args:
+    chdir: "{{ edu_docker_inst_dir }}"
+  when: "'edu-sharing-search-elastic-reset' in ansible_run_tags"
+  tags:
+    - edu-sharing-search-elastic-reset 
+
+- name: Restart repository-search-elastic-index and repository-search-elastic-tracker in docker.
   command:
     chdir: "{{ edu_docker_inst_dir }}"
     cmd: "{{edu_sharing_restart_command | replace('{service}', 'repository-search-elastic-index repository-search-elastic-tracker') }}"
