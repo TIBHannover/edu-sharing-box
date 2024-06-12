@@ -1,0 +1,29 @@
+---
+- name: Check if backup folder exists
+  stat:
+    path: "{{ backup_path }}"
+  register: backup_folder_exists
+
+- name: If backup_path exists, find the latest backup folder
+  when: backup_folder_exists.stat.exists
+  block:
+    - name: Find all backup folders
+      find:
+        paths: "{{ backup_path }}"
+        file_type: directory
+      register: backup_folders
+
+    - name: Check if there are any backup folders
+      fail:
+        msg: "No backup folders found in {{ backup_path }}"
+      ignore_errors: true
+      when: backup_folders.matched == 0
+
+    - name: Sort backup folders by modification time
+      set_fact:
+        sorted_backup_folders: "{{ backup_folders.files | sort(attribute='mtime') | map(attribute='path') | list }}"
+
+    - name: Get path of the latest backup folder
+      set_fact:
+        backup_folder: "{{ sorted_backup_folders | last }}"
+

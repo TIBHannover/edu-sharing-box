@@ -1,4 +1,0 @@
----
-edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/4.2.11/edu-sharing_4.2.11.2020-08-04-bef275b89.zip
-edu_client_config_xml_path: '{{ edu_home }}/war/WEB-INF/classes/org/edu_sharing/service/config/client.config.xml'
-edu_config_file: 'edu-sharing.properties'

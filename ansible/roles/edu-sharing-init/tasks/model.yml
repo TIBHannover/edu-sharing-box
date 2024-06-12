@@ -1,0 +1,56 @@
+---
+  - name: Ensures custom-dir exists
+    file: path='{{ edu_docker_inst_dir }}/custom-repository-service' state=directory
+
+  - name: get temporary current original container repository-service
+    shell: |
+      sg docker -c "docker create --name temp-repository-service docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}"
+
+  - name: copy files and remove temp container
+    block:
+      - name: get amp file from temporary container
+        shell:
+          chdir: '{{ edu_docker_inst_dir }}/custom-repository-service'
+          cmd: |
+            sg docker -c "docker cp temp-repository-service:/opt/alfresco/amps/alfresco/1/edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp ."
+    always:
+      - name: remove temporary container repository-service
+        shell: |
+          sg docker -c "docker rm temp-repository-service"
+
+  - name: get original files from archive
+    shell:
+      chdir: '{{ edu_docker_inst_dir }}/custom-repository-service'
+      cmd: '{{ java_home }}/bin/jar xf edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp config/alfresco/extension/{{ item.path }}'
+    loop: "{{ (alfresco_ccmodel_add_custom_properties | default([], true)) + (edu_cccontentmodel_adjustments | default([], true)) }}"
+
+
+  - include_tasks: alfresco-model.yml
+    vars:
+      alfresco_extension_path: '{{ edu_docker_inst_dir }}/custom-repository-service/config/alfresco/extension'
+
+  - name: update modified files in archive
+    shell:
+      chdir: '{{ edu_docker_inst_dir }}/custom-repository-service'
+      cmd: '{{ java_home }}/bin/jar uf edu_sharing-community-repository-backend-alfresco-module-{{ edu_version }}.amp config/alfresco/extension/{{ item.path }}'
+    loop: "{{ (alfresco_ccmodel_add_custom_properties | default([], true)) + (edu_cccontentmodel_adjustments | default([], true)) }}"
+
+  - name: add dockerfile for custom container
+    template:
+      src: Dockerfile_repository-service
+      dest: '{{ edu_docker_inst_dir }}/custom-repository-service'
+
+  - include_tasks: alfresco_amp_modules.yml
+
+  - name: build custom container repository-service
+    shell:
+      chdir: '{{ edu_docker_inst_dir }}/custom-repository-service'
+      cmd: |
+        sg docker -c "docker build -f Dockerfile_repository-service -t docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}-{{ edu_repo_caption }}-custom ."
+
+  - name: Allow pull failures to be able to use custom image
+    replace:
+      path: '{{ edu_docker_inst_dir }}/utils.sh'
+      regexp: 'pull \|'
+      replace: "pull --ignore-pull-failures |"
+    when: edu_version is defined and  edu_version is version_compare('8.0.0','>=')

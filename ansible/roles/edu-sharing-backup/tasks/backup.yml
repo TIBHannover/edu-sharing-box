@@ -1,0 +1,24 @@
+---
+ - name: Configure backup-script
+   template:
+     src: edu-sharing-backup.sh.j2
+     dest: "{{ backup_bin }}/edu-sharing-backup.sh"
+     mode: "a+x"
+
+ - name: Backup edu-sharing instantly
+   shell: "test -x {{ backup_bin }}/edu-sharing-backup.sh && {{ backup_bin }}/edu-sharing-backup.sh"
+   no_log: true
+   when: run_backup_script_instantly is defined and run_backup_script_instantly
+   tags:
+     - edu-sharing-backup-instantly
+
+ - name: Creates an crontab entry for the backup script.
+   cron:
+     name: "edu-sharing backup process"
+     minute: "{{ backup_cron_schedule.minute | default('*') }}"
+     hour: "{{ backup_cron_schedule.hour | default('*') }}"
+     day: "{{ backup_cron_schedule.day | default('*') }}"
+     month: "{{ backup_cron_schedule.month | default('*') }}"
+     weekday: "{{ backup_cron_schedule.weekday | default('*') }}"
+     job: "test -x {{ backup_bin }}/edu-sharing-backup.sh && {{ backup_bin }}/edu-sharing-backup.sh"
+     state: "{{ backup_process_state }}"

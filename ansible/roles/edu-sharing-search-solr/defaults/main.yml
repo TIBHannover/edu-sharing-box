@@ -1,0 +1,6 @@
+---
+search_solr_environment_variable:
+  - key: REPOSITORY_SEARCH_SOLR4_JAVA_XMS
+    value: '{{repository_search_solr_java_xms | default("1g",true)}}'
+  - key: REPOSITORY_SEARCH_SOLR4_JAVA_XMX
+    value: '{{repository_search_solr_java_xmx | default("1g",true)}}'

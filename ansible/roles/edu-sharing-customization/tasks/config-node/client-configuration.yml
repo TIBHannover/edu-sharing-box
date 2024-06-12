@@ -1,0 +1,33 @@
+---
+
+- include_tasks: client_config_xml.yml
+
+- import_tasks: metadatasets.yml
+  become: true
+
+- import_tasks: custom-menu-entries.yml
+  become: yes
+
+- import_tasks: hide_main_menu.yml
+  become: yes
+
+
+- import_tasks: custom_option.yml
+  become: yes
+
+- include_tasks: custom-license.yml
+  args:
+    apply:
+      become: yes
+  vars:
+    custom_license_client_config_xml_path: "{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml"
+    custom_license_edu_sharing_assets: "{{repository_config_edu_sharing_path.stdout}}"
+  with_items: '{{ edu_custom_licenses | default([], true) }}'
+  when: (repository_volume_config_node_path.stdout is defined and repository_volume_config_node_path.stdout != "") and
+        (repository_config_edu_sharing_path.stdout is defined) and (repository_config_edu_sharing_path.stdout != "")
+  loop_control:
+    loop_var: custom_license
+
+- import_tasks: mail-templates.yml
+  become: yes
+

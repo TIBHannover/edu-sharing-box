@@ -1,9 +1,0 @@
----
-
-- name: edit i18n
-  lineinfile:
-    backrefs: yes
-    path: '{{i18n_path}}/{{item[0]}}'
-    line: '\g<start>{{item[2]}}\g<end>'
-    regexp: '(?P<start>^\s*"{{item[1]}}"\s*:\s*").*(?P<end>".*)'
-  loop: '{{ edu_i18n_adjustments | default([], true) }}'

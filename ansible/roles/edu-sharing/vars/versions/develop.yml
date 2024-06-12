@@ -1,5 +1,0 @@
----
-edu_sharing_workaround_jar_cleanup:
-  - edu-sharing/WEB-INF/lib/httpclient-4.3.1.jar
-  - edu-sharing/WEB-INF/lib/httpcore-4.3.jar
-  - edu-sharing/WEB-INF/lib/httpmime-4.3.1.jar

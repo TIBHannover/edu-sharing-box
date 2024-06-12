@@ -1,0 +1,11 @@
+---
+
+mirror_vocabs_script_dir: '{{ base_dir }}/bin'
+
+mirror_vocabularies:
+  # - url: "https://w3id.org/kim/hochschulfaechersystematik/scheme.json"
+  #   target_directory: "/var/www/oer/vocabs-mirror"
+  # - url: "https://w3id.org/kim/hcrt/scheme.json"
+  #   target_directory: "/var/www/oer/vocabs-mirror"
+
+mirror_vocabs_hour: "4"

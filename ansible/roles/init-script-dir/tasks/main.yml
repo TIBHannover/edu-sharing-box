@@ -1,0 +1,3 @@
+---
+- name: Ensures bin folder exists.
+  file: path='{{script_dir}}' state=directory

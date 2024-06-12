@@ -1,0 +1,72 @@
+---
+# Define a list of custom menus that should be added to the edu-sharing main menu
+# if you need to know more about the properties, see the: https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/org/edu_sharing/alfresco/service/config/model/MenuEntry.java
+#  example:
+#   - name: "SIDEBAR.EXAMPLE"  # (Required)  without SIDEBAR. prefix it will not be translated, just show the name
+#     scope: "workspace"          # (Optional) for now doesn't work, you can remove it, default is "workspace"
+#     labels:                  #(Optional) use for translation, work only if name has prefix SIDEBAR.
+#       - ["en","Example Search"]
+#       - ["de","Example Suche"]
+#     icon: "open_in_new"       # (Optional) Material icon  default is "open_in_new"
+#     position: 2               # (Optional) Position in menu, if negative value, count from end, higher value means higher position, default is -1
+#     path: "search"            # (Optional) Internal path, if path is set, url must be removed from the menu entry
+#     url: "https://www.example.de/" # (Optional) url, if url is set, path must be removed from the menu entry
+#     isDisabled: 'false'         # (Optional) if true, the button is greyed out and has no function, default: 'false'
+#     onlyDesktop: 'false'        # (Optional) if true, the button is only shown on desktop, default: 'false'
+#     onlyWeb: 'false'            # (Optional) if true, the button is not shown in Cordova apps, default: 'false'
+#     isSeperate: 'false'         # (Optional) if true, the menu item is separated (with a line above it), default: 'false'
+#     openInNew: 'false'          # (Optional) if true, the button opens in a new tab, default: 'false'
+
+- name: Add custom menu entry block.
+  block:
+    #  add custom menu entry
+    - name: Add custom menu entry to client.config.xml.
+      xml:
+        path: "{{ repository_volume_config_node_path.stdout}}/defaults/client.config.xml"
+        xpath: "/config/values"
+        add_children: >
+          <menuEntries>
+            <name>{{custom_menu_entry.name|upper }}</name>
+            <scope>{{custom_menu_entry.scope | lower | default('workspace', true)}}</scope>
+            <icon>{{custom_menu_entry.icon | default('open_in_new', true)}}</icon>
+            <position>{{custom_menu_entry.position | default(-1, true)}}</position>
+            <openInNew>{{custom_menu_entry.openInNew | default('false', true)}}</openInNew>
+            {% if custom_menu_entry.url is defined %}
+            <url>{{custom_menu_entry.url}}</url>
+            {% endif %}
+            {% if custom_menu_entry.path is defined %}
+            <path>{{custom_menu_entry.path}}</path>
+            {% endif %}
+            <isSeperate>{{custom_menu_entry.isSeperate | default('false', true)}}</isSeperate>
+            <isDisabled>{{custom_menu_entry.isDisabled | default('false', true)}}</isDisabled>
+            <onlyDesktop>{{custom_menu_entry.onlyDesktop | default('false', true)}}</onlyDesktop>
+            <onlyWeb>{{custom_menu_entry.onlyWeb | default('false', true)}}</onlyWeb>
+          </menuEntries>
+        input_type: xml
+        pretty_print: yes
+      when: custom_menu_entry is not none
+
+    # let's add/update the Key,value for custom menu entry in ../common/en.json file
+    - name: Set custom menu entry labels to ../common/[langCode].json.
+      # become: yes
+      shell: |
+        jq '.{{custom_menu_entry.name|upper }} ="{{item[1]}}"' \
+        {{repository_config_edu_sharing_path.stdout}}/assets/i18n/common/{{item[0]}}.json >tmp.json && mv tmp.json {{repository_config_edu_sharing_path.stdout}}/assets/i18n/common/{{item[0]}}.json
+      when: custom_menu_entry.name is match('SIDEBAR.*')
+      loop: "{{ custom_menu_entry.labels | default([], true) }}"
+
+  # since custom menu entry is not a mandatory,in order to make edu-sharing working, we don't want to stop the ansible,
+  # we want to let ansible continue, and just remove the current custom menu entry
+  rescue:
+    - name: It caught an error, we will rollback last insert, from client.config.xml.
+      xml:
+        path: "{{ repository_volume_config_node_path.stdout}}/defaults/client.config.xml"
+        xpath: "/config/values/menuEntries[id='{{custom_menu_entry.name|upper }}']"
+        state: absent
+        pretty_print: yes
+
+    - name: It caught an error, we will rollback last insert, from ../common/[en/de].json.
+      shell: |
+        jq 'del(.SIDEBAR.{{custom_menu_entry.name|upper }})' \
+        {{repository_config_edu_sharing_path.stdout}}/assets/i18n/common/{{item[0]}}.json >tmp.json && mv tmp.json {{repository_config_edu_sharing_path.stdout}}/assets/i18n/common/{{item[0]}}.json
+      loop: "{{ custom_menu_entry.labels | default([], true) }}"
