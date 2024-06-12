@@ -53,3 +53,18 @@ The `tasks/` directory contains all the ansible tasks.
 
 1. `main`: The main task or entry task for ansible.
 2. `config-env.yml`: Used to update the .env file with rendering service variables
+
+
+## Cleaning elastics search
+
+sometimes we need to clear the elastics search indexing, so the elastics search will re-index everything again, this may happen when we want to restore data from backup, or when something went wrong with elastics search, or what ever the problem may be.
+
+in order to reset the elastics search you can add the into the `--tags` another tags called `edu-sharing-search-elastic-reset`
+
+example:
+
+```sh
+  ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-search-elastic,edu-sharing-search-elastic-reset"
+
+```
+in this case the ansible will run the reset elastics search index and then restart it again.
