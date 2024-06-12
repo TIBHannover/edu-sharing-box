@@ -55,7 +55,7 @@ The `tasks/` directory contains all the ansible tasks.
 2. `config-env.yml`: Used to update the .env file with rendering service variables
 
 
-## Cleaning solr4
+## Cleaning elastics search
 
 sometimes we need to clear the elastics search indexing, so the elastics search will re-index everything again, this may happen when we want to restore data from backup, or when something went wrong with elastics search, or what ever the problem may be.
 
