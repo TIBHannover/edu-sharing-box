@@ -1,0 +1,11 @@
+---
+
+- name: Update alfresco-global.properties if alfviral_antivirus_configuration is not empty
+  become: true
+  lineinfile:
+    path: '{{ alfresco_global_properties_path }}/alfresco-global.properties'
+    regexp: '^{{ item.key }}='
+    line: '{{ item.key }}={{ item.value }}'
+    insertafter: EOF
+  loop: "{{ alfviral_antivirus_configuration }}"
+  when: alfviral_antivirus_configuration is defined and alfviral_antivirus_configuration | length > 0

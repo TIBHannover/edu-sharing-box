@@ -1,0 +1,16 @@
+---
+- name: Clear hideMainMenu entries from client config
+  xml:
+    path: '{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml'
+    xpath: '/config/values/hideMainMenu'
+    state: absent
+    pretty_print: yes
+
+- name: add hideMainMenu entry to client config
+  xml:
+    path: '{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml'
+    xpath: '/config/values'
+    add_children: '<hideMainMenu>{{ item }}</hideMainMenu>'
+    input_type: xml
+    pretty_print: yes
+  with_items: '{{edu_hide_main_menus | default([], true) }}'

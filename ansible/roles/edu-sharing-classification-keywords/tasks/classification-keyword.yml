@@ -1,0 +1,37 @@
+---
+
+- name : delete old classification_keywords.xml
+  file:
+    path: "/var/www/{{edu_classification_keyword_path}}"
+    state: absent
+  when: classification_keywords_force_download
+
+- name: Ensure classification keywords dir exists
+  file: 
+    path: '/var/www/{{edu_classification_keyword_path | dirname}}'
+    state: directory
+    group: "www-data"
+    owner: "www-data"
+
+- name: check if classification_keywords xml file exist
+  stat: path="/var/www/{{edu_classification_keyword_path}}"
+  register: classification_keywords_xml_file_exist
+
+- name: download classification keywords gz format
+  get_url:
+    url: '{{classification_keywords_url}}'
+    dest: "/var/www/{{edu_classification_keyword_path}}.gz"
+    group: "www-data"
+    owner: "www-data"
+    force: yes
+  when: not classification_keywords_xml_file_exist.stat.exists
+
+- name: unzip classification keywords gz format
+  command:
+    chdir: '/var/www/{{edu_classification_keyword_path | dirname  }}'
+    cmd: 'gunzip {{edu_classification_keyword_path | basename }}.gz'
+    creates: '/var/www/{{edu_classification_keyword_path}}'
+  when: not classification_keywords_xml_file_exist.stat.exists
+
+- name: remove gz file
+  file: path="/var/www/{{edu_classification_keyword_path}}.gz" state=absent

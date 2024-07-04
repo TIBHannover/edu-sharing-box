@@ -1,0 +1,50 @@
+---
+- set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_') }}"
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: load_version_variables
+    apply:
+      tags:
+        - edu-sharing-search-solr
+  tags:
+    - edu-sharing-search-solr
+
+- include_tasks: config-env.yml
+  when: search_solr_environment_variable | default([], true) | length>0
+  tags: 
+    - edu-sharing-search-solr
+
+- name: Pull Docker image if not present
+  shell:
+    cmd: "docker pull bitnami/minideb:bullseye"
+  when: "'edu-sharing-search-solr-reset' in ansible_run_tags"
+  tags:
+    - edu-sharing-search-solr
+
+- name: (Optional) Reset edu-sharing-search-solr
+  shell: 
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: |
+      docker run \
+        --rm \
+        --volumes-from "$(docker compose ps repository-search-solr4 -q -a)" \
+        bitnami/minideb:bullseye \
+        bash -c '
+          rm -rf /opt/alfresco/alf_data/solr4/index || true
+          rm -rf /opt/alfresco/alf_data/solr4/content || true
+          rm -rf /opt/alfresco/alf_data/solr4/model || true
+        '
+  when: "'edu-sharing-search-solr-reset' in ansible_run_tags"
+  tags:
+    - edu-sharing-search-solr
+
+
+- name: Restart edu-sharing-search-solr4 in docker.
+  command:
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: "{{edu_sharing_restart_command | replace('{service}', ' repository-search-solr4') }}"
+  no_log: true
+  tags:
+    - edu-sharing-search-solr
+

@@ -1,0 +1,22 @@
+---
+  - name: Check if .env file exists
+    ansible.builtin.stat:
+      path: "{{ edu_docker_inst_dir }}/.env"
+    register: env_file_stat
+
+  - name: Copy .env.sample to .env if .env does not exist
+    command: "cp -f .env.sample .env"
+    args:
+      chdir: "{{ edu_docker_inst_dir }}"
+    when: not env_file_stat.stat.exists or 
+          (force_override_env_file is defined and force_override_env_file)
+
+  - name: Adjust values in .env file.
+    lineinfile:
+      path: "{{ edu_docker_inst_dir }}/.env"
+      state: present
+      regexp: "^# {{ item.key }}="
+      line: "{{ item.key }}={{ item.value }}"
+    no_log: true
+    when: item.value is defined and item.value != ""
+    loop: "{{ search_elastics_environment_variable | default([], true) }}"

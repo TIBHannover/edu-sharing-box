@@ -1,0 +1,28 @@
+---
+# It can have more than one Option
+# Options:
+#   --all              Backup repository, elastic search index and apache solr index
+#   --repo             Backup repository including binaries and databases
+#   --repodb           Backups only the repository databases
+#   --elastic          Backup elastic search index
+#   --solr             Backup apache solr index
+#   --compressed       Creates compressed backups
+#   --hot-backup       Create a backup without stopping the systems
+#                      This can lead to missing data and corrupted index in terms of the overall system
+#                      Backups of each component are therefore still valid.
+
+backup_script_option: "--repo --compressed"
+
+backup_path: '{{ base_dir }}/backup'
+backup_bin: '{{ script_dir }}'
+
+# Run the backup script as soon as the script is installed in he server
+run_backup_script_instantly: false # true => it will run the script instantly
+# Removes older backups but keeps n numbers
+backup_keep_last_nr_directories: 5
+
+# By default it will run every Sunday at midnight
+backup_cron_schedule:
+  minute: "0"
+  hour: "0"
+  weekday: "7"

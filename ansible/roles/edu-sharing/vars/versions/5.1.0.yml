@@ -1,6 +1,0 @@
----
-edu_sharing_archive_url: https://github.com/edu-sharing/Edu-Sharing/releases/download/5.1.0/edu-sharing_5.1.0.2021-03-02-7cbf29dc1.zip
-edu_sharing_workaround_jar_cleanup:
-  - "alfresco/WEB-INF/lib/jackson-annotations-2.8.3.jar"
-  - "alfresco/WEB-INF/lib/jackson-core-2.8.3.jar"
-  - "alfresco/WEB-INF/lib/jackson-databind-2.8.3.jar"

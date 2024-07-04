@@ -1,9 +1,0 @@
----
-- name: Install PostgreSQL server package
-  package:
-    name: postgresql
-    state: present
-  tags:
-  - packages
-  - root-task
-  

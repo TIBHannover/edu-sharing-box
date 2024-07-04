@@ -1,2 +1,2 @@
 
-- include: clamav.yml
+- include_tasks: clamav.yml

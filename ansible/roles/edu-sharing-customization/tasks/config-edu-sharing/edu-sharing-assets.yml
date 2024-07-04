@@ -1,0 +1,10 @@
+---
+- import_tasks: images.yml
+  become: yes
+  tags:
+    - images
+
+- import_tasks: editI18n.yml
+  become: yes
+  tags:
+    - i18n

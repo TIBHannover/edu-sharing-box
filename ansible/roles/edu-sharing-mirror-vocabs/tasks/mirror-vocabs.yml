@@ -1,0 +1,31 @@
+---
+
+- name: Ensures mirror target dirs exist
+  become: true
+  file:
+    path: "{{ item.target_directory }}"
+    state: directory
+    group: "www-data"
+    owner: "www-data"
+  loop: "{{ mirror_vocabularies | default([], true) }}"
+
+- name: Create mirror-script
+  become: true
+  template:
+    src: mirror-vocabs.sh.j2
+    mode: 'u+x'
+    group: "www-data"
+    owner: "www-data"
+    dest: '{{ mirror_vocabs_script_dir }}/mirror-vocabs.sh'
+
+- name: Execute mirror-script
+  become: true
+  command: "{{ mirror_vocabs_script_dir }}/mirror-vocabs.sh"
+
+- name: Configure cron schedule - mirror vocabularies
+  become: true
+  cron:
+    name: "mirror vocabularies"
+    minute: '0'
+    hour: '{{ mirror_vocabs_hour }}'
+    job: '{{ mirror_vocabs_script_dir }}/mirror-vocabs.sh'

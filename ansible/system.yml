@@ -10,7 +10,11 @@
   roles:
     - init-facts
 
-- hosts: renderingservice, edusharing,educonnector
+- hosts: all
+  roles:
+    - init-script-dir
+
+- hosts: edusharing,educonnector
   become: yes
   roles:
     - apache
@@ -26,32 +30,53 @@
       vars:
         docker_users:
           - "{{ work_user }}"
-    - role: postgresql
-      when: alfresco_db_type == 'postgresql' and  edu_version is version('7.0.0','<')
-    - role: mariadb
-      when: alfresco_db_type == 'mariadb' and  edu_version is version('7.0.0','<')
   tags:
     - root-task
 
-- hosts: alfrescosolr4, edusharing
+- hosts: edusharing
+  become: yes
   roles:
-    - java
-    - role: tomcat
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-      tags: [tomcat]
-
-- hosts: alfrescosolr4
-  roles:
-    - role: alfresco-solr4
-      when: edu_version is defined and edu_version is version('7.0.0','<')
+    - role: java
+      tags: [java]
 
 - hosts: edusharing
   roles:
-    - edu-sharing
-    - role: backup
-      tags: backup
+    - role: edu-sharing-init
+      tags: 
+        - edu-sharing-init
+    - role: edu-sharing-migration
+      tags: 
+        - edu-sharing-migration
+    - role: edu-sharing-customization
+      tags: 
+        - edu-sharing-customization
+    - role: edu-sharing-rendering-service
+      tags: 
+        - edu-sharing-rendering-service
+    - role: edu-sharing-search-elastic
+      tags: 
+        - edu-sharing-search-elastic
+    - role: edu-sharing-search-solr
+      tags: 
+        - edu-sharing-search-solr
 
-- hosts: renderingservice, opencast
+- hosts: edusharing
+  roles:
+    - role: edu-sharing-classification-keywords
+      tags: 
+        - edu-sharing-classification-keywords
+    - role: edu-sharing-mirror-vocabs
+      tags: 
+        - edu-sharing-mirror-vocabs
+    - role: edu-sharing-backup
+      tags:
+        - edu-sharing-backup
+    - role: edu-sharing-restore
+      when: edu_sharing_restore_from_backup is defined and edu_sharing_restore_from_backup
+      tags:
+        - edu-sharing-restore
+
+- hosts: opencast
   become: yes
   roles:
     - role: geerlingguy.docker
@@ -60,15 +85,9 @@
         docker_users:
           - "{{ work_user }}"
 
-- hosts: renderingservice
+- hosts: edusharing
   become: yes
   roles:
-    - role: postgresql
-      when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
-    - role: mariadb
-      when: esrender_db_type == 'mariadb' and edu_version is version('7.0.0','<')
-    - role: renderingservice-installation
-      when: edu_version is defined and edu_version is version('7.0.0','<')
     - role: splash
       when: install_splash is defined and install_splash
   tags:
@@ -80,26 +99,6 @@
       when: install_opencast_importer is defined and install_opencast_importer
   tags:
     - opencast
-
-- hosts: renderingservice
-  roles:
-    - role: renderingservice-init
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-    - role: renderingservice-registration
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-
-- hosts: onlyoffice
-  roles:
-    - role: geerlingguy.docker
-      become: yes 
-      when: enable_only_office is defined and enable_only_office
-      vars:
-        docker_users:
-          - "{{ work_user }}"
-    - role: onlyoffice
-      when: enable_only_office is defined and enable_only_office
-  tags:
-    - onlyoffice
 
 - hosts: educonnector
   roles:
@@ -114,13 +113,6 @@
   tags:
     - edu-connector
 
-- hosts: edusharing
-  roles:
-    - role: moodle-registration
-      when: register_moodle
-  tags:
-    - moodle-registration
-    
 - hosts: edusharing
   become: yes
   roles:

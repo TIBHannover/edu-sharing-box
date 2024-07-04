@@ -1,8 +1,0 @@
----
-
-- name: Copy mail template.
-  copy:
-    src: '{{item}}'
-    dest: '{{mail_templates_path}}'
-  when: (edu_sharing_mail_templates_override is defined) and (edu_sharing_mail_templates_override != "") and (edu_sharing_mail_templates_override is not none)
-  with_items: '{{edu_sharing_mail_templates_override}}'

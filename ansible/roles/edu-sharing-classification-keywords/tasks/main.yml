@@ -1,0 +1,17 @@
+---
+
+- include_tasks: classification-keyword.yml
+  args:
+    apply:
+      become: yes
+  when: activate_classification_keywords is defined and activate_classification_keywords
+  tags: 
+    - edu-sharing-classification-keywords
+
+- include_tasks: jobs.yml
+  args:
+    apply:
+      become: yes
+  when: activate_classification_keywords is defined and activate_classification_keywords
+  tags: 
+    - edu-sharing-classification-keywords
