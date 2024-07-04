@@ -1,0 +1,19 @@
+# ensure_and_clean_directory.yml
+
+- name: Ensure the target directory exists
+  file:
+    path: "{{ target_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: Find all files in the target directory
+  find:
+    paths: "{{ target_directory }}"
+    file_type: file
+  register: files_to_remove
+
+- name: Remove existing files in the target directory
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ files_to_remove.files }}"

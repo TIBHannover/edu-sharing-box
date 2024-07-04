@@ -1,4 +1,9 @@
 ---
+- name: Ensure and clean the alfviral directory
+  include_tasks: ensure_and_clean_directory.yml
+  vars:
+    target_directory: "{{ edu_docker_inst_dir }}/custom-repository-service/alfviral/"
+
 # Include the alfviral amp file
 - name: Copy alfviral AMP
   copy:
