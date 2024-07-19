@@ -32,7 +32,7 @@ edu_sharing_environment_variable:
 # Edu-sharing-plugin-oersi-update see: gitlab.com/TIBHannover/oer/edu-sharing-plugin-oersi-update
 
 # version of the amp file
-es_update_oersi_version: 1.0.1
+es_update_oersi_version: 1.0.2
 es_update_oersi_amp_filename: "es-update-oersi-{{es_update_oersi_version}}.amp"
 # oersi update endpoint 
 es_update_oersi_url: 'https://oersi.org/resources/api-internal/import-scripts/python/update-record'
