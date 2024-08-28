@@ -36,6 +36,9 @@ search_solr_environment_variable:
   - key: REPOSITORY_SEARCH_SOLR4_JAVA_XMX
     value: '{{repository_search_solr_java_xmx | default("1g",true)}}'
 
+  # If we need to override the service name, then we can override it,
+  # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
+  service_repository_search_solr:  'repository-search-solr4'
 
 ```
 

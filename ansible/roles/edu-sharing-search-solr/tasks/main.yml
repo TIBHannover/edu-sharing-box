@@ -43,7 +43,7 @@
 - name: Restart edu-sharing-search-solr4 in docker.
   command:
     chdir: "{{ edu_docker_inst_dir }}"
-    cmd: "{{edu_sharing_restart_command | replace('{service}', ' repository-search-solr4') }}"
+    cmd: "{{edu_sharing_restart_command | replace('{service}', service_repository_search_solr) }}"
   no_log: true
   tags:
     - edu-sharing-search-solr
