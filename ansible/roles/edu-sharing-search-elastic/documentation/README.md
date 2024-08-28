@@ -44,6 +44,9 @@ search_elastics_environment_variable:
   - key:  REPOSITORY_SEARCH_ELASTIC_TRACKER_JAVA_XMX
     value: '{{repository_search_elastic_tracker_java_xmx| default("1g",true)}}'
 
+  # If we need to override the service name, then we can override it,
+  # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
+  service_elastic_search: 'repository-search-elastic-index repository-search-elastic-tracker'
 
 ```
 

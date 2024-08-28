@@ -27,7 +27,7 @@
 - name: Restart repository-search-elastic-index and repository-search-elastic-tracker in docker.
   command:
     chdir: "{{ edu_docker_inst_dir }}"
-    cmd: "{{edu_sharing_restart_command | replace('{service}', 'repository-search-elastic-index repository-search-elastic-tracker') }}"
-  # no_log: true
+    cmd: "{{edu_sharing_restart_command | replace('{service}', service_elastic_search) }}"
+  no_log: true
   tags:
     - edu-sharing-search-elastic
