@@ -16,7 +16,7 @@
              - "{{ backup_path }}/{{ alfresco_db.name }}-dump.sql.gz:/docker-entrypoint-initdb.d/psqldump.sql.gz"
     insertafter: '^\s*services:$'
     marker: ""
-  when: edu_version is defined and  edu_version is version_compare('8.0.0','<')
+  when: edu_version is defined and (edu_version | regex_replace('-RC[0-9]+', '')) is version_compare('8.0.0','<')
 
 - name: Add migration for database version >=8
   blockinfile:
@@ -27,7 +27,7 @@
              - "{{ backup_path }}/{{ alfresco_db.name }}-dump.sql.gz:/docker-entrypoint-initdb.d/psqldump.sql.gz"
     insertafter: '^\s*services:$'
     marker: ""
-  when: edu_version is defined and  edu_version is version_compare('8.0.0','>=')
+  when: edu_version is defined and (edu_version | regex_replace('-RC[0-9]+', '')) is version_compare('8.0.0','>=')
 
 - name: Launch edu-sharing in docker.
   command:

@@ -148,6 +148,8 @@ The `tasks/` directory contains all the ansible tasks.
 7. `alfresco_amp_modules`: This task adds the path of AMP files.
    - `alfviral`: Copies the alfviral AMP to the server.
    - `es_update_oersi`: Copies the es-update-oersi AMP to the server.
+8. `set_edu_docker_inst_dir`: Used to refactor the folder name according to docker convention, for example `edu-sharing-9.0.1-RC1` with become `edu-sharing-9_0_1_rc1`
+9. `extract_image_from_repository_service`: used to get the image of the `repository-service`, since it is different from RC and release version 
 
 
 ## Templates
@@ -157,8 +159,8 @@ The `tasks/` directory contains all the ansible tasks.
  It contains: 
 
  1. `3_repository-service-volume-override-common.yml` Used to override the volumes,and add the custom image, work only for version 7.
- 2. `docker-compose.override.yml` Used to override the volumes,and add the custom image, work only for version 8 and above.
- 3. `Dockerfile_repository-service` Used to override the Image and create a custom image
+ 2. `docker-compose.override.yml.j2` Used to override the volumes,and add the custom image, work only for version 8 and above.
+ 3. `Dockerfile_repository-service.j2` Used to override the Image and create a custom image
 
 
 

@@ -3,7 +3,7 @@
 
 - name: get temporary current original container repository-service
   shell: |
-    sg docker -c "docker create --name temp-repository-service docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}"
+    sg docker -c "docker create --name temp-repository-service  {{repository_service_image}}"
 
 - name: copy files and remove temp container
   block:

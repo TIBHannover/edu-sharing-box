@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   repository-service:
-    image: docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{ edu_version }}-{{ edu_repo_caption }}-custom
+    image: {{repository_service_image | regex_replace('[\\n\\t]', '')}}-{{ edu_repo_caption }}-custom
     environment:
       - TZ={{edu_sharing_docker_timezone}}
     volumes:
