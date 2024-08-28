@@ -67,6 +67,10 @@ rendering_environment_variable:
   - key: SERVICES_RENDERING_VIDEO_DEFAULT_RESOLUTION
     value: '{{rendering_service_video_default_resolution| default("720",true)}}'
 
+  # If we need to override the service name, then we can override it,
+  # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
+  service_rendering_service: 'services-rendering-service'
+
 ```
 
 ## Tasks

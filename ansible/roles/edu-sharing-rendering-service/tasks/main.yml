@@ -18,7 +18,7 @@
 - name: restart rendering-service in docker.
   command:
     chdir: "{{ edu_docker_inst_dir }}"
-    cmd: "{{edu_sharing_restart_command | replace('{service}', 'services-rendering-service') }}"
+    cmd: "{{edu_sharing_restart_command | replace('{service}', service_rendering_service) }}"
   # no_log: true
   tags:
     - edu-sharing-rendering-service
