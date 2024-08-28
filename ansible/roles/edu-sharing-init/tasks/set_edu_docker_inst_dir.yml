@@ -1,0 +1,4 @@
+---
+- name: Set edu_docker_inst_dir fact
+  set_fact: 
+    edu_docker_inst_dir: "{{ edu_inst_dir | regex_replace('([0-9])[-.]', '\\1_') | lower() }}"
