@@ -3,6 +3,7 @@
   file: path='{{ backup_path }}' state=directory
   tags:
     - edu-sharing-backup
+
 - include_role:
     name: edu-sharing-init
     tasks_from: set_edu_docker_inst_dir
@@ -11,6 +12,7 @@
         - edu-sharing-backup
   tags:
     - edu-sharing-backup
+
 - include_role:
     name: edu-sharing-init
     tasks_from: load_version_variables
@@ -19,6 +21,7 @@
         - edu-sharing-backup
   tags:
     - edu-sharing-backup
+    
 - include_tasks: backup.yml
   tags:
     - edu-sharing-backup
