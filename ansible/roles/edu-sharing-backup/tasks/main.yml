@@ -4,7 +4,12 @@
   tags:
     - edu-sharing-backup
 
-- set_fact: edu_docker_inst_dir="{{ edu_inst_dir|replace('.','_')}}"
+- include_role:
+    name: edu-sharing-init
+    tasks_from: set_edu_docker_inst_dir
+    apply:
+      tags:
+        - edu-sharing-backup
   tags:
     - edu-sharing-backup
 
@@ -16,8 +21,7 @@
         - edu-sharing-backup
   tags:
     - edu-sharing-backup
-
+    
 - include_tasks: backup.yml
   tags: 
     - edu-sharing-backup
-
