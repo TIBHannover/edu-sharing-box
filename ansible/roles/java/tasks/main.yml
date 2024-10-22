@@ -10,7 +10,7 @@
     state: present 
     update_cache: yes
 
-- include: get_java_home.yml
+- include_tasks: get_java_home.yml
 
 - name: Set JAVA_HOME if configured.
   template:

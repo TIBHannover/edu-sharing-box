@@ -18,10 +18,10 @@
   shell: |
     sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E '{{edu_connector_docker_project_name}}' | xargs -r docker stop "
 
-- include: install.yml
+- include_tasks: install.yml
   tags: 
     - edu-connector-installation
-- include: register.yml
+- include_tasks: register.yml
   tags: 
     - edu-connector-registration
 
