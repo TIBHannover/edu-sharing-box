@@ -32,7 +32,7 @@ edu_sharing_environment_variable:
 # Edu-sharing-plugin-oersi-update see: gitlab.com/TIBHannover/oer/edu-sharing-plugin-oersi-update
 
 # version of the amp file
-es_update_oersi_version: 1.0.2
+es_update_oersi_version: 1.0.3
 es_update_oersi_amp_filename: "es-update-oersi-{{es_update_oersi_version}}.amp"
 # oersi update endpoint 
 es_update_oersi_url: 'https://oersi.org/resources/api-internal/import-scripts/python/update-record'
@@ -43,6 +43,9 @@ es_update_oersi_configuration:
     value: "{{es_update_oersi_url | default('',true)}}"
   - key: edu_sharing.baseUrl
     value: "{{edu_sharing_url | default('',true)}}"
+  - key: bulk.thread.pool.size
+    value: "{{thread_pool_size | default(200,true)}}"
+
 
 # antivirus alfviral see: https://github.com/TIBHannover/alfviral
 antivirus_alfviral_version: 1.4.0-TIB.2
