@@ -48,8 +48,8 @@ es_update_oersi_configuration:
 
 
 # antivirus alfviral see: https://github.com/TIBHannover/alfviral
-antivirus_alfviral_version: 1.4.0-TIB.2
-antivirus_alfviral_amp_filename: 'alfviral-{{ antivirus_alfviral_version }}.amp'
+antivirus_alfviral_version: 1.4.0
+antivirus_alfviral_amp_filename: 'alfviral-platform-{{ antivirus_alfviral_version }}.amp'
 
 alfviral_antivirus_configuration:
   - key: alfviral.mode
