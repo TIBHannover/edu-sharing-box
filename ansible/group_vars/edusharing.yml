@@ -285,6 +285,6 @@ edu_connector_enable_modules:
 # activate/deactivate es-update-oersi, a alfresco plugin used to update metadata in oersi
 activate_es_update_oersi: false
 # version of the amp file
-es_update_oersi_version: 1.0.2
+es_update_oersi_version: 1.0.3
 # oersi update endpoint 
 es_update_oersi_url: 'https://oersi.org/resources/api-internal/import-scripts/python/update-record'
