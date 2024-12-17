@@ -73,6 +73,8 @@ es_update_oersi_configuration:
     value: "{{es_update_oersi_url | default('',true)}}"
   - key: edu_sharing.baseUrl
     value: "{{edu_sharing_url | default('',true)}}"
+  - key: bulk.thread.pool.size
+    value: "{{thread_pool_size | default(200,true)}}"
 
 # Alfviral AMP
 

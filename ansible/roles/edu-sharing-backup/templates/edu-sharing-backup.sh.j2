@@ -30,8 +30,17 @@ fi
 # Execute edu-sharing backup script
 echo "Initiating edu-sharing backup..."
 if ! eval "${EDU_SHARING_BACKUP_COMMAND}"; then
-    echo "Failed to initiate edu-sharing backup."
-    exit 1
+    # List and unpause all paused Docker containers
+    echo "Unpausing all paused Docker containers..."
+    for container_id in $(docker ps -q -f "status=paused"); do
+        echo "Unpausing Docker container: ${container_id}"
+        docker unpause "${container_id}"
+        if [ $? -ne 0 ]; then
+            echo "Failed to unpause Docker container: ${container_id}"
+        else
+            echo "Docker container unpaused: ${container_id}"
+        fi
+    done
 else
     echo "Edu-sharing backup initiated successfully."
 fi
