@@ -60,8 +60,10 @@
       tags: 
         - edu-sharing-search-solr
     - role: edu-sharing-notification
-      when: edu_version is defined and  (edu_version | regex_replace('-RC[0-9]+', '') ) is version_compare('9.0.0', '<')
-      tags: 
+      when:
+        ( edu_version is defined and  (edu_version | regex_replace('-RC[0-9]+', '') ) is version_compare('9.0.0', '>'))
+        and (enable_notification_service is defined and enable_notification_service)
+      tags:
         - edu-sharing-notification
 
 - hosts: edusharing
