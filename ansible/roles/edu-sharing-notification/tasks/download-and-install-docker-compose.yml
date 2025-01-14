@@ -1,0 +1,58 @@
+---
+- name: Ensure notification directory exists.
+  file:
+    path: "{{notification_service_install_dir}}"
+    state: directory
+  tags:
+    - edu-sharing-notification
+
+- name: Download compose file.
+  get_url:
+    force: yes
+    url: "{{ repository_plugin_kafka_deploy_docker_compose }}"
+    dest: "{{ notification_service_install_dir }}/{{ repository_plugin_kafka_deploy_docker_compose | basename }}"
+  tags:
+    - edu-sharing-notification
+
+- name: Extract docker files.
+  unarchive:
+    remote_src: yes
+    src: "{{ notification_service_install_dir }}/{{ repository_plugin_kafka_deploy_docker_compose | basename }}"
+    dest: "{{notification_service_install_dir}}"
+  tags:
+    - edu-sharing-notification
+
+- name: Copy .env file file.
+  template:
+    src: .env.j2
+    dest: "{{notification_service_install_dir}}/.env"
+
+- name: Copy deploy shell script file.
+  template:
+    src: deploy.sh.j2
+    dest: "{{notification_service_install_dir}}/deploy.sh"
+    mode: "a+x"
+
+- name: Get the network name of a container based on a pattern
+  shell: |
+    sg docker -c "docker inspect --format '{{ '{{json ' }}.NetworkSettings.Networks{{ '}}' }}'  $(sg docker -c "docker ps --filter 'name=repository-service_' --format '{{ '{{' }}.Names{{ '}}' }}' | head -n 1 ") | jq -r 'keys[]'"
+  register: repository_service_docker_network_name
+  ignore_errors: true
+  tags:
+    - edu-sharing-notification
+
+- name: Check edu-sharing version.
+  debug:
+    msg: "Your edu-sharing version is {{ repository_service_docker_network_name.stdout }}."
+
+- name: Copy override file.
+  template:
+    src: 3_plugin-kafka-override-common.yml.j2
+    dest: "{{notification_service_install_dir}}/3_plugin-kafka-override-common.yml"
+  vars:
+    edu_sharing_docker_network_name: "{{repository_service_docker_network_name.stdout}}"
+
+- name: Run notification service.
+  shell:
+    chdir: "{{notification_service_install_dir}}/"
+    cmd: '{{notification_service_deploy_command | default(''sg docker -c "./deploy.sh start"'',true)}}'

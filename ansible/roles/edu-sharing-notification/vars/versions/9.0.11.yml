@@ -1,0 +1,18 @@
+---
+repository_plugin_kafka_config: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-config-defaults/9.0.11/edu_sharing-community-repository-plugin-kafka-config-defaults-9.0.11-sources.jar
+
+repository_plugin_kafka_deploy: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-deploy-docker-build-service/9.0.11/edu_sharing-community-repository-plugin-kafka-deploy-docker-build-service-9.0.11-sources.jar
+
+repository_plugin_kafka_backend_alfresco_module: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-backend-alfresco-module/9.0.11/edu_sharing-community-repository-plugin-kafka-backend-alfresco-module-9.0.11.amp
+
+repository_plugin_kafka_backend_services_module: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-backend-services-module/9.0.11/edu_sharing-community-repository-plugin-kafka-backend-services-module-9.0.11.amp
+
+repository_plugin_kafka_deploy_docker_compose: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-deploy-docker-compose/9.0.11/edu_sharing-community-repository-plugin-kafka-deploy-docker-compose-9.0.11.jar
+
+# In newer versions Edu-sharing will change the deploy command so we need to update it here
+# deploy docker images to server
+notification_service_deploy_command: 'sg docker -c "./deploy.sh start"'
+# remove docker images from server
+notification_service_undeploy_command: sg docker -c "./deploy.sh stop"
+notification_service_purge_all_command: |
+     yes | sg docker -c "./deploy.sh remove"
