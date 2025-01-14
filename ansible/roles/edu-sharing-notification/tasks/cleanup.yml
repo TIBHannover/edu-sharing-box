@@ -1,0 +1,51 @@
+---
+- name: Remove all files plugin-kafka folders when disabling notification service.
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_fileglob:
+    - "{{ repository_volume_docker_plugins.stdout }}/plugin-kafka/*"
+    - "{{ repository_volume_config_plugins.stdout }}/plugin-kafka/*"
+  when:
+    (repository_volume_config_plugins.stdout is defined and repository_volume_config_plugins.stdout != '') and
+    (repository_volume_docker_plugins.stdout is defined and repository_volume_docker_plugins.stdout != '')
+  tags:
+    - edu-sharing-notification
+
+- name: Find all .amp and .jar files to remove based on dynamic basename
+  become: true
+  find:
+    paths:
+      - "{{ repository_service_volume_amps.stdout }}/alfresco/2"
+      - "{{ repository_service_volume_amps.stdout }}/edu-sharing/1"
+      - "{{ repository_service_volume_edu_sharing.stdout }}/WEB-INF/lib"
+    patterns:
+      - "{{ repository_plugin_kafka_backend_alfresco_module | basename | regex_replace('-[0-9]+\\.[0-9]+\\.[0-9]+\\.amp$', '*.amp') }}"
+      - "{{ repository_plugin_kafka_backend_services_module | basename | regex_replace('-[0-9]+\\.[0-9]+\\.[0-9]+\\.amp$', '*.amp') }}"
+      - "{{ repository_plugin_kafka_backend_services_module | basename | regex_replace('-[0-9]+\\.[0-9]+\\.[0-9]+\\.amp$', '*.jar') }}"
+      - "*plugin-kafka-notification*.amp"
+      - "*plugin-kafka-notification*.jar"
+      - "*plugin-kafka-backend*.amp"
+      - "*plugin-kafka-backend*.jar"
+    recurse: no
+  when:
+    (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
+    (repository_service_volume_edu_sharing.stdout is defined and repository_service_volume_edu_sharing.stdout != '')
+  register: found_files
+
+- name: Debug filtered files
+  debug:
+    msg: "Files to delete: {{ found_files.files | map(attribute='path') | list }}"
+
+- name: Delete filtered files
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ found_files.files | map(attribute='path') | list }}"
+  when:
+    (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
+    (repository_service_volume_edu_sharing.stdout is defined and repository_service_volume_edu_sharing.stdout != '')
+  tags:
+    - edu-sharing-notification

@@ -59,6 +59,10 @@
     - role: edu-sharing-search-solr
       tags: 
         - edu-sharing-search-solr
+    - role: edu-sharing-notification
+      when: edu_version is defined and  (edu_version | regex_replace('-RC[0-9]+', '') ) is version_compare('9.0.0', '<')
+      tags: 
+        - edu-sharing-notification
 
 - hosts: edusharing
   roles:
