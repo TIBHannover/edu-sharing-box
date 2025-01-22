@@ -1,0 +1,51 @@
+---
+- name: Start adding es-update-oersi .amp file.
+  when: activate_es_update_oersi is defined and activate_es_update_oersi and repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != ''
+  block:
+    - name: Ensure alfresco folder exists.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+        state: directory
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-es-update-oersi-amp
+
+    - name: Download es-update-oersi .amp file.
+      become: true
+      get_url:
+        force: yes
+        url: "{{ es_update_oersi_dowload_url }}"
+        dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ es_update_oersi_dowload_url | basename }}"
+      when:
+        (es_update_oersi_dowload_url is defined and es_update_oersi_dowload_url !="") and
+        ( es_update_oersi_force_local is defined and not es_update_oersi_force_local )
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-es-update-oersi-amp
+
+    - name: Copy es-update-oersi .amp file.
+      become: true
+      copy:
+        src: "{{ es_update_oersi_amp_filename }}"
+        dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+      when: es_update_oersi_force_local is defined and es_update_oersi_force_local
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-es-update-oersi-amp
+
+  rescue:
+    - debug:
+        msg: "The task failed. Performing recovery action."
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-es-update-oersi-amp
+
+    - name: Rollback changes.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ es_update_oersi_dowload_url | basename }}"
+        state: absent
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-es-update-oersi-amp

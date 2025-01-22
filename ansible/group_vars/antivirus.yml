@@ -1,5 +1,0 @@
----
-# Recommended RAM for ClamAV :
-#    Minimum: 3 GiB
-#    Preferred: 4 GiB
-install_antivirus: false

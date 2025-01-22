@@ -1,0 +1,31 @@
+---
+- name: Find all .amp files to remove based on dynamic basename
+  become: true
+  find:
+    paths:
+      - "{{ repository_service_volume_amps.stdout }}/alfresco/2"
+    patterns:
+      - "es-update-oersi*.amp"
+      - "alfviral-platform*.amp"
+    recurse: no
+  when: repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != ''
+  register: found_files
+  tags:
+    - edu-sharing-custom-amp
+
+
+- name: Debug filtered files
+  debug:
+    msg: "Files to delete: {{ found_files.files | map(attribute='path') | list }}"
+  tags:
+    - edu-sharing-custom-amp
+
+- name: Delete filtered files
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ found_files.files | map(attribute='path') | list }}"
+  when: repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != ''
+  tags:
+    - edu-sharing-custom-amp

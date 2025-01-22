@@ -1,0 +1,53 @@
+---
+- name: Start adding Alfviral .amp file.
+  when: install_antivirus is defined and install_antivirus and repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != ''
+  block:
+    - name: Ensure alfresco folder exists.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+        state: directory
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-alfviral-amp
+
+    - name: Download Alfviral .amp file.
+      become: true
+      get_url:
+        force: yes
+        url: "{{ antivirus_alfviral_url }}"
+        dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ antivirus_alfviral_url | basename }}"
+      when:
+        ( edu_version is defined and edu_version | regex_replace('-RC[0-9]+', '') is version_compare('9.0.0', '>=')) and
+        (antivirus_alfviral_force_local is defined and not antivirus_alfviral_force_local)
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-alfviral-amp
+
+    - name: Copy alfviral AMP
+      become: true
+      copy:
+        src: '{{ antivirus_alfviral_amp_filename }}'
+        dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+      when:
+        ( edu_version is defined and edu_version | regex_replace('-RC[0-9]+', '') is version_compare('9.0.0', '<')) or
+        (antivirus_alfviral_force_local is defined and antivirus_alfviral_force_local)
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-alfviral-amp
+
+  rescue:
+    - debug:
+        msg: "The task failed. Performing recovery action."
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-alfviral-amp
+
+    - name: Rollback changes.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ antivirus_alfviral_url | basename }}"
+        state: absent
+      tags:
+        - edu-sharing-custom-amp
+        - edu-sharing-alfviral-amp

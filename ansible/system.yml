@@ -65,9 +65,9 @@
         and (enable_notification_service is defined and enable_notification_service)
       tags:
         - edu-sharing-notification
-
-- hosts: edusharing
-  roles:
+    - role: edu-sharing-custom-amp
+      tags:
+        - edu-sharing-custom-amp
     - role: edu-sharing-classification-keywords
       tags: 
         - edu-sharing-classification-keywords

@@ -1,0 +1,20 @@
+---
+- name: Get the path to the repository service config plugins.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-amps'")"
+  register: repository_service_volume_amps
+  ignore_errors: true
+  tags:
+    - edu-sharing-custom-amp
+
+- name: Wait until folder is created by Docker.
+  become: true
+  wait_for:
+    path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+    state: present
+    timeout: 300 # Set a timeout value as needed
+  retries: 10
+  delay: 10
+  ignore_errors: true
+  tags:
+    - edu-sharing-custom-amp

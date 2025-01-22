@@ -41,3 +41,8 @@ apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if se
 
 # activate/deactivate notification service
 enable_notification_service: false
+
+# Recommended RAM for ClamAV :
+#    Minimum: 3 GiB
+#    Preferred: 4 GiB
+install_antivirus: false
