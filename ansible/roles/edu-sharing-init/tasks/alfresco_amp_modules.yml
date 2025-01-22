@@ -16,15 +16,3 @@
     - name: remove temporary container repository-service
       shell: |
         sg docker -c "docker rm temp-repository-service"
-
-- import_tasks: alfviral.yml
-  when: install_antivirus is defined and install_antivirus
-  tags:  
-    - alfviral
-    - antivirus
-
-- import_tasks: es_update_oersi.yml
-  when: activate_es_update_oersi is defined and activate_es_update_oersi
-  tags:  
-    - oersi
-    - es-update-oersi

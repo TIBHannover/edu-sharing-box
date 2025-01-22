@@ -1,0 +1,14 @@
+---
+
+# For edu-sharing docker version we need to wait for responses up to 3 minutes
+- name: Wait edu-sharing (repository-service) to come up.
+  uri:
+    url: '{{ edu_sharing_url }}'
+    timeout: 60
+    status_code: 200
+  register: repository_service
+  until: repository_service.status == 200
+  retries: 30
+  delay: 10
+  tags:
+    - edu-sharing-init

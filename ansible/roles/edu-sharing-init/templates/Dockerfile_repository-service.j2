@@ -3,14 +3,6 @@ FROM {{repository_service_image | regex_replace('[\\n\\t]', '')}}
 USER worker
 COPY {{amp_file_name}} /opt/alfresco/amps/alfresco/1/{{amp_file_name}}
 
-{% if install_antivirus is defined and install_antivirus %}
-COPY alfviral/{{ antivirus_alfviral_amp_filename | basename }}  /opt/alfresco/amps/alfviral/{{ antivirus_alfviral_amp_filename | basename }}
-{% endif %}
-
-{% if activate_es_update_oersi is defined and activate_es_update_oersi %}
-COPY esupdate/{{ es_update_oersi_amp_filename | basename }}  /opt/alfresco/amps/esupdate/{{ es_update_oersi_amp_filename | basename }}
-{% endif %}
-
 {% if (activate_es_update_oersi is defined and activate_es_update_oersi) or (install_antivirus is defined and install_antivirus) %}
 COPY reinstall.sh /opt/alfresco/bin/reinstall.sh
 {% endif %}
