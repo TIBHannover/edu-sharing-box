@@ -32,7 +32,6 @@ Vagrant.configure("2") do |config|
     ansible.groups = {
       "edusharing" => ["edu-sharing-vm"],
       "educonnector" => ["edu-sharing-vm"],
-      "antivirus" => ["edu-sharing-vm"],
       "opencast" => ["edu-sharing-vm"],
       "alfresco:children" => ["edusharing"],
       "all:vars" => {
