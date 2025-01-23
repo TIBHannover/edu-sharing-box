@@ -9,9 +9,9 @@ repository_plugin_kafka_backend_services_module: https://artifacts.edu-sharing.c
 
 repository_plugin_kafka_deploy_docker_compose: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-deploy-docker-compose/9.0.15/edu_sharing-community-repository-plugin-kafka-deploy-docker-compose-9.0.15.jar
 
-# In newer versions Edu-sharing will change the deploy command so we need to update it here
 # deploy docker images to server
 notification_service_deploy_command: 'sg docker -c "./deploy.sh start"'
+notification_service_restart_command: 'sg docker -c "./deploy.sh restart"'
 # remove docker images from server
 notification_service_undeploy_command: sg docker -c "./deploy.sh stop"
 notification_service_purge_all_command: |

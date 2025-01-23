@@ -45,11 +45,11 @@
   tags:
     - edu-sharing-notification
 
-- name: Stop all notification service containers.
+- name: Remove all notification service containers.
   shell: |
-    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'notification[-_]service' | xargs -r docker stop "
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'notification[-_]service' | xargs -r docker stop | xargs -r docker rm"
   tags:
-    - edu-sharing-init
+    - edu-sharing-notification
 
 # Ensure installation directory exists
 - name: Ensure notification service installation directory exists
@@ -80,11 +80,12 @@
     - include_tasks: download-plugin-kafka-service-amp.yml
     - include_tasks: download-plugin-kafka-alfresco-amp.yml
     - include_tasks: download-and-install-docker-compose.yml
+    - include_tasks: override_notification_mail_templates.yml
   when: enable_notification_service is defined and enable_notification_service
   tags:
     - edu-sharing-notification
 
-- name: Cleanup files adn folder when when disabling notification service.
+- name: Cleanup files and folder when when disabling notification service.
   include_tasks: cleanup.yml
   when: enable_notification_service is defined and not enable_notification_service
   tags:
@@ -94,5 +95,14 @@
   command:
     chdir: "{{ edu_docker_inst_dir }}"
     cmd: "{{ edu_sharing_restart_command | replace('{service}', notification_service_repository_service | default('repository-service')) }}"
+  tags:
+    - edu-sharing-notification
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: wait_services_to_be_up
+    apply:
+      tags:
+        - edu-sharing-notification
   tags:
     - edu-sharing-notification

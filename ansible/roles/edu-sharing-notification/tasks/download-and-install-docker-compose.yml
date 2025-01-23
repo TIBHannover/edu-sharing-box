@@ -15,6 +15,7 @@
     - edu-sharing-notification
 
 - name: Extract docker files.
+  become: true
   unarchive:
     remote_src: yes
     src: "{{ notification_service_install_dir }}/{{ repository_plugin_kafka_deploy_docker_compose | basename }}"

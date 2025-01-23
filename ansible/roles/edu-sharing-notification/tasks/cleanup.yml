@@ -33,10 +33,14 @@
     (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
     (repository_service_volume_edu_sharing.stdout is defined and repository_service_volume_edu_sharing.stdout != '')
   register: found_files
+  tags:
+    - edu-sharing-notification
 
 - name: Debug filtered files
   debug:
     msg: "Files to delete: {{ found_files.files | map(attribute='path') | list }}"
+  tags:
+    - edu-sharing-notification
 
 - name: Delete filtered files
   become: true

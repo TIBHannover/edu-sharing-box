@@ -28,3 +28,12 @@ notification_service_environment_variable:
     value: "{{ notification_service_mail_sent_address | default(edu_mail_smtp_from | default('noreply@twillo.de',true),true) }}"
 
 notification_service_docker_project_name: "notification_service_docker_version"
+
+notification_mail_templates_base_path: "{{notification_service_install_dir}}/templates/mail"
+
+# a list of custom mail templates that should be copied into notification-service; 
+# format of each entry: 
+#     [<source-file-path>, <destination>]
+# example: 
+#     - ['baseLayout.html', '/mail/html/baseLayout.html']
+notification_mail_templates:
