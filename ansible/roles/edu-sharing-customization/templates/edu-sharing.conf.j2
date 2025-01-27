@@ -1,5 +1,11 @@
 // {{ ansible_managed }}
 
+{% if edu_version is defined and edu_version | regex_replace('-RC[0-9]+', '') is version_compare('9.0.0', '>=') and edu_configure_shibboleth is defined and edu_configure_shibboleth %}
+// switch sso methode over spring profiles: basic (csrf protection), openidEnabled, samlEnabled
+// see the: https://github.com/edu-sharing/edu-sharing-community-repository/blob/maven/develop/config/defaults/src/main/resources/edu-sharing.reference.conf#L35-L39
+spring.profiles.active: "{{spring_profile_active | default('samlEnabled',true)}}"
+{% endif %}
+
 repository: {
     // statistics endpoints (for providing public information about content counts, user counts, etc.)
     statistics:{
