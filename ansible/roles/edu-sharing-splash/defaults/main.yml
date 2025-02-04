@@ -1,0 +1,6 @@
+---
+# Activate/deactivate Splash
+install_splash: false
+
+
+splash_port: 8050
