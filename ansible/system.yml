@@ -51,6 +51,9 @@
     - role: edu-sharing-search-solr
       tags: 
         - edu-sharing-search-solr
+    - role: edu-sharing-notification
+      tags:
+        - edu-sharing-notification
     - role: edu-sharing-custom-amp
       tags:
         - edu-sharing-custom-amp

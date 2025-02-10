@@ -1,0 +1,39 @@
+---
+enable_notification_service: false
+notification_service_version: 9.0.16
+# installation directory
+notification_service_install_dir: "{{base_dir}}/notification-service_{{notification_service_version|replace('.','_')}}"
+
+# repository_volume_config_plugins:
+#      stdout: '{{notification_service_install_dir}}'
+# repository_volume_docker_plugins:
+#      stdout: '{{notification_service_install_dir}}'
+
+notification_service_environment_variable:
+  - key: NOTIFICATION_SERVICE_DATABASE_NAME
+    value: '{{notification_service_database_name | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASE_USER
+    value: '{{notification_service_database_user | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASES_PASS
+    value: '{{notification_service_database_pass | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASES_ROOT_USER
+    value: '{{notification_service_database_root_user | default("root",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASES_ROOT_PASS
+    value: '{{notification_service_database_root_pass | default("root",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASES_REPLICATION_SET_KEY
+    value: '{{notification_service_database_replication_set_key | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICES_MAIL_SEND_ADDRESS
+    value: "{{ notification_service_mail_sent_address | default(edu_mail_smtp_from | default('noreply@twillo.de',true),true) }}"
+  - key: REPOSITORY_SERVICE_MAIL_REPORT_RECEIVER
+    value: "{{ notification_service_mail_sent_address | default(edu_mail_smtp_from | default('noreply@twillo.de',true),true) }}"
+
+notification_service_docker_project_name: "notification_service_docker_version"
+
+notification_mail_templates_base_path: "{{notification_service_install_dir}}/templates/mail"
+
+# a list of custom mail templates that should be copied into notification-service; 
+# format of each entry: 
+#     [<source-file-path>, <destination>]
+# example: 
+#     - ['baseLayout.html', '/mail/html/baseLayout.html']
+notification_mail_templates:

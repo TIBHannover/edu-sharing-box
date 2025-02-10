@@ -1,0 +1,34 @@
+---
+- name: Start adding Alfresco .amp file.
+  when: enable_notification_service is defined and enable_notification_service and repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != ''
+  block:
+    - name: Ensure alfresco folder exists.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+        state: directory
+      tags:
+        - edu-sharing-notification
+
+    - name: Download plugin kafka alfresco .amp file.
+      become: true
+      get_url:
+        force: yes
+        url: "{{ repository_plugin_kafka_backend_alfresco_module }}"
+        dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ repository_plugin_kafka_backend_alfresco_module | basename }}"
+      tags:
+        - edu-sharing-notification
+
+  rescue:
+    - debug:
+        msg: "The task failed. Performing recovery action."
+      tags:
+        - edu-sharing-notification
+
+    - name: Rollback changes.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ repository_plugin_kafka_backend_alfresco_module | basename }}"
+        state: absent
+      tags:
+        - edu-sharing-notification

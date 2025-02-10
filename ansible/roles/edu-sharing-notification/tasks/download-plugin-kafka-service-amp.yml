@@ -1,0 +1,34 @@
+---
+- name: Start adding the .amp file.
+  when: enable_notification_service is defined and enable_notification_service and repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != ''
+  block:
+    - name: Ensure edu-sharing folder exists.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/edu-sharing/1/"
+        state: directory
+      tags:
+        - edu-sharing-notification
+
+    - name: Download plugin Kafka service .amp file.
+      become: true
+      get_url:
+        force: yes
+        url: "{{ repository_plugin_kafka_backend_services_module }}"
+        dest: "{{ repository_service_volume_amps.stdout }}/edu-sharing/1/{{ repository_plugin_kafka_backend_services_module | basename }}"
+      tags:
+        - edu-sharing-notification
+
+  rescue:
+    - debug:
+        msg: "The task failed. Performing recovery action."
+      tags:
+        - edu-sharing-notification
+
+    - name: Rollback changes.
+      become: true
+      file:
+        path: "{{ repository_service_volume_amps.stdout }}/edu-sharing/1/{{ repository_plugin_kafka_backend_services_module | basename }}"
+        state: absent
+      tags:
+        - edu-sharing-notification
