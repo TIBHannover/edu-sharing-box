@@ -14,7 +14,7 @@
     - name: Download es-update-oersi .amp file.
       become: true
       get_url:
-        force: yes
+        force: "{{es_update_oersi_override_existing | default(true,true) | bool }}"
         url: "{{ es_update_oersi_dowload_url }}"
         dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ es_update_oersi_dowload_url | basename }}"
       when:
@@ -29,6 +29,7 @@
       copy:
         src: "{{ es_update_oersi_amp_filename }}"
         dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+        force: "{{es_update_oersi_override_existing | default(true,true) | bool }}"
       when: es_update_oersi_force_local is defined and es_update_oersi_force_local
       tags:
         - edu-sharing-custom-amp

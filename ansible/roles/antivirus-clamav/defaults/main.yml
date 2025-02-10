@@ -1,5 +1,3 @@
-
-
 clamav_docker_version: stable
 
 clamav_docker_install_dir: "{{base_dir}}/clamav_{{clamav_docker_version|replace('.','_')}}"

@@ -14,12 +14,10 @@
     - name: Download Alfviral .amp file.
       become: true
       get_url:
-        force: yes
+        force: "{{alfviral_override_existing | default(true,true) | bool }}"
         url: "{{ antivirus_alfviral_url }}"
         dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/{{ antivirus_alfviral_url | basename }}"
-      when:
-        ( edu_version is defined and edu_version | regex_replace('-RC[0-9]+', '') is version_compare('9.0.0', '>=')) and
-        (antivirus_alfviral_force_local is defined and not antivirus_alfviral_force_local)
+      when: antivirus_alfviral_force_local is defined and not antivirus_alfviral_force_local
       tags:
         - edu-sharing-custom-amp
         - edu-sharing-alfviral-amp
@@ -27,11 +25,10 @@
     - name: Copy alfviral AMP
       become: true
       copy:
-        src: '{{ antivirus_alfviral_amp_filename }}'
+        src: "{{ antivirus_alfviral_amp_filename }}"
         dest: "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
-      when:
-        ( edu_version is defined and edu_version | regex_replace('-RC[0-9]+', '') is version_compare('9.0.0', '<')) or
-        (antivirus_alfviral_force_local is defined and antivirus_alfviral_force_local)
+        force: "{{alfviral_override_existing | default(true,true)  | bool }}"
+      when: antivirus_alfviral_force_local is defined and antivirus_alfviral_force_local
       tags:
         - edu-sharing-custom-amp
         - edu-sharing-alfviral-amp
