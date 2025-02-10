@@ -53,8 +53,7 @@ Each role in the edu-sharing playbook comes with its own detailed documentation,
 - [edu-sharing-mirror-vocabs](ansible/roles/edu-sharing-mirror-vocabs/documentation/README.md): This role manages the mirroring of vocabularies.
 - [edu-sharing-backup](ansible/roles/edu-sharing-backup/documentation/README.md): This role is responsible for backing up edu-sharing data.
 - [edu-sharing-restore](ansible/roles/edu-sharing-restore/documentation/README.md): This role handles the restoration of edu-sharing data.
-- [edu-sharing-notification](ansible/roles/edu-sharing-notification/documentation/README.md): This role handles the edu-sharing notification service.
 - [edu-sharing-custom-amp](ansible/roles/edu-sharing-custom-amp/documentation/README.md): This role handles the alfresco AMPs files.
 - [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles splash installation.
-
+- [antivirus-clamav](ansible/roles/antivirus-clamav/documentation/README.md): This role handles antivirus (clamAv) installation.
 These documentation files provide detailed instructions and guidelines for using each role effectively.
