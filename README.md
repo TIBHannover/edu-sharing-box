@@ -56,4 +56,6 @@ Each role in the edu-sharing playbook comes with its own detailed documentation,
 - [edu-sharing-custom-amp](ansible/roles/edu-sharing-custom-amp/documentation/README.md): This role handles the alfresco AMPs files.
 - [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles splash installation.
 - [antivirus-clamav](ansible/roles/antivirus-clamav/documentation/README.md): This role handles antivirus (clamAv) installation.
+- [edu-sharing-connector](ansible/roles/edu-sharing-connector/documentation/README.md): This role handles edu-sharing-connector installation.
+- [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles edu-sharing-splash installation.
 These documentation files provide detailed instructions and guidelines for using each role effectively.

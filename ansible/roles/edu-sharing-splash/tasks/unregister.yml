@@ -1,0 +1,24 @@
+---
+
+
+- name: Disable edu_splash virtual host
+  become: true
+  command: a2dissite edu_splash.conf
+  ignore_errors: true
+  notify: restart apache2
+
+- name: Remove edu_splash virtual host configuration
+  become: true
+  file:
+    path: "/etc/apache2/sites-available/edu_splash.conf"
+    state: absent
+  ignore_errors: true
+  notify: restart apache2
+
+
+- name: Remove the Ansible managed block from the file
+  become: true
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU SHARING SPLASH CONFIGURATION"
+    state: absent  # This removes the block

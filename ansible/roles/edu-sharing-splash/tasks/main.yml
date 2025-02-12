@@ -1,17 +1,31 @@
 ---
-- name: Stop running docker-container, if exists
-  shell: "sg docker -c \"docker ps --format '{{ '{{' }}.Image{{ '}}' }}' | grep -q 'scrapinghub/splash' && docker stop splash\""
-  ignore_errors: true  # exit code 1, if container does not exist
-  tags: 
+
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: fetch_docker_paths
+    apply:
+      tags:
+        - edu-sharing-splash
+  vars:
+    extra_required_paths:
+      - "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    store_docker_paths_globally: true
+  tags:
     - edu-sharing-splash
 
-- name: Remove docker-container, if exists
-  shell: "sg docker -c \"docker ps -a --format '{{ '{{' }}.Image{{ '}}' }}' | grep -q 'scrapinghub/splash' && docker rm splash\""
-  ignore_errors: true  # exit code 1, if container does not exist
-  tags: 
+
+- name: Download and install edu-sharing-splash
+  block:
+    - include_tasks: install.yml
+    - include_tasks: register_apache.yml
+    - include_tasks: register_splash.yml
+  when: enable_edu_sharing_splash is defined and enable_edu_sharing_splash
+  tags:
     - edu-sharing-splash
 
-- name: Run splash docker-container
-  shell: "sg docker -c \"docker run --name splash --restart=always -d -p {{ splash_port }}:8050 scrapinghub/splash\""
-  tags: 
+- name: Unregister edu-sharing-connector from edu-sharing.
+  block:
+    - include_tasks: unregister.yml
+  when: enable_edu_sharing_splash is defined and not enable_edu_sharing_splash
+  tags:
     - edu-sharing-splash

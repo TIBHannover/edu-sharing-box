@@ -1,6 +1,8 @@
 ---
 # Activate/deactivate Splash
-install_splash: false
+enable_edu_sharing_splash: true
+edu_sharing_splash_location: '/edu-splash'
+# "http://{{ host }}:8050/render.png" # URL of the splash-service for http previews
+edu_sharing_splash_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}{{edu_sharing_splash_location | default("/edu-splash",true)}}/render.png'
 
-
-splash_port: 8050
+edu_sharing_splash_port: 8050
