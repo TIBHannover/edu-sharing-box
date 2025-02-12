@@ -8,7 +8,7 @@
   tags:
     - root-task
 
-- hosts: edusharing,educonnector
+- hosts: edusharing
   become: yes
   roles:
     - apache
@@ -16,7 +16,7 @@
     - root-task
     - apache
 
-- hosts: edusharing,educonnector,opencast,antivirus
+- hosts: edusharing,opencast,antivirus
   become: yes
   roles:
     - role: geerlingguy.docker
@@ -54,9 +54,9 @@
     - role: edu-sharing-notification
       tags:
         - edu-sharing-notification
-    - role: edu-sharing-custom-amp
+    - role: edu-sharing-connector
       tags:
-        - edu-sharing-custom-amp
+        - edu-sharing-connector
     - role: edu-sharing-classification-keywords
       tags: 
         - edu-sharing-classification-keywords
@@ -81,13 +81,6 @@
       when: install_opencast_importer is defined and install_opencast_importer
   tags:
     - opencast
-
-- hosts: educonnector
-  roles:
-    - role: edu-connector
-      when: enable_edu_connector is defined and enable_edu_connector
-  tags:
-    - edu-connector
 
 - hosts: edusharing
   become: yes

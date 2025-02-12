@@ -1,17 +1,4 @@
 ---
-
-# For edu-connector we need to wait until for response before we continue with registration
-- name: Wait edu-connector to come up.
-  uri:
-    url: '{{ ( edu_connector_url + "/metadata") }}'
-    timeout: 60
-    status_code: 200
-  register: esresult
-  until: esresult.status == 200
-  retries: 30
-  delay: 10
-
-
 # For edu-sharing docker version we need to wait for responses up to 3 minutes
 - name: Wait edu-sharing to come up.
   uri:
@@ -53,14 +40,23 @@
     status_code: [200, 500] # 500 if not existing
   no_log: true
 
-- name: Register edu-connector.
-  uri:
-    url: '{{edu_sharing_url}}/rest/admin/v1/applications?url={{ ( edu_connector_url + "/metadata") | urlencode}}'
-    method: PUT
-    body_format: json
-    status_code: 200  
-    headers:
-      Authorization: 'Bearer {{accesstoken}}'
-      Accept: application/json
-  no_log: true
 
+- name: Disable edu_connector virtual host
+  become: true
+  command: a2dissite edu_connector.conf
+  notify: restart apache2
+
+- name: Remove edu_connector virtual host configuration
+  become: true
+  file:
+    path: "/etc/apache2/sites-available/edu_connector.conf"
+    state: absent
+  notify: restart apache2
+
+
+- name: Remove the Ansible managed block from the file
+  become: true
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU CONNECTOR CONFIGURATION"
+    state: absent  # This removes the block

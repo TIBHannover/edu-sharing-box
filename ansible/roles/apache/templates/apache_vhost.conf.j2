@@ -34,14 +34,6 @@
           Require all granted
         </Directory>
 {% endif %}
-{% if enable_edu_connector is defined and enable_edu_connector %}
-        <Location {{edu_connector_path | default("/edu-connector",true)}}>
-              ProxyPass http://localhost:{{edu_connector_internal_port | default('9200',true)}}/
-              ProxyPassReverse http://localhost:{{edu_connector_internal_port | default('9200',true)}}/
-       </Location>
-{% endif %}
-
-
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

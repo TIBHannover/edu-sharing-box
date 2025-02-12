@@ -32,26 +32,3 @@ jobs.entries += {
     }
 }
 {% endif %}
-
-{% if enable_edu_connector is defined and enable_edu_connector %}
- {% for module in edu_connector_enable_modules %}
-   connectorList.connectors +=  {
-        id:"{{module.id}}", icon:"{{module.icon | default('edit',true)}}", showNew: {{module.showNew | default('true',true) |string|lower}}, onlyDesktop: {{module.onlyDesktop | default('true',true) |string|lower}}, hasViewMode: {{module.hasViewMode | default('true',true) |string|lower}},
-        filetypes:[
-            {%for fileType in module.filetypes %}
-            {
-                {%for key, value in fileType.items() %}
-                    {%if value is string %}
-                        {{key}}: "{{value}}",
-                    {%elif value is boolean %}
-                        {{key}}: {{ value|string|lower}},
-                    {%else %}
-                        {{key}}: {{ value}},
-                    {%endif%}
-                {% endfor %}
-            }
-            {% endfor %}
-         ]
-    }
- {% endfor %}
-{% endif %}
