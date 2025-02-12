@@ -34,22 +34,25 @@
       become: yes
       tags: [java]
     - role: edu-sharing-init
-      tags: 
+      tags:
         - edu-sharing-init
+    - role: edu-sharing-custom-amp
+      tags:
+        - edu-sharing-custom-amp
     - role: edu-sharing-migration
-      tags: 
+      tags:
         - edu-sharing-migration
     - role: edu-sharing-customization
-      tags: 
+      tags:
         - edu-sharing-customization
     - role: edu-sharing-rendering-service
-      tags: 
+      tags:
         - edu-sharing-rendering-service
     - role: edu-sharing-search-elastic
-      tags: 
+      tags:
         - edu-sharing-search-elastic
     - role: edu-sharing-search-solr
-      tags: 
+      tags:
         - edu-sharing-search-solr
     - role: edu-sharing-notification
       tags:
@@ -58,10 +61,10 @@
       tags:
         - edu-sharing-connector
     - role: edu-sharing-classification-keywords
-      tags: 
+      tags:
         - edu-sharing-classification-keywords
     - role: edu-sharing-mirror-vocabs
-      tags: 
+      tags:
         - edu-sharing-mirror-vocabs
     - role: edu-sharing-backup
       tags:
@@ -71,8 +74,7 @@
       tags:
         - edu-sharing-restore
     - role: edu-sharing-splash
-      when: install_splash is defined and install_splash
-      tags: 
+      tags:
         - edu-sharing-splash
 
 - hosts: opencast

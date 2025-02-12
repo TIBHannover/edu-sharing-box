@@ -53,8 +53,6 @@
     src: "Dockerfile_repository-service.j2"
     dest: "{{ edu_docker_inst_dir }}/custom-repository-service/Dockerfile_repository-service"
 
-- include_tasks: alfresco_amp_modules.yml
-
 - name: build custom container repository-service
   shell:
     chdir: "{{ edu_docker_inst_dir }}/custom-repository-service"

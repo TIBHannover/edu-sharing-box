@@ -1,5 +1,5 @@
 
-<Location {{edu_sharing_splash_location | default("/edu-splash",true)}}>
+<Location {{edu_sharing_splash_apache_location | default("/edu-splash",true)}}>
       ProxyPass http://localhost:{{edu_sharing_splash_port | default('8050',true)}}/
       ProxyPassReverse http://localhost:{{edu_sharing_splash_port | default('8050',true)}}/
 </Location>

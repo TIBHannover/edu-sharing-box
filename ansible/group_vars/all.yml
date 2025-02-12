@@ -2,20 +2,12 @@
 edu_sharing_host: 192.168.98.101
 edu_sharing_domain: '{{edu_sharing_host}}'
 edu_sharing_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/edu-sharing'
-edu_version: 8.1.0
+edu_version: 9.0.0
 solr_host: '{{edu_sharing_host}}'
-
-esrender_host: 192.168.98.101
-esrender_proxy: '{{ esrender_host }}'
-esrender_url: '{{ edu_sharing_protocol | default("http") }}://{{ esrender_proxy }}/edu-sharing/esrender'
 
 clamav_host: 192.168.98.101
 clamav_proxy: "{{clamav_host}}"
 
-edu_connector_host: 192.168.98.104
-edu_connector_proxy: "{{edu_connector_host}}"
-install_splash: false
-enable_edu_connector: false
 esrender_db:
   name: esrender
   user: esrender
@@ -29,19 +21,13 @@ script_dir: '{{ base_dir }}/bin'
 
 # enable / disable the edu-sharing backup process: present|absent
 backup_process_state: absent
-
 # enable / disable the edu-sharing restore process: true|false
 edu_sharing_restore_from_backup: false
-
 # activate/deactivate es-update-oersi, a alfresco plugin used to update metadata in oersi
 activate_es_update_oersi: false
 
 apache_conf_servername: # use as apache2 ServerName Directive, if set - see http://httpd.apache.org/docs/2.2/en/mod/core.html#servername
 apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if set. Example: On - see http://httpd.apache.org/docs/2.2/en/mod/core.html#usecanonicalname
-
-# activate/deactivate notification service
-enable_notification_service: false
-
 # Recommended RAM for ClamAV :
 #    Minimum: 3 GiB
 #    Preferred: 4 GiB

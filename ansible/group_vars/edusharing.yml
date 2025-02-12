@@ -15,7 +15,7 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
-connect_content_oersi: true  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
+connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
@@ -79,12 +79,6 @@ edu_sharing_port:
 edu_sharing_protocol: http
 
 edu_enable_statistics_api: "false"
-
-mirror_vocabularies: # list of vocabularies a local mirror should be created for (url - url of the source, target_directory - directory where the mirror should be stored)
-#  - url: "https://w3id.org/kim/hochschulfaechersystematik/scheme.json"
-#    target_directory: "/var/www/oer/vocabs-mirror"
-#  - url: "https://w3id.org/kim/hcrt/scheme.json"
-#    target_directory: "/var/www/oer/vocabs-mirror"
 
 edu_migration_replace_mapping: # replace mapping jobs that should be executed during edu-sharing update (startFolder - root node, property - property that should be migrated, data - csv mapping)
 #  - startFolder: 869665e9-7e42-49af-bd30-6469e59904c5
@@ -226,27 +220,3 @@ edu_custom_menu_entries: # list of custom menu entries
     #   position: 2
     #   openInNew: true
     #   url: "https://www.example.de/"
-
-# Enable modules for edu-sharing connector 
-# example:
-#     - id: 'TINYMCE'       # Required
-#       icon: 'edit'        # optional default will be edit
-#       showNew: true       # optional default will be true
-#       onlyDesktop: true   # optional default will be true
-#       hasViewMode: true   # optional default will be true
-#       filetypes:          # Required
-#         - {mimetype: "text/html",filetype: "html",createable: true,editable: true,editorType: "tinymce"}
-# TINYMCE is by default
-edu_connector_enable_modules:
-  - id: 'H5P'
-    filetypes:
-      - {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
-  - id: 'ONLY_OFFICE'
-    icon: 'edit'
-    showNew: true
-    onlyDesktop: true
-    hasViewMode: true
-    filetypes:
-      - {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true}
-      - {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true}
-      - {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true}
