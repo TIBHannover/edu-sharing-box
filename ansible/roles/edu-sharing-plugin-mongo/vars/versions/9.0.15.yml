@@ -1,0 +1,18 @@
+---
+repository_plugin_mongo_config: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-mongo-config-defaults/9.0.15/edu_sharing-community-repository-plugin-mongo-config-defaults-9.0.15-sources.jar
+
+repository_plugin_mongo_deploy: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-mongo-deploy-docker-build-service/9.0.15/edu_sharing-community-repository-plugin-mongo-deploy-docker-build-service-9.0.15-sources.jar
+
+repository_plugin_mongo_backend_alfresco_module: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-mongo-backend-alfresco-module/9.0.15/edu_sharing-community-repository-plugin-mongo-backend-alfresco-module-9.0.15.amp
+
+repository_plugin_mongo_backend_services_module: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-mongo-backend-services-module/9.0.15/edu_sharing-community-repository-plugin-mongo-backend-services-module-9.0.15.amp
+
+repository_plugin_mongo_deploy_docker_compose: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-mongo-deploy-docker-compose/9.0.15/edu_sharing-community-repository-plugin-mongo-deploy-docker-compose-9.0.15.jar
+
+# deploy docker images to server
+mongo_plugin_service_service_deploy_command: 'sg docker -c "./deploy.sh start"'
+mongo_plugin_service_restart_command: 'sg docker -c "./deploy.sh restart"'
+# remove docker images from server
+mongo_plugin_service_undeploy_command: sg docker -c "./deploy.sh stop"
+mongo_plugin_service_purge_all_command: |
+     yes | sg docker -c "./deploy.sh remove"

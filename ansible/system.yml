@@ -57,6 +57,9 @@
     - role: edu-sharing-notification
       tags:
         - edu-sharing-notification
+    - role: edu-sharing-plugin-mongo
+      tags:
+        - edu-sharing-plugin-mongo
     - role: edu-sharing-connector
       tags:
         - edu-sharing-connector

@@ -22,11 +22,38 @@
   tags:
     - edu-sharing-config-node
 
+- name: Get the path to the repository service config plugins.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-amps'")"
+  register: repository_service_volume_amps
+  ignore_errors: true
+  tags:
+    - edu-sharing-config-node
+
+- name: Get the path to the repository service config plugins.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-config-plugins'")"
+  register: repository_volume_config_plugins
+  ignore_errors: true
+  tags:
+    - edu-sharing-config-node
+
+- name: Get the path to the repository service config plugins.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}'  $(sg docker -c "docker volume ls -q |grep '_repository-service-volume-bin-plugins'")"
+  register: repository_volume_docker_plugins
+  ignore_errors: true
+  tags:
+    - edu-sharing-config-node
+
 - name: Store variable globally.
   set_fact:
     repository_volume_config_cluster_path: "{{ repository_volume_config_cluster_path }}"
     repository_config_edu_sharing_path: "{{ repository_config_edu_sharing_path }}"
     repository_volume_config_node_path: "{{ repository_volume_config_node_path}}"
+    repository_service_volume_amps: "{{ repository_service_volume_amps}}"
+    repository_volume_docker_plugins: "{{ repository_volume_docker_plugins}}"
+    repository_volume_config_plugins: "{{ repository_volume_config_plugins}}"
   when: store_docker_paths_globally | default(false) | bool
 
 - name: Merge default and extra required paths, ensuring no duplicates

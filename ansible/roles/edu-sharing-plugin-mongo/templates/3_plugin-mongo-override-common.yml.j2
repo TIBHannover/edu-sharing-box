@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  repository-mongo:
+     networks:
+        - {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}
+
+
+  repository-service:
+     profiles: ["exclude"]  # This service will NOT start by default
+
+
+
+networks:
+ {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}:
+   external: true

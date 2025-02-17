@@ -1,0 +1,14 @@
+---
+
+- name: Add or update environment variables inside the environment section in docker-compose.override.yml
+  blockinfile:
+    path: "{{ edu_docker_inst_dir }}/docker-compose.override.yml"
+    marker: "# {mark} ANSIBLE MANAGED ENVIRONMENT VARIABLES"
+    block: |
+        {% for env_var in mongo_plugin_environment_variable %}
+              - {{ env_var }}
+        {% endfor %}
+    insertafter: '^(\s*)environment:'  # Ensure insertion after the existing 'environment' line
+  when: mongo_plugin_environment_variable is defined
+  tags: 
+    - edu-sharing-plugin-mongo

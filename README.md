@@ -58,4 +58,5 @@ Each role in the edu-sharing playbook comes with its own detailed documentation,
 - [antivirus-clamav](ansible/roles/antivirus-clamav/documentation/README.md): This role handles antivirus (clamAv) installation.
 - [edu-sharing-connector](ansible/roles/edu-sharing-connector/documentation/README.md): This role handles edu-sharing-connector installation.
 - [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles edu-sharing-splash installation.
+- [edu-sharing-plugin-mongo](ansible/roles/edu-sharing-plugin-mongo/documentation/README.md): This role handles edu-sharing-plugin-mongo.
 These documentation files provide detailed instructions and guidelines for using each role effectively.
