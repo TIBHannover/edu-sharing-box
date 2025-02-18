@@ -66,8 +66,20 @@
   tags:
     - edu-sharing-notification
 
-- name: Load paths and wait for paths to be generated.
-  include_tasks: wait_for_paths.yml
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: fetch_docker_paths
+    apply:
+      tags:
+      - edu-sharing-notification
+  vars:
+    extra_required_paths:
+    - "{{ repository_volume_config_plugins.stdout }}"
+    - "{{ repository_volume_docker_plugins.stdout }}"
+    - "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+    - "{{ repository_service_volume_amps.stdout }}/edu-sharing/1/"
+    - "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/lib/"
+    store_docker_paths_globally: true
   tags:
     - edu-sharing-notification
 
@@ -104,5 +116,6 @@
     apply:
       tags:
         - edu-sharing-notification
+  when: "'edu-sharing-notification' in ansible_run_tags"
   tags:
     - edu-sharing-notification

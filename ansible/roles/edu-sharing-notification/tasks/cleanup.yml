@@ -1,15 +1,27 @@
 ---
-- name: Remove all files plugin-kafka folders when disabling notification service.
+
+
+- name: Find all files inside plugin-kafka folders
+  become: true
+  find:
+    paths:
+      - "{{ repository_volume_docker_plugins.stdout }}/plugin-kafka"
+      - "{{ repository_volume_config_plugins.stdout }}/plugin-kafka"
+    file_type: any
+  register: found_files
+  when:
+    - repository_volume_docker_plugins.stdout is defined and repository_volume_docker_plugins.stdout != ''
+    - repository_volume_config_plugins.stdout is defined and repository_volume_config_plugins.stdout != ''
+  tags:
+    - edu-sharing-notification
+
+- name: Remove found plugin-kafka files
   become: true
   file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     state: absent
-  with_fileglob:
-    - "{{ repository_volume_docker_plugins.stdout }}/plugin-kafka/*"
-    - "{{ repository_volume_config_plugins.stdout }}/plugin-kafka/*"
-  when:
-    (repository_volume_config_plugins.stdout is defined and repository_volume_config_plugins.stdout != '') and
-    (repository_volume_docker_plugins.stdout is defined and repository_volume_docker_plugins.stdout != '')
+  loop: "{{ found_files.files }}"
+  when: found_files.matched > 0
   tags:
     - edu-sharing-notification
 
@@ -19,7 +31,7 @@
     paths:
       - "{{ repository_service_volume_amps.stdout }}/alfresco/2"
       - "{{ repository_service_volume_amps.stdout }}/edu-sharing/1"
-      - "{{ repository_service_volume_edu_sharing.stdout }}/WEB-INF/lib"
+      - "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/lib"
     patterns:
       - "{{ repository_plugin_kafka_backend_alfresco_module | basename | regex_replace('-[0-9]+\\.[0-9]+\\.[0-9]+\\.amp$', '*.amp') }}"
       - "{{ repository_plugin_kafka_backend_services_module | basename | regex_replace('-[0-9]+\\.[0-9]+\\.[0-9]+\\.amp$', '*.amp') }}"
@@ -31,7 +43,7 @@
     recurse: no
   when:
     (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
-    (repository_service_volume_edu_sharing.stdout is defined and repository_service_volume_edu_sharing.stdout != '')
+    (repository_config_edu_sharing_path.stdout is defined and repository_config_edu_sharing_path.stdout != '')
   register: found_files
   tags:
     - edu-sharing-notification
@@ -50,6 +62,6 @@
   with_items: "{{ found_files.files | map(attribute='path') | list }}"
   when:
     (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
-    (repository_service_volume_edu_sharing.stdout is defined and repository_service_volume_edu_sharing.stdout != '')
+    (repository_config_edu_sharing_path.stdout is defined and repository_config_edu_sharing_path.stdout != '')
   tags:
     - edu-sharing-notification
