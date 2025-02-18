@@ -6,6 +6,7 @@
     state: "present"
   tags:
   - packages
+  - apache
 
 - name: apache - add virtual hosts
   template:
@@ -14,6 +15,9 @@
   loop: '{{ apache2_conf_templates }}'
   notify:
     - restart apache2
+  tags:
+  - packages
+  - apache
 
 - name: apache - enabled mod
   apache2_module:
@@ -22,6 +26,9 @@
   loop: '{{ apache2_modules }}'
   notify:
     - restart apache2
+  tags:
+  - packages
+  - apache
 
 - name: a2dissite default
   file:
@@ -29,6 +36,9 @@
     state: absent
   notify:
     - restart apache2
+  tags:
+  - packages
+  - apache
 
 - name: a2ensite
   file:
@@ -38,3 +48,6 @@
   loop: '{{ apache2_conf_templates }}'
   notify:
     - restart apache2
+  tags:
+  - packages
+  - apache
