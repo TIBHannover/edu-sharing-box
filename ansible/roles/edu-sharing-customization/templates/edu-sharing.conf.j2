@@ -6,13 +6,6 @@ repository: {
             enabled:{{ edu_enable_statistics_api }}
         }
     }
-{% if edu_splash_url is defined and edu_splash_url is not none and edu_splash_url != "" %}
-    communication:{
-        splash:{
-            url: "{{ edu_splash_url }}"
-        }
-    }
-{% endif %}
 }
 
 {% if activate_classification_keywords is defined and activate_classification_keywords and activate_classification_keywords_update is defined and activate_classification_keywords_update %}
