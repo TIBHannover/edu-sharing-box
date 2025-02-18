@@ -40,19 +40,12 @@
     status_code: [200, 500] # 500 if not existing
   no_log: true
 
-
-- name: Disable edu_connector virtual host
-  become: true
-  command: a2dissite edu_connector.conf
-  notify: restart apache2
-
 - name: Remove edu_connector virtual host configuration
   become: true
   file:
     path: "/etc/apache2/sites-available/edu_connector.conf"
     state: absent
   notify: restart apache2
-
 
 - name: Remove the Ansible managed block from the file
   become: true

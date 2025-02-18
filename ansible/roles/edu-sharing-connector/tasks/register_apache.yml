@@ -5,14 +5,4 @@
   template:
     src: "{{edu_connector_virtual_host_path | default('edu_connector.conf.j2',true)}}"
     dest: '/etc/apache2/sites-available/edu_connector.conf'
-  notify:
-    - restart apache2
-
-- name: a2ensite
-  become: true
-  file:
-    path: '/etc/apache2/sites-enabled/edu_connector.conf'
-    src: '../sites-available/edu_connector.conf'
-    state: link
-  notify:
-    - restart apache2
+  notify: restart apache2
