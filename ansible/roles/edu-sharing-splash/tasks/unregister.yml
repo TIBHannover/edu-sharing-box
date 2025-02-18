@@ -1,18 +1,9 @@
 ---
-
-
-- name: Disable edu_splash virtual host
-  become: true
-  command: a2dissite edu_splash.conf
-  ignore_errors: true
-  notify: restart apache2
-
 - name: Remove edu_splash virtual host configuration
   become: true
   file:
     path: "/etc/apache2/sites-available/edu_splash.conf"
     state: absent
-  ignore_errors: true
   notify: restart apache2
 
 

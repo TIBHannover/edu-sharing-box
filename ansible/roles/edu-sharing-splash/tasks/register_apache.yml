@@ -7,12 +7,3 @@
     dest: '/etc/apache2/sites-available/edu_splash.conf'
   notify:
     - restart apache2
-
-- name: a2ensite
-  become: true
-  file:
-    path: '/etc/apache2/sites-enabled/edu_splash.conf'
-    src: '../sites-available/edu_splash.conf'
-    state: link
-  notify:
-    - restart apache2
