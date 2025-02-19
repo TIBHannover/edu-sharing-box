@@ -51,6 +51,7 @@ Each role in the edu-sharing playbook comes with its own detailed documentation,
 - [edu-sharing-customization](ansible/roles/edu-sharing-customization/documentation/README.md): This role allows customization of the edu-sharing platform.
 - [edu-sharing-rendering-service](ansible/roles/edu-sharing-rendering-service/documentation/README.md): This role manages the rendering service for edu-sharing.
 - [edu-sharing-search-elastic](ansible/roles/edu-sharing-search-elastic/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
+- [edu-sharing-search-solr](ansible/roles/edu-sharing-search-solr/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
 - [edu-sharing-classification-keywords](ansible/roles/edu-sharing-classification-keywords/documentation/README.md): This role handles keyword classification tasks.
 - [edu-sharing-mirror-vocabs](ansible/roles/edu-sharing-mirror-vocabs/documentation/README.md): This role manages the mirroring of vocabularies.
 - [edu-sharing-backup](ansible/roles/edu-sharing-backup/documentation/README.md): This role is responsible for backing up edu-sharing data.
@@ -61,4 +62,5 @@ Each role in the edu-sharing playbook comes with its own detailed documentation,
 - [edu-sharing-connector](ansible/roles/edu-sharing-connector/documentation/README.md): This role handles edu-sharing-connector installation.
 - [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles edu-sharing-splash installation.
 - [edu-sharing-plugin-mongo](ansible/roles/edu-sharing-plugin-mongo/documentation/README.md): This role handles edu-sharing-plugin-mongo.
+- [edu-sharing-notification](ansible/roles/edu-sharing-notification/documentation/README.md): This role handles edu-sharing-notification plugin.
 These documentation files provide detailed instructions and guidelines for using each role effectively.
