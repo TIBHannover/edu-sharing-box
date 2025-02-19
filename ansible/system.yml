@@ -92,7 +92,8 @@
   roles:
     - role: shibboleth
       when: install_shibboleth is defined and install_shibboleth
-      tags: shibboleth
+      tags: 
+        - shibboleth
   tags:
     - root-task
 
