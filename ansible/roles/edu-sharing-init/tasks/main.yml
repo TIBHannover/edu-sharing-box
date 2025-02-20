@@ -49,12 +49,6 @@
   tags:
     - edu-sharing-init
 
-- name: Get edu-sharing version in server.
-  shell: "echo ${EDU_SHARING_VERSION:-}"
-  register: edu_sharing_version
-  tags:
-    - edu-sharing-init
-
 - name: Ensures inst-dir exists.
   file: path='{{edu_docker_inst_dir}}' state=directory
   tags:
@@ -77,8 +71,6 @@
     - edu-sharing-init
 
 - include_tasks: clean-edu-sharing-volumes.yml
-  when: edu_sharing_version.stdout is defined and
-    edu_sharing_version.stdout != edu_version
   tags:
     - edu-sharing-init
 

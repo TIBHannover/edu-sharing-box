@@ -1,4 +1,17 @@
 ---
+
+- name: Check if the image exists locally
+  shell: |
+    sg docker -c "docker images -q {{ repository_service_image | trim }}"
+  register: image_check
+  changed_when: false
+
+- name: Pull the image if it does not exist
+  shell: |
+    sg docker -c "docker pull {{ repository_service_image | trim }}"
+  when: image_check.stdout | trim == ""
+  changed_when: true
+
 - name: Ensures custom-dir exists
   file: path='{{ edu_docker_inst_dir }}/custom-repository-service' state=directory
 

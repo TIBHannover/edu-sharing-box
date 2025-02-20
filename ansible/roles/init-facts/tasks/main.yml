@@ -1,2 +1,10 @@
 ---
 - set_fact: work_user="{{ ansible_user | default(lookup('env', 'USER')) }}"
+
+- name: Read all variables from /etc/environment
+  command: cat /etc/environment
+  register: etc_environment_variables
+
+- name: Set Ansible facts from /etc/environment
+  set_fact:
+    system_etc_env: "{{ dict(etc_environment_variables.stdout_lines | select('match', '^[^#]*=.*') | map('split', '=', 1) | list) }}"
