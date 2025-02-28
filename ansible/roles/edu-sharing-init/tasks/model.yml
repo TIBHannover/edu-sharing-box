@@ -70,7 +70,7 @@
   shell:
     chdir: "{{ edu_docker_inst_dir }}/custom-repository-service"
     cmd: >
-      sg docker -c "docker build -f Dockerfile_repository-service -t {{ repository_service_image|trim}}-{{ edu_repo_caption }}-custom ."
+      sg docker -c "docker build --no-cache -f Dockerfile_repository-service -t {{ repository_service_image|trim}}-{{ edu_repo_caption }}-custom ."
 
 - name: Allow pull failures to be able to use custom image
   replace:

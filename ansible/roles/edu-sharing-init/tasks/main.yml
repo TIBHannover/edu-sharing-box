@@ -123,6 +123,12 @@
   tags:
     - edu-sharing-init
 
+- name: Clean unused edu-sharing images.
+  command: |
+    sg docker "docker image prune -a -f"
+  tags:
+    - edu-sharing-init
+
 - include_tasks: wait_services_to_be_up.yml
   tags:
     - edu-sharing-init
