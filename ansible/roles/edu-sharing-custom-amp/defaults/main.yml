@@ -3,7 +3,7 @@
 # antivirus alfviral see: https://github.com/TIBHannover/alfviral
 antivirus_alfviral_force_local: true
 # antivirus_alfviral_version: 1.4.0
-antivirus_alfviral_version:  1.4.0-1
+antivirus_alfviral_version:  1.4.0
 antivirus_alfviral_amp_filename: 'alfviral-platform-{{ antivirus_alfviral_version }}.amp'
 
 antivirus_alfviral_url: "https://github.com/TIBHannover/alfviral/releases/download/{{antivirus_alfviral_version}}/alfviral-platform-{{antivirus_alfviral_version}}.amp"

@@ -2,3 +2,5 @@ FROM {{repository_service_image | regex_replace('[\\n\\t]', '')}}
 
 USER worker
 COPY {{amp_file_name}} /opt/alfresco/amps/alfresco/1/{{amp_file_name}}
+
+COPY reinstall.sh /opt/alfresco/bin/reinstall.sh
