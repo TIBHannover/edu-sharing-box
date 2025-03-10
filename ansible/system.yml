@@ -4,9 +4,11 @@
     - role: set-timezone
       become: yes
     - role: init-facts
+      tags:
+        - init-facts
     - role: init-script-dir
   tags:
-    - root-task
+    - always
 
 - hosts: edusharing
   become: yes

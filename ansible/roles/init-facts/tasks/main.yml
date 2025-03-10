@@ -10,7 +10,8 @@
     system_etc_env: >-
       {{ dict(etc_environment_variables.stdout_lines 
       | select('match', '^[^#=]+=[^=]+$') 
-      | map('split', '=', 1)) }}
+      | map('regex_replace', '^([^=]+)=(.*)$', '\g<1>|\g<2>') 
+      | map('split', '|')) }}
 
 - name: Debug extracted environment variables
   debug:
