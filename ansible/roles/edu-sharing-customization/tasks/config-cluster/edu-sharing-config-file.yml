@@ -19,8 +19,3 @@
 - include_tasks: lms.yml
   tags:
     - lms
-
-- include_tasks: shibboleth_after.yml
-  when: edu_configure_shibboleth is defined and edu_configure_shibboleth
-  tags:
-    - shibboleth

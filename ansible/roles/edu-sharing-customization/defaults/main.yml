@@ -68,14 +68,6 @@ edu_sharing_customization_environment_variable:
     value: '{{edu_mail_smtp_server | default("",true)}}'
   - key: REPOSITORY_SERVICE_HOME_APPID
     value: '{{edu_repo_id | default("local",true)}}'
-  - key: REPOSITORY_SERVICE_AUTH_EXTERNAL
-    value: '{{ "true" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
-  - key: REPOSITORY_SERVICE_AUTH
-    value: '{{ "shibboleth" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
-  - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGIN
-    value: '{{ "/edu-sharing/shibboleth" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
-  - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGOUT
-    value: '{{ shibboleth_sp_base_path +"/Shibboleth.sso/Logout?return=" +  edu_sharing_url + "/components/login" if (edu_configure_shibboleth is defined) and (edu_configure_shibboleth)  else ""}}'
 
 # If we need to override the service name, then we can override it,
 # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value

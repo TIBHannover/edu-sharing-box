@@ -54,21 +54,6 @@
     tags:
       - edu-sharing-customization
 
-  - include_tasks: shibboleth_before.yml
-    args:
-      apply:
-        become: yes
-    vars:
-      shibboleth_before_client_config_path: '{{repository_volume_config_node_path.stdout}}/defaults/client.config.xml'
-      edu_sharing_webapp_webinf_classes_path: '{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/classes'
-      edu_sharing_webapp_lib_path: '{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/lib'
-    when: (edu_configure_shibboleth is defined and edu_configure_shibboleth) and
-          (repository_volume_config_node_path.stdout is defined) and (repository_volume_config_node_path.stdout != "") and
-          (repository_volume_config_node_path.stdout is defined and repository_volume_config_node_path.stdout != "")
-    tags:
-      - edu-sharing-customization
-      - edu-sharing-customization-shibboleth-before
-
   - name: Restart edu-sharing service in docker.
     command:
       chdir: "{{ edu_docker_inst_dir }}"
