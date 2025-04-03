@@ -24,7 +24,7 @@
 
 - name: (Optional) Reset repository-search-elastic-index
   shell: |
-    docker compose exec -T repository-search-elastic-index bash -c 'rm -rf /usr/share/elasticsearch/data/nodes || true' || true
+    docker compose exec -T repository-search-elastic-index bash -c 'rm -rf /usr/share/elasticsearch/data/* || true' || true
   args:
     chdir: "{{ edu_docker_inst_dir }}"
   when: "'edu-sharing-search-elastic-reset' in ansible_run_tags"
