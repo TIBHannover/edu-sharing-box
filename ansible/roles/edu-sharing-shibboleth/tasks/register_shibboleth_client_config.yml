@@ -1,0 +1,24 @@
+- name: Register shibboleth client configuration.
+  become: true
+  when: repository_volume_config_node_path.stdout is defined and repository_volume_config_node_path.stdout != ""
+  block:
+    - name: Set shibboleth client.config configuration
+      xml:
+        path: "{{ repository_volume_config_node_path.stdout }}/defaults/client.config.xml"
+        xpath: "{{ item.xpath }}"
+        value: "{{ item.value }}"
+        state: "{{ 'absent' if remove_shibboleth_config  | default(false) else 'present' }}"
+        pretty_print: yes
+      loop:
+        # - xpath: /config/values/loginUrl # We don't need this key when remove_shibboleth_config is true
+        #   value: "{{ edu_login_shib_url }}"
+        - xpath: /config/values/loginAllowLocal # This key is always required
+          value: "{{ edu_login_allow_local }}"
+        # - xpath: /config/values/loginProvidersUrl # Remove this key if remove_shibboleth_config is true
+        #   value: "{{ edu_login_providers_url | default('') }}"
+        # - xpath: /config/values/loginProviderTargetUrl # Remove this key if remove_shibboleth_config is true
+        #   value: "{{ edu_login_provider_target_url | default('') }}"
+        # - xpath: /config/values/logout/url # Remove this key if remove_shibboleth_config is true
+        #   value: "{{ shibboleth_sp_handler_url }}/Logout?return={{ edu_sharing_url }}/components/login"
+        # - xpath: /config/values/logout/destroySession # Remove this key if remove_shibboleth_config is true
+        #   value: "true"

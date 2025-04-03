@@ -1,0 +1,17 @@
+---
+- name: Remove the Ansible managed block from the file
+  become: true
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU SHARING SHIBBOLETH CONFIGURATION"
+    state: absent # This removes the block
+
+- name: Remove Environment variables
+  include_tasks: config-env.yml
+  vars:
+    comment_out_env_variables: true
+
+- name: Remove shibboleth settings in client.config.xml file.
+  include_tasks: register_shibboleth_client_config.yml
+  vars:
+    remove_shibboleth_config: true

@@ -1,0 +1,22 @@
+- name: Register shibboleth.
+  become: true
+  when: repository_volume_config_node_path.stdout is defined and repository_volume_config_node_path.stdout != ""
+  block:
+    - name: Ensures sso-context-dir exists
+      file: path='{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/classes/org/edu_sharing/spring' state=directory
+
+    - name: Copy edu-sharing-sso-context.xml
+      copy:
+        src: "{{ edu_sso_context_path }}"
+        dest: "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/classes/org/edu_sharing/spring/edu-sharing-sso-context.xml"
+
+    - name: Check if edu-sharing_spring.jar exists
+      stat:
+        path: "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/lib/edu-sharing_spring.jar"
+      register: edu_sharing_spring_jar_stat_result
+
+    - name: Update edu-sharing-sso-context.xml in spring-configuration
+      command:
+        chdir: "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/classes"
+        cmd: "{{ java_home }}/bin/jar uf {{ repository_config_edu_sharing_path.stdout }}/WEB-INF/lib/edu-sharing_spring.jar org/edu_sharing/spring/edu-sharing-sso-context.xml"
+      when: edu_sharing_spring_jar_stat_result.stat.exists

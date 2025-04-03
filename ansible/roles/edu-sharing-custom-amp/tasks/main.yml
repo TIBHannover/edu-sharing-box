@@ -45,3 +45,4 @@
     apply:
       tags:
         - edu-sharing-custom-amp
+  when: "'edu-sharing-custom-amp' in ansible_run_tags"
