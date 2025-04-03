@@ -1,35 +1,34 @@
-# Ansible Role: edu-sharing-splash
+# Ansible Role: edu-sharing-shibboleth
 
-> By default edu-sharing-splash is not activated, in order to activate you need to make `enable_edu_sharing_splash: true`
+> By default edu-sharing-shibboleth is not activated, in order to activate you need to make `install_shibboleth: true`
 
-
-The `edu-sharing-splash` role is used to install the splash. [Splash](https://splash.readthedocs.io/en/stable/index.html) is a javascript rendering service, used to create  screenshots of html pages.
+The `edu-sharing-shibboleth` role is responsible for activating Shibboleth in edu-sharing. This role will only be enabled if Shibboleth is installed and running on the same server as edu-sharing.  
 
 ## Implementation
 
-The `edu-sharing-splash` role is included in the playbook [system.yml](../../../system.yml).
+The `edu-sharing-shibboleth` role is included in the playbook [system.yml](../../../system.yml).
 In order to activate the restore script you need to make true the `install_splash` in `all.yml` variables.
 
 ```yaml
 - hosts: edusharing
   roles:
-    - role: edu-sharing-splash
+    - role: edu-sharing-shibboleth
       tags: 
-        - edu-sharing-splash
+        - edu-sharing-shibboleth
 
 ```
 
-or we just want to run only the `edu-sharing-splash` then we run:
+or we just want to run only the `edu-sharing-shibboleth` then we run:
 
 ```sh
-ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-splash"
+ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-shibboleth"
 ```
-This will skip other roles and run only the edu-sharing-splash role
+This will skip other roles and run only the edu-sharing-shibboleth role
 
 
 ## Role Variables
 
-The `edu-sharing-splash` role allows you to customize certain variables according to your requirements. 
+The `edu-sharing-shibboleth` role allows you to customize certain variables according to your requirements. 
 
 Here are the default variables:
 
@@ -52,7 +51,7 @@ The `tasks/` directory contains all the ansible tasks.
 
 - `main.yml`: The main task or entry task for ansible.
 - `install.yml`: Install and run splash.
-- `register_apache`: Register the edu-sharing-splash, so we can access from outside.
+- `register_apache`: Register the edu-sharing-shibboleth, so we can access from outside.
 - `register_splash`: Register splash into edu-sharing.
 - `unregister`: Rollback the configuration, if the `enable_edu_connector` is false or not defined.
 
