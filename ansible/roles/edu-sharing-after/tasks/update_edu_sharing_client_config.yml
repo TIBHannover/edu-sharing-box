@@ -14,4 +14,6 @@
         pretty_print: yes
       loop:
         - xpath: /config/values/logout/destroySession
-          value: "true"
+          value: "{{ edu_logout_destroy_session| default('true',true) }}"
+        - xpath: /config/values/loginAllowLocal # This key is always required
+          value: "{{ edu_login_allow_local | default('true',true) }}"
