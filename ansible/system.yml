@@ -81,6 +81,9 @@
     - role: edu-sharing-splash
       tags:
         - edu-sharing-splash
+    - role: edu-sharing-shibboleth
+      tags:
+        - edu-sharing-shibboleth
 
 - hosts: opencast
   roles:
@@ -94,7 +97,7 @@
   roles:
     - role: shibboleth
       when: install_shibboleth is defined and install_shibboleth
-      tags: 
+      tags:
         - shibboleth
   tags:
     - root-task
@@ -105,3 +108,18 @@
       when: install_antivirus is defined and install_antivirus
   tags:
     - antivirus-clamav
+
+# **Final Cleanup (edu-sharing-after)**
+- hosts: edusharing
+  become: yes
+  post_tasks:
+    - name: Run edu-sharing-after as the last task
+      include_role:
+        name: edu-sharing-after
+        apply:
+          tags:
+            - edu-sharing-after
+            - always
+      tags:
+        - edu-sharing-after
+        - always
