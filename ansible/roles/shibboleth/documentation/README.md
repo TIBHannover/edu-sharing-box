@@ -22,6 +22,64 @@ ansible-playbook -v -i <host> ansible/system.yml --tags "shibboleth"
 ```
 This will skip other roles and run only the shibboleth role
 
+## Role Variables
+
+The `edu-sharing-splash` role allows you to customize certain variables according to your requirements. 
+
+Here are the default variables:
+
+```yml
+  ---
+  # Set your entityID here
+  shibboleth_sp_entity_id: "https://box.edusharing/shibboleth"
+
+  shibboleth_sp_config_template: dfn-aai-shibboleth2.xml.j2 # the template that should be used for shibboleth2.xml
+  shibboleth_sp_attr_checker_template: attrChecker.html.j2  # the template that should be used for attrChecker.html
+  shibboleth_sp_error_css_file: shib-error.css              # stylesheet used for error pages
+  shibboleth_sp_attribute_map_file: attribute-map.xml       # the file that is used as /etc/shibboleth/attribute-map.xml
+  shibboleth_sp_metadata_provider_certificate: https://www.aai.dfn.de/metadata/dfn-aai.pem # DFN AAI certificate that should be used for validation of the metadata
+
+  # from here: internal default variables - no need to set them
+  shibboleth_switchaai_apt_source_debian_stretch_package_url: https://pkg.switch.ch/switchaai/debian/dists/stretch/main/binary-all/misc/switchaai-apt-source_1.0.0~bpo9+1_all.deb
+  shibboleth_switchaai_apt_source_debian_buster_package_url: https://pkg.switch.ch/switchaai/debian/dists/buster/main/binary-all/misc/switchaai-apt-source_1.0.0_all.deb
+
+  # Set the path to your (key and certificate) credential files.
+  # If not set a new (tmp) cert and key file will be generated. You can find these files in /etc/shibboleth/tmp-cert.pem and /etc/shibboleth/tmp-key.pem.
+  # If you need to replace the existing credential files, you can
+  #   - add the new credentials at the end of the list
+  #   - wait 24h
+  #   - set the new credentials at the beginning of the list, set the old credentials at the end
+  #   - wait 24h
+  #   - remove the old credentials
+  # -> see https://doku.tid.dfn.de/de:certificates#zertifikatstausch
+  shibboleth_sp_credential_files:
+      - certificate_file: shib-sp_4050-cert.pem
+        key_file: shib-sp_4050-key.pem
+  #  - certificate_file: /some/path/testcert.pem
+  #    key_file: /some/path/test.key.pem
+  #  - certificate_file: /some/path/test2
+  #    key_file: /some/path/test2.key
+
+  # Set your mail support address here
+  shibboleth_sp_support_contact: pleasechange@nodomain.com
+  # Set the location to your help html page here
+  shibboleth_sp_help_location: /contact.html
+  #shibboleth_sp_discovery_service_url: https://wayf.aai.dfn.de/DFN-AAI-Test/wayf # TEST
+  shibboleth_sp_discovery_service_url: https://wayf.aai.dfn.de/DFN-AAI-Basic/wayf # PROD
+  #shibboleth_sp_metadata_provider_url: http://www.aai.dfn.de/metadata/dfn-aai-test-metadata.xml # TEST
+  shibboleth_sp_metadata_provider_url: http://www.aai.dfn.de/metadata/dfn-aai-idp-metadata.xml # PROD
+
+
+  shibboleth_sp_remote_user_attributes: 'eduPersonUniqueId eppn' # 'eduPersonUniqueId persistent-id eppn' # attributes that should be used for the remote user - see https://wiki.shibboleth.net/confluence/display/SP3/ApplicationDefaults -> REMOTE_USER for details
+
+  shibboleth_sp_error_templates_logo_location: 'https://wiki.aai.dfn.de/_media/logo.png'    # logo that is used in the error templates
+
+
+  shibboleth_sp_sessions_handler_ssl: true                  # Set Sessions attribute handlerSSL
+  shibboleth_sp_sessions_cookie_props: '{{ "https" if shibboleth_sp_sessions_handler_ssl else "http" }}' # Set Sessions attribute cookieProps
+```
+
+
 ## Tasks
 
 The `tasks/` directory contains all the Ansible tasks.
