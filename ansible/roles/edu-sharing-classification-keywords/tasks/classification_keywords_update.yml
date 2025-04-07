@@ -1,0 +1,23 @@
+---
+- name: Add or update edu sharing classification keywords.
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU SHARING CLASSIFICATION KEYWORDS"
+    insertafter: BOF
+    block: |
+      jobs.entries += {
+          name: "Import Factual Term Marc 21",
+          class: "org.edu_sharing.repository.server.jobs.quartz.ImporterJob",
+          trigger: "Cron[0 0 22 * * ?]",
+          params: {
+              "oai_base_url": "[https://services.dnb.de/oai/repository]",
+              "oai_metadata_prefix": "MARC21-xml",
+              "sets": "authorities:sachbegriff",
+              "record_handler": "org.edu_sharing.repository.server.importer.RecordHandlerKeywordsDNBMarc",
+              "persistent_handler": "org.edu_sharing.repository.server.importer.PersistenHandlerKeywordsDNBMarc",
+              "importer_class": "org.edu_sharing.repository.server.importer.OAIPMHLOMImporter",
+              "period_in_days": {{ classification_keywords_update_interval | default("10",true)}},
+              "username": "admin"
+          }
+      }
+  when: activate_classification_keywords_update is defined and activate_classification_keywords_update

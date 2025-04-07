@@ -1,10 +1,8 @@
 ---
 
-- name: create edu-sharing.conf
-  template:
-    src: edu-sharing.conf.j2
-    dest: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
-  when: edu_config_file == 'edu-sharing.conf'
+- include_tasks: add_repository_statistics.yml
+  tags:
+    - repository-statistics
 
 - include_tasks: youtube.yml  
   when: connect_content_youtube

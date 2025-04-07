@@ -53,7 +53,7 @@ The `tasks/` directory contains all the ansible tasks.
 - `install.yml`: Install and run splash.
 - `register_apache`: Register the edu-sharing-shibboleth, so we can access from outside.
 - `register_splash`: Register splash into edu-sharing.
-- `unregister`: Rollback the configuration, if the `enable_edu_connector` is false or not defined.
+- `unregister`: Rollback the configuration, if the `enable_edu_sharing_splash` is false or not defined.
 
 ## Templates
 

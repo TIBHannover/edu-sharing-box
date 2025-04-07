@@ -1,0 +1,15 @@
+---
+- name: Add or update repository statistics.
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING REPOSITORY STATISTICS"
+    insertbefore: BOF
+    block: |
+      repository: {
+          // statistics endpoints (for providing public information about content counts, user counts, etc.)
+          statistics:{
+              api:{
+                  enabled:{{ edu_enable_statistics_api | default('false',true) }}
+              }
+          }
+      }

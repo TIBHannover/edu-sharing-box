@@ -125,8 +125,7 @@ The `tasks/` directory contains all the ansible tasks.
 
  It contains: 
 
- 1. `edu-sharing.conf.j2` Used to override edu-sharing configuration.
- 2. `lms.properties.xml.j2` Used to add and activate LMS  platforms.
- 3. `oersi.properties.xml` Used to add and activate OERSI patform.
- 4. `pixabay.properties.xml` Used to add and activate pixbay patform.
- 3. `youtube.properties.xml` Used to add and activate youtube patform.
+ 1. `lms.properties.xml.j2` Used to add and activate LMS  platforms.
+ 2. `oersi.properties.xml` Used to add and activate OERSI patform.
+ 3. `pixabay.properties.xml` Used to add and activate pixbay patform.
+ 4. `youtube.properties.xml` Used to add and activate youtube patform.

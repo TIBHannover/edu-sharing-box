@@ -32,12 +32,25 @@ Here are the default variables:
 
 
 ```yaml
-# Override the default local file 
-classification_keywords_force_download: false
+    ---
+    # define config for classifications keywords
+    # activate the classification-keyword (true/false)
+    activate_classification_keywords: false
 
-# Classification-Keywords-URL (for download)
-classification_keywords_url: "https://data.dnb.de/GND/authorities-gnd-sachbegriff_dnbmarc_20240213.mrc.xml.gz"
+    # activate the classification-keyword update (true/false)
+    activate_classification_keywords_update: false
 
+    # define the classification-keyword interval in days = 1 means every day
+    classification_keywords_update_interval: 15
+
+    # classification keyword default file
+    edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
+
+    # Override the default local file
+    classification_keywords_force_download: false
+
+    # Classification-Keywords-URL (for download)
+    classification_keywords_url: "https://data.dnb.de/GND/authorities-gnd-sachbegriff_dnbmarc_20240213.mrc.xml.gz"
 ```
 
 ## Tasks
@@ -47,3 +60,12 @@ The `tasks/` directory contains all the ansible tasks.
 1. `main`: The main task or entry task for ansible.
 2. `classification-keyword.yml`: Used to download the classification-keywords from  `classification_keywords_url` url and extract the `xml` file into server.
 3. `jobs.yml`: It's used to register the classification keywords in edu-sharing
+4. `classification_keywords_update.yml`: Register classification keyword in `edu-sharing.override.conf`
+5. `register_apache_vhost.yml`: Add classification keyword vhost in apache configuration
+6. `unregister.yml`: Rollback everything when we decide to deactivate this role
+
+## Templates
+
+The `template/` directory contains template files.
+
+1. `edu_classification.conf.j2`: apache configuration file.

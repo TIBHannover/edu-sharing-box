@@ -1,0 +1,17 @@
+---
+- name: Remove the Ansible managed block from the file
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU SHARING CLASSIFICATION KEYWORDS"
+    state: absent # This removes the block
+
+- name: Remove edu_splash virtual host configuration
+  file:
+    path: "/etc/apache2/sites-available/edu_classification.conf"
+    state: absent
+  notify: restart apache2
+
+- name: delete old classification_keywords xml file
+  file:
+    path: "/var/www/{{edu_classification_keyword_path}}"
+    state: absent

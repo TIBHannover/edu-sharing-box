@@ -1,5 +1,18 @@
 ---
-# Override the default local file 
+# define config for classifications keywords
+# activate the classification-keyword (true/false)
+activate_classification_keywords: false
+
+# activate the classification-keyword update (true/false)
+activate_classification_keywords_update: false
+
+# define the classification-keyword interval in days = 1 means every day
+classification_keywords_update_interval: 15
+
+# classification keyword default file
+edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
+
+# Override the default local file
 classification_keywords_force_download: false
 
 # Classification-Keywords-URL (for download)

@@ -1,6 +1,10 @@
 ---
 - name: Include the task file to fetch docker paths and wait for required files
   include_tasks: fetch_docker_paths.yml
+  vars:
+    extra_required_paths:
+      - "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+      - "{{repository_volume_config_cluster_path.stdout}}/applications/ccapp-registry.properties.xml"
   tags:
     - edu-sharing-cluster
 

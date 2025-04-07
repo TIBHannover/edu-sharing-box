@@ -1,17 +1,49 @@
 ---
+# - include_tasks: classification-keyword.yml
+#   args:
+#     apply:
+#       become: yes
+#   when: activate_classification_keywords is defined and activate_classification_keywords
+#   tags:
+#     - edu-sharing-classification-keywords
 
-- include_tasks: classification-keyword.yml
-  args:
+# - include_tasks: jobs.yml
+#   args:
+#     apply:
+#       become: yes
+#   when: activate_classification_keywords is defined and activate_classification_keywords
+#   tags:
+#     - edu-sharing-classification-keywords
+
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: fetch_docker_paths
     apply:
-      become: yes
-  when: activate_classification_keywords is defined and activate_classification_keywords
-  tags: 
+      tags:
+        - edu-sharing-classification-keywords
+  vars:
+    extra_required_paths:
+      - "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    store_docker_paths_globally: true
+  tags:
     - edu-sharing-classification-keywords
 
-- include_tasks: jobs.yml
-  args:
-    apply:
-      become: yes
+- name: Install edu-sharing-classification-keywords
+  become: true
+  block:
+    - include_tasks: unregister.yml
+    - include_tasks: classification-keyword.yml
+    - include_tasks: jobs.yml
+    - include_tasks: classification_keywords_update.yml
+    - include_tasks: register_apache_vhost.yml
   when: activate_classification_keywords is defined and activate_classification_keywords
-  tags: 
+  tags:
+    - edu-sharing-classification-keywords
+
+- name: Unregister du-sharing-classification-keywords from edu-sharing.
+  become: true
+  block:
+    - include_tasks: unregister.yml
+  when: activate_classification_keywords is defined and not activate_classification_keywords
+  tags:
     - edu-sharing-classification-keywords

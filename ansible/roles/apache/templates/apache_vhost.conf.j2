@@ -26,14 +26,7 @@
           AllowOverride All
           Require all granted
         </Directory>
-{% if activate_classification_keywords is defined and activate_classification_keywords %}
-        DocumentRoot /var/www
-        <Directory /var/www/{{edu_classification_keyword_path | dirname }} >
-          Options Indexes FollowSymLinks MultiViews
-          AllowOverride All
-          Require all granted
-        </Directory>
-{% endif %}
+        
         IncludeOptional /etc/apache2/sites-available/edu_*.conf
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined

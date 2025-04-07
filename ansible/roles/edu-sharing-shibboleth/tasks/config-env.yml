@@ -22,7 +22,7 @@
     state: present
     regexp: '^\s*#?\s*{{ item.key }}='
     line: "{{ item.key }}={{ item.value }}"
-  # no_log: true
+  no_log: true
   when: 
     - item.value is defined and item.value != ""
     - not comment_out_env_variables | default(false)
@@ -35,7 +35,7 @@
     regexp: '^\s*{{ item.key }}='  # Match only non-commented variables, ignoring spaces
     backrefs: true
     line: "#{{ item.key }}={{ item.value }}"
-  # no_log: true
+  no_log: true
   when: 
     - item.value is defined and item.value != ""
     - comment_out_env_variables | default(false)
