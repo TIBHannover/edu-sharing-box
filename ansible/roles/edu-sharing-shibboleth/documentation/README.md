@@ -65,6 +65,7 @@ The `edu-sharing-shibboleth` role allows customization of certain variables. Bel
     - key: REPOSITORY_SERVICE_AUTH_EXTERNAL_LOGOUT
       value: '{{ shibboleth_sp_base_path +"/Shibboleth.sso/Logout?return=" +  edu_sharing_url + "/components/login"}}'
 
+  security_sso_saml_metadata_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/oer/shibboleth/metadata.xml'
 ```
 
 ## Tasks
