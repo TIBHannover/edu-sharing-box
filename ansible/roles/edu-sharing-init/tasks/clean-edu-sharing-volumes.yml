@@ -74,6 +74,7 @@
     - "{{ edu_sharing_docker_project_name }}_repository-service-volume-config-edu-sharing"
     - "{{ edu_sharing_docker_project_name }}_repository-service-volume-bin-plugins"
     - "{{ edu_sharing_docker_project_name }}_repository-service-volume-amps"
+    - "{{ edu_sharing_docker_project_name }}_repository-service-volume-config-cluster"
   ignore_errors: true  # Ensures playbook continues even if volumes do not exist
   when: >
     system_etc_env['EDU_SHARING_VERSION'] is defined and
