@@ -11,5 +11,5 @@
   become: true
   blockinfile:
     path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
-    marker: "//{mark} BEGIN EDU SHARING SPLASH CONFIGURATION"
+    marker: "//{mark} EDU SHARING SPLASH CONFIGURATION"
     state: absent  # This removes the block

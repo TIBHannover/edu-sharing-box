@@ -3,11 +3,9 @@
   become: true
   blockinfile:
     path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
-    marker: "//{mark} BEGIN EDU SHARING SPLASH CONFIGURATION"
-    insertafter: '^\s*repository:\s*{'
+    marker: "//{mark} EDU SHARING SPLASH CONFIGURATION"
+    insertafter: EOF
     block: |
-      communication: {
-          splash: {
-              url: "{{ edu_sharing_splash_url }}"
-          }
+      repository.communication.splash = {
+        url: "{{ edu_sharing_splash_url }}"
       }
