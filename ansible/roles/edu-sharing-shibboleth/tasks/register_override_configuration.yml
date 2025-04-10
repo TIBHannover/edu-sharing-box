@@ -1,5 +1,5 @@
 ---
-- name: Add or update edu sharing splash.
+- name: Add or update edu sharing shibboleth.
   become: true
   blockinfile:
     path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
@@ -7,16 +7,13 @@
     insertbefore: BOF
     block: |
       spring.profiles.active=samlEnabled
-      security: {
-        sso: {
-          saml: {
-            useHomeApplicationKeys: true
-            idp: {
-              metadata: {
-                  url: "https://test.service.tib.eu/oer/shibboleth/metadata.xml"
-                  # url: "http://192.168.98.101/oer/metadata.xml"
-              }
-            }
+      security.sso.saml = {
+        useHomeApplicationKeys: {{ security_sso_saml_use_home_application_keys | default(true, true) | string | lower }}
+        idp: {
+          metadata: { 
+            url: "{{ security_sso_saml_metadata_url }}"
           }
         }
       }
+  when: security_sso_saml_metadata_url is defined and security_sso_saml_metadata_url | length > 0
+

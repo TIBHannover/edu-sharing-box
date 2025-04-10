@@ -28,3 +28,6 @@ edu_sharing_shibboleth_env_variable:
     value: '{{ "true"}}'
   - key: REPOSITORY_SERVICE_HOME_AUTH_EXTERNAL_LOGOUT_REDIRECT_URL
     value: '{{edu_sharing_url + "/components/login"}}'
+
+
+security_sso_saml_metadata_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/oer/shibboleth/metadata.xml'
