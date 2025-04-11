@@ -1,0 +1,8 @@
+---
+
+- name: Apache - add edu-connector virtual hosts
+  become: true
+  template:
+    src: "{{edu_connector_virtual_host_path | default('edu_connector.conf.j2',true)}}"
+    dest: '/etc/apache2/sites-available/edu_connector.conf'
+  notify: restart apache2

@@ -1,0 +1,121 @@
+---
+- name: Check edu-sharing version.
+  fail:
+    msg: "Your edu-sharing version is {{ edu_version }}. Please ensure it is 9.0.0 or higher"
+  when: edu_version is defined and  (edu_version | regex_replace('-RC[0-9]+', '') ) is version_compare('9.0.0', '<')
+  tags:
+    - edu-sharing-plugin-mongo
+
+# Ensure unzip package is installed
+- name: Ensure unzip is present
+  package:
+    name: unzip
+  become: true
+  tags:
+    - packages
+    - root-task
+    - edu-sharing-plugin-mongo
+
+- name: Ensure the java_home variable is set.
+  include_role:
+    name: java
+    tasks_from: get_java_home
+    apply:
+      tags:
+        - edu-sharing-plugin-mongo
+  when: java_home is not defined
+  tags:
+    - edu-sharing-plugin-mongo
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: set_edu_docker_inst_dir
+    apply:
+      tags:
+        - edu-sharing-plugin-mongo
+  tags:
+    - edu-sharing-plugin-mongo
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: load_version_variables
+    apply:
+      tags:
+        - edu-sharing-plugin-mongo
+  tags:
+    - edu-sharing-plugin-mongo
+
+- name: Remove all plugin mongo service containers.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E '{{plugin_mongo_service_docker_project_name}}' | xargs -r docker stop | xargs -r docker rm"
+  tags:
+    - edu-sharing-plugin-mongo
+
+# Ensure installation directory exists
+- name: Ensure plugin service installation directory exists
+  file:
+    path: "{{ plugin_mongo_service_install_dir }}"
+    state: directory
+  tags:
+    - edu-sharing-plugin-mongo
+
+# Load version variables
+- name: Load version variables
+  include_vars:
+    file: "../vars/versions/{{ plugin_mongo_service_version | default('default') }}.yml"
+  tags:
+    - edu-sharing-plugin-mongo
+
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: fetch_docker_paths
+    apply:
+      tags:
+        - edu-sharing-plugin-mongo
+  vars:
+    extra_required_paths:
+    - "{{ repository_volume_config_plugins.stdout }}"
+    - "{{ repository_volume_docker_plugins.stdout }}"
+    - "{{ repository_service_volume_amps.stdout }}/alfresco/2/"
+    - "{{ repository_service_volume_amps.stdout }}/edu-sharing/1/"
+    - "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/lib/"
+    store_docker_paths_globally: true
+  tags:
+    - edu-sharing-plugin-mongo
+
+# Include download tasks
+- name: Download and install required plugins
+  block:
+    - include_tasks: cleanup.yml
+    - include_tasks: download-config-plugin.yml
+    - include_tasks: download-docker-plugin.yml
+    - include_tasks: download-plugin-mongo-service-amp.yml
+    - include_tasks: download-plugin-mongo-alfresco-amp.yml
+    - include_tasks: config-env.yml
+    - include_tasks: download-and-install-docker-compose.yml
+  when: enable_plugin_mongo_service is defined and enable_plugin_mongo_service
+  tags:
+    - edu-sharing-plugin-mongo
+
+- name: Cleanup files and folder when when disabling plugin mongo service.
+  include_tasks: cleanup.yml
+  when: enable_plugin_mongo_service is defined and not enable_plugin_mongo_service
+  tags:
+    - edu-sharing-plugin-mongo
+
+- name: Restart edu-sharing service in docker.
+  command:
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: "{{ edu_sharing_restart_command | replace('{service}', plugin_mongo_repository_service | default('repository-service')) }}"
+  tags:
+    - edu-sharing-plugin-mongo
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: wait_services_to_be_up
+    apply:
+      tags:
+        - edu-sharing-plugin-mongo
+  when: "'edu-sharing-plugin-mongo' in ansible_run_tags"
+  tags:
+    - edu-sharing-plugin-mongo

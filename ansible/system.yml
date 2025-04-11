@@ -1,78 +1,89 @@
 ---
 - hosts: all
-  become: yes
   roles:
-    - set-timezone
+    - role: set-timezone
+      become: yes
+    - role: init-facts
+      tags:
+        - init-facts
+    - role: init-script-dir
   tags:
-    - root-task
+    - always
 
-- hosts: all
-  roles:
-    - init-facts
-
-- hosts: renderingservice, edusharing,educonnector
+- hosts: edusharing
   become: yes
   roles:
     - apache
   tags:
     - root-task
-    - shibboleth
+    - apache
 
-- hosts: edusharing
+- hosts: edusharing,opencast,antivirus
   become: yes
   roles:
     - role: geerlingguy.docker
-      when: edu_version is defined and edu_version is version('7.0.0','>=')
       vars:
         docker_users:
-          - "{{ work_user }}"
-    - role: postgresql
-      when: alfresco_db_type == 'postgresql' and  edu_version is version('7.0.0','<')
-    - role: mariadb
-      when: alfresco_db_type == 'mariadb' and  edu_version is version('7.0.0','<')
+          - "{{ work_user | default('vagrant')  }}"
   tags:
+    - docker-installation
+    - docker
     - root-task
-
-- hosts: alfrescosolr4, edusharing
-  roles:
-    - java
-    - role: tomcat
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-      tags: [tomcat]
-
-- hosts: alfrescosolr4
-  roles:
-    - role: alfresco-solr4
-      when: edu_version is defined and edu_version is version('7.0.0','<')
 
 - hosts: edusharing
   roles:
-    - edu-sharing
-    - role: backup
-      tags: backup
-
-- hosts: renderingservice, opencast
-  become: yes
-  roles:
-    - role: geerlingguy.docker
-      when: (install_splash is defined and install_splash) or (install_opencast_importer is defined and install_opencast_importer)
-      vars:
-        docker_users:
-          - "{{ work_user }}"
-
-- hosts: renderingservice
-  become: yes
-  roles:
-    - role: postgresql
-      when: esrender_db_type == 'postgresql' and edu_version is version('7.0.0','<')
-    - role: mariadb
-      when: esrender_db_type == 'mariadb' and edu_version is version('7.0.0','<')
-    - role: renderingservice-installation
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-    - role: splash
-      when: install_splash is defined and install_splash
-  tags:
-    - root-task
+    - role: java
+      become: yes
+      tags: [java]
+    - role: edu-sharing-init
+      tags:
+        - edu-sharing-init
+    - role: edu-sharing-custom-amp
+      tags:
+        - edu-sharing-custom-amp
+    - role: edu-sharing-migration
+      tags:
+        - edu-sharing-migration
+    - role: edu-sharing-customization
+      tags:
+        - edu-sharing-customization
+    - role: edu-sharing-rendering-service
+      tags:
+        - edu-sharing-rendering-service
+    - role: edu-sharing-search-elastic
+      tags:
+        - edu-sharing-search-elastic
+    - role: edu-sharing-search-solr
+      tags:
+        - edu-sharing-search-solr
+    - role: edu-sharing-notification
+      tags:
+        - edu-sharing-notification
+    - role: edu-sharing-plugin-mongo
+      tags:
+        - edu-sharing-plugin-mongo
+    - role: edu-sharing-connector
+      tags:
+        - edu-sharing-connector
+    - role: edu-sharing-classification-keywords
+      tags:
+        - edu-sharing-classification-keywords
+    - role: edu-sharing-mirror-vocabs
+      tags:
+        - edu-sharing-mirror-vocabs
+    - role: edu-sharing-backup
+      tags:
+        - edu-sharing-backup
+    - role: edu-sharing-restore
+      when: edu_sharing_restore_from_backup is defined and edu_sharing_restore_from_backup
+      tags:
+        - edu-sharing-restore
+    - role: edu-sharing-splash
+      tags:
+        - edu-sharing-splash
+    - role: edu-sharing-shibboleth
+      tags:
+        - edu-sharing-shibboleth
 
 - hosts: opencast
   roles:
@@ -81,66 +92,34 @@
   tags:
     - opencast
 
-- hosts: renderingservice
-  roles:
-    - role: renderingservice-init
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-    - role: renderingservice-registration
-      when: edu_version is defined and edu_version is version('7.0.0','<')
-
-- hosts: onlyoffice
-  roles:
-    - role: geerlingguy.docker
-      become: yes 
-      when: enable_only_office is defined and enable_only_office
-      vars:
-        docker_users:
-          - "{{ work_user }}"
-    - role: onlyoffice
-      when: enable_only_office is defined and enable_only_office
-  tags:
-    - onlyoffice
-
-- hosts: educonnector
-  roles:
-    - role: geerlingguy.docker
-      become: yes
-      when: enable_edu_connector is defined and enable_edu_connector
-      vars:
-        docker_users:
-          - "{{ work_user | default('vagrant') }}"
-    - role: edu-connector
-      when: enable_edu_connector is defined and enable_edu_connector
-  tags:
-    - edu-connector
-
-- hosts: edusharing
-  roles:
-    - role: moodle-registration
-      when: register_moodle
-  tags:
-    - moodle-registration
-    
 - hosts: edusharing
   become: yes
   roles:
     - role: shibboleth
       when: install_shibboleth is defined and install_shibboleth
-      tags: shibboleth
+      tags:
+        - shibboleth
   tags:
     - root-task
 
 - hosts: antivirus
   roles:
-    - role: geerlingguy.docker
-      become: yes
-      when: install_antivirus is defined and install_antivirus
-      vars:
-        docker_users:
-          - "{{ work_user | default('vagrant') }}"
-    - role: antivirus
+    - role: antivirus-clamav
       when: install_antivirus is defined and install_antivirus
   tags:
-    - antivirus
-    - clamav
-    - clamav-docker
+    - antivirus-clamav
+
+# **Final Cleanup (edu-sharing-after)**
+- hosts: edusharing
+  become: yes
+  post_tasks:
+    - name: Run edu-sharing-after as the last task
+      include_role:
+        name: edu-sharing-after
+        apply:
+          tags:
+            - edu-sharing-after
+            - always
+      tags:
+        - edu-sharing-after
+        - always

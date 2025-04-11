@@ -5,26 +5,6 @@
 {% if apache_conf_usecanonicalname is defined and apache_conf_usecanonicalname is not none and apache_conf_usecanonicalname != "" %}
         UseCanonicalName  {{ apache_conf_usecanonicalname }}
 {% endif %}
-{% if edu_version is defined and edu_version is version_compare('7.0.0','<') %}
-{% if esrender_vhost is defined and esrender_vhost %}
-        DocumentRoot {{esrender_document_root}}
-        <Directory {{esrender_base_dir}}/>
-          Options Indexes FollowSymLinks MultiViews
-          AllowOverride All
-          Require all granted
-        </Directory>
-        Alias "/edu-sharing/esrender" "{{esrender_base_dir}}"
-        ProxyPass /edu-sharing/esrender        !
-{% else %}
-        ProxyPass /edu-sharing/esrender        http://{{ esrender_host }}/edu-sharing/esrender
-{% endif %}
-
-{% if es_proxy_vhost is defined and es_proxy_vhost %}
-        ProxyPass /alfresco     ajp://localhost:{{tomcat_ajp_port}}/alfresco
-        ProxyPass /share        ajp://localhost:{{tomcat_ajp_port}}/share
-        ProxyPass /edu-sharing  ajp://localhost:{{tomcat_ajp_port}}/edu-sharing
-{% endif %}
-{% elif edu_version is defined and edu_version is version_compare('7.0.0','>=') %}
        ProxyIOBufferSize 65536
        <Location /edu-sharing>
                 ProxyPass ajp://localhost:8102/edu-sharing
@@ -39,7 +19,6 @@
               ProxyPass http://localhost:9100/esrender
               ProxyPassReverse http://localhost:9100/esrender
        </Location>
-{% endif %}
 
         DocumentRoot /var/www
         <Directory /var/www >
@@ -47,38 +26,8 @@
           AllowOverride All
           Require all granted
         </Directory>
-{% if activate_classification_keywords is defined and activate_classification_keywords %}
-        DocumentRoot /var/www
-        <Directory /var/www/{{edu_classification_keyword_path | dirname }} >
-          Options Indexes FollowSymLinks MultiViews
-          AllowOverride All
-          Require all granted
-        </Directory>
-{% endif %}
-{% if enable_only_office is defined and enable_only_office %}
-        Define VPATH {{onlyoffice_v_path | default('/onlyoffice',true)}}
-        Define DS_ADDRESS 127.0.0.1:{{onlyoffice_port | default('9600',true)}}
-
-        <Location ${VPATH}>
-                Require all granted
-                SetEnvIf Host "^(.*)$" THE_HOST=$1
-                RequestHeader setifempty X-Forwarded-Proto http
-                RequestHeader setifempty X-Forwarded-Host %{THE_HOST}e
-                RequestHeader edit X-Forwarded-Host (.*) $1${VPATH}
-                ProxyAddHeaders Off
-                #ProxyPassMatch (.*)(\/websocket)$ "ws://127.0.0.1:{{onlyoffice_port | default('9600',true)}}/$1$2"
-                ProxyPass "http://${DS_ADDRESS}/"
-                ProxyPassReverse "http://${DS_ADDRESS}/"
-        </Location>
-{% endif %}
-{% if enable_edu_connector is defined and enable_edu_connector %}
-        <Location {{edu_connector_path | default("/edu-connector",true)}}>
-              ProxyPass http://localhost:{{edu_connector_internal_port | default('9200',true)}}/
-              ProxyPassReverse http://localhost:{{edu_connector_internal_port | default('9200',true)}}/
-       </Location>
-{% endif %}
-
-
+        
+        IncludeOptional /etc/apache2/sites-available/edu_*.conf
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

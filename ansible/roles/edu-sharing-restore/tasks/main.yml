@@ -1,0 +1,34 @@
+---
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: set_edu_docker_inst_dir
+    apply:
+      tags:
+        - edu-sharing-restore
+  tags:
+    - edu-sharing-restore
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: load_version_variables
+    apply:
+      tags:
+        - edu-sharing-restore
+  tags:
+    - edu-sharing-restore
+
+- include_tasks: get_backup.yml
+  when: backup_folder is not defined and backup_folder == ""
+  tags: 
+    - edu-sharing-restore
+
+- debug:
+    var: backup_folder
+  tags: 
+    - edu-sharing-restore
+
+- include_tasks: restore.yml
+  when:  backup_folder is defined and backup_folder != ""
+  tags: 
+    - edu-sharing-restore

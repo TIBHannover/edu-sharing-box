@@ -1,0 +1,7 @@
+---
+- name: Apache - add edu-sharing-classification-keywords virtual hosts
+  template:
+    src: "{{edu_sharing_classification_keyword_virtual_host_path | default('edu_classification.conf.j2',true)}}"
+    dest: "/etc/apache2/sites-available/edu_classification.conf"
+  notify:
+    - restart apache2

@@ -1,0 +1,17 @@
+---
+- name: Include the task file to fetch docker paths and wait for required files
+  include_tasks: fetch_docker_paths.yml
+  vars:
+    extra_required_paths:
+      - "{{repository_config_edu_sharing_path.stdout}}/assets/images/"
+      - "{{repository_config_edu_sharing_path.stdout}}/assets/i18n/"
+  tags:
+    - edu-sharing-config
+
+- include_tasks: edu-sharing-assets.yml
+  args:
+    apply:
+      become: yes
+  when: (repository_config_edu_sharing_path.stdout is defined) and (repository_config_edu_sharing_path.stdout != "")
+  tags:
+    - edu-sharing-config

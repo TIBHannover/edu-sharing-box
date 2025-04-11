@@ -1,0 +1,40 @@
+---
+- include_role:
+    name: edu-sharing-init
+    tasks_from: set_edu_docker_inst_dir
+    apply:
+      tags:
+        - edu-sharing-search-elastic
+  tags:
+    - edu-sharing-search-elastic
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: load_version_variables
+    apply:
+      tags:
+        - edu-sharing-search-elastic
+  tags:
+    - edu-sharing-search-elastic
+
+- include_tasks: config-env.yml
+  when: search_elastics_environment_variable | default([], true) | length>0
+  tags: 
+    - edu-sharing-search-elastic
+
+- name: (Optional) Reset repository-search-elastic-index
+  shell: |
+    docker compose exec -T repository-search-elastic-index bash -c 'rm -rf /usr/share/elasticsearch/data/* || true' || true
+  args:
+    chdir: "{{ edu_docker_inst_dir }}"
+  when: "'edu-sharing-search-elastic-reset' in ansible_run_tags"
+  tags:
+    - edu-sharing-search-elastic-reset 
+
+- name: Restart repository-search-elastic-index and repository-search-elastic-tracker in docker.
+  command:
+    chdir: "{{ edu_docker_inst_dir }}"
+    cmd: "{{edu_sharing_restart_command | replace('{service}', service_elastic_search) }}"
+  no_log: true
+  tags:
+    - edu-sharing-search-elastic

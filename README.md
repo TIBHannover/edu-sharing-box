@@ -4,8 +4,6 @@
 Dieses Projekt bietet die Möglichkeit, ein edu-sharing mit minimalem Aufwand in einer virtuellen Maschine aufzusetzen. Voraussetzung ist die Installation von
 [Git](https://git-scm.com/downloads),  [Vagrant](https://www.vagrantup.com/downloads.html) und [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 
-Außerdem kann eine Moodle-Instanz an das Repositorium angebunden werden. Siehe hierfür [Moodle-Integration](#moodle-integration)
-
 ## Installation
 
 Die folgenden Schritte im Terminal (Linux/macOS) oder in der GitBash (Windows) ausführen.
@@ -38,14 +36,31 @@ vagrant ssh
 * *esrender_version* anpassen in den renderingservice-vars
 * playbook ausführen
 
-## Moodle Integration
-
-- zunächst Edu-Sharing-Box wie in [Installation](#installation) geschildert installieren
-- nach erfolgreicher Installation die [Moodle-Box](https://github.com/TIBHannover/moodle-box) installieren. Dabei darauf achten, dass in _group_vars/all.yml_ der Eintrag `install_edu_sharing_plugin` auf `true` gesetzt ist, damit das Plugin installiert wird
-- anschließend in der Datei _group_vars/edusharing.yml_ der Edu-Sharing-Box den Eintrag `register_moodle` auf `true` setzen
-- im edu-sharing-box-Verzeichnis den Befehl `vagrant reload --provision`ausführen
-- nun sollte in moodle eine Einbindung des edu-sharing Repositoriums erfolgt sein
-
 ## DFN-AAI / Shibboleth Integration
 
 Siehe [SHIBBOLETH.md](SHIBBOLETH.md)
+
+## Documentation
+
+Each role in the edu-sharing playbook comes with its own detailed documentation, covering various aspects such as updates, included components, and more. Below are the links to the documentation for each role:
+ 
+- [shibboleth](ansible/roles/shibboleth/documentation/README.md): This role install and configure the shibboleth.
+- [apache](ansible/roles/apache/documentation/README.md): This role initializes the edu-sharing.
+- [edu-sharing-init](ansible/roles/edu-sharing-init/documentation/README.md): This role initializes the edu-sharing.
+- [edu-sharing-migration](ansible/roles/edu-sharing-migration/documentation/README.md):  This role handles migration tasks for edu-sharing.
+- [edu-sharing-customization](ansible/roles/edu-sharing-customization/documentation/README.md): This role allows customization of the edu-sharing platform.
+- [edu-sharing-rendering-service](ansible/roles/edu-sharing-rendering-service/documentation/README.md): This role manages the rendering service for edu-sharing.
+- [edu-sharing-search-elastic](ansible/roles/edu-sharing-search-elastic/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
+- [edu-sharing-search-solr](ansible/roles/edu-sharing-search-solr/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
+- [edu-sharing-classification-keywords](ansible/roles/edu-sharing-classification-keywords/documentation/README.md): This role handles keyword classification tasks.
+- [edu-sharing-mirror-vocabs](ansible/roles/edu-sharing-mirror-vocabs/documentation/README.md): This role manages the mirroring of vocabularies.
+- [edu-sharing-backup](ansible/roles/edu-sharing-backup/documentation/README.md): This role is responsible for backing up edu-sharing data.
+- [edu-sharing-restore](ansible/roles/edu-sharing-restore/documentation/README.md): This role handles the restoration of edu-sharing data.
+- [edu-sharing-custom-amp](ansible/roles/edu-sharing-custom-amp/documentation/README.md): This role handles the alfresco AMPs files.
+- [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles splash installation.
+- [antivirus-clamav](ansible/roles/antivirus-clamav/documentation/README.md): This role handles antivirus (clamAv) installation.
+- [edu-sharing-connector](ansible/roles/edu-sharing-connector/documentation/README.md): This role handles edu-sharing-connector installation.
+- [edu-sharing-splash](ansible/roles/edu-sharing-splash/documentation/README.md): This role handles edu-sharing-splash installation.
+- [edu-sharing-plugin-mongo](ansible/roles/edu-sharing-plugin-mongo/documentation/README.md): This role handles edu-sharing-plugin-mongo.
+- [edu-sharing-notification](ansible/roles/edu-sharing-notification/documentation/README.md): This role handles edu-sharing-notification plugin.
+These documentation files provide detailed instructions and guidelines for using each role effectively.

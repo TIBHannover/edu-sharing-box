@@ -1,0 +1,29 @@
+---
+# Used ony if the tomcat is is still there, if we changed the default one then we can override
+tomcat_stop_command: "{{base_dir}}/bin/tomcat.sh stop 2> /dev/null || true"
+
+edu_sharing_docker_timezone: '{{timezone | default("Europe/Berlin",true)}}'
+
+edu_sharing_environment_variable:
+  - key: COMPOSE_PROJECT_NAME
+    value: '{{edu_sharing_docker_project_name}}'
+  - key: REPOSITORY_DATABASE_NAME
+    value: '{{alfresco_db.name}}'
+  - key: REPOSITORY_DATABASE_USER
+    value: '{{alfresco_db.user}}'
+  - key: REPOSITORY_DATABASE_PASS
+    value: '{{alfresco_db.password}}'
+  - key: COMMON_BIND_HOST
+    value: '{{common_bind_host | default("127.0.0.1",true)}}'
+  - key: REPOSITORY_SERVICE_GUEST_USER
+    value: '{{guest_user_name | default("esguest",true)}}'
+  - key: REPOSITORY_SERVICE_GUEST_PASS
+    value: '{{guest_user_password | default("esguest",true)}}'
+  - key: REPOSITORY_SERVICE_ADMIN_PASS
+    value: '{{alf_password}}'
+  - key: SERVICES_RENDERING_DATABASE_NAME
+    value: '{{esrender_db.name}}'
+  - key: SERVICES_RENDERING_DATABASE_USER
+    value: '{{esrender_db.user}}'
+  - key: SERVICES_RENDERING_DATABASE_PASS
+    value: '{{esrender_db.password}}'

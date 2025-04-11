@@ -1,0 +1,6 @@
+---
+restore_backup_folder: true
+
+backup_path: '{{ base_dir }}/backup'
+
+# backup_folder:

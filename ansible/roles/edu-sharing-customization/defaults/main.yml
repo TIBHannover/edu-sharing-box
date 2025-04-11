@@ -1,0 +1,74 @@
+---
+
+# (internal) cleanup / set values in client.config.xml
+# format:
+#   xpath   - xpath where to set the value
+#   value   - xml value
+#   cleanup - xpath. if set, remove from client.config.xml before set values
+edu_client_config_xml_standard_entries:
+  - xpath: '/config/values/imprintUrl'
+    value: '{{ edu_imprinturl | default("") }}'
+  - xpath: '/config/values/privacyInformationUrl'
+    value: '{{ edu_privacyInformationUrl | default("") }}'
+  - xpath: '/config/values/register/local'
+    value: '{{ edu_register_local }}'
+  - xpath: '/config/values/register/recoverUrl'
+    value: '{{ edu_recover_url }}'
+    cleanup: '/config/values/register/recoverUrl'
+  - xpath: '/config/values/banner/url'
+    value: '{{ edu_banner_url | default("") }}'
+    cleanup: '/config/values/banner'
+  - xpath: '/config/values/banner/href'
+    value: '{{ edu_banner_href | default("") }}'
+    cleanup: '/config/values/banner'
+  - cleanup: '/config/values/allowedLicenses'
+  - cleanup: '/config/values/loginUrl'
+  - cleanup: '/config/values/loginAllowLocal'
+  - cleanup: '/config/values/loginProvidersUrl'
+  - cleanup: '/config/values/loginProviderTargetUrl'
+  - cleanup: '/config/values/logout'
+  - xpath: '/config/values/workspaceViewType'
+    value: '{{ "1" if (edu_workspace_viewType | default("list")) == "tile" else "0" }}'
+    cleanup: '/config/values/workspaceViewType'
+  - xpath: '/config/values/upload/postDialog'
+    value: '{{ edu_upload_post_dialog }}'
+  - xpath: '/config/values/publish/licenseMandatory'
+    value: '{{ edu_license_mandatory | default(false) }}'
+    cleanup: '/config/values/publish/licenseMandatory'
+  - xpath: '/config/values/publish/authorMandatory'
+    value: '{{ edu_author_mandatory | default(false) }}'
+    cleanup: '/config/values/publish/authorMandatory'
+
+# edu-sharing configuration type (edu_version < 5.1: 'edu-sharing.properties' and edu_version >= 5.1: 'edu-sharing.conf'
+edu_config_file: 'edu-sharing.conf'
+
+# trusted client configuration for oauthTokenService
+edu_oauth_trusted_clients:
+  - client: "eduApp"
+    password: "secret"
+
+edu_sharing_customization_environment_variable:
+  - key: REPOSITORY_SERVICE_PORT
+    value: '{{edu_sharing_port | default("80",true)}}'
+  - key: REPOSITORY_SERVICE_HOST
+    value: '{{edu_sharing_host}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PORT
+    value: '{{edu_mail_smtp_port if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_FROM
+    value: '{{edu_mail_smtp_from if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_REPORT_RECEIVER
+    value: '{{edu_mail_report_receiver if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_USERNAME
+    value: '{{edu_mail_smtp_username if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PASSWORD
+    value: '{{edu_mail_smtp_passwd if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_AUTHTYPE
+    value: '{{edu_mail_authtype if (edu_mail_smtp_server is not none) and (edu_mail_smtp_server is defined) else ""}}'
+  - key: REPOSITORY_SERVICE_MAIL_SERVER_SMTP_HOST
+    value: '{{edu_mail_smtp_server | default("",true)}}'
+  - key: REPOSITORY_SERVICE_HOME_APPID
+    value: '{{edu_repo_id | default("local",true)}}'
+
+# If we need to override the service name, then we can override it,
+# example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
+service_repository_service: 'repository-service'

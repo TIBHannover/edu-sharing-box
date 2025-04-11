@@ -1,0 +1,14 @@
+---
+- name: Get the network name of a repository based on a pattern
+  shell: |
+    sg docker -c "docker inspect --format '{{ '{{json ' }}.NetworkSettings.Networks{{ '}}' }}'  $(sg docker -c "docker ps --filter 'name=repository-service_' --format '{{ '{{' }}.Names{{ '}}' }}' | head -n 1 ") | jq -r 'keys[]'"
+  register: repository_service_docker_network_name
+  ignore_errors: true
+  tags:
+    - edu-sharing-customization
+
+- name: Check edu-sharing version.
+  debug:
+    msg: "Your edu-sharing version is {{ repository_service_docker_network_name.stdout }}."
+  tags:
+    - edu-sharing-customization

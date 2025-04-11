@@ -1,0 +1,51 @@
+---
+- name: Start extracting the content of the .jar file.
+  when: enable_plugin_mongo_service is defined and enable_plugin_mongo_service and repository_volume_config_plugins.stdout is defined and repository_volume_config_plugins.stdout != ''
+  block:
+    - name: Ensure plugin-mongo directory exists.
+      become: true
+      file:
+        path: "{{ repository_volume_config_plugins.stdout }}/plugin-mongo"
+        state: directory
+      tags:
+        - edu-sharing-plugin-mongo
+
+    - name: Download plugin mongo config .jar file.
+      # become: true
+      get_url:
+        force: yes
+        url: "{{ repository_plugin_mongo_config }}"
+        dest: "{{ plugin_mongo_service_install_dir }}/{{ repository_plugin_mongo_config | basename }}"
+      tags:
+        - edu-sharing-plugin-mongo
+
+    - name: Extract plugin mongo config sources.
+      become: true
+      shell: |
+        unzip -o "{{ plugin_mongo_service_install_dir }}/{{ repository_plugin_mongo_config | basename }}" \
+          "plugin-mongo/*" -d "{{ repository_volume_config_plugins.stdout }}/"
+      register: unzip_result
+      tags:
+        - edu-sharing-plugin-mongo
+
+  rescue:
+    - name: Handle failure - perform recovery action.
+      debug:
+        msg: "The task failed because the condition was false. Performing recovery action."
+      tags:
+        - edu-sharing-plugin-mongo
+
+    - name: Rollback changes.
+      become: true
+      shell: |
+        rm -rf {{ repository_volume_config_plugins.stdout }}/plugin-mongo/*
+      tags:
+        - edu-sharing-plugin-mongo
+
+  always:
+    - name: Clean up the .jar file.
+      # become: true
+      shell: |
+        rm {{ plugin_mongo_service_install_dir }}/{{ repository_plugin_mongo_config | basename }}
+      tags:
+        - edu-sharing-plugin-mongo

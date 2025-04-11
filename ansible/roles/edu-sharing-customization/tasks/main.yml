@@ -1,0 +1,68 @@
+---
+  - include_role:
+      name: edu-sharing-init
+      tasks_from: set_edu_docker_inst_dir
+      apply:
+        tags:
+          - edu-sharing-customization
+    tags: 
+      - edu-sharing-customization
+
+  - name: Ensure the java_home variable is set.
+    include_role:
+      name: java
+      tasks_from: get_java_home
+      apply:
+        tags:
+          - edu-sharing-customization
+    when:  java_home is not defined
+    tags:
+      - edu-sharing-customization
+
+  - include_role:
+      name: edu-sharing-init
+      tasks_from: load_version_variables
+      apply:
+        tags:
+          - edu-sharing-customization
+    tags:
+      - edu-sharing-customization
+    
+
+  - name: Ensure gzip and jq python-lxml are present.
+    package:
+      name:
+        - unzip
+        - jq
+        - gzip
+        - python3-lxml
+    become: true
+    tags:
+      - edu-sharing-customization
+
+  - include_tasks: adjust_env_variables.yml
+    tags:
+      - edu-sharing-customization
+
+  - include_tasks: ./config-cluster/main.yml
+    tags:
+      - edu-sharing-customization
+  - include_tasks: ./config-edu-sharing/main.yml
+    tags:
+      - edu-sharing-customization
+  - include_tasks: ./config-node/main.yml
+    tags:
+      - edu-sharing-customization
+
+  - name: Restart edu-sharing service in docker.
+    command:
+      chdir: "{{ edu_docker_inst_dir }}"
+      cmd: "{{edu_sharing_restart_command | replace('{service}', service_repository_service)}}"
+    # no_log: true
+    tags:
+      - edu-sharing-customization
+
+  - include_tasks: jobs.yml
+    tags:
+      - edu-sharing-customization
+      - edu-sharing-customization-jobs

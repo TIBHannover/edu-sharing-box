@@ -8,13 +8,13 @@
 - debug:
     var: ansible_distribution_version
   
-- include: debianstretch.yml
+- include_tasks: debianstretch.yml
   when: ansible_distribution == 'Debian' and ansible_distribution_release == 'stretch'
 
-- include: debianbuster.yml
+- include_tasks: debianbuster.yml
   when: ansible_distribution == 'Debian' and ansible_distribution_release == 'buster'
 
-- include: debian-from-bullseye.yml
+- include_tasks: debian-from-bullseye.yml
   when: ansible_distribution == 'Debian' and ansible_distribution_version is version('11', '>=')
 
-- include: shibbolethconfig.yml
+- include_tasks: shibbolethconfig.yml

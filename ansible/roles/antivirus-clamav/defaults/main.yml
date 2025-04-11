@@ -1,0 +1,18 @@
+clamav_docker_version: stable
+
+clamav_docker_install_dir: "{{base_dir}}/clamav_{{clamav_docker_version|replace('.','_')}}"
+
+clamav_docker_internal_port: 3310
+clamav_milter_docker_internal_port: 7357
+# docker composer name
+clamav_docker_docker_project_name: "clamav_docker_antivirus"
+
+clamav_docker_no_freshclamd: "false"
+clamav_docker_no_milterd: "true"
+clamav_docker_no_clamd: "false"
+clamav_docker_startup_timeout: 1800
+clamav_docker_freshclamd_checks: 1
+
+
+# Command to run edu-connector in docker
+clamav_docker_run_command: 'sg docker -c "docker compose -f docker-compose.yml up -d"'

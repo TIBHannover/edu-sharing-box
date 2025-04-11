@@ -1,0 +1,21 @@
+---
+- name: Ensures inst-dir exists
+  file:
+    path: "{{edu_connector_install_dir}}"
+    state: directory
+
+
+- name: Download edu-connector sources.
+  get_url:
+    url: "{{edu_connector_version_archive_url}}"
+    dest: "{{edu_connector_install_dir}}/edu-connector.jar"
+    force: "{{edu_connector_override_existing | default(true,true)  | bool }}"
+
+- name: Extract edu-connector sources.
+  unarchive:
+    remote_src: yes
+    src: "{{edu_connector_install_dir}}/edu-connector.jar"
+    dest: "{{edu_connector_install_dir}}"
+    creates: "{{edu_connector_install_dir}}/edu-connector"
+
+

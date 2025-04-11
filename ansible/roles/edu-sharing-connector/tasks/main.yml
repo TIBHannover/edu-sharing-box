@@ -1,0 +1,68 @@
+---
+- name: Ensure unzip is present
+  package:
+    name: ["unzip"]
+  become: true
+  tags:
+    - edu-connector
+    - packages
+    - root-task
+
+- name: Load version variables.
+  with_first_found:
+    - "../vars/versions/{{ edu_connector_version }}.yml"
+    - "../vars/versions/default.yml"
+  include_vars: "{{ item }}"
+  tags:
+    - edu-sharing-connector
+
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: get_repository_service_network
+    apply:
+      tags:
+        - edu-sharing-connector
+  tags:
+    - edu-sharing-connector
+
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: fetch_docker_paths
+    apply:
+      tags:
+        - edu-sharing-connector
+  vars:
+    extra_required_paths:
+      - "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    store_docker_paths_globally: true
+  tags:
+    - edu-sharing-connector
+
+- name: Stop all edu-sharing-connector running containers.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'edu[-_]connector' | xargs -r docker stop "
+  tags:
+    - edu-sharing-connector
+
+- name: Download and install edu-sharing-connector
+  block:
+    - include_tasks: download.yml
+    - include_tasks: install.yml
+    - include_tasks: register_apache.yml
+    - include_tasks: register_connectors.yml
+  when: enable_edu_connector is defined and enable_edu_connector
+  tags:
+    - edu-sharing-connector
+
+- name: Unregister edu-sharing-connector from edu-sharing.
+  block:
+    - include_tasks: unregister.yml
+  when: enable_edu_connector is defined and not enable_edu_connector
+  tags:
+    - edu-sharing-connector
+
+- name: Clean unused edu-connector images, containers, networks and cashes.
+  command: |
+    sg docker "docker system prune --all --force --filter "label=edu-connector" --filter "label=edu_connector""
+  tags:
+    - edu-sharing-connector

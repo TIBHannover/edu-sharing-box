@@ -1,0 +1,26 @@
+---
+- name: Read docker-compose.yml content
+  slurp:
+    src: "{{ edu_docker_inst_dir }}/docker-compose.yml"
+  ignore_errors: true
+  register: docker_compose_file
+
+- name: Decode the content of docker-compose.yml
+  set_fact:
+    docker_compose_json: "{{ docker_compose_file.content | b64decode | from_yaml }}"
+  when: docker_compose_file.content is defined and docker_compose_file.content | length > 0
+
+- name: Extract image name for repository-service with fallback to default if content is undefined or empty
+  set_fact:
+    repository_service_image: >
+      {{
+        docker_compose_json.services['repository-service'].image
+        | trim
+        | default('docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:' + edu_version, true)
+      }}
+  when: docker_compose_json is defined and docker_compose_json | length > 0
+
+- name: Set default image value if docker_compose_file is not defined or empty
+  set_fact:
+    repository_service_image: "docker.edu-sharing.com/projects/community/edu_sharing-projects-community-deploy-docker-repository-build-service:{{edu_version}}"
+  when: docker_compose_json is not defined or docker_compose_json | length == 0

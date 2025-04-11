@@ -1,0 +1,9 @@
+---
+
+- name: Apache - add edu-sharing-splash virtual hosts
+  become: true
+  template:
+    src: "{{edu_sharing_splash_virtual_host_path | default('edu_splash.conf.j2',true)}}"
+    dest: '/etc/apache2/sites-available/edu_splash.conf'
+  notify:
+    - restart apache2

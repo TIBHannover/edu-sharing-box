@@ -1,0 +1,24 @@
+---
+- name: Add or update Edu Connector configuration
+  become: true
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU CONNECTOR CONFIGURATION"
+    insertafter: EOF
+    block: |
+      {% for module in edu_connector_enable_modules -%}
+      connectorList.connectors += {
+          id: "{{ module.id }}",
+          icon: "{{ module.icon | default('edit', true) }}",
+          showNew: {{ module.showNew | default(true, true) | string | lower }},
+          onlyDesktop: {{ module.onlyDesktop | default(true, true) | string | lower }},
+          hasViewMode: {{ module.hasViewMode | default(true, true) | string | lower }},
+          filetypes: [{% for fileType in module.filetypes -%}
+              {
+                  {% for key, value in fileType.items() -%}
+                      {{ key }}: {{ ('"' ~ value ~ '"') if value is string else (value | string | lower if value is boolean else value) }},
+                  {% endfor -%}
+              }{{ ',' if not loop.last else '' }}
+          {% endfor -%}]
+      };
+      {% endfor -%}

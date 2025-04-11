@@ -1,20 +1,13 @@
 ---
 es_proxy_vhost: true
 
-tomcat_users:
-  - username: "CN=Alfresco Repository Client, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
-    password: "null"
-    roles: "repoclient"
-  - username: "CN=Alfresco Repository, OU=Unknown, O=Alfresco Software Ltd., L=Maidenhead, ST=UK, C=GB"
-    password: "null"
-    roles: "repository"
 
-use_esguest_user: true
-# map of permssions that should be adjusted for the esguest user
-# key: Key of the permission (see list of available permissions: curl -X GET --header 'Accept: application/json' 'http://<YOURHOST>/edu-sharing/rest/admin/v1/toolpermissions/esguest')
-# value: ALLOWED | DENIED | UNDEFINED (see https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/org/edu_sharing/service/admin/model/ToolPermission.java)
-esguest_permissions:
-  "TOOLPERMISSION_GLOBAL_AUTHORITY_SEARCH": "DENIED"
+edu_sharing_docker_project_name: "edu_sharing_docker_version"
+
+alfresco_db:
+  name: alfresco
+  user: alfresco
+  password: alfresco
 
 connect_content_pixabay: false
 pixabay_apikey: CHANGE_ME
@@ -22,29 +15,13 @@ pixabay_apikey: CHANGE_ME
 connect_content_youtube: false
 youtube_apikey: CHANGE_ME
 
-connect_content_oersi: true  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
-
-register_moodle: false
-moodle_host: 192.168.98.105
-moodle_url: "http://{{moodle_host}}"
-
-# method how to retrieve the edu-sharing archive that should be installed
-#  'download' - use the archive from 'edu_sharing_archive_url'
-#  'copy-local' - copy the archive from the local host in 'edu_sharing_local_archive_path'
-edu_sharing_archive_retrieve_method: download
-edu_sharing_local_archive_path:
-
-# possibility to add an archive with custom modifications to edu-home
-edu_sharing_custom_installation: false
-edu_sharing_custom_archive_path:
+connect_content_oersi: false  # activate / deactivate feature 'OERSI connection' (available from edu-sharing 6.0)
 
 edu_inst_dir: "{{base_dir}}/edu-sharing_{{edu_version}}"
 edu_home: "{{edu_inst_dir}}/edu-sharing"
 
 edu_repo_caption: local-repo-vmtest
 edu_repo_id: local
-
-edu_log4j_properties_path:  # path of custom log4j.properties. if undefined, use the default - see https://github.com/edu-sharing/Edu-Sharing/blob/develop/Backend/src/log4j.properties
 
 # the receiver address where to send mails
 edu_mail_report_receiver:
@@ -59,7 +36,6 @@ edu_mail_smtp_port: 25
 # the sender address used to send mails
 edu_mail_smtp_from: pleasechange@nodomain.com
 
-edu_splash_url: # "http://{{ esrender_host }}:8050/render.png" # URL of the splash-service for http previews
 edu_imprinturl:
 edu_privacyInformationUrl:
 edu_license_mandatory: "false"   # | "false"
@@ -87,7 +63,6 @@ edu_logo_path:
 # example: ['local/path/example.svg', 'example.svg']
 edu_custom_images:
 edu_mds_override_paths:
-  - mds_oersi_override.xml
 edu_valuespaces_paths:
 edu_valuespaces_i18n_paths:
 # List of email template you want to override.
@@ -101,17 +76,9 @@ edu_help_menu_options:
 edu_allowed_licenses:
 
 edu_sharing_port:
-edu_sharing_clientport:
 edu_sharing_protocol: http
-edu_sharing_clientprotocol:
 
 edu_enable_statistics_api: "false"
-
-mirror_vocabularies: # list of vocabularies a local mirror should be created for (url - url of the source, target_directory - directory where the mirror should be stored)
-#  - url: "https://w3id.org/kim/hochschulfaechersystematik/scheme.json"
-#    target_directory: "/var/www/oer/vocabs-mirror"
-#  - url: "https://w3id.org/kim/hcrt/scheme.json"
-#    target_directory: "/var/www/oer/vocabs-mirror"
 
 edu_migration_replace_mapping: # replace mapping jobs that should be executed during edu-sharing update (startFolder - root node, property - property that should be migrated, data - csv mapping)
 #  - startFolder: 869665e9-7e42-49af-bd30-6469e59904c5
@@ -191,12 +158,8 @@ edu_custom_licenses:
 activate_classification_keywords: false
 # activate the classification-keyword update (true/false)
 activate_classification_keywords_update: false
-# Override the default local file 
-classification_keywords_force_download: false
 # define the classification-keyword interval in days = 1 means every day
 classification_keywords_update_interval: 15
-# Classification-Keywords-URL (for download)
-classification_keywords_url: "https://data.dnb.de/GND/authorities-sachbegriff_dnbmarc_20211013.mrc.xml.gz"
 # classification keyword default file 
 edu_classification_keyword_path: "classification-keywords/classification-keywords.xml"
 
@@ -258,33 +221,3 @@ edu_custom_menu_entries: # list of custom menu entries
     #   openInNew: true
     #   url: "https://www.example.de/"
 
-# Enable modules for edu-sharing connector 
-# example:
-#     - id: 'TINYMCE'       # Required
-#       icon: 'edit'        # optional default will be edit
-#       showNew: true       # optional default will be true
-#       onlyDesktop: true   # optional default will be true
-#       hasViewMode: true   # optional default will be true
-#       filetypes:          # Required
-#         - {mimetype: "text/html",filetype: "html",createable: true,editable: true,editorType: "tinymce"}
-# TINYMCE is by default
-edu_connector_enable_modules:
-  - id: 'H5P'
-    filetypes:
-      - {mimetype: "application/zip",filetype: "h5p", ccressourcetype: "h5p", createable: true,editable: true}
-  - id: 'ONLY_OFFICE'
-    icon: 'edit'
-    showNew: true
-    onlyDesktop: true
-    hasViewMode: true
-    filetypes:
-      - {mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",filetype: "docx",createable: true,editable: true}
-      - {mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",filetype: "pptx",createable: true,editable: true}
-      - {mimetype: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",filetype: "xlsx",createable: true,editable: true}
-
-# activate/deactivate es-update-oersi, a alfresco plugin used to update metadata in oersi
-activate_es_update_oersi: false
-# version of the amp file
-es_update_oersi_version: 1.0.3
-# oersi update endpoint 
-es_update_oersi_url: 'https://oersi.org/resources/api-internal/import-scripts/python/update-record'

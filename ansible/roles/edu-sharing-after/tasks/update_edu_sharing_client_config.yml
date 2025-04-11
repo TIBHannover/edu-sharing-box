@@ -1,0 +1,19 @@
+---
+- name: Register shibboleth client configuration.
+  become: true
+  when:
+    ( repository_volume_config_node_path.stdout is defined and repository_volume_config_node_path.stdout != "") and
+    (install_shibboleth is defined and install_shibboleth)
+  block:
+    - name: Set shibboleth client.config configuration
+      xml:
+        path: "{{ repository_volume_config_node_path.stdout }}/defaults/client.config.xml"
+        xpath: "{{ item.xpath }}"
+        value: "{{ item.value }}"
+        state: "present"
+        pretty_print: yes
+      loop:
+        - xpath: /config/values/logout/destroySession
+          value: "{{ edu_logout_destroy_session| default('true',true) }}"
+        - xpath: /config/values/loginAllowLocal # This key is always required
+          value: "{{ edu_login_allow_local | default('true',true) }}"

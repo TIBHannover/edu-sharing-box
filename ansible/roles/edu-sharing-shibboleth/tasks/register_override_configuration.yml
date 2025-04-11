@@ -1,0 +1,19 @@
+---
+- name: Add or update edu sharing shibboleth.
+  become: true
+  blockinfile:
+    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
+    marker: "//{mark} BEGIN EDU SHARING SHIBBOLETH CONFIGURATION"
+    insertbefore: BOF
+    block: |
+      spring.profiles.active=samlEnabled
+      security.sso.saml = {
+        useHomeApplicationKeys: {{ security_sso_saml_use_home_application_keys | default(true, true) | string | lower }}
+        idp: {
+          metadata: { 
+            url: "{{ security_sso_saml_metadata_url }}"
+          }
+        }
+      }
+  when: security_sso_saml_metadata_url is defined and security_sso_saml_metadata_url | length > 0
+

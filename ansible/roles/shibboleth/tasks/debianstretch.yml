@@ -4,10 +4,15 @@
     repo: 'deb http://deb.debian.org/debian stretch-backports main'
     filename: backports
     update_cache: yes
+  tags: 
+    - shibboleth
+    - shibboleth-stretch
   
 - name: Install switchaai debian stretch installation package
   apt:
     deb: '{{ shibboleth_switchaai_apt_source_debian_stretch_package_url }}'
+  tags: 
+    - shibboleth-platform-stretch
 
 - name: Install required packages for debian stretch
   apt:
@@ -15,9 +20,13 @@
     default_release: stretch-backports
     state: latest
     name: ["init-system-helpers", "libxerces-c3.2"]
+  tags: 
+    - shibboleth-platform-stretch
 
 - name: Install shibboleth package for debian stretch
   apt:
     update_cache: yes
     install_recommends: yes
     name: shibboleth
+  tags: 
+    - shibboleth-platform-stretch

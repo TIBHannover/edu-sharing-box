@@ -1,0 +1,5 @@
+---
+- include_tasks: mirror-vocabs.yml
+  when: mirror_vocabularies | default([], true) | length>0
+  tags: 
+    - mirror-vocabularies

@@ -1,0 +1,81 @@
+---
+- name: Get a list of all containers.
+  become: true
+  shell: >
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'edu[-_]sharing' || true"
+  register: containers_list
+  changed_when: containers_list.stdout != ""
+
+- name: Stop all edu-sharing containers.
+  shell: >
+    sg docker -c "docker stop {{ item }}"
+  with_items: "{{ containers_list.stdout_lines | default([], true) }}"
+
+- name: Remove all edu-sharing containers.
+  shell: >
+    sg docker -c "docker rm {{ item }}"
+  with_items: "{{ containers_list.stdout_lines | default([], true) }}"
+
+- name: Perform cleaning before Upgrade
+  when: (system_etc_env['EDU_SHARING_VERSION'] is defined) and
+    (system_etc_env['EDU_SHARING_VERSION'] | default(edu_version) != edu_version)
+  block:
+    - name: Get a list of all volumes.
+      shell: >
+        sg docker -c "docker volume ls --quiet --quiet --filter name='^{{edu_sharing_docker_project_name}}' || true"
+      register: volumes_list
+      changed_when: volumes_list.stdout != ""
+
+    - name: Filter out protected volumes
+      set_fact:
+        safe_volumes: "{{ volumes_list.stdout_lines | reject('in', protected_volumes) | list }}"
+      vars:
+        protected_volumes:
+          - "{{ edu_sharing_docker_project_name }}_repository-database-volume-data"
+          - "repository_database"
+          - "repository-database"
+          - "{{ edu_sharing_docker_project_name }}_repository-service-volume-data"
+          - "repository-service-volume"
+          - "repository_service_volume"
+
+    - name: Volumes to be deleted
+      debug:
+        var: safe_volumes
+      tags:
+        - edu-sharing-init
+
+    - name: Remove all volumes except 'repository-database-volume-data' and 'repository-service-volume-data'.
+      shell: >
+        sg docker -c "docker volume rm {{ item }}"
+      with_items: "{{ safe_volumes | default([], true) }}"
+      when:
+        - not ((edu_sharing_docker_project_name ~ "_repository-database-volume-data") in item)
+        - not ((edu_sharing_docker_project_name ~ "_repository-service-volume-data") in item)
+
+
+- name: Export EDU_SHARING_VERSION to avoid multiple cleaning docker containers and volumes.
+  become: true
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items:
+    - key: EDU_SHARING_VERSION
+      value: "{{edu_version}}"
+
+- name: |
+    Remove Unused Configuration Volumes to Prevent Errors
+    (Edu-Sharing requires these volumes to be removed at this stage to avoid errors 
+    due to missing MongoDB and notification services, which are not yet configured.)
+  shell: >
+    sg docker -c "docker volume rm {{ item }}"
+  with_items:
+    - "{{ edu_sharing_docker_project_name }}_repository-service-volume-config-edu-sharing"
+    - "{{ edu_sharing_docker_project_name }}_repository-service-volume-bin-plugins"
+    - "{{ edu_sharing_docker_project_name }}_repository-service-volume-amps"
+  ignore_errors: true  # Ensures playbook continues even if volumes do not exist
+  when: >
+    system_etc_env['EDU_SHARING_VERSION'] is defined and
+    (system_etc_env['EDU_SHARING_VERSION'] | default(edu_version) == edu_version)
+

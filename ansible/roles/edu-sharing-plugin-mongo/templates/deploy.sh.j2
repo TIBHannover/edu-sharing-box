@@ -1,0 +1,127 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+export COMPOSE_PROJECT_NAME="{{plugin_mongo_service_docker_project_name}}"
+
+export COMPOSE_EXEC="docker compose"
+
+export CLI_CMD="$0"
+export CLI_OPT1="$1"
+shift || true
+
+pushd "{{plugin_mongo_service_install_dir}}">/dev/null || exit
+
+if [[ -f ".env" ]] ; then
+	source .env
+fi
+
+compose() {
+
+	COMPOSE_DIRECTORY="$1"
+	COMPOSE_LIST=
+
+	shift && {
+
+    shift && {
+
+      while true; do
+        flag="$1"
+        shift || break
+
+        COMPOSE_FILE_TYPE=""
+        case "$flag" in
+        -common) COMPOSE_FILE_TYPE="common" ;;
+        -remote) COMPOSE_FILE_TYPE="remote" ;;
+        -productive)
+          COMPOSE_FILE_TYPE="productive"
+          if [[ ! $PRODUCTIVE_ENABLED -eq "true" ]] ; then continue ; fi
+          ;;
+        esac
+
+        while IFS='' read -r COMPOSE_FILE; do
+          COMPOSE_LIST="$COMPOSE_LIST -f ${COMPOSE_FILE}"
+        done < <(find "${COMPOSE_DIRECTORY}" -type f -name "*_*-${COMPOSE_FILE_TYPE}.yml" | sort -g)
+      done
+
+
+      for COMPOSE_FILE in $ADDITIONAL_COMPOSE_FILES; do
+        COMPOSE_LIST="$COMPOSE_LIST -f ${COMPOSE_FILE}"
+      done
+    }
+	}
+
+	echo $COMPOSE_LIST
+}
+
+rstart() {
+	COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -remote -productive)"
+
+	echo "Use compose set: $COMPOSE_LIST"
+
+	$COMPOSE_EXEC \
+		$COMPOSE_LIST \
+		pull || exit
+
+	$COMPOSE_EXEC \
+		$COMPOSE_LIST \
+		up -d $@ || exit
+}
+
+stop() {
+	COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -productive)"
+
+	echo "Use compose set: $COMPOSE_LIST"
+
+	$COMPOSE_EXEC \
+		$COMPOSE_LIST \
+		stop $@ || exit
+}
+
+remove() {
+	read -p "Are you sure you want to continue? [y/N] " answer
+	case ${answer:0:1} in
+	y | Y)
+		COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -productive)"
+
+		echo "Use compose set: $COMPOSE_LIST"
+
+		$COMPOSE_EXEC \
+			$COMPOSE_LIST \
+			down || exit
+		;;
+	*)
+		echo Canceled.
+		;;
+	esac
+}
+
+case "${CLI_OPT1}" in
+start)
+	rstart $@
+	;;
+stop)
+	stop $@
+	;;
+remove)
+	remove
+	;;
+restart)
+	stop $@ && rstart $@
+	;;
+*)
+	echo ""
+	echo "Usage: ${CLI_CMD} [option]"
+	echo ""
+	echo "options:"
+	echo ""
+	echo "  - start        start notification-service"
+	echo "  - restart      stops and starts notification-service"
+	echo ""
+	echo "  - stop         stop notification-service"
+	echo "  - remove               remove notification-service"
+	echo ""
+	;;
+esac
+
+popd >/dev/null || exit

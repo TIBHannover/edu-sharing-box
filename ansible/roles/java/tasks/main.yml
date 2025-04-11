@@ -1,30 +1,24 @@
 ---
-  - name: download and extract java
-    unarchive:
-      remote_src: yes
-      src: '{{java_archive_url}}'
-      dest: "{{java_inst_dir}}"
-      creates: "{{java_inst_dir}}/{{java_name}}"
 
-  - name: create symlink
-    file:
-      path: '{{java_home}}'
-      src: '{{java_name}}'
-      state: link
+- name: Update package lists
+  apt:
+    update_cache: yes
 
-  - name: Set JAVA_HOME if configured.
-    template:
-      src: java_home.sh.j2
-      dest: /etc/profile.d/java_home.sh
-      mode: 0644
-    when: java_home is defined and java_home
-    become: yes
-    tags:
-    - root-task
+- name: Install java packages
+  apt: 
+    pkg: "default-jdk"
+    state: present 
+    update_cache: yes
 
-  - name: Remove libservlet3.1-java, since it has security issues and is unused
-    become: yes
-    apt:
-      name: ['libservlet3.1-java']
-      state: absent
-    when: security_cleanup_remove_package_libservlet
+- include_tasks: get_java_home.yml
+
+- name: Set JAVA_HOME if configured.
+  template:
+    src: java_home.sh.j2
+    dest: /etc/profile.d/java_home.sh
+    mode: 0644
+  when: java_home is defined and java_home
+  become: true
+  tags:
+  - java
+

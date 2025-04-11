@@ -1,0 +1,19 @@
+---
+
+- include_tasks: add_repository_statistics.yml
+  tags:
+    - repository-statistics
+
+- include_tasks: youtube.yml  
+  when: connect_content_youtube
+  tags:
+    - youtube
+
+- include_tasks: pixabay.yml
+  when: connect_content_pixabay
+  tags:
+    - pixabay
+
+- include_tasks: lms.yml
+  tags:
+    - lms

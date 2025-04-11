@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# {{ ansible_managed }}
+#
+# Backup edu-sharing
+
+# Define variables
+BACKUP_FOLDER_PATH="{{ backup_path }}"
+KEEP_LAST_NR="{{ backup_keep_last_nr_directories }}"
+EDU_DOCKER_DIR="{{ edu_docker_inst_dir }}"
+BACKUP_SCRIPT_OPTION="{{backup_script_option}}"
+
+# Construct backup options
+EDU_SHARING_DOCKER_BACKUP_OPTIONS="${BACKUP_SCRIPT_OPTION} --keep ${KEEP_LAST_NR} ${BACKUP_FOLDER_PATH}"
+
+# Construct backup command with options
+EDU_SHARING_BACKUP_COMMAND="sg docker -c './utils.sh backup {options}'"
+
+# Replace {options} placeholder with actual options
+EDU_SHARING_BACKUP_COMMAND="${EDU_SHARING_BACKUP_COMMAND//\{options\}/${EDU_SHARING_DOCKER_BACKUP_OPTIONS}}"
+
+# Change directory to edu-sharing installation directory
+if [ -d "${EDU_DOCKER_DIR}" ]; then
+    cd "${EDU_DOCKER_DIR}" || exit 1
+else
+    echo "Edu-sharing installation directory not found: ${EDU_DOCKER_DIR}"
+    exit 1
+fi
+
+# Execute edu-sharing backup script
+echo "Initiating edu-sharing backup..."
+if ! eval "${EDU_SHARING_BACKUP_COMMAND}"; then
+    # List and unpause all paused Docker containers
+    echo "Unpausing all paused Docker containers..."
+    for container_id in $(docker ps -q -f "status=paused"); do
+        echo "Unpausing Docker container: ${container_id}"
+        docker unpause "${container_id}"
+        if [ $? -ne 0 ]; then
+            echo "Failed to unpause Docker container: ${container_id}"
+        else
+            echo "Docker container unpaused: ${container_id}"
+        fi
+    done
+else
+    echo "Edu-sharing backup initiated successfully."
+fi

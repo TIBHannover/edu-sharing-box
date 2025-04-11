@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  repository-service:
+    image: {{repository_service_image | regex_replace('[\\n\\t]', '')}}-{{ edu_repo_caption }}-custom
+    environment:
+      - TZ={{edu_sharing_docker_timezone}}
+    volumes:
+      - repository-service-volume-config-node:/opt/bitnami/tomcat/shared/classes/config
+      - repository-service-volume-config-edu-sharing:/opt/bitnami/tomcat/webapps/edu-sharing
+      - repository-service-volume-config-plugins:/opt/alfresco/tomcat/shared/classes/config/plugins
+      - repository-service-volume-bin-plugins:/opt/alfresco/bin/plugins
+      - repository-service-volume-amps:/opt/alfresco/amps
+    
+volumes:
+  repository-service-volume-config-edu-sharing:
+  repository-service-volume-config-plugins:
+  repository-service-volume-bin-plugins:
+  repository-service-volume-amps:
+  repository-service-volume-config-node:
