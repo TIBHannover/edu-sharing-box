@@ -6,8 +6,8 @@ plugin_mongo_service_install_dir: "{{base_dir}}/mongo-service_{{plugin_mongo_ser
 
 
 mongo_plugin_service_environment_variable:
-
-plugin_mongo_service_docker_project_name: "mongo_plugin_service_docker_version"
+# it must have same docker project name as edu-sharing, otherwise the backup will not work
+plugin_mongo_service_docker_project_name: "{{edu_sharing_docker_project_name}}"
 
 plugin_mongo_database_name: "edu-sharing"
 plugin_mongo_database_user: "repository"

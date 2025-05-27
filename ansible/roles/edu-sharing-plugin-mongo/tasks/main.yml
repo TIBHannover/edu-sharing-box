@@ -47,7 +47,7 @@
 
 - name: Remove all plugin mongo service containers.
   shell: |
-    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E '{{plugin_mongo_service_docker_project_name}}' | xargs -r docker stop | xargs -r docker rm"
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'repository-mongo' | xargs -r docker stop | xargs -r docker rm"
   tags:
     - edu-sharing-plugin-mongo
 
