@@ -45,6 +45,7 @@ Siehe [SHIBBOLETH.md](SHIBBOLETH.md)
 Each role in the edu-sharing playbook comes with its own detailed documentation, covering various aspects such as updates, included components, and more. Below are the links to the documentation for each role:
  
 - [shibboleth](ansible/roles/shibboleth/documentation/README.md): This role install and configure the shibboleth.
+- [edu-sharing-shibboleth](ansible/roles/edu-sharing-shibboleth/documentation/README.md): This role configure the shibboleth in edu-sharing.
 - [apache](ansible/roles/apache/documentation/README.md): This role initializes the edu-sharing.
 - [edu-sharing-init](ansible/roles/edu-sharing-init/documentation/README.md): This role initializes the edu-sharing.
 - [edu-sharing-migration](ansible/roles/edu-sharing-migration/documentation/README.md):  This role handles migration tasks for edu-sharing.
