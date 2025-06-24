@@ -53,7 +53,7 @@ mail_configuration:
 
 # version of the amp file
 es_update_oersi_force_local: true
-es_update_oersi_version: 1.0.3
+es_update_oersi_version: 1.0.4
 es_update_oersi_amp_filename: "es-update-oersi-{{es_update_oersi_version}}.amp"
 es_update_oersi_dowload_url:
 # oersi update endpoint 
