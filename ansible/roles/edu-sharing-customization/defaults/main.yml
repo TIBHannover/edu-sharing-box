@@ -72,3 +72,20 @@ edu_sharing_customization_environment_variable:
 # If we need to override the service name, then we can override it,
 # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
 service_repository_service: 'repository-service'
+
+# DOI service configuration for repository integration with DataCite.
+# All fields are required except 'owner'.
+edu_doi_configuration:
+  enabled: false                # (required) Enable or disable the DOI service.
+  repoUrl: '{{edu_sharing_url}}'  # (required) Base URL for repository node entries.
+  baseUrl: 'https://api.test.datacite.org'       # (required) DataCite API endpoint (test or production).
+  prefix: ''           # (required) DOI prefix assigned by DataCite.
+  accountId: ''     # (required) DataCite API account ID.
+  password: '' # (required) DataCite API password.
+
+# DOI publishing configuration for copy-based publishing of nodes.
+# All fields are required except 'owner'.
+edu_doi_publishing_configuration:
+  node: ''                     # (required) Node ID where published DOIs will be stored.
+  node_pattern: 'yyyy/MM/dd'   # (required) Pattern for organizing published nodes.
+  owner: ''                    # (optional) Owner for published DOIs; defaults to node owner if not set.
