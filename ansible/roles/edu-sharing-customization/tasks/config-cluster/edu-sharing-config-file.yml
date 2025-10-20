@@ -8,6 +8,13 @@
   tags:
     - repository-doi-service
 
+- include_tasks: add_remove_angular_headers.yml
+  tags:
+   - repository-security
+   - repository-angular-headers
+   - repository-seo
+   - repository-angular-robots
+
 - include_tasks: youtube.yml  
   when: connect_content_youtube
   tags:

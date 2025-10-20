@@ -89,3 +89,33 @@ edu_doi_publishing_configuration:
   node: ''                     # (required) Node ID where published DOIs will be stored.
   node_pattern: 'yyyy/MM/dd'   # (required) Pattern for organizing published nodes.
   owner: ''                    # (optional) Owner for published DOIs; defaults to node owner if not set.
+
+
+
+# Angular UI customization (security headers and robots)
+# Use edu_angular_configs to override values; do NOT change _edu_angular_defaults.
+# Default Angular configuration structure
+#  see: https://github.com/edu-sharing/edu-sharing-community-repository/blob/maven/release/{version}/config/defaults/src/main/resources/edu-sharing.reference.conf#L619-L659
+#
+# Example override (inventory/group_vars/host_vars):
+#   edu_angular_configs:
+#     headers:
+#       X-Frame-Options: "DENY"
+#       Content-Security-Policy:
+#         default-src: "'self'"
+#         script-src: "'self' 'unsafe-inline'"
+#     robots:
+#       - "User-agent: *"
+#       - "Disallow: /admin"
+
+_edu_angular_defaults:
+  headers:
+    X-XSS-Protection: "1"
+    X-Frame-Options: "sameorigin"
+    Content-Security-Policy:
+      default-src: "* data: blob: 'self' gap://ready"
+      connect-src: "* data:"
+      img-src: "* data: blob:"
+      style-src: "* 'unsafe-inline'"
+      script-src: "* 'unsafe-inline' 'unsafe-eval' https://app-registry.edu-sharing.com"
+      font-src: "'self' data:"

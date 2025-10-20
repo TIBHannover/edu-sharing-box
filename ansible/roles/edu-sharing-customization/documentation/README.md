@@ -119,7 +119,20 @@ edu_doi_publishing_configuration:
   node: ''                     # (required) Node ID where published DOIs will be stored.
   node_pattern: 'yyyy/MM/dd'   # (required) Pattern for organizing published nodes.
   owner: ''                    # (optional) Owner for published DOIs; defaults to node owner if not set.
-  
+
+# Angular UI customization
+# Override via edu_angular_configs (do not change _edu_angular_defaults).
+# Headers map is merged recursively; robots is written as-is when provided.
+# Example:
+#  edu_angular_configs:
+#    headers:
+#      X-Frame-Options: "DENY"
+#      Content-Security-Policy:
+#        default-src: "'self'"
+#        script-src: "'self' 'unsafe-inline'"
+#    robots:
+#      - "User-agent: *"
+#      - "Disallow: /admin"
 ```
 
 ## Tasks
@@ -135,6 +148,7 @@ This directory contains all the customization tasks for the `repository-service-
 3. **`youtube.yml`**: Configures YouTube integration for the repository.
 4. **`pixabay.yml`**: Configures Pixabay integration for the repository.
 5. **`lms.yml`**: Configures LMS (Learning Management System) integration for the repository.
+6. **`add_remove_angular_headers.yml`**: Manages Angular security headers and robots in `edu-sharing.override.conf` using `edu_angular_configs`. Writes or removes dedicated blocks via Ansible blockinfile.
 
 ### `config-edu-sharing`
 
