@@ -121,15 +121,24 @@ edu_doi_publishing_configuration:
   owner: ''                    # (optional) Owner for published DOIs; defaults to node owner if not set.
 
 # Angular UI customization
-# Override via edu_angular_configs (do not change _edu_angular_defaults).
-# Headers map is merged recursively; robots is written as-is when provided.
-# Example:
+# Configure via edu_angular_configs in inventory - only specified headers will be written.
+# Supports both string values and nested objects for complex configurations.
+# 
+# Simple example:
 #  edu_angular_configs:
 #    headers:
 #      X-Frame-Options: "DENY"
+#      X-XSS-Protection: "1"
+#
+# Advanced example with nested CSP:
+#  edu_angular_configs:
+#    headers:
+#      X-Frame-Options: "DENY" 
 #      Content-Security-Policy:
-#        default-src: "'self'"
-#        script-src: "'self' 'unsafe-inline'"
+#        default-src: "* data: blob: 'self' gap://ready"
+#        connect-src: "* data:"
+#        script-src: "* 'unsafe-inline' 'unsafe-eval' https://app-registry.edu-sharing.com"
+#        frame-src: "*"
 #    robots:
 #      - "User-agent: *"
 #      - "Disallow: /admin"
