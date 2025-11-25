@@ -1,17 +1,38 @@
 ---
-- name: Stop running docker-container, if exists
+# Clean up any existing screenshot service containers
+- name: Stop running splash docker-container, if exists
   shell: "sg docker -c \"docker ps --format '{{ '{{' }}.Image{{ '}}' }}' | grep -q 'scrapinghub/splash' && docker stop splash\""
   ignore_errors: true  # exit code 1, if container does not exist
   tags: 
     - edu-sharing-splash
 
-- name: Remove docker-container, if exists
+- name: Remove splash docker-container, if exists
   shell: "sg docker -c \"docker ps -a --format '{{ '{{' }}.Image{{ '}}' }}' | grep -q 'scrapinghub/splash' && docker rm splash\""
   ignore_errors: true  # exit code 1, if container does not exist
   tags: 
     - edu-sharing-splash
 
-- name: Run splash docker-container
-  shell: "sg docker -c \"docker run --name splash --restart=always -d -p {{ edu_sharing_splash_port }}:8050 scrapinghub/splash\""
+- name: Stop running playwright docker-container, if exists
+  shell: "sg docker -c \"docker ps --format '{{ '{{' }}.Names{{ '}}' }}' | grep -q 'playwright' && docker stop playwright\""
+  ignore_errors: true  # exit code 1, if container does not exist
   tags: 
+    - edu-sharing-splash
+
+- name: Remove playwright docker-container, if exists
+  shell: "sg docker -c \"docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -q 'playwright' && docker rm playwright\""
+  ignore_errors: true  # exit code 1, if container does not exist
+  tags: 
+    - edu-sharing-splash
+
+# Install the selected screenshot service
+- name: Install Playwright screenshot service
+  include_tasks: install-playwright.yml
+  when: screenshot_service_type | default('splash') == 'playwright'
+  tags:
+    - edu-sharing-splash
+
+- name: Install Splash screenshot service
+  include_tasks: install-splash.yml
+  when: screenshot_service_type | default('splash') == 'splash'
+  tags:
     - edu-sharing-splash

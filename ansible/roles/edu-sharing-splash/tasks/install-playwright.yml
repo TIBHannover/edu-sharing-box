@@ -1,0 +1,11 @@
+---
+# Install playwright
+- name: Pull playwright docker image
+  shell: "sg docker -c \"docker pull {{ playwright_image }}\""
+  tags: 
+    - edu-sharing-splash
+
+- name: Run playwright docker-container
+  shell: "sg docker -c \"docker run --name playwright --restart=always -d -p {{ edu_sharing_splash_port }}:{{ playwright_internal_port }} {{ playwright_image }}\""
+  tags: 
+    - edu-sharing-splash
