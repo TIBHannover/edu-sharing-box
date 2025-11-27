@@ -9,16 +9,4 @@
       repository.communication.splash = {
         url: "{{ edu_sharing_splash_url }}"
       }
-  when: screenshot_service_type == 'splash'
 
-- name: Add or update edu sharing playwright configuration (Playwright service)
-  become: true
-  blockinfile:
-    path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
-    marker: "//{mark} EDU SHARING SPLASH CONFIGURATION"
-    insertafter: EOF
-    block: |
-      repository.communication.playwright = {
-        url: "{{ edu_sharing_splash_url }}"
-      }
-  when: screenshot_service_type == 'playwright'
