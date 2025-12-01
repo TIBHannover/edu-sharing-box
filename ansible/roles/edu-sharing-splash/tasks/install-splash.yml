@@ -1,0 +1,6 @@
+---
+# Install splash
+- name: Run splash docker-container
+  shell: "sg docker -c \"docker run --name splash --restart=always -d -p {{ edu_sharing_splash_port }}:{{ splash_internal_port }} {{ splash_image }}\""
+  tags: 
+    - edu-sharing-splash

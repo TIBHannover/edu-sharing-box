@@ -1,5 +1,5 @@
 ---
-- name: Add or update edu sharing splash.
+- name: Add or update edu sharing splash configuration (Splash service)
   become: true
   blockinfile:
     path: "{{repository_volume_config_cluster_path.stdout}}/edu-sharing.override.conf"
@@ -9,3 +9,4 @@
       repository.communication.splash = {
         url: "{{ edu_sharing_splash_url }}"
       }
+

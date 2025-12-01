@@ -1,8 +1,20 @@
 ---
 # Activate/deactivate Splash
 enable_edu_sharing_splash: false
+
+# Screenshot service type: 'splash' or 'playwright'
+screenshot_service_type: 'playwright'
+
 edu_sharing_splash_location: '/edu-splash'
 # "http://{{ host }}:8050/render.png" # URL of the splash-service for http previews
 edu_sharing_splash_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}{{edu_sharing_splash_location | default("/edu-splash",true)}}/render.png'
 
 edu_sharing_splash_port: 8050
+
+# Splash configuration
+splash_image: 'scrapinghub/splash'
+splash_internal_port: 8050
+
+# Playwright configuration
+playwright_image: 'registry.gitlab.com/e.kacaj/playwright-splash:latest'
+playwright_internal_port: 5050

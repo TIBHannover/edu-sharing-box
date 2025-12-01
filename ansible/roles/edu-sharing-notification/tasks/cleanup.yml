@@ -8,7 +8,7 @@
       - "{{ repository_volume_docker_plugins.stdout }}/plugin-kafka"
       - "{{ repository_volume_config_plugins.stdout }}/plugin-kafka"
     file_type: any
-  register: found_files
+  register: plugin_kafka_found_files
   when:
     - repository_volume_docker_plugins.stdout is defined and repository_volume_docker_plugins.stdout != ''
     - repository_volume_config_plugins.stdout is defined and repository_volume_config_plugins.stdout != ''
@@ -20,8 +20,8 @@
   file:
     path: "{{ item.path }}"
     state: absent
-  loop: "{{ found_files.files }}"
-  when: found_files.matched > 0
+  loop: "{{ plugin_kafka_found_files.files }}"
+  when: plugin_kafka_found_files.matched > 0
   tags:
     - edu-sharing-notification
 
@@ -44,13 +44,13 @@
   when:
     (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
     (repository_config_edu_sharing_path.stdout is defined and repository_config_edu_sharing_path.stdout != '')
-  register: found_files
+  register: plugin_kafka_amp_jar_found_files
   tags:
     - edu-sharing-notification
 
 - name: Debug filtered files
   debug:
-    msg: "Files to delete: {{ found_files.files | map(attribute='path') | list }}"
+    msg: "Files to delete: {{ plugin_kafka_amp_jar_found_files.files | map(attribute='path') | list }}"
   tags:
     - edu-sharing-notification
 
@@ -59,9 +59,38 @@
   file:
     path: "{{ item }}"
     state: absent
-  with_items: "{{ found_files.files | map(attribute='path') | list }}"
+  with_items: "{{ plugin_kafka_amp_jar_found_files.files | map(attribute='path') | list }}"
   when:
     (repository_service_volume_amps.stdout is defined and repository_service_volume_amps.stdout != '') and
     (repository_config_edu_sharing_path.stdout is defined and repository_config_edu_sharing_path.stdout != '')
+  tags:
+    - edu-sharing-notification
+
+- name: Find all kafka-related plugin folders to delete
+  become: true
+  find:
+    paths:
+      - "{{ repository_config_edu_sharing_path.stdout }}/WEB-INF/classes/alfresco/module/"
+      - "{{ repository_volume_docker_plugins.stdout }}"
+      - "{{ repository_volume_config_plugins.stdout }}"
+    file_type: directory
+    patterns:
+      - "*plugin-kafka*"
+    recurse: no
+  when:
+    repository_config_edu_sharing_path.stdout is defined and repository_config_edu_sharing_path.stdout != '' and
+    repository_volume_docker_plugins.stdout is defined and repository_volume_docker_plugins.stdout != '' and
+    repository_volume_config_plugins.stdout is defined and repository_volume_config_plugins.stdout != ''
+  register: kafka_plugin_folders
+  tags:
+    - edu-sharing-notification
+
+- name: Delete kafka-related plugin folders
+  become: true
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ kafka_plugin_folders.files }}"
+  when: kafka_plugin_folders.files | length > 0
   tags:
     - edu-sharing-notification

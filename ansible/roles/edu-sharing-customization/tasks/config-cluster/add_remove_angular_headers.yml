@@ -1,0 +1,82 @@
+# Description:
+#   Manages Angular-related settings in edu-sharing.override.conf:
+#     - Security headers (only from edu_angular_configs.headers - no defaults merged).
+#     - robots rules (from edu_angular_configs.robots).
+# Inputs:
+#   - repository_volume_config_cluster_path.stdout: base path to config cluster volume.
+#   - edu_angular_configs: user overrides (define in inventory/group_vars/host_vars).
+# Behavior:
+#   - If edu_angular_configs.headers is defined and non-empty, writes only those headers.
+#   - Otherwise, removes the headers block.
+#   - If edu_angular_configs.robots is defined, writes/updates robots block; else removes it.
+# Idempotency:
+#   - Uses blockinfile with unique markers to allow safe re-runs.
+# Tags:
+#   - angular-headers, security-headers, angular-robots, seo
+---
+
+- name: Add or update Angular security headers
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING ANGULAR HEADERS"
+    insertafter: EOF
+    block: |
+      // Angular security headers configuration
+      {% set headers_to_use = edu_angular_configs.headers | default({}) %}
+      angular.headers = {
+      {% for key, value in headers_to_use.items() %}
+        {% if value is mapping %}
+        {{ key }}: {
+          {% for sub_key, sub_value in value.items() %}
+          {{ sub_key }}: "{{ sub_value }}"
+          {% endfor %}
+        }
+        {% else %}
+        {{ key }}: "{{ value }}"
+        {% endif %}
+      {% endfor %}
+      }
+  when: edu_angular_configs is defined and edu_angular_configs.headers is defined and edu_angular_configs.headers | length > 0
+  tags:
+    - angular-headers
+    - security-headers
+
+
+- name: Remove Angular security headers block if headers not defined or empty
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING ANGULAR HEADERS"
+    state: absent
+  when: edu_angular_configs is not defined or edu_angular_configs.headers is not defined or edu_angular_configs.headers | length == 0
+  tags:
+    - angular-headers
+    - security-headers
+
+
+- name: Add or update Angular robots
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING ANGULAR ROBOTS"
+    insertafter: EOF
+    block: |
+      // Angular robots configuration
+      {% set robots_to_use = edu_angular_configs.robots | default([]) %}
+      angular.robots = [
+      {% for rule in robots_to_use %}
+          "{{ rule }}"
+      {% endfor %}
+      ]
+  when: edu_angular_configs is defined and edu_angular_configs.robots is defined
+  tags:
+    - angular-robots
+    - seo
+
+- name: Remove Angular robots block if robots not defined
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING ANGULAR ROBOTS"
+    state: absent
+  when: edu_angular_configs is not defined or edu_angular_configs.robots is not defined
+  tags:
+    - angular-robots
+    - seo

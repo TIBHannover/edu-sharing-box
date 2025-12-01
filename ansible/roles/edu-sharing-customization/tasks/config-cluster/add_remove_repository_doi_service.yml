@@ -1,0 +1,48 @@
+---
+- name: Add or update DOI service configuration.
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING REPOSITORY DOISERVICE"
+    insertafter: EOF
+    block: |
+      // DOI service configuration for repository
+      repository.doiservice= {
+            // Enable or disable the DOI service (requires repository restart)
+            enabled: {{ edu_doi_configuration.enabled | default(false) | string | lower  }}
+            // URL for repository node entry used in DOI creation (e.g., https://myrepo.com/edu-sharing/)
+            repoUrl: "{{ edu_doi_configuration.repoUrl | default('', true) }}"
+            // Base URL for DOI API (e.g., https://api.test.datacite.org for testing, https://api.datacite.org for production)
+            baseUrl: "{{ edu_doi_configuration.baseUrl | default('https://api.test.datacite.org', true) }}"
+            // API credentials
+            accountId: "{{ edu_doi_configuration.accountId | default('', true) }}"
+            password: "{{ edu_doi_configuration.password | default('', true) }}"
+            // Prefix for DOI creation
+            prefix: "{{ edu_doi_configuration.prefix | default('', true) }}"
+      }
+
+      // Configuration for copy-based publishing of nodes
+      publish= {
+        // Node used for publishing
+        node: "{{ edu_doi_publishing_configuration.node | default('', true) }}"
+        // Pattern for node organization (e.g., yyyy/MM/dd)
+        nodePattern: "{{ edu_doi_publishing_configuration.node_pattern | default('yyyy/MM/dd', true) }}"
+        // Owner of the published nodes
+        owner: "{{ edu_doi_publishing_configuration.owner | default('', true) }}"
+      }
+  when: edu_doi_configuration is defined and edu_doi_configuration.enabled is defined and edu_doi_configuration.enabled | default(false) == true
+  tags:
+    - doi
+    - doi_registration
+
+- name: Remove DOI configuration.
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING REPOSITORY DOISERVICE"
+    state: absent # Removes the block if DOI service is disabled
+  when: edu_doi_configuration is defined and edu_doi_configuration.enabled is defined and edu_doi_configuration.enabled | default(false) == false
+  tags:
+    - doi
+    - doi_un_registration
+
+
+

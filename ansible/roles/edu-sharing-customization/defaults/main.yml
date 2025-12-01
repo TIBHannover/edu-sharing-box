@@ -72,3 +72,49 @@ edu_sharing_customization_environment_variable:
 # If we need to override the service name, then we can override it,
 # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
 service_repository_service: 'repository-service'
+
+# DOI service configuration for repository integration with DataCite.
+# All fields are required except 'owner'.
+edu_doi_configuration:
+  enabled: false                # (required) Enable or disable the DOI service.
+  repoUrl: '{{edu_sharing_url}}'  # (required) Base URL for repository node entries.
+  baseUrl: 'https://api.test.datacite.org'       # (required) DataCite API endpoint (test or production).
+  prefix: ''           # (required) DOI prefix assigned by DataCite.
+  accountId: ''     # (required) DataCite API account ID.
+  password: '' # (required) DataCite API password.
+
+# DOI publishing configuration for copy-based publishing of nodes.
+# All fields are required except 'owner'.
+edu_doi_publishing_configuration:
+  node: ''                     # (required) Node ID where published DOIs will be stored.
+  node_pattern: 'yyyy/MM/dd'   # (required) Pattern for organizing published nodes.
+  owner: ''                    # (optional) Owner for published DOIs; defaults to node owner if not set.
+
+
+
+# Angular UI customization (security headers and robots)
+# Configure via edu_angular_configs in inventory/group_vars/host_vars.
+# Only headers explicitly defined will be written - no defaults merged.
+# Supports both string values and nested objects for complex headers like CSP.
+#
+# Structure and examples:
+# edu_angular_configs:
+#   headers:
+#     # Simple string headers
+#     X-Frame-Options: "DENY"
+#     X-XSS-Protection: "1"
+#     # Nested object for Content-Security-Policy
+#     Content-Security-Policy:
+#       default-src: "* data: blob: 'self' gap://ready"
+#       connect-src: "* data:"
+#       img-src: "* data: blob:"
+#       style-src: "* 'unsafe-inline'"
+#       script-src: "* 'unsafe-inline' 'unsafe-eval' https://app-registry.edu-sharing.com"
+#       font-src: "'self' data:"
+#       frame-src: "*"
+#   robots:
+#     - "User-agent: *"
+#     - "Disallow: /admin"
+#     - "Sitemap: {{sitemap}}"
+#
+# Reference: https://github.com/edu-sharing/edu-sharing-community-repository/blob/maven/release/{version}/config/defaults/src/main/resources/edu-sharing.reference.conf#L619-L659
