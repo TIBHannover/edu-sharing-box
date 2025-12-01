@@ -15,6 +15,12 @@
    - repository-seo
    - repository-angular-robots
 
+- include_tasks: add_remove_guest_configuration.yml
+  tags:
+    - repository-guest-user
+    - repository-guest-configuration
+    - repository-guest-access-control
+
 - include_tasks: youtube.yml  
   when: connect_content_youtube
   tags:

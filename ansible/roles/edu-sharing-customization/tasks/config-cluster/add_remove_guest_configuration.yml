@@ -1,0 +1,35 @@
+---
+- name: Add or update guest user configuration
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING GUEST CONFIGURATION"
+    insertafter: EOF
+    block: |
+      // Guest user configuration
+      repository.guest = {
+          // Enable or disable guest user access (requires repository restart)
+          enabled: {{ enable_guest_user | default(false) | string | lower }}
+          // Guest user name
+          username: "{{ guest_user_name | default('esguest', true) }}"
+          // Guest user groups
+          groups: [
+          {% for group in guest_user_groups | default([]) %}
+              "{{ group }}"{{ "," if not loop.last else "" }}
+          {% endfor %}
+          ]
+      }
+  when: enable_guest_user is defined and enable_guest_user | bool
+  tags:
+    - guest-configuration
+    - access-control
+
+- name: Remove guest user configuration block if disabled or not defined
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING GUEST CONFIGURATION"
+    state: absent
+  when: enable_guest_user is not defined or not (enable_guest_user | bool)
+  tags:
+    - guest-configuration
+    - access-control
+

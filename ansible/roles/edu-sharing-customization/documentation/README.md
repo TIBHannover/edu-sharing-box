@@ -142,6 +142,23 @@ edu_doi_publishing_configuration:
 #    robots:
 #      - "User-agent: *"
 #      - "Disallow: /admin"
+
+# Guest user configuration
+# Allows anonymous users to access the repository with predefined permissions.
+# When enabled, creates a guest user account with specified username and group memberships.
+# Requires repository restart to take effect.
+#
+# Configuration variables:
+#   enable_guest_user: boolean to enable/disable guest access (default: false)
+#   guest_user_name: username for guest user (default: "esguest")
+#   guest_user_groups: list of groups for guest user (default: [])
+#
+# Example:
+#  enable_guest_user: true
+#  guest_user_name: "esguest"
+#  guest_user_groups:
+#    - "GROUP_EVERYONE"
+#    - "GROUP_GUEST"
 ```
 
 ## Tasks
@@ -158,6 +175,7 @@ This directory contains all the customization tasks for the `repository-service-
 4. **`pixabay.yml`**: Configures Pixabay integration for the repository.
 5. **`lms.yml`**: Configures LMS (Learning Management System) integration for the repository.
 6. **`add_remove_angular_headers.yml`**: Manages Angular security headers and robots in `edu-sharing.override.conf` using `edu_angular_configs`. Writes or removes dedicated blocks via Ansible blockinfile.
+7. **`add_remove_guest_configuration.yml`**: Manages guest user configuration in `edu-sharing.override.conf`. Enables anonymous access with configurable username and group memberships using `enable_guest_user`, `guest_user_name`, and `guest_user_groups` variables.
 
 ### `config-edu-sharing`
 
