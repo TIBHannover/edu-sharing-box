@@ -7,10 +7,6 @@ services:
 
 
   notification-service:
-     environment:
-        SPRING_MAIL_USERNAME: "${REPOSITORY_SERVICE_MAIL_SERVER_SMTP_USERNAME:-}"
-        SPRING_MAIL_PASSWORD: "${REPOSITORY_SERVICE_MAIL_SERVER_SMTP_PASSWORD:-}"
-        SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
      networks:
         - {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}
 

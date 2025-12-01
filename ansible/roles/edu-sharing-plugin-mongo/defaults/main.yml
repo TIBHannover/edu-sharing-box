@@ -1,6 +1,6 @@
 ---
 enable_plugin_mongo_service: false
-plugin_mongo_service_version: 9.0.16
+plugin_mongo_service_version: 9.1.0
 # installation directory
 plugin_mongo_service_install_dir: "{{base_dir}}/mongo-service_{{plugin_mongo_service_version|replace('.','_')}}"
 
