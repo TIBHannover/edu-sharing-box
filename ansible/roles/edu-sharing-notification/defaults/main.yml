@@ -1,6 +1,6 @@
 ---
 enable_notification_service: false
-notification_service_version: 9.0.16
+notification_service_version: 9.1.0
 # installation directory
 notification_service_install_dir: "{{base_dir}}/notification-service_{{notification_service_version|replace('.','_')}}"
 
