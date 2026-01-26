@@ -92,7 +92,11 @@
     - include_tasks: download-plugin-kafka-service-amp.yml
     - include_tasks: download-plugin-kafka-alfresco-amp.yml
     - include_tasks: download-and-install-docker-compose.yml
+      tags:
+        - edu-sharing-notification-template-override
     - include_tasks: override_notification_mail_templates.yml
+      tags:
+        - edu-sharing-notification-template-override
   when: enable_notification_service is defined and enable_notification_service
   tags:
     - edu-sharing-notification
@@ -102,6 +106,15 @@
   when: enable_notification_service is defined and not enable_notification_service
   tags:
     - edu-sharing-notification
+
+- name: Run notification service.
+  shell:
+    chdir: "{{notification_service_install_dir}}/"
+    cmd: '{{notification_service_deploy_command | default(''sg docker -c "./deploy.sh start"'',true)}}'
+  when: enable_notification_service is defined and enable_notification_service
+  tags:
+    - edu-sharing-notification
+    - edu-sharing-notification-template-override
 
 - name: Restart edu-sharing service in docker.
   command:

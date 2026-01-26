@@ -27,12 +27,16 @@
   template:
     src: .env.j2
     dest: "{{notification_service_install_dir}}/.env"
+  tags:
+    - edu-sharing-notification
 
 - name: Copy deploy shell script file.
   template:
     src: deploy.sh.j2
     dest: "{{notification_service_install_dir}}/deploy.sh"
     mode: "a+x"
+  tags:
+    - edu-sharing-notification
 
 - name: Get the network name of a container based on a pattern
   shell: |
@@ -45,6 +49,8 @@
 - name: Check edu-sharing version.
   debug:
     msg: "Your edu-sharing version is {{ repository_service_docker_network_name.stdout }}."
+  tags:
+    - edu-sharing-notification
 
 - name: Copy override file.
   template:
@@ -52,8 +58,5 @@
     dest: "{{notification_service_install_dir}}/3_plugin-kafka-override-common.yml"
   vars:
     edu_sharing_docker_network_name: "{{repository_service_docker_network_name.stdout}}"
-
-- name: Run notification service.
-  shell:
-    chdir: "{{notification_service_install_dir}}/"
-    cmd: '{{notification_service_deploy_command | default(''sg docker -c "./deploy.sh start"'',true)}}'
+  tags:
+    - edu-sharing-notification
