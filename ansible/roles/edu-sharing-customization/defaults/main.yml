@@ -118,3 +118,35 @@ edu_doi_publishing_configuration:
 #     - "Sitemap: {{sitemap}}"
 #
 # Reference: https://github.com/edu-sharing/edu-sharing-community-repository/blob/maven/release/{version}/config/defaults/src/main/resources/edu-sharing.reference.conf#L619-L659
+
+# Examples:
+# edu_system_jobs:
+#   # Basic job with default trigger (Immediate - runs at startup)
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.RefreshCacheJob"
+#
+#   # Job with custom name and cron schedule
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.TrashcanCleanerJob"
+#     name: "Nightly Trash Cleanup"
+#     trigger: "Cron[0 0 2 * * ?]"  # Every day at 2:00 AM
+#     parameters:
+#       timeToKeep: "7776000000"    # 90 days in milliseconds (90 * 24 * 60 * 60 * 1000)
+#       batchSize: "5000"           # Process 5000 nodes per batch
+#
+#   # Job with auto-generated name and additional properties
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.TimedPermissionJob"
+#     trigger: "Cron[0 * * * * ?]"  # Every minute
+#     priority: 10                  # Custom property: numeric value
+#     enabled: true                 # Custom property: boolean value
+#
+#   # Job running every Monday at 6:00 AM
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.BulkEditJob"
+#     trigger: "Cron[0 0 6 ? * 1]"
+#     parameters:
+#       maxNodes: "1000"
+#
+#   # Job running every 6 hours with custom status
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.ImporterJob"
+#     name: "Periodic Content Import"
+#     trigger: "Cron[0 0 */6 * * ?]"
+#     status: "active"
+#     timeout: "3600000"            # 1 hour timeout in milliseconds

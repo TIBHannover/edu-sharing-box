@@ -159,6 +159,37 @@ edu_doi_publishing_configuration:
 #  guest_user_groups:
 #    - "GROUP_EVERYONE"
 #    - "GROUP_GUEST"
+
+# Custom jobs configuration (Quartz)
+# Adds custom jobs to edu-sharing.override.conf using "jobs.entries += { ... }".
+# If edu_system_jobs is undefined or empty, the jobs block will be removed.
+#
+# Fields:
+#   job_class  - (required) Fully qualified Java class name for the job
+#   name       - (optional) Job display name. If omitted, derived from job_class
+#   trigger    - (optional) Quartz trigger. Defaults to "Immediate"
+#   parameters - (optional) Job-specific parameters (string values)
+#   <any_key>  - (optional) Additional key-value pairs are written to the job
+#
+# Quartz Cron format: Cron[second minute hour day-of-month month day-of-week]
+# Day-of-week: 0 or 7 = Sunday, 1 = Monday, ..., 6 = Saturday
+#
+# Example (with JSON parameter value):
+# edu_system_jobs:
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.FixElasticSearchDeletedNodes"
+#     name: "Weekly ES Cleanup"
+#     trigger: "Cron[0 0 4 ? * 0]"
+#     parameters:
+#       cleanupChildren: "true"
+#       execute: "false"
+#       query: '{"term":{"type":"ccm:io"}}'
+#
+# Example (extra keys):
+# edu_system_jobs:
+#   - job_class: "org.edu_sharing.repository.server.jobs.quartz.LicenseManagerJob"
+#     trigger: "Cron[0 0 * * * ?]"
+#     status: "active"
+#     priority: "10"
 ```
 
 ## Tasks
@@ -176,6 +207,7 @@ This directory contains all the customization tasks for the `repository-service-
 5. **`lms.yml`**: Configures LMS (Learning Management System) integration for the repository.
 6. **`add_remove_angular_headers.yml`**: Manages Angular security headers and robots in `edu-sharing.override.conf` using `edu_angular_configs`. Writes or removes dedicated blocks via Ansible blockinfile.
 7. **`add_remove_guest_configuration.yml`**: Manages guest user configuration in `edu-sharing.override.conf`. Enables anonymous access with configurable username and group memberships using `enable_guest_user`, `guest_user_name`, and `guest_user_groups` variables.
+8. **`add_remove_jobs_configuration.yml`**: Manages Quartz job entries in `edu-sharing.override.conf` using `edu_system_jobs`. Adds or removes the jobs block depending on whether the variable is defined and non-empty.
 
 ### `config-edu-sharing`
 

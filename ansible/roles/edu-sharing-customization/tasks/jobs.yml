@@ -5,10 +5,10 @@
   no_log: true
   loop: '{{ edu_migration_replace_mapping | default([], true) }}'
 
-- name: "Add more jobs to list of all jobs"
-  set_fact:
-    edu_jobs_all: "{{ edu_jobs_all | default([], true) + [{'jobClass': item.job_class, 'params': item.parameters }] }}"
-  loop: '{{ edu_system_jobs | default([], true) }}'
+# - name: "Add more jobs to list of all jobs"
+#   set_fact:
+#     edu_jobs_all: "{{ edu_jobs_all | default([], true) + [{'jobClass': item.job_class, 'params': item.parameters }] }}"
+#   loop: '{{ edu_system_jobs | default([], true) }}'
 
 # For edu-sharing docker version we need to wait for responses up to 3 minutes
 - name: "wait edu-sharing to come up"

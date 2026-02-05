@@ -1,0 +1,71 @@
+# Custom jobs configuration for edu-sharing Quartz scheduler.
+# Configure via edu_system_jobs in inventory/group_vars/host_vars.
+# Jobs will be added to edu-sharing.override.conf using "jobs.entries += {...}" syntax.
+# If variable is undefined, empty, or set to an empty list, all custom jobs will be removed.
+#
+# Field descriptions:
+#   job_class  - (required) Fully qualified Java class name for the job
+#   name       - (optional) Display name for the job. If not provided, auto-generated from job_class
+#                Example: "TrashcanCleanerJob" becomes "Trashcan Cleaner Job"
+#   trigger    - (optional) Quartz trigger expression. Defaults to "Immediate" (runs at startup)
+#                - "Immediate" = Run once at startup
+#                - "Cron[second minute hour day-of-month month day-of-week]" = Scheduled execution
+#   parameters - (optional) Dictionary of job-specific configuration parameters
+#   <any_key>  - (optional) Any additional key-value pairs will be included in the job configuration
+#                Supports strings, numbers, and booleans
+#
+# Quartz Cron format: Cron[second minute hour day-of-month month day-of-week]
+#   - Day-of-week: 0 or 7 = Sunday, 1 = Monday, ..., 6 = Saturday
+#   - Special characters: * (any), ? (no specific value), */N (every N units), - (range), , (list)
+#
+# Common cron examples:
+#   "Cron[0 0 2 * * ?]"      - Every day at 2:00 AM
+#   "Cron[0 0 6 ? * 1]"      - Every Monday at 6:00 AM
+#   "Cron[0 * * * * ?]"      - Every minute
+#   "Cron[0 */30 * * * ?]"   - Every 30 minutes
+#   "Cron[0 0 */6 * * ?]"    - Every 6 hours
+#   "Cron[0 0 0 1 * ?]"      - First day of every month at midnight
+#   "Cron[0 0 6 ? * 1-5]"    - Monday-Friday at 6:00 AM
+#
+# Available jobs list: https://{{edu_sharing_host}}/edu-sharing/rest/admin/v1/jobs/all
+#
+---
+- name: Add or update custom jobs configuration
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING CUSTOM JOBS CONFIGURATION"
+    insertafter: EOF
+    block: |
+      // Custom jobs configuration
+      // to override and add custom jobs, we recommend using "jobs.entries += {...}"
+      {% for job in edu_system_jobs %}
+      jobs.entries +={
+          name: "{{ job.name | default((job.job_class.split('.')[-1] | regex_replace('Job$', '') | regex_replace('([A-Z])', ' \1') | trim)) }}",
+          class: "{{ job.job_class }}",
+          trigger: "{{ job.trigger | default('Immediate') }}"{% if job.parameters is defined and job.parameters %},
+          parameters: {
+          {% for param_key, param_value in job.parameters.items() %}
+              {{ param_key }}: {{ param_value | to_json }}{{ "," if not loop.last else "" }}
+          {% endfor %}
+          }{% endif %}
+          {% set extra_keys = job.keys() | list | difference(['job_class', 'name', 'trigger', 'parameters']) %}{% if extra_keys | length > 0 %},
+          {% for key in extra_keys %}
+          {{ key }}: "{{ job[key] }}"{{ "," if not loop.last else "" }}
+          {% endfor %}{% endif %}
+
+      }
+      {% endfor %}
+  when: edu_system_jobs is defined and edu_system_jobs | length > 0
+  tags:
+    - jobs-configuration
+    - custom-jobs
+
+- name: Remove jobs configuration block if not defined or empty
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING CUSTOM JOBS CONFIGURATION"
+    state: absent
+  when: edu_system_jobs is not defined or edu_system_jobs | length == 0
+  tags:
+    - jobs-configuration
+    - custom-jobs
