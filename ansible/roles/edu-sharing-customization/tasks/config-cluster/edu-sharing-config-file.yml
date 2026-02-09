@@ -21,6 +21,12 @@
     - repository-guest-configuration
     - repository-guest-access-control
 
+- include_tasks: add_remove_jobs_configuration.yml
+  tags:
+    - repository-jobs
+    - repository-jobs-configuration
+    - repository-custom-jobs
+
 - include_tasks: youtube.yml  
   when: connect_content_youtube
   tags:
