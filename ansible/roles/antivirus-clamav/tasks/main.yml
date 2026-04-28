@@ -1,2 +1,21 @@
+---
+
+- name: Ensures inst-dir exists
+  file:
+    path: "{{clamav_docker_install_dir}}"
+    state: directory
 
 - include_tasks: clamav.yml
+
+- include_tasks: clamav_config.yml
+  when: >
+    (clamav_config_overrides is defined and clamav_config_overrides | length > 0)
+    or (clamav_reset_config | default(false) | bool)
+
+- name: Restart ClamAV
+  ansible.builtin.command: "{{ clamav_docker_restart_command | default('docker compose up -d --force-recreate', true) }}"
+  args:
+    chdir: "{{ clamav_docker_install_dir }}/"
+  when: >
+    (clamav_config_overrides is defined and clamav_config_overrides | length > 0)
+    or (clamav_reset_config | default(false) | bool)

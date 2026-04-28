@@ -1,0 +1,100 @@
+---
+# This task file manages the runtime clamd.conf that Docker creates inside the
+# clamav_config volume.
+#
+# Behavior:
+# - It discovers the Docker volume mountpoint for the ClamAV config volume.
+# - It waits until Docker has created the active clamd.conf file.
+# - It creates a one-time immutable backup as clamd.conf.orig.
+# - On every run, it restores clamd.conf from clamd.conf.orig as a baseline.
+# - If clamav_reset_config is false, it applies entries from
+#   clamav_config_overrides to clamd.conf.
+# - If clamav_reset_config is true, it keeps the restored baseline and skips
+#   all overrides.
+#
+# Override behavior:
+# - Existing active directives are updated in place.
+# - Commented directives like "#MaxFileSize 400M" are uncommented and replaced.
+# - If a directive does not exist at all, it is appended once.
+# - Re-running the playbook is deterministic because the baseline is restored
+#   before applying overrides.
+#
+# Reset behavior:
+# - clamav_reset_config defaults to false.
+# - Reset is explicit. An empty clamav_config_overrides map does not reset
+#   anything by itself.
+# - Restoring from clamd.conf.orig resets the active config back to the original
+#   Docker-generated file captured on the first successful run.
+#
+# Reference sample config:
+# https://github.com/Cisco-Talos/clamav/blob/main/etc/clamd.conf.sample
+
+- name: Get the path to the clamav config volume.
+  shell: |
+    sg docker -c "docker volume inspect --format '{{ '{{' }}.Mountpoint{{ '}}' }}' $(sg docker -c "docker volume ls -q | grep '{{clamav_docker_docker_project_name | default('clamav_docker_antivirus',true)}}_clamav_config'")"
+  register: clamav_config_volume
+  ignore_errors: true
+  tags:
+    - edu-sharing-antivirus
+    - clamav
+    - antivirus-clamav
+
+- name: Wait until folder is created by Docker.
+  become: true
+  wait_for:
+    path: "{{ clamav_config_volume.stdout }}/clamd.conf"
+    state: present
+    timeout: 300
+  retries: 10
+  delay: 10
+  ignore_errors: true
+  when: (clamav_config_volume.stdout is defined) and (clamav_config_volume.stdout != "")
+  tags:
+    - edu-sharing-antivirus
+    - clamav
+    - antivirus-clamav
+
+- name: Update the clamd.conf file with the configuration values.
+  become: true
+  block:
+    - name: Check whether original clamd.conf backup exists
+      stat:
+        path: "{{ clamav_config_volume.stdout }}/clamd.conf.orig"
+      register: clamd_conf_orig_backup
+
+    - name: Create original clamd.conf backup once
+      copy:
+        src: "{{ clamav_config_volume.stdout }}/clamd.conf"
+        dest: "{{ clamav_config_volume.stdout }}/clamd.conf.orig"
+        remote_src: true
+      when: not clamd_conf_orig_backup.stat.exists
+
+    - name: Restore clamd.conf from original baseline
+      copy:
+        src: "{{ clamav_config_volume.stdout }}/clamd.conf.orig"
+        dest: "{{ clamav_config_volume.stdout }}/clamd.conf"
+        remote_src: true
+
+    - name: Apply ClamAV config overrides
+      lineinfile:
+        path: "{{ clamav_config_volume.stdout }}/clamd.conf"
+        regexp: "^(#\\s*)?{{ item.key }}\\b.*$"
+        line: "{{ item.key }} {{ item.value }}"
+        insertafter: EOF
+      loop: "{{ clamav_config_overrides | default({}) | dict2items }}"
+      when:
+        - not (clamav_reset_config | default(false) | bool)
+        - clamav_config_overrides | default({}) | length > 0
+
+  rescue:
+    - name: Roll back clamd.conf to original backup
+      copy:
+        src: "{{ clamav_config_volume.stdout }}/clamd.conf.orig"
+        dest: "{{ clamav_config_volume.stdout }}/clamd.conf"
+        remote_src: true
+
+  when: (clamav_config_volume.stdout is defined) and (clamav_config_volume.stdout != "")
+  tags:
+    - edu-sharing-antivirus
+    - clamav
+    - antivirus-clamav

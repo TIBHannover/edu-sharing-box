@@ -52,6 +52,13 @@ clamav_docker_freshclamd_checks: 1
 # Command to run edu-connector in docker
 clamav_docker_run_command: 'sg docker -c "docker compose -f docker-compose.yml up -d"'
 
+# Configuration overrides for clamd.conf. This can be used to set any configuration value in clamd.conf. The key is the name of the configuration option, the value is the desired value for this option. Example:
+clamav_config_overrides:
+  # StreamMaxLength: 250M
+  # MaxFileSize: 250M
+  # MaxScanSize: 500M
+
+
 ```
 
 ## Tasks

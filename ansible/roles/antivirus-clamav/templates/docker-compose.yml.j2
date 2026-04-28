@@ -14,6 +14,9 @@ services:
       - {{clamav_milter_docker_internal_port | default(7357, true)}}:7357
     volumes:
       - "clamav_antivirus_db:/var/lib/clamav"
+      - "clamav_config:/etc/clamav"
     restart: unless-stopped
 volumes:
   clamav_antivirus_db:
+  clamav_config:
+    name: "{{clamav_docker_docker_project_name | default('clamav_docker_antivirus',true)}}_clamav_config"

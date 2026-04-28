@@ -1,15 +1,18 @@
-- name: Ensures inst-dir exists
-  file:
-    path: "{{clamav_docker_install_dir}}"
-    state: directory
 
-
-- name: Copy edu-connector docker-compose file.
+- name: Copy docker-compose.yml.j2 to inst-dir as docker-compose.yml
   template:
     src: docker-compose.yml.j2
     dest: "{{clamav_docker_install_dir}}/docker-compose.yml"
+  tags:
+    - edu-sharing-antivirus
+    - clamav
+    - antivirus-clamav
 
-- name: Run run docker compose -d.
+- name: Run ClamAV Docker container
   shell:
     chdir: '{{clamav_docker_install_dir}}/'
     cmd: "{{clamav_docker_run_command}}"
+  tags:
+    - edu-sharing-antivirus
+    - clamav
+    - antivirus-clamav
