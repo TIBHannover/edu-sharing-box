@@ -9,7 +9,7 @@
 
 - include_tasks: clamav_config.yml
   when: >
-    (clamav_config_overrides is defined and clamav_config_overrides | length > 0)
+    (clamav_config_overrides | default([]) | length > 0)
     or (clamav_reset_config | default(false) | bool)
 
 - name: Restart ClamAV
