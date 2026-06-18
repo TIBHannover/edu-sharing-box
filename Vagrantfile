@@ -1,5 +1,5 @@
 require 'yaml'
-settings = YAML.load_file 'ansible/__group_vars/all.yml'
+settings = YAML.load_file 'ansible/group_vars/all.yml'
 
 
 $set_environment_variables = <<SCRIPT
