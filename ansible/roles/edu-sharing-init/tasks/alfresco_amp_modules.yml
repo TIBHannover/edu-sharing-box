@@ -19,3 +19,10 @@
 
 - import_tasks: alfviral.yml
 - import_tasks: es_update_oersi.yml
+
+# The imported tasks may have modified the permissions of the reinstall.sh script, so we need to ensure that it is executable before the playbook finishes.
+# This ensures that no matter what the imported tasks did to the permissions
+- name: Force permanent executable permissions on the final modified script
+  file:
+    path: "{{ edu_docker_inst_dir }}/custom-repository-service/reinstall.sh"
+    mode: '0755'
