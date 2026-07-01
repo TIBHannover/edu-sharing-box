@@ -35,6 +35,18 @@
     - alfresco-webscripts-management
     - alfresco-customization
 
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: wait_services_to_be_up
+    apply:
+      tags:
+        - edu-sharing-alfresco-webscripts
+        - alfresco-webscripts-management
+        - alfresco-customization
+  when: "'edu-sharing-alfresco-webscripts' in ansible_run_tags"
+
+
 - name: Register and reload webscripts
   include_tasks: register_webscripts.yml
   tags:
