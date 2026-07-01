@@ -37,6 +37,8 @@
           - "{{ edu_sharing_docker_project_name }}_repository-service-volume-data"
           - "repository-service-volume"
           - "repository_service_volume"
+          - "{{ edu_sharing_docker_project_name }}_repository-service-volume-config-cluster"
+          - "repository-service-volume-config-cluster"
 
     - name: Volumes to be deleted
       debug:
@@ -51,6 +53,9 @@
       when:
         - not ((edu_sharing_docker_project_name ~ "_repository-database-volume-data") in item)
         - not ((edu_sharing_docker_project_name ~ "_repository-service-volume-data") in item)
+        - not ((edu_sharing_docker_project_name ~ "_repository-service-volume-config-cluster") in item)
+
+    # - include_tasks: backup_old_edupasswords.yml
 
 
 - name: Export EDU_SHARING_VERSION to avoid multiple cleaning docker containers and volumes.
