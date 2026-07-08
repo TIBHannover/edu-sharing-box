@@ -3,111 +3,96 @@ set -e
 set -o pipefail
 
 export COMPOSE_PROJECT_NAME="{{plugin_mongo_service_docker_project_name}}"
-
 export COMPOSE_EXEC="docker compose"
 
 export CLI_CMD="$0"
 export CLI_OPT1="$1"
 shift || true
 
+# Move to the mongo plugin directory first to read local environments
 pushd "{{plugin_mongo_service_install_dir}}">/dev/null || exit
 
+# Source local .env if it exists (where MAIN_PROJECT_DIR might be defined)
 if [[ -f ".env" ]] ; then
 	source .env
 fi
 
+# --- Smart Cross-Folder Linking ---
+BASE_COMPOSE_LIST=""
+if [[ -n "$MAIN_PROJECT_DIR" ]]; then
+	# Convert local plugin files to absolute paths so they don't break when we shift directories
+	PLUGIN_DIR="$(pwd)"
+	BASE_COMPOSE_LIST="-f ${MAIN_PROJECT_DIR}/docker-compose.yml -f ${MAIN_PROJECT_DIR}/docker-compose.override.yml"
+	
+	# Crucial: Move execution context to the main directory so relative volumes/paths match perfectly
+	cd "${MAIN_PROJECT_DIR}"
+else
+	PLUGIN_DIR="."
+fi
+
 compose() {
-
 	COMPOSE_DIRECTORY="$1"
-	COMPOSE_LIST=
+	if [[ "$COMPOSE_DIRECTORY" == "." ]]; then
+		COMPOSE_DIRECTORY="${PLUGIN_DIR}"
+	fi
+	
+	DYNAMIC_LIST=""
+	shift
 
-	shift && {
+	while [[ $# -gt 0 ]]; do
+		flag="$1"
+		shift
 
-    shift && {
+		COMPOSE_FILE_TYPE=""
+		case "$flag" in
+			-common) COMPOSE_FILE_TYPE="common" ;;
+			-remote) COMPOSE_FILE_TYPE="remote" ;;
+			-productive)
+				COMPOSE_FILE_TYPE="productive"
+				if [[ ! "$PRODUCTIVE_ENABLED" == "true" ]] ; then continue ; fi
+				;;
+			*) continue ;;
+		esac
 
-      while true; do
-        flag="$1"
-        shift || break
+		while IFS='' read -r COMPOSE_FILE; do
+			DYNAMIC_LIST="$DYNAMIC_LIST -f ${COMPOSE_FILE}"
+		done < <(find "${COMPOSE_DIRECTORY}" -type f -name "*_*-${COMPOSE_FILE_TYPE}.yml" | sort -g)
+	done
 
-        COMPOSE_FILE_TYPE=""
-        case "$flag" in
-        -common) COMPOSE_FILE_TYPE="common" ;;
-        -remote) COMPOSE_FILE_TYPE="remote" ;;
-        -productive)
-          COMPOSE_FILE_TYPE="productive"
-          if [[ ! $PRODUCTIVE_ENABLED -eq "true" ]] ; then continue ; fi
-          ;;
-        esac
+	for COMPOSE_FILE in $ADDITIONAL_COMPOSE_FILES; do
+		DYNAMIC_LIST="$DYNAMIC_LIST -f ${COMPOSE_FILE}"
+	done
 
-        while IFS='' read -r COMPOSE_FILE; do
-          COMPOSE_LIST="$COMPOSE_LIST -f ${COMPOSE_FILE}"
-        done < <(find "${COMPOSE_DIRECTORY}" -type f -name "*_*-${COMPOSE_FILE_TYPE}.yml" | sort -g)
-      done
-
-
-      for COMPOSE_FILE in $ADDITIONAL_COMPOSE_FILES; do
-        COMPOSE_LIST="$COMPOSE_LIST -f ${COMPOSE_FILE}"
-      done
-    }
-	}
-
-	echo $COMPOSE_LIST
+	echo "$DYNAMIC_LIST"
 }
 
 rstart() {
-	COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -remote -productive)"
+	CURRENT_COMPOSE_LIST="${BASE_COMPOSE_LIST} $(compose . -common -remote -productive)"
 
-	echo "Use compose set: $COMPOSE_LIST"
+	echo "Use compose set: $CURRENT_COMPOSE_LIST"
 
-	$COMPOSE_EXEC \
-		$COMPOSE_LIST \
-		pull || exit
-
-	$COMPOSE_EXEC \
-		$COMPOSE_LIST \
-		up -d $@ || exit
+	# Bypasses fatal exits on unresolvable local custom builds
+	$COMPOSE_EXEC $CURRENT_COMPOSE_LIST pull --ignore-pull-failures || true
+	$COMPOSE_EXEC $CURRENT_COMPOSE_LIST up -d "$@" || exit
 }
 
 stop() {
-	COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -productive)"
+	CURRENT_COMPOSE_LIST="${BASE_COMPOSE_LIST} $(compose . -common -productive)"
 
-	echo "Use compose set: $COMPOSE_LIST"
+	echo "Use compose set: $CURRENT_COMPOSE_LIST"
 
-	$COMPOSE_EXEC \
-		$COMPOSE_LIST \
-		stop $@ || exit
-}
-
-remove() {
-	read -p "Are you sure you want to continue? [y/N] " answer
-	case ${answer:0:1} in
-	y | Y)
-		COMPOSE_LIST="$COMPOSE_LIST $(compose . "*" -common -productive)"
-
-		echo "Use compose set: $COMPOSE_LIST"
-
-		$COMPOSE_EXEC \
-			$COMPOSE_LIST \
-			down || exit
-		;;
-	*)
-		echo Canceled.
-		;;
-	esac
+	$COMPOSE_EXEC $CURRENT_COMPOSE_LIST stop "$@" || exit
 }
 
 case "${CLI_OPT1}" in
 start)
-	rstart $@
+	rstart "$@"
 	;;
 stop)
-	stop $@
-	;;
-remove)
-	remove
+	stop "$@"
 	;;
 restart)
-	stop $@ && rstart $@
+	stop "$@" && rstart "$@"
 	;;
 *)
 	echo ""
@@ -115,11 +100,10 @@ restart)
 	echo ""
 	echo "options:"
 	echo ""
-	echo "  - start        start notification-service"
-	echo "  - restart      stops and starts notification-service"
+	echo "  - start        start plugin-mongo-service"
+	echo "  - restart      stops and starts plugin-mongo-service"
 	echo ""
-	echo "  - stop         stop notification-service"
-	echo "  - remove               remove notification-service"
+	echo "  - stop         stop plugin-mongo-service"
 	echo ""
 	;;
 esac
