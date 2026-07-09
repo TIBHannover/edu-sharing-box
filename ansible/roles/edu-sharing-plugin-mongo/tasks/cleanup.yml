@@ -66,3 +66,12 @@
   tags:
     - edu-sharing-plugin-mongo
 
+# Task to remove environment variables
+- name: Remove the Ansible managed block from the file
+  become: true
+  blockinfile:
+    path:  "{{ edu_docker_inst_dir }}/docker-compose.override.yml"
+    marker: "# {mark} ANSIBLE MONGO PLUGIN ENVIRONMENT VARIABLES"
+    state: absent  # This removes the block
+  tags: 
+    - edu-sharing-plugin-mongo

@@ -1,7 +1,7 @@
 ---
-- name: Ensure notification directory exists.
+- name: Ensure plugin mongo service installation directory exists.
   file:
-    path: "{{notification_service_install_dir}}"
+    path: "{{plugin_mongo_service_install_dir}}"
     state: directory
   tags:
     - edu-sharing-plugin-mongo

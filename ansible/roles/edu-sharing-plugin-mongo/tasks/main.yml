@@ -85,8 +85,8 @@
     - include_tasks: download-docker-plugin.yml
     - include_tasks: download-plugin-mongo-service-amp.yml
     - include_tasks: download-plugin-mongo-alfresco-amp.yml
-    # - include_tasks: config-env.yml
-    - include_tasks: download-and-install-docker-compose.yml
+    - include_tasks: config-env.yml
+    # - include_tasks: download-and-install-docker-compose.yml
   when: enable_plugin_mongo_service is defined and enable_plugin_mongo_service
   tags:
     - edu-sharing-plugin-mongo
@@ -102,15 +102,6 @@
     chdir: "{{ edu_docker_inst_dir }}"
     cmd: "{{ edu_sharing_restart_command | replace('{service}', plugin_mongo_repository_service | default('repository-service')) }}"
   tags:
-    - edu-sharing-plugin-mongo
-  when: enable_plugin_mongo_service is defined and not enable_plugin_mongo_service
-
-
-- name: Run Plugin Mongo service.
-  shell:
-    chdir: "{{plugin_mongo_service_install_dir}}/"
-    cmd: '{{mongo_plugin_service_deploy_command | default(''sg docker -c "./deploy.sh start"'',true)}}'
-  tags: 
     - edu-sharing-plugin-mongo
 
 - include_role:
