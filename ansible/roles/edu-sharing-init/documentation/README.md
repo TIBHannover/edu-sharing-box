@@ -63,11 +63,11 @@ edu_sharing_environment_variable:
   
   # MongoDB configuration for edu-sharing services
   - key: MONGO_DATABASES_ROOT_USER
-    value: '{{mongo_databases_root_user | default("root",true)}}'
+    value: '{{mongo_databases.root_user | default("root",true)}}'
   - key: MONGO_DATABASES_ROOT_PASS
-    value: '{{mongo_databases_root_pass | default("root",true)}}'
+    value: '{{mongo_databases.root_pass | default("root",true)}}'
   - key: MONGO_DATABASES_REPLICATION_SET_KEY
-    value: '{{mongo_databases_replication_set_key | default("edusharing",true)}}'
+    value: '{{mongo_databases.replication_set_key | default("edusharing",true)}}'
   
   # Rendering2 service database configuration
   - key: RENDERING2_SERVICE_DATABASE_NAME
