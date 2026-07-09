@@ -3,20 +3,25 @@ version: '3.7'
 services:
   kafka:
      networks:
-        - {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}
-
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
 
   notification-service:
      networks:
-        - {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+     # --- The Native Fix ---
+     # This tells Docker Compose to wipe out the original depends_on array 
+     # inside this directory context so it stops searching for mongo-database.
+     depends_on: !override []
+     # ----------------------
 
-
-  notification-service-db: 
+  # Changed from repository-mongo to mongo-database to match the original service 
+  # name being called in your main depends_on constraints.
+  mongo-database:
+     image: alpine:latest # Keeps syntax validator happy
+     profiles: ["donotstart"]  # This service will NOT start by default
      networks:
-        - {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}
-
-
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
 
 networks:
- {{edu_sharing_docker_network_name | default('edu_sharing_docker_version_default',true)}}:
+ {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}:
    external: true
