@@ -27,37 +27,38 @@ edu_sharing_environment_variable:
     value: '{{esrender_db.user}}'
   - key: SERVICES_RENDERING_DATABASE_PASS
     value: '{{esrender_db.password}}'
-  - key: SERVICES_RENDERING_SERVICE_HOST
-    value: '{{edu_sharing_host}}'
-  - key: SERVICES_RENDERING_SERVICE_PORT
-    value: '{{edu_sharing_port | default("80",true)}}'
-  - key:  SERVICES_RENDERING_SERVICE_PORT_HTTP
-    value: '{{rendering_service_port_http| default("9100",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_PROT
-    value: '{{rendering_service_prot| default("http",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_GDPR_ENABLED
-    value: '{{rendering_service_enable_gdpr| default("false",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_GDPR_MODULES
-    value: '{{rendering_service_gdpr_modules| default("",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_GDPR_URLS
-    value: '{{rendering_service_gdpr_urls| default("",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_PLUGINS
-    value: '{{rendering_service_plugins| default("",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_VIEWER_ENABLED
-    value: '{{rendering_service_viewer_enabled| default("true",true)}}'
-  - key: SERVICES_RENDERING_SERVICE_CACHE_CLEANER_SCHEDULE
-    value: '{{ rendering_service_cache_cleaner_schedule | default("0 0 * * 0", true) | quote }}'
-  - key: SERVICES_RENDERING_RENDERMOODLE_URL
-    value: '{{rendering_service_rendering_module_url| default("",true)}}'
-  - key: SERVICES_RENDERING_RENDERMOODLE_TOKEN
-    value: '{{rendering_service_rendering_module_token| default("",true)}}'
-  - key: SERVICES_RENDERING_RENDERMOODLE_CATEGORY_ID
-    value: '{{rendering_service_rendering_module_category_id| default("1",true)}}'
-  - key: SERVICES_RENDERING_AUDIO_FORMATS
-    value: '{{rendering_service_audio_format| default("mp3",true)}}'
-  - key: SERVICES_RENDERING_VIDEO_FORMATS
-    value: '{{rendering_service_video_format| default("mp4,webm",true)}}'
-  - key: SERVICES_RENDERING_VIDEO_RESOLUTIONS
-    value: '{{rendering_service_video_resolutions| default("240,720,1080",true)}}'
-  - key: SERVICES_RENDERING_VIDEO_DEFAULT_RESOLUTION
-    value: '{{rendering_service_video_default_resolution| default("720",true)}}'
+  # MongoDB configuration for edu-sharing services
+  - key: MONGO_DATABASES_ROOT_USER
+    value: '{{mongo_databases.root_user | default("root",true)}}'
+  - key: MONGO_DATABASES_ROOT_PASS
+    value: '{{mongo_databases.root_pass | default("root",true)}}'
+  - key: MONGO_DATABASES_REPLICATION_SET_KEY
+    value: '{{mongo_databases.replication_set_key | default("edusharing",true)}}'
+  # Rendering2 service database configuration
+  - key: RENDERING2_SERVICE_DATABASE_NAME
+    value: '{{esrender2.db_name | default("rendering",true)}}'
+  - key: RENDERING2_SERVICE_DATABASE_USER
+    value: '{{esrender2.db_user | default("rendering",true)}}'
+  - key: RENDERING2_SERVICE_DATABASE_PASS
+    value: '{{esrender2.db_password | default("rendering",true)}}'
+  # LUMI service database configuration
+  - key: RENDERING2_LUMI_DATABASE_NAME
+    value: '{{esrender2.lumi_db_name | default("lumi",true)}}'
+  - key: RENDERING2_LUMI_DATABASE_USER
+    value: '{{esrender2.lumi_db_user | default("lumi",true)}}'
+  - key: RENDERING2_LUMI_DATABASE_PASS
+    value: '{{esrender2.lumi_db_password | default("lumi",true)}}'
+    # Notification service database configuration
+  - key: NOTIFICATION_SERVICE_DATABASE_NAME
+    value: '{{notification_service.db_name | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASE_USER
+    value: '{{notification_service.db_user | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASE_PASS
+    value: '{{notification_service.db_pass | default("notification",true)}}'
+   # Repository service database configuration
+  - key: REPOSITORY_MONGO_DATABASE
+    value: '{{plugin_mongo.database_name | default("repository",true)}}'
+  - key: REPOSITORY_MONGO_USER
+    value: '{{plugin_mongo.database_user | default("repository",true)}}'
+  - key: REPOSITORY_MONGO_PASS
+    value: '{{plugin_mongo.database_pass | default("repository",true)}}'
