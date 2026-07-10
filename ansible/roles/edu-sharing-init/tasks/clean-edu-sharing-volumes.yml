@@ -45,6 +45,8 @@
           - "repository-service-volume-config-cluster"
           - "{{ edu_sharing_docker_project_name }}_repository-mongo-volume-data-primary"
           - "repository-mongo-volume-data-primary"
+          - "{{ edu_sharing_docker_project_name }}_mongo-database-volume-data"
+          - "mongo-database-volume-data"
 
     - name: Volumes to be deleted
       debug:
@@ -60,6 +62,8 @@
         - not ((edu_sharing_docker_project_name ~ "_repository-database-volume-data") in item)
         - not ((edu_sharing_docker_project_name ~ "_repository-service-volume-data") in item)
         - not ((edu_sharing_docker_project_name ~ "_repository-service-volume-config-cluster") in item)
+        - not ((edu_sharing_docker_project_name ~ "_repository-mongo-volume-data-primary") in item)
+        - not ((edu_sharing_docker_project_name ~ "_mongo-database-volume-data") in item)
 
 
 - name: Export EDU_SHARING_VERSION to avoid multiple cleaning docker containers and volumes.

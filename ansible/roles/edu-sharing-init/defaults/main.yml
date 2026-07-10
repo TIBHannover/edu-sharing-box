@@ -57,8 +57,8 @@ edu_sharing_environment_variable:
     value: '{{notification_service.db_pass | default("notification",true)}}'
    # Repository service database configuration
   - key: REPOSITORY_MONGO_DATABASE
-    value: '{{plugin_mongo.database_name | default("repository",true)}}'
+    value: '{{plugin_mongo.db_name | default("repository",true)}}'
   - key: REPOSITORY_MONGO_USER
-    value: '{{plugin_mongo.database_user | default("repository",true)}}'
+    value: '{{plugin_mongo.db_user | default("repository",true)}}'
   - key: REPOSITORY_MONGO_PASS
-    value: '{{plugin_mongo.database_pass | default("repository",true)}}'
+    value: '{{plugin_mongo.db_pass | default("repository",true)}}'
