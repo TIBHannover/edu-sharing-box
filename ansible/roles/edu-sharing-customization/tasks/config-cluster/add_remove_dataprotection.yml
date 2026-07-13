@@ -1,0 +1,60 @@
+---
+- name: Add or update dataprotection configuration overrides.
+  blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING DATAPROTECTION CONFIGURATION"
+    insertafter: EOF
+    block: |
+      // Dataprotection configuration
+      {% set dtConfig = dataprotectionConfig | default({}) -%}
+      {% if dtConfig.enabled is defined and dtConfig.enabled | default(false) | bool -%}
+      repository.dataprotection = {
+          enabled: {{ dtConfig.enabled | default(false) | string | lower }}
+          {% if dtConfig.retentionPeriod is defined and dtConfig.retentionPeriod is not none -%}
+          retentionPeriod: {{ dtConfig.retentionPeriod }}
+          {% endif -%}
+          {% if dtConfig.metadataExport is defined and dtConfig.metadataExport is not none -%}
+          metadataExport: {{ dtConfig.metadataExport | string | lower }}
+          {% endif -%}
+          {% if dtConfig.binaryExport is defined and dtConfig.binaryExport is not none -%}
+          binaryExport: {{ dtConfig.binaryExport | string | lower }}
+          {% endif -%}
+          {% if dtConfig.summaryExport is defined and dtConfig.summaryExport is not none -%}
+          summaryExport: {{ dtConfig.summaryExport | string | lower }}
+          {% endif -%}
+          fileName: "{{ dtConfig.fileName | default('dataprotectioninfo_twillo.de') }}"
+          {% if dtConfig.templatePath is defined and dtConfig.templatePath is not none -%}
+          templatePath: "{{ dtConfig.templatePath }}"
+          {% endif -%}
+          {% if dtConfig.links is defined and dtConfig.links is not none -%}
+          links: [
+              {% for link in dtConfig.links -%}
+              "{{ link }}"{{ ',' if not loop.last else '' }}
+              {% endfor -%}
+          ]
+          {% endif -%}
+          {% if dtConfig.cronExpression is defined and dtConfig.cronExpression is not none -%}
+          cronExpression: "{{ dtConfig.cronExpression }}"
+          {% endif -%}
+      }
+      {% endif %}
+  when: >
+    dataprotectionConfig is defined and 
+    dataprotectionConfig is not none and 
+    dataprotectionConfig.enabled | default(false) | bool
+  tags:
+    - dataprotection-configuration
+    - access-control
+
+- name: Remove dataprotection configuration block if disabled or not defined.
+  ansible.builtin.blockinfile:
+    path: "{{ repository_volume_config_cluster_path.stdout }}/edu-sharing.override.conf"
+    marker: "//{mark} EDU SHARING DATAPROTECTION CONFIGURATION"
+    state: absent
+  when: >
+    dataprotectionConfig is not defined or 
+    dataprotectionConfig is none or 
+    not (dataprotectionConfig.enabled | default(false) | bool)
+  tags:
+    - dataprotection-configuration
+    - access-control

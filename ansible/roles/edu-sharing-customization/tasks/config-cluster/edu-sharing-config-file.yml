@@ -27,6 +27,12 @@
     - repository-jobs-configuration
     - repository-custom-jobs
 
+- include_tasks: add_remove_dataprotection.yml
+  tags:
+    - dataprotection-configuration
+    - access-control
+    - repository-dataprotection
+
 - include_tasks: youtube.yml  
   when: connect_content_youtube
   tags:
