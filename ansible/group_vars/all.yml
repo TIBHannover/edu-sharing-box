@@ -37,3 +37,8 @@ apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if se
 #    Minimum: 3 GiB
 #    Preferred: 4 GiB
 install_antivirus: false
+
+# Enable/disable the edu-sharing rendering service 2 (esrender2) feature. When enabled, the rendering service 2 will be started and configured.
+enable_rendering_service_2: false
+# remove old rendering service if the new rendering service 2 is enabled. This will remove the old rendering service and its configuration.
+keep_both_rendering_services: false

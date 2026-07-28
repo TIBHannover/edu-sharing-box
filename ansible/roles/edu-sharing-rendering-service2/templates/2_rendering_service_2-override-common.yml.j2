@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  rendering2-rustfs-storage:
+    networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
+  rendering2-message-queue:
+     networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
+  rendering2-service:
+     networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+     # --- The Native Fix ---
+     # This tells Docker Compose to wipe out the original depends_on array 
+     # inside this directory context so it stops searching for mongo-database.
+     depends_on: !override []
+     # ----------------------
+
+  # Changed from repository-mongo to mongo-database to match the original service 
+  # name being called in your main depends_on constraints.
+  mongo-database:
+     image: alpine:latest # Keeps syntax validator happy
+     profiles: ["donotstart"]  # This service will NOT start by default
+     networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
+  rendering2-document-converter:
+     networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
+  rendering2-lumi:
+     networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
+  rendering2-admin-frontend:
+     networks:
+        - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
+networks:
+ {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}:
+   external: true

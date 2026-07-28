@@ -1,6 +1,6 @@
 # Ansible Role: edu-sharing-rendering-service
 
-The `edu-sharing-rendering-service` role is used update the rendering service.
+The `edu-sharing-rendering-service` role manages the rendering service for edu-sharing, enabling document preview generation and format conversion for various file types.
 
 ## Implementation
 
@@ -15,12 +15,23 @@ The `edu-sharing-rendering-service` role is included in the playbook [system.yml
 
 ```
 
-or we just want to run only the `edu-sharing-rendering-service` then we run:
+To run only the `edu-sharing-rendering-service` role:
 
 ```sh
 ansible-playbook -v -i <host> ansible/system.yml --tags "edu-sharing-rendering-service"
 ```
-This will skip other roles and run only the edu-sharing-rendering-service role
+
+This will skip other roles and run only the edu-sharing-rendering-service role.
+
+## Note on Multiple Rendering Services
+
+If you want to run both rendering-service and rendering-service2 in parallel, set the following variable:
+
+```yaml
+keep_both_rendering_services: true
+```
+
+By default, if rendering-service2 is enabled, rendering-service will be unregistered.
 
 ## Role Variables
 
@@ -75,7 +86,13 @@ rendering_environment_variable:
 
 ## Tasks
 
-The `tasks/` directory contains all the ansible tasks.
+The `tasks/` directory contains all the ansible tasks:
 
-1. `main`: The main task or entry task for ansible.
-2. `config-env.yml`: Used to update the .env file with rendering service variables
+1. `main.yml`: The main entry point that orchestrates the role execution
+2. `config-env.yml`: Updates the .env file with rendering service environment variables
+3. `unregister.yml`: Unregisters rendering service 1 when switching to rendering service 2 (if `keep_both_rendering_services` is false)
+
+## Handlers
+
+- `cleanup rendering containers`: Cleans up old rendering service containers after updates
+- `cleanup rendering2 containers`: Cleans up rendering service 2 containers if applicable

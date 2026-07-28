@@ -1,0 +1,14 @@
+
+<Location {{esrender2.service_public_path | default("/rendering",true)}}>
+      ProxyPreserveHost On
+      ProxyPass http://localhost:{{esrender2.internal_port_http | default('10100',true)}}/rendering
+      ProxyPassReverse http://localhost:{{esrender2.internal_port_http | default('10100',true)}}/rendering
+</Location>
+
+{% if esrender2.service_public_admin_path is defined and esrender2.service_public_admin_path is not none and esrender2.service_public_admin_path != "" %}
+  <Location {{esrender2.service_public_admin_path}}>
+      ProxyPreserveHost On
+      ProxyPass http://localhost:{{esrender2.admin_frontend_port_http | default("10400",true)}}/rendering-admin
+      ProxyPassReverse http://localhost:{{esrender2.admin_frontend_port_http | default("10400",true)}}/rendering-admin
+  </Location>
+{% endif %}

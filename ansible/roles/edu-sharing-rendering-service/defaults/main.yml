@@ -37,4 +37,4 @@ rendering_environment_variable:
 
 # If we need to override the service name, then we can override it,
 # example:  in the edu-sharing-init/vars/versions/8.1.0.yml we add this variable with new value
-service_rendering_service: 'services-rendering-service'
+service_rendering_service: 'services-rendering-service services-rendering-service-init services-rendering-service-cache-cleaner services-rendering-cache services-rendering-database'

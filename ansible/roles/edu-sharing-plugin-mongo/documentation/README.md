@@ -33,7 +33,7 @@ Here are the default variables:
 
 ```yaml
 enable_plugin_mongo_service: false
-plugin_mongo_service_version: 10.0.0
+plugin_mongo_service_version: 10.0.1
 # installation directory
 plugin_mongo_service_install_dir: "{{base_dir}}/mongo-service_{{plugin_mongo_service_version|replace('.','_')}}"
 

@@ -1,0 +1,5 @@
+---
+repository_rendering_service_2_deploy_docker_compose: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-services-rendering2-deploy-docker-compose/10.0.1/edu_sharing-community-services-rendering2-deploy-docker-compose-10.0.1.jar
+
+# deploy docker images to server
+rendering_service_2_deploy_command: 'sg docker -c "./deploy.sh start"'

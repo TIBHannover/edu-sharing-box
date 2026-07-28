@@ -1,0 +1,8 @@
+---
+rendering_service_2_version: 10.0.0
+
+rendering_service_2_plugin_install_dir: "{{base_dir}}/rendering-service-2_{{rendering_service_2_version|replace('.','_')}}"
+
+
+# it must have same docker project name as edu-sharing, otherwise the backup will not work
+rendering_service_2_docker_project_name: "{{edu_sharing_docker_project_name}}"

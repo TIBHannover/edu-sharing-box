@@ -1,0 +1,125 @@
+---
+- name: Check edu-sharing version.
+  fail:
+    msg: "Your edu-sharing version is {{ edu_version }}. Please ensure it is 9.0.0 or higher"
+  when: edu_version is defined and  (edu_version | regex_replace('-RC[0-9]+', '') ) is version_compare('9.0.0', '<')
+  tags:
+    - edu-sharing-rendering-service2
+
+# Ensure unzip package is installed
+- name: Ensure unzip is present
+  package:
+    name: unzip
+  become: true
+  tags:
+    - packages
+    - root-task
+    - edu-sharing-rendering-service2
+
+- name: Ensure the java_home variable is set.
+  include_role:
+    name: java
+    tasks_from: get_java_home
+    apply:
+      tags:
+        - edu-sharing-rendering-service2
+  when: java_home is not defined
+  tags:
+    - edu-sharing-rendering-service2
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: set_edu_docker_inst_dir
+    apply:
+      tags:
+        - edu-sharing-rendering-service2
+  tags:
+    - edu-sharing-rendering-service2
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: load_version_variables
+    apply:
+      tags:
+        - edu-sharing-rendering-service2
+  tags:
+    - edu-sharing-rendering-service2
+
+
+- name: Remove all rendering service 2 plugin containers.
+  shell: |
+    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E '{{rendering_service_2_docker_project_name}}[-_]rendering2[-_]' | xargs -r docker stop | xargs -r docker rm"
+  tags:
+    - edu-sharing-rendering-service2
+
+
+# Ensure installation directory exists
+- name: Ensure plugin service installation directory exists
+  file:
+    path: "{{ rendering_service_2_plugin_install_dir }}"
+    state: directory
+  tags:
+    - edu-sharing-rendering-service2
+
+# Load version variables
+- name: Load version variables
+  include_vars:
+    file: "../vars/versions/{{ rendering_service_2_version | default('default') }}.yml"
+  tags:
+    - edu-sharing-rendering-service2
+
+- include_role:
+    name: edu-sharing-customization
+    tasks_from: fetch_docker_paths
+    apply:
+      tags:
+        - edu-sharing-rendering-service2
+  vars:
+    extra_required_paths:
+    - "{{ repository_volume_config_plugins.stdout }}"
+    store_docker_paths_globally: true
+  tags:
+    - edu-sharing-rendering-service2
+
+# Include download tasks
+- name: Download and install required plugins
+  block:
+    - include_tasks: download-and-install-docker-compose.yml
+    - include_tasks: register_apache_vhost.yml
+  when: enable_rendering_service_2 is defined and enable_rendering_service_2
+  tags:
+    - edu-sharing-rendering-service2
+
+# unrregister apache vhost
+- include_tasks: cleanup.yml
+  when: enable_rendering_service_2 is defined and not enable_rendering_service_2
+  tags:
+    - edu-sharing-rendering-service2
+  
+
+- name: Start rendering service 2 plugin containers.
+  command:
+    chdir: "{{ rendering_service_2_plugin_install_dir }}"
+    cmd: "{{ rendering_service_2_deploy_command | default('sg docker -c \"./deploy.sh start\"') }}"
+  when:  enable_rendering_service_2 is defined and enable_rendering_service_2
+  tags:
+    - edu-sharing-rendering-service2
+  notify: "cleanup rendering containers"
+
+
+- include_tasks: unregister.yml
+  when:
+    - (enable_rendering_service_2 | default(false) | bool)
+    - not (keep_both_rendering_services | default(false) | bool)
+  tags:
+    - edu-sharing-rendering-service2
+
+- include_role:
+    name: edu-sharing-init
+    tasks_from: wait_services_to_be_up
+    apply:
+      tags:
+        - edu-sharing-rendering-service2
+  when: "'edu-sharing-rendering-service2' in ansible_run_tags"
+  tags:
+    - edu-sharing-rendering-service2

@@ -1,0 +1,9 @@
+---
+
+- name: Remove edu_sharing-rendering-service2 virtual host configuration
+  become: true
+  file:
+    path: "/etc/apache2/sites-available/edu_rendering_service_2.conf"
+    state: absent
+  notify: restart apache2
+

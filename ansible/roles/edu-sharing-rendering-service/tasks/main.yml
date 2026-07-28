@@ -27,3 +27,11 @@
   # no_log: true
   tags:
     - edu-sharing-rendering-service
+  notify: "cleanup rendering2 containers"
+
+- include_tasks: unregister.yml
+  when:
+    - not (enable_rendering_service_2 | default(false) | bool)
+    - not (keep_both_rendering_services | default(false) | bool)
+  tags:
+    - edu-sharing-rendering-service2
