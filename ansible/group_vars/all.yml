@@ -2,7 +2,7 @@
 edu_sharing_host: 192.168.98.101
 edu_sharing_domain: '{{edu_sharing_host}}'
 edu_sharing_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/edu-sharing'
-edu_version: 9.1.0
+edu_version: 10.0.1
 solr_host: '{{edu_sharing_host}}'
 
 clamav_host: 192.168.98.101
@@ -37,3 +37,8 @@ apache_conf_usecanonicalname: # use as apache2 UseCanonicalName Directive, if se
 #    Minimum: 3 GiB
 #    Preferred: 4 GiB
 install_antivirus: false
+
+# Enable/disable the edu-sharing rendering service 2 (esrender2) feature. When enabled, the rendering service 2 will be started and configured.
+enable_rendering_service_2: false
+# remove old rendering service if the new rendering service 2 is enabled. This will remove the old rendering service and its configuration.
+keep_both_rendering_services: false

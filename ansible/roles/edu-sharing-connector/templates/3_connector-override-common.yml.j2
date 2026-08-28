@@ -1,17 +1,17 @@
 version: '3.7'
 
 services:
-  services-edu-connector-database:
+  services-connector-database:
      networks:
         - {{edu_sharing_docker_network_name | default('edu_sharing_docker_network_name',true)}}
 
 
-  services-edu-connector-service:
+  services-connector-service:
      networks:
         - {{edu_sharing_docker_network_name | default('edu_sharing_docker_network_name',true)}}
 
 
-  services-edu-connector-service-init: 
+  services-connector-service-init: 
      networks:
         - {{edu_sharing_docker_network_name | default('edu_sharing_docker_network_name',true)}}
 

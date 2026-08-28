@@ -1,0 +1,8 @@
+---
+- name: Apache - add rendering service 2 virtual hosts
+  become: true
+  template:
+    src: "{{esrender2.apache_vhost_template | default('edu_rendering_service_2.conf.j2',true)}}"
+    dest: "/etc/apache2/sites-available/edu_rendering_service_2.conf"
+  notify:
+    - restart apache2

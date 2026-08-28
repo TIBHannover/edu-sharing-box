@@ -1,23 +1,41 @@
 ---
+- name: Install cron package
+  apt:
+    name: 
+      - cron
+    update_cache: true
+    state: "present"
+  tags:
+  - packages
+  - edu-sharing-import
+
 - name: checkout opencast-importer repo
   git:
     repo: 'https://github.com/virtUOS/edusharing-opencast-importer.git'
     dest: '{{ opencast_importer_dir }}'
     force: yes
     version: '{{ opencast_importer_repo_version }}'
+  tags:
+    - opencast-importer
 
 - name: Configure .env
   template:
     src: 'env.j2'
     dest: '{{ opencast_importer_dir }}/.env'
+  tags: 
+    - opencast-importer
 
 - name: Configure config.oc-instances.js
   template:
     src: 'config.oc-instances.js.j2'
     dest: '{{ opencast_importer_dir }}/src/config/config.oc-instances.js'
+  tags:
+    - opencast-importer
 
 - name: Run npm install via docker-container
   shell: "sg docker -c \"docker run -it -v {{ opencast_importer_dir }}:/work --rm node:14 /bin/bash -c 'cd /work && npm install'\""
+  tags:
+    - opencast-importer
 
 - name: Configure cron schedule - execute opencast-import
   cron:
@@ -25,3 +43,5 @@
     hour: '{{ opencast_importer_cron_hour }}'
     minute: '{{ opencast_importer_cron_minute }}'
     job: "docker run -v {{ opencast_importer_dir }}:/work --rm node:14 /bin/bash -c 'cd /work && npm start'"
+  tags:
+    - opencast-importer

@@ -1,0 +1,89 @@
+- name: PRE UPGRADE BACKUP
+  block:
+    - name: Ensures database backup directory exists.
+      file:
+        path: "{{ base_dir }}/pg_upgrade_backup"
+        state: directory
+      tags:
+        - edu-sharing-init
+
+    # Keeps your exact preferred method
+    - name: Read the target repository postgres version from docker-compose.yml
+      shell: >
+        sg docker -c "grep -A 5 'repository-database:' {{ edu_docker_inst_dir }}/docker-compose.yml | grep 'image:' | sed 's/.*://' | tr -d ' '"
+      register: pg_backup__reg_compose_version
+      changed_when: false
+      tags:
+        - edu-sharing-init
+
+    - name: Inspect the repository-database container name.
+      shell: >
+        sg docker -c "docker ps -a --format '{% raw %}{{.Names}}{% endraw %}' | grep -E repository-database[-_]{{ edu_sharing_docker_project_name }} || true"
+      register: repository_database_container_name
+      changed_when: false
+      tags:
+        - edu-sharing-init
+
+    - name: Detect active PostgreSQL major version
+      shell: >
+        sg docker -c "docker exec -i -e PGPASSWORD='{{ alfresco_db.password }}' {{ repository_database_container_name.stdout }} psql -U {{ alfresco_db.user }} -d {{ alfresco_db.name }} -t -c 'SHOW server_version;' | awk -F. '{print \$1}' | tr -d ' '"
+      register: pg_backup__reg_live_version
+      changed_when: false
+      failed_when: false
+      tags:
+        - edu-sharing-init
+
+    - name: Set Backup file and postgres version facts
+      set_fact:
+        pg_backup__file_path: "{{ base_dir }}/pg_upgrade_backup/edu_sharing_{{ edu_version }}_db_backup.sql"
+        pg_backup__folder_path: "{{ base_dir }}/pg_upgrade_backup"
+        pg_backup__running_major: "{{ (pg_backup__reg_live_version.stdout | default('0')).split('.') | first | int }}"
+        pg_backup__target_major: "{{ (pg_backup__reg_compose_version.stdout | default('0')).split('.') | first | int }}"
+      tags:
+        - edu-sharing-init
+
+    # Only triggers the dump if the major integers do not match
+    - name: Run the pg_dump command inside the repository-database container to create a backup of the database.
+      shell: >
+        sg docker -c "docker exec -i -e PGPASSWORD='{{ alfresco_db.password }}' {{ repository_database_container_name.stdout }} pg_dump -U {{ alfresco_db.user }} -d {{ alfresco_db.name }} > {{ pg_backup__file_path }}"
+      when:
+        - pg_backup__running_major | int > 0
+        - pg_backup__target_major | int > 0
+        - pg_backup__running_major | int != pg_backup__target_major | int
+      register: pg_backup__dump_result
+      no_log: true
+      tags:
+        - edu-sharing-init
+
+    - name: Set backup needed fact
+      set_fact:
+        pg_backup__is_backup_needed: "{{ (pg_backup__running_major | int > 0) and (pg_backup__target_major | int > 0) and (pg_backup__running_major | int != pg_backup__target_major | int) }}"
+      tags:
+        - edu-sharing-init
+
+    - name: Display backup file execution status and postgres versions
+      debug:
+        msg: >
+          Running Version: {{ pg_backup__running_major }} | 
+          Target Version: {{ pg_backup__target_major }} | 
+          Status: {{ 'Backup Needed.' if pg_backup__is_backup_needed | bool else 'Skipped. Versions are identical.' }}
+      tags:
+        - edu-sharing-init
+
+    - name: Verify that the database backup file is valid and not empty
+      stat:
+        path: "{{ pg_backup__file_path }}"
+      register: pg_backup__dump_file_stat
+      when:
+        - pg_backup__is_backup_needed | bool
+      tags:
+        - edu-sharing-init
+
+    - name: Crash safety halt if backup file validation failed
+      fail:
+        msg: "CRITICAL: The database backup file is missing or empty! Aborting volume rotation to prevent data loss."
+      when:
+        - pg_backup__is_backup_needed | bool
+        - not pg_backup__dump_file_stat.stat.exists or pg_backup__dump_file_stat.stat.size == 0
+      tags:
+        - edu-sharing-init

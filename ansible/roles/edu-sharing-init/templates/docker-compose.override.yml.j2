@@ -1,20 +1,56 @@
 version: "3.7"
 services:
+
+  mongo-database:
+    image: docker.edu-sharing.com/community/common/edu_sharing-community-common-docker-mongodb:8.0.12
+    environment:
+      ALLOW_EMPTY_PASSWORD: "false"
+      MONGODB_ADVERTISED_HOSTNAME: mongo-database
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_ROOT_USER: "${MONGO_DATABASES_ROOT_USER:-root}"
+      MONGODB_ROOT_PASSWORD: "${MONGO_DATABASES_ROOT_PASS:-root}"
+      MONGODB_REPLICA_SET_KEY: "${MONGO_DATABASES_REPLICATION_SET_KEY:-edusharing}"
+      EXPERIMENTAL_DOCKER_DESKTOP_FORCE_QEMU: "1"
+      MONGODB_EXTRA_RENDERING2_DATABASE: "${RENDERING2_SERVICE_DATABASE_NAME:-rendering}"
+      MONGODB_EXTRA_RENDERING2_USERNAME: "${RENDERING2_SERVICE_DATABASE_USER:-rendering}"
+      MONGODB_EXTRA_RENDERING2_PASSWORD: "${RENDERING2_SERVICE_DATABASES_PASS:-rendering}"
+      MONGODB_EXTRA_LUMI_DATABASE: "${RENDERING2_LUMI_DATABASE_NAME:-lumi}"
+      MONGODB_EXTRA_LUMI_USERNAME: "${RENDERING2_LUMI_DATABASE_USER:-lumi}"
+      MONGODB_EXTRA_LUMI_PASSWORD: "${RENDERING2_LUMI_DATABASE_PASS:-lumi}"
+      MONGODB_EXTRA_NOTIFICATION_DATABASE: "${NOTIFICATION_SERVICE_DATABASE_NAME:-notification}"
+      MONGODB_EXTRA_NOTIFICATION_USERNAME: "${NOTIFICATION_SERVICE_DATABASE_USER:-notification}"
+      MONGODB_EXTRA_NOTIFICATION_PASSWORD: "${NOTIFICATION_SERVICE_DATABASE_PASS:-notification}"
+      MONGODB_EXTRA_REPOSITORY_DATABASE: "${REPOSITORY_MONGO_DATABASE:-repository}"
+      MONGODB_EXTRA_REPOSITORY_USERNAME: "${REPOSITORY_MONGO_USER:-repository}"
+      MONGODB_EXTRA_REPOSITORY_PASSWORD: "${REPOSITORY_MONGO_PASS:-repository}"
+    expose:
+      - "27017"
+    volumes:
+      - mongo-database-volume-data:/bitnami/mongodb
+    restart: unless-stopped
+
   repository-service:
     image: {{repository_service_image | regex_replace('[\\n\\t]', '')}}-{{ edu_repo_caption }}-custom
     environment:
       - TZ={{edu_sharing_docker_timezone}}
     volumes:
-      - repository-service-volume-config-node:/opt/bitnami/tomcat/shared/classes/config
-      - repository-service-volume-config-edu-sharing:/opt/bitnami/tomcat/webapps/edu-sharing
-      - repository-service-volume-config-plugins:/opt/alfresco/tomcat/shared/classes/config/plugins
+      - repository-service-volume-config-node:/usr/local/tomcat/shared/classes/config
+      - repository-service-volume-config-edu-sharing:/usr/local/tomcat/webapps/edu-sharing
+      - repository-service-volume-config-plugins:/usr/local/tomcat/shared/classes/config/plugins
       - repository-service-volume-bin-plugins:/opt/alfresco/bin/plugins
       - repository-service-volume-amps:/opt/alfresco/amps
 {% if enable_alfresco_webscripts_management | default(false) %}
-      - repository-service-volume-webscripts:{{ alfresco_webscripts_path | default("/opt/alfresco/tomcat/shared/classes/alfresco/extension/templates/webscripts") }}
+      - repository-service-volume-webscripts:{{ alfresco_webscripts_path | default("/usr/local/tomcat/shared/classes/alfresco/extension/templates/webscripts") }}
+{% endif %}
+
+{% if pg_backup__is_backup_needed | default(false) | bool %}
+  repository-database:
+    volumes:
+      - {{ pg_backup__folder_path }}:/docker-entrypoint-initdb.d:ro
 {% endif %}
     
 volumes:
+  mongo-database-volume-data:
   repository-service-volume-config-edu-sharing:
   repository-service-volume-config-plugins:
   repository-service-volume-bin-plugins:

@@ -1,4 +1,16 @@
 ---
+
+- name: Install cron package
+  become: true
+  apt:
+    name: 
+      - cron
+    update_cache: true
+    state: "present"
+  tags:
+  - packages
+  - edu-sharing-backup
+
 - name: Ensures backup_path dir exists
   file: path='{{ backup_path }}' state=directory
   tags:

@@ -1,0 +1,55 @@
+---
+# tasks/rotate-volume.yml
+
+- name: VOLUME ROTATION PHASE
+  block:
+    - name: Find and get the edu-sharing repository-database-volume-data volume name.
+      shell: >
+        sg docker -c "docker volume ls --quiet --filter name='^{{ edu_sharing_docker_project_name }}_repository-database-volume-data$' || true"
+      register: rotate_volume__repository_database_volume_name
+      changed_when: false
+      tags: [edu-sharing-init]
+
+    - name: Get Volume path for edu-sharing repository-database-volume-data volume.
+      shell: >
+        sg docker -c "docker volume inspect {{ rotate_volume__repository_database_volume_name.stdout | trim }} --format '{% raw %}{{.Mountpoint}}{% endraw %}'"
+      register: rotate_volume__repository_database_volume_path
+      changed_when: false
+      when: rotate_volume__repository_database_volume_name.stdout is defined and rotate_volume__repository_database_volume_name.stdout | trim != ""
+      tags: [edu-sharing-init]
+
+    - name: Clean the passed path fact (removes any trailing slashes and spaces)
+      set_fact:
+        safe_volume_path: "{{ rotate_volume__repository_database_volume_path.stdout | trim | regex_replace('/+$', '') }}"
+      when: 
+        - rotate_volume__repository_database_volume_path.stdout is defined 
+        - rotate_volume__repository_database_volume_path.stdout | trim != ""
+      tags: [edu-sharing-init]
+
+    - name: Rotate the edu-sharing repository-database-volume-data volume.
+      shell: >
+        mv {{ safe_volume_path }} {{ safe_volume_path }}_old_{{ pg_backup__running_major | default('backup') }}
+      become: true
+      when: 
+        - safe_volume_path is defined 
+        - safe_volume_path | trim != ""
+      tags: [edu-sharing-init]
+
+    - name: Re-create a pristine, empty _data folder inside the parent volume directory
+      file:
+        path: "{{ safe_volume_path }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      become: true
+      when: 
+        - safe_volume_path is defined 
+        - safe_volume_path | trim != ""
+      tags: [edu-sharing-init]
+
+  # CRITICAL PROTECTION: Only execute this block if the running version is different from the target version
+  when: 
+    - pg_backup__running_major is defined
+    - pg_backup__target_major is defined
+    - pg_backup__running_major != pg_backup__target_major

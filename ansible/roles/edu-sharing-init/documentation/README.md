@@ -60,6 +60,46 @@ edu_sharing_environment_variable:
     value: '{{esrender_db.user}}'
   - key: SERVICES_RENDERING_DATABASE_PASS
     value: '{{esrender_db.password}}'
+  
+  # MongoDB configuration for edu-sharing services
+  - key: MONGO_DATABASES_ROOT_USER
+    value: '{{mongo_databases.root_user | default("root",true)}}'
+  - key: MONGO_DATABASES_ROOT_PASS
+    value: '{{mongo_databases.root_pass | default("root",true)}}'
+  - key: MONGO_DATABASES_REPLICATION_SET_KEY
+    value: '{{mongo_databases.replication_set_key | default("edusharing",true)}}'
+  
+  # Rendering2 service database configuration
+  - key: RENDERING2_SERVICE_DATABASE_NAME
+    value: '{{esrender2_db.name | default("rendering",true)}}'
+  - key: RENDERING2_SERVICE_DATABASE_USER
+    value: '{{esrender2_db.user | default("rendering",true)}}'
+  - key: RENDERING2_SERVICE_DATABASES_PASS
+    value: '{{esrender2_db.password | default("rendering",true)}}'
+  
+  # LUMI service database configuration
+  - key: RENDERING2_LUMI_DATABASE_NAME
+    value: '{{esrender2_lumi_db.name | default("lumi",true)}}'
+  - key: RENDERING2_LUMI_DATABASE_USER
+    value: '{{esrender2_lumi_db.user | default("lumi",true)}}'
+  - key: RENDERING2_LUMI_DATABASE_PASS
+    value: '{{esrender2_lumi_db.password | default("lumi",true)}}'
+
+    # Notification service database configuration
+  - key: NOTIFICATION_SERVICE_DATABASE_NAME
+    value: '{{notification_service.db_name | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASE_USER
+    value: '{{notification_service.db_user | default("notification",true)}}'
+  - key: NOTIFICATION_SERVICE_DATABASE_PASS
+    value: '{{notification_service.db_pass | default("notification",true)}}'
+
+   # Repository service database configuration
+  - key: REPOSITORY_MONGO_DATABASE
+    value: '{{plugin_mongo_database_name | default("repository",true)}}'
+  - key: REPOSITORY_MONGO_USER
+    value: '{{plugin_mongo_database_user | default("repository",true)}}'
+  - key: REPOSITORY_MONGO_PASS
+    value: '{{plugin_mongo_database_pass | default("repository",true)}}'
 ```
 
 ## Tasks

@@ -32,28 +32,20 @@ Here are the default variables:
 
 
 ```yaml
----
 enable_plugin_mongo_service: false
-plugin_mongo_service_version: 9.0.16
+plugin_mongo_service_version: 10.0.1
 # installation directory
 plugin_mongo_service_install_dir: "{{base_dir}}/mongo-service_{{plugin_mongo_service_version|replace('.','_')}}"
 
 
-mongo_plugin_service_environment_variable:
+# it must have same docker project name as edu-sharing, otherwise the backup will not work
+plugin_mongo_service_docker_project_name: "{{edu_sharing_docker_project_name}}"
 
-plugin_mongo_service_docker_project_name: "mongo_plugin_service_docker_version"
-
-plugin_mongo_database_name: "edu-sharing"
-plugin_mongo_database_user: "repository"
-plugin_mongo_database_pass: "repository"
-plugin_mongo_database_root_user: "root"
-plugin_mongo_database_root_pass: "root"
-plugin_mongo_database_replication_set_key: "repository"
 
 
 mongo_plugin_environment_variable:
-    - "REPOSITORY_MONGO_CONNECTION_STRING=mongodb://{{ plugin_mongo_database_user | default('repository', true) }}:{{ plugin_mongo_database_pass | default('repository', true) }}@repository-mongo:27017/{{ plugin_mongo_database_name | default('edu-sharing', true) }}"
-    - "REPOSITORY_MONGO_DATABASE={{ plugin_mongo_database_name | default('edu-sharing', true) }}"
+    - "REPOSITORY_MONGO_CONNECTION_STRING=mongodb://{{ plugin_mongo_database_user | default('repository', true) }}:{{ plugin_mongo_database_pass | default('repository', true) }}@mongo-database:27017/{{ plugin_mongo_database_name | default('repository', true) }}?authSource={{ plugin_mongo_database_name | default('repository', true) }}"
+    - "REPOSITORY_MONGO_DATABASE={{ plugin_mongo_database_name | default('repository', true) }}"
 ```
 
 ## Tasks

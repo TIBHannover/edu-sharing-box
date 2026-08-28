@@ -45,12 +45,6 @@
   tags:
     - edu-sharing-plugin-mongo
 
-- name: Remove all plugin mongo service containers.
-  shell: |
-    sg docker -c "docker ps -a --format '{{ '{{' }}.Names{{ '}}' }}' | grep -E 'repository-mongo' | xargs -r docker stop | xargs -r docker rm"
-  tags:
-    - edu-sharing-plugin-mongo
-
 # Ensure installation directory exists
 - name: Ensure plugin service installation directory exists
   file:
@@ -92,7 +86,7 @@
     - include_tasks: download-plugin-mongo-service-amp.yml
     - include_tasks: download-plugin-mongo-alfresco-amp.yml
     - include_tasks: config-env.yml
-    - include_tasks: download-and-install-docker-compose.yml
+    # - include_tasks: download-and-install-docker-compose.yml
   when: enable_plugin_mongo_service is defined and enable_plugin_mongo_service
   tags:
     - edu-sharing-plugin-mongo

@@ -71,7 +71,7 @@
   become: true
   blockinfile:
     path:  "{{ edu_docker_inst_dir }}/docker-compose.override.yml"
-    marker: "# {mark} ANSIBLE MANAGED ENVIRONMENT VARIABLES"
+    marker: "# {mark} ANSIBLE MONGO PLUGIN ENVIRONMENT VARIABLES"
     state: absent  # This removes the block
   tags: 
     - edu-sharing-plugin-mongo

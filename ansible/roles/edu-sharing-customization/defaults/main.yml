@@ -150,3 +150,28 @@ edu_doi_publishing_configuration:
 #     trigger: "Cron[0 0 */6 * * ?]"
 #     status: "active"
 #     timeout: "3600000"            # 1 hour timeout in milliseconds
+
+# ==============================================================================
+# DATA PROTECTION (GDPR / COMPLIANCE) CONFIGURATION OVERRIDES
+# ==============================================================================
+# By default, this feature is completely disabled and no overrides are written.
+# To activate and customize this feature:
+#   1. Uncomment the entire block below (remove the '#' from lines 15 to 25).
+#   2. Adjust only the properties you want to change.
+#   3. Properties left alone will cleanly fall back to internal system defaults.
+# ==============================================================================
+
+# dataprotectionConfig:
+#   enabled: true                             # [bool] Master switch to activate data protection workflows
+#   retentionPeriod: "PT240H"                 # [string] ISO 8601 duration format (PT240H = 240 Hours / 10 Days)
+#   metadataExport: true                      # [bool] Export text/metadata records before data deletion
+#   binaryExport: true                        # [bool] Export physical files (PDFs, videos, etc.) before deletion
+#   summaryExport: true                       # [bool] Generate a clean HTML compliance report summary
+#   fileName: "dataprotectioninfo_edu-sharing" # [string] Base prefix name for the generated export ZIP archives
+#   templatePath: "html/dataprotection/report.html" # [string] Internal path to the layout template for the report
+#   links:                                    # [list] Legal or privacy URLs included in compliance documents
+#     - "http://edu-sharing.com"
+#     - "http://edu-sharing.net"
+#   cronExpression: "Cron[0 * * * * ?]"       # [string] Java Quartz Cron format (6 fields: Sec Min Hour DayOfMonth Month DayOfWeek)
+#                                             # NOTE: Day-of-Week uses 1-7 (1 = Sunday, 7 = Saturday). Use '?' if DayOfMonth is '*'
+#                                             # Default "0 * * * * ?" executes exactly at second 0 of EVERY minute.

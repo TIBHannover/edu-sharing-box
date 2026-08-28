@@ -1,7 +1,7 @@
 ---
-- name: Ensure notification directory exists.
+- name: Ensure plugin mongo service installation directory exists.
   file:
-    path: "{{notification_service_install_dir}}"
+    path: "{{plugin_mongo_service_install_dir}}"
     state: directory
   tags:
     - edu-sharing-plugin-mongo
@@ -46,18 +46,3 @@
   tags:
     - edu-sharing-plugin-mongo
 
-- name: Copy override file.
-  template:
-    src: 3_plugin-mongo-override-common.yml.j2
-    dest: "{{plugin_mongo_service_install_dir}}/3_plugin-mongo-override-common.yml"
-  vars:
-    edu_sharing_docker_network_name: "{{repository_service_docker_network_name.stdout}}"
-  tags: 
-    - edu-sharing-plugin-mongo
-
-- name: Run Plugin Mongo service.
-  shell:
-    chdir: "{{plugin_mongo_service_install_dir}}/"
-    cmd: '{{mongo_plugin_service_deploy_command | default(''sg docker -c "./deploy.sh start"'',true)}}'
-  tags: 
-    - edu-sharing-plugin-mongo
