@@ -1,0 +1,11 @@
+---
+- name: Cleanup old rendering containers
+  listen: "cleanup rendering2 containers"
+  ansible.builtin.shell: |
+    containers=$(docker ps -a --format '{% raw %}{{.Names}}{% endraw %}' | grep rendering2 || true)
+    if [ -n "$containers" ]; then
+      docker rm -f $containers
+    fi
+  when: not (keep_both_rendering_services | default(false) | bool)
+  register: rm_result
+  changed_when: rm_result.stdout != ""
