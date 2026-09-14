@@ -1,5 +1,5 @@
 ---
-rendering_service_2_version: 10.0.0
+rendering_service_2_version: 10.0.2
 
 rendering_service_2_plugin_install_dir: "{{base_dir}}/rendering-service-2_{{rendering_service_2_version|replace('.','_')}}"
 
