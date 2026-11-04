@@ -1,5 +1,5 @@
 ---
-repository_plugin_kafka_config: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-config-defaults/10.0.3/edu_sharing-community-repository-plugin-kafka-config-defaults-10.0.3-sources.jar
+repository_plugin_kafka_config: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-config-defaults/10.0.6/edu_sharing-community-repository-plugin-kafka-config-defaults-10.0.6-sources.jar
 
 repository_plugin_kafka_deploy: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-community-repository-plugin-kafka-deploy-docker-build-service/10.0.3/edu_sharing-community-repository-plugin-kafka-deploy-docker-build-service-10.0.3-sources.jar
 
