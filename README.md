@@ -53,7 +53,7 @@ Each role in the edu-sharing playbook comes with its own detailed documentation,
 - [edu-sharing-rendering-service](ansible/roles/edu-sharing-rendering-service/documentation/README.md): This role manages the rendering service for edu-sharing.
 - [edu-sharing-rendering-service2](ansible/roles/edu-sharing-rendering-service2/documentation/README.md): This role manages the second rendering service for edu-sharing. **⚠️ Important: Please review the documentation before activating this service, as it requires domain name configuration instead of IP addresses.**
 - [edu-sharing-search-elastic](ansible/roles/edu-sharing-search-elastic/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
-- [edu-sharing-search-solr](ansible/roles/edu-sharing-search-solr/documentation/README.md): This role deals with the elastic search functionality within edu-sharing.
+- [edu-sharing-search-solr](ansible/roles/edu-sharing-search-solr/documentation/README.md): This role deals with the apache solr search functionality within edu-sharing. **⚠️ Deprecated for edu-sharing 10.0.4 and above.**
 - [edu-sharing-classification-keywords](ansible/roles/edu-sharing-classification-keywords/documentation/README.md): This role handles keyword classification tasks.
 - [edu-sharing-mirror-vocabs](ansible/roles/edu-sharing-mirror-vocabs/documentation/README.md): This role manages the mirroring of vocabularies.
 - [edu-sharing-backup](ansible/roles/edu-sharing-backup/documentation/README.md): This role is responsible for backing up edu-sharing data.

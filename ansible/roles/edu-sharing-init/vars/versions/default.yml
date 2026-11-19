@@ -1,5 +1,5 @@
 ---
-edu_sharing_archive_url: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-projects-community-deploy-docker-compose/9.0.2/edu_sharing-projects-community-deploy-docker-compose-9.0.2-bin.zip
+edu_sharing_archive_url: https://artifacts.edu-sharing.com/repository/maven-remote/org/edu_sharing/edu_sharing-projects-community-deploy-docker-compose/10.0.4/edu_sharing-projects-community-deploy-docker-compose-10.0.4-bin.zip
 
 # In newer versions Edu-sharing may change the deploy commands, if so we can change them here
 # {service} is an variable tha ansible will replace, based on what service we want to execute the action

@@ -1,4 +1,4 @@
-# Ansible Role: edu-sharing-search-solr
+# Ansible Role: edu-sharing-search-solr (Deprecated for edu-sharing 10.0.4 and above)
 
 The `edu-sharing-search-solr` role is used update the repository search solr.
 

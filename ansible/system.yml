@@ -57,6 +57,7 @@
       tags:
         - edu-sharing-search-elastic
     - role: edu-sharing-search-solr
+      when: not (edu_version is defined and ((edu_version | regex_replace('-RC[0-9]+', '')) is version('10.0.4', '>=')))
       tags:
         - edu-sharing-search-solr
     - role: edu-sharing-notification

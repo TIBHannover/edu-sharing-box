@@ -1,4 +1,18 @@
 ---
+
+- name: Notify that Solr is no longer activated for edu-sharing 10.0.4+.
+  ansible.builtin.debug:
+    msg: "Note: edu-sharing version is {{ edu_version }} (>= 10.0.4); Solr is no longer activated in this version."
+  when: edu_version is defined and ((edu_version | regex_replace('-RC[0-9]+', '')) is version('10.0.4', '>='))
+  tags:
+    - edu-sharing-search-solr
+
+- name: Skip remaining tasks in this role for edu-sharing 10.0.4+.
+  ansible.builtin.meta: end_role
+  when: edu_version is defined and ((edu_version | regex_replace('-RC[0-9]+', '')) is version('10.0.4', '>='))
+  tags:
+    - edu-sharing-search-solr
+
 - include_role:
     name: edu-sharing-init
     tasks_from: set_edu_docker_inst_dir
