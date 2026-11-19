@@ -14,7 +14,14 @@ services:
      # --- The Native Fix ---
      # This tells Docker Compose to wipe out the original depends_on array 
      # inside this directory context so it stops searching for mongo-database.
-     depends_on: !override []
+     depends_on: !override
+      rendering2-message-queue:
+         condition: service_healthy
+      rendering2-rustfs-storage:
+         condition: service_healthy
+      rendering2-lumi:
+         condition: service_healthy
+
      # ----------------------
 
   # Changed from repository-mongo to mongo-database to match the original service 
@@ -25,11 +32,23 @@ services:
      networks:
         - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
 
+
+  redis-cache:
+    image: redis:latest
+    profiles: ["donotstart"]  # This service will NOT start by default
+    networks:
+       - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
+
   rendering2-document-converter:
      networks:
         - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
 
   rendering2-lumi:
+     depends_on: !override
+       rendering2-message-queue:
+         condition: service_healthy
+       rendering2-rustfs-storage:
+         condition: service_healthy
      networks:
         - {{ edu_sharing_docker_network_name | default('edu_sharing_docker_version_default', true) }}
 
