@@ -43,11 +43,11 @@ Here are the default variables:
 ---
 # It can have more than one Option
 # Options:
-#   --all              Backup repository, elastic search index and apache solr index
+#   --all              Backup repository, elastic search index and apache solr index (deprecated)
 #   --repo             Backup repository including binaries and databases
 #   --repodb           Backups only the repository databases
 #   --elastic          Backup elastic search index
-#   --solr             Backup apache solr index
+#   --solr             Backup apache solr index (deprecated)
 #   --compressed       Creates compressed backups
 #   --hot-backup       Create a backup without stopping the systems
 #                      This can lead to missing data and corrupted index in terms of the overall system

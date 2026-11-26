@@ -19,4 +19,4 @@ edu_sharing_backup_command: 'sg docker -c "./utils.sh backup {options}"'
 # Edu-sharing restore command
 edu_sharing_restore_command: 'sg docker -c "./utils.sh restore {options}"'
 
-service_repository_search_solr:  'repository-search-solr'
+service_repository_search_solr:  'repository-search-solr' # (deprecated)

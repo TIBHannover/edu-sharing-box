@@ -3,7 +3,7 @@ edu_sharing_host: 192.168.98.101
 edu_sharing_domain: '{{edu_sharing_host}}'
 edu_sharing_url: '{{ edu_sharing_protocol | default("http") }}://{{edu_sharing_host}}/edu-sharing'
 edu_version: 10.0.1
-solr_host: '{{edu_sharing_host}}'
+solr_host: '{{edu_sharing_host}}' # (deprecated)
 
 clamav_host: 192.168.98.101
 clamav_proxy: "{{clamav_host}}"

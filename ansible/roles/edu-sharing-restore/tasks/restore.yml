@@ -10,9 +10,10 @@
 - debug:
     var: backup_folder
 
-- name: Check if solr4 directory or solr4.tar file exists
+- name: Check if solr4 directory or solr4.tar file exists (deprecated)
   # become: true
   shell: |
+    echo "Solr is deprecated (will be removed in future versions)"
     if [[ -f "{{ backup_folder }}/solr4.tar" ]] || [[ -d "{{ backup_folder }}/solr" ]]  ; then
       echo true
     else
@@ -33,7 +34,7 @@
     executable: /bin/bash
   register: elastics_check_result
 
-- name: Reset solr4
+- name: Reset solr4 (deprecated)
   shell: 
     chdir: "{{ edu_docker_inst_dir }}"
     cmd: |
